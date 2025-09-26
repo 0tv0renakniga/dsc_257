@@ -1,0 +1,5 @@
+# inside data dir use these cmds to build zip files
+
+cat glove_0{00..41} > glove.6B.zip
+cat cifar-rep_0{00..05} > cifar-representations.zip
+
