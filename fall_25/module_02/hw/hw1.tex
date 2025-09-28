@@ -1,0 +1,197 @@
+\documentclass{article}
+
+% Required packages
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{tikz}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{comment}
+
+% Set page geometry
+\geometry{a4paper, margin=1in}
+
+% Configure listings for Python
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\footnotesize,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  frame=single,
+  breaklines=true,
+  breakatwhitespace=true,
+  captionpos=b,
+  tabsize=4,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  commentstyle=\color{gray}\textit,
+  keywordstyle=\color{blue}\bfseries,
+  stringstyle=\color{red}
+}
+
+\begin{document}
+
+\pagestyle{fancy}
+\chead{DSC 257: Unsupervised Learning (Fall 2025)}
+\lhead{Homework 11}
+\rhead{Randall Rogers}
+
+%------------------
+% Solution for 1(a) and 1(b)
+%------------------
+\subsection*{Solution 1}
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\subsubsection*{Solution 1 (a)}
+\subsubsection*{Step 1: Identify characteristics of the dataspace}
+\parbox{\textwidth}{
+We are given 10 dimensional vectors where each element can be any real number ($x_{i} \in \mathbb{R}$):
+}
+
+
+\subsubsection*{\normalfont}{$\therefore$ we can express the dataspace $\chi$ as: $\chi = \mathbb{R}^{10}$}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\subsubsection*{Solution 1 (b)}
+\subsubsection*{Step 1: Identify characteristics of the dataspace}
+\parbox{\textwidth}{
+We are given 3 dimensional vectors where each element is zero or one ($x_{i} \in [0,1]$):
+}
+
+\subsubsection*{\normalfont}{$\therefore$ we can express the dataspace $\chi$ as: $\chi = {[0,1]}^{3}$}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 2(a),2(b), and 2(c)
+%------------------
+\subsection*{Solution 2}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 2 (a)}
+\subsubsection*{Step 1: Define Euclidean distance ($\ell_2$)}
+\parbox{\textwidth}{
+
+$$\ell_2 = \|p - q\|_2 = \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2}$$
+
+}
+
+\subsubsection*{Step 2: Compute $\ell_2$}
+\parbox{\textwidth}{
+Let $p=1$ and $q=10$
+$$
+\begin{aligned}
+\ell_2 &= \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2}\\
+\ell_2 &= \sqrt{\sum_{i=1}^{1} (1 - 10)^2}\\
+\ell_2 &= \sqrt{(- 9)^2}\\
+\ell_2 &= 9
+\end{aligned}
+$$
+}
+\subsubsection*{\normalfont}{$\therefore$ $\ell_{2} = 9$}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\subsubsection*{Solution 2 (b)}
+\subsubsection*{Step 1: Define Euclidean distance ($\ell_2$)}
+\parbox{\textwidth}{
+
+$$\ell_2 = \|p - q\|_2 = \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2}$$
+
+}
+
+\subsubsection*{Step 2: Compute $\ell_2$}
+\parbox{\textwidth}{
+Let $p = \begin{bmatrix} -1 \\ 12 \end{bmatrix}, q = \begin{bmatrix} 6 \\ -12 \end{bmatrix}$
+$$
+\begin{aligned}
+\ell_2 &= \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2}\\
+\ell_2 &= \sqrt{(p_1 - q_1)^{2}+(p_2 - q_2)^{2}}\\
+\ell_2 &= \sqrt{(-1 - 6)^{2}+(12 - (-12))^{2}}\\
+\ell_2 &= \sqrt{(-7)^{2}+(24)^{2}}\\
+\ell_2 &= \sqrt{625}\\
+\ell_2 &= 25
+\end{aligned}
+$$
+}
+\subsubsection*{\normalfont}{$\therefore$ $\ell_{2} = 25$}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+
+\subsection*{Solution 2}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 2 (c)}
+\subsubsection*{Step 1: Define Euclidean distance ($\ell_2$)}
+\parbox{\textwidth}{
+
+$$\ell_2 = \|p - q\|_2 = \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2}$$
+
+}
+
+\subsubsection*{Step 2: Compute $\ell_2$}
+\parbox{\textwidth}{
+Let $p = \begin{bmatrix} 1 \\ 5 \\ -1 \end{bmatrix}, q = \begin{bmatrix} 5 \\ 2 \\ 11 \end{bmatrix}$
+$$
+\begin{aligned}
+\ell_2 &= \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2}\\
+\ell_2 &= \sqrt{(p_1 - q_1)^{2}+(p_2 - q_2)^{2}+(p_3 - q_3)^{2}}\\
+\ell_2 &= \sqrt{(1 - 5)^{2}+(5 - 2)^{2}+(-1 - 11)^{2}}\\
+\ell_2 &= \sqrt{(-4)^{2}+(3)^{2}+(-12)^{2}}\\
+\ell_2 &= \sqrt{169}\\
+\ell_2 &= 13
+\end{aligned}
+$$
+}
+\subsubsection*{\normalfont}{$\therefore$ $\ell_{2} = 13$}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 3(a) and 3(b)
+%------------------
+\subsection*{Solution 3}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsection*{Solution 3 (a)}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Step 1: Normalize the vector $x$}
+\parbox{\textwidth}{
+Let $x = \begin{bmatrix} 10 \\ 15 \\ 25 \end{bmatrix}$
+
+$$\sum_{i=1}^{3} x_{i} = x_{1} + x_{2} + x_{3} = 10 + 15 + 25 = 50$$
+
+Now, divide each entry by the total sum:\\
+
+$$p = \frac{1}{50} \cdot x = \frac{1}{50} \begin{bmatrix} 10 \\ 15 \\ 25 \end{bmatrix} = \begin{bmatrix} 10/50 \\ 15/50 \\ 25/50 \end{bmatrix} = \begin{bmatrix} 0.2 \\ 0.3 \\ 0.5 \end{bmatrix}$$
+}
+\subsubsection*{\normalfont}{$\therefore$ the result ($p$) of scaling vertor $x$ is the following:}
+$$p = \begin{bmatrix} 0.2 \\ 0.3 \\ 0.5 \end{bmatrix}$$ \\
+
+\subsection*{Solution 3 (b)}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Step 1: Define dimension of the probability simplex}
+\parbox{\textwidth}{
+The dimension of vector $p$ is $3$ and $k=n-1$ where $k$ is the dimension of the probability simplex
+}
+\subsubsection*{\normalfont}{$\therefore$ vector $p$ lies in the probability simplex($\Delta_2$) for $k=2$}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+
+
+\end{document}

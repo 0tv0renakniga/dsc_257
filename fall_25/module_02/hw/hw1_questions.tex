@@ -1,0 +1,120 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+
+\title{DSC 257R: Unsupervised Learning \\ Homework 1}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Proximity in data spaces}
+
+\begin{enumerate}
+
+\item In each of the following situations, specify the data space $\mathcal{X}$ using correct mathematical notation.
+    \begin{enumerate}
+    \item Each data point is a 10-dimensional vector with real-valued entries.
+    \item Each data point is a 3-dimensional vector with entries in $[0,1]$.
+    \end{enumerate}
+
+\item Determine the Euclidean ($\ell_{2}$) distance between each of the following pairs of points $p$ and $q$.
+    \begin{enumerate}
+    \item $p=1, q=10$
+    \item $p=\begin{bmatrix} -1 \\ 12 \end{bmatrix}, q=\begin{bmatrix} 6 \\ -12 \end{bmatrix}$
+    \item $p=\begin{bmatrix} 1 \\ 5 \\ -1 \end{bmatrix}, q=\begin{bmatrix} 5 \\ 2 \\ 11 \end{bmatrix}$
+    \end{enumerate}
+
+\item Consider the vector $x=\begin{bmatrix} 10 \\ 15 \\ 25 \end{bmatrix}$.
+    \begin{enumerate}
+    \item Let $p$ be the result of scaling this vector (that is, multiplying all its entries by the same factor) so that the sum of the entries is 1. What is $p$?
+    \item This vector $p$ lies in the probability simplex $\Delta_{k}$ for what $k$?
+    \end{enumerate}
+
+\item Give an example of a two-dimensional point that cannot be scaled to lie in $\Delta_{2}$.
+
+\item Sketch the probability simplex $\Delta_{3}$ using three-dimensional axes. Make sure to label the axes. Show the locations of the following points:
+    \[
+    \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix}, \begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix}, \begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix}
+    \]
+    Also label the most central point in the simplex; what are its coordinates?
+
+\item Here are three probability distributions in $\Delta_{4}$.
+    \[
+    p=\begin{bmatrix} 1/2 \\ 1/4 \\ 1/8 \\ 1/8 \end{bmatrix}, \quad q=\begin{bmatrix} 1/4 \\ 1/4 \\ 1/4 \\ 1/4 \end{bmatrix}, \quad r=\begin{bmatrix} 1/2 \\ 0 \\ 1/4 \\ 1/4 \end{bmatrix}
+    \]
+    \begin{enumerate}
+    \item Compute $\ell_{1}$ distance between $p$ and $q$, that is, $\|p-q\|_{1}$.
+    \item Compute $\|q-r\|_{1}$.
+    \item Compute the KL divergence $K(p, q)$.
+    \item Compute the KL divergence $K(q, r)$.
+    \end{enumerate}
+
+\item Before attempting the next problems, make sure that Python 3 and Jupyter are installed on your computer.
+
+\item \textbf{Choosing representations for nearest neighbor.} In this problem, we will study how different representations of images can affect the performance of nearest neighbor methods. We will use the CIFAR-10 data set, which has 50,000 training images and 10,000 test images, with ten different classes (airplane, automobile, bird, cat, deer, dog, frog, horse, ship, truck). The images are in color, of size $32 \times 32$.
+
+    We will compare several image representations:
+    \begin{itemize}
+    \item The raw pixel representation
+    \item Histogram-of-gradients (HoG) features
+    \item The representation obtained by passing the image through a pre-trained convolutional net (VGG) and using one of the last layers (last-fc, meaning "last fully-connected layer")
+    \item The representation obtained by passing the image through a pre-trained convolutional net (VGG) and using one of the earlier layers (last-conv, meaning "last convolutional layer")
+    \item The representation obtained by using a convolutional net with the same architecture but with random weights (and again, with two variants, last-fc and last-conv)
+    \end{itemize}
+
+    In each case, the idea is to study the classification performance (on the test set) using 1-nearest neighbor on the training data with Euclidean ($\ell_{2}$) distance.
+
+    Download \texttt{cifar-representations.zip} from the course website. The directory contains a Jupyter notebook, some helper functions, and some data. In the notebook, we have provided code that will extract HOG and neural net features from the CIFAR data; look through it to get a sense of how it works.
+    \begin{enumerate}
+    \item What is the dimensionality of each of the representations (raw pixel, HoG, VGG-last-fc, VGG-last-conv)?
+    \item Report test accuracies for 1-nearest neighbor classification using the various representations (raw pixel, HoG, VGG-last-fc, VGG-last-conv, random-VGG-last-fc, random-VGG-last-conv).
+    \item For the raw pixel representation:
+        \begin{itemize}
+        \item Show the first five images in the test set whose label is correctly predicted by 1-NN, and show the nearest neighbor (in the training set) of each of these images.
+        \item Show the first five images in the test set whose label is incorrectly predicted by 1-NN, and show the nearest neighbor (in the training set) of each of the images.
+        \end{itemize}
+        Repeat for the HoG and VGG-last-fc representations.
+    \end{enumerate}
+
+\item \textbf{Word vectors.} In this problem, we'll get a first glimpse of word embeddings. We will work with GloVe, which provides 300-dimensional vectors for each of 400,000 words; you can find out more about these at \url{https://nlp.stanford.edu/projects/glove/}.
+
+    The vectors are in the file \texttt{glove.6B.300d.txt}, which you can download from the course website. To load them into Python, use the following code:
+    \begin{verbatim}
+    import numpy as np
+    filename = 'glove.6B.300d.txt'
+    with open(filename) as f:
+        content = f.read().splitlines()
+    n = len(content)
+    vecs = np.zeros((n,300))
+    words = []
+    index = 0
+    for rawline in content:
+        line = rawline.split()
+        words.append(line[0])
+        vecs[index] = np.genfromtxt(line[1:])
+        index = index+1
+    \end{verbatim}
+
+    Once this has run, the following variables will be set:
+    \begin{itemize}
+    \item \texttt{n}, the vocabulary size
+    \item \texttt{words[0:n]}, a list of the vocabulary words
+    \item \texttt{vecs[0:n]}, the word vectors
+    \end{itemize}
+
+    The following words are all in the vocabulary: 'communism', 'africa', 'happy', 'sad', 'upset', 'computer', 'cat', 'dollar'.
+
+    For each of these words:
+    \begin{itemize}
+    \item Find the five closest words (other than itself) in the 300-dimensional embedding space. (Either code up your own nearest neighbor algorithm or use \texttt{sklearn.neighbors.NearestNeighbors}.)
+    \item Turn in these lists of neighboring words.
+    \end{itemize}
+
+\end{enumerate}
+
+\end{document}
+
