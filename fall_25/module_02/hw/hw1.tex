@@ -396,4 +396,20 @@ The $\ell_1$ distance is symmetric and satisfies the triangle inequality, making
 The $\ell_1$ distance is like counting how much you need to move marbles between jars to make them the same - it's always the same no matter which direction you go. But KL divergence is like asking "how surprised would I be?" If one jar is completely empty but you expected marbles there, you'd be infinitely surprised! That's why one answer is infinity - it's like expecting something that's impossible.
 
 \noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+%------------------
+% Solution for 7
+%------------------
+\subsection*{Solution 7}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Part a:  What is the dimensionality of each of the representations (raw pixel, HoG, VGG-last-fc, VGG-last-conv)?}
+\subsubsection*{Part b:  Report test accuracies for 1-nearest neighbor classification using the various representations (raw pixel, HoG, VGG-last-fc, VGG-last-conv, random-VGG-last-fc, random-VGG-last-conv).}
+\subsubsection*{Part c:  show first 5 correct/incorrect test and coresponding training for each model(raw,hog,etc.)}
+% raw_acc: 35.4%
+% hog_acc: 36.6%
+% pretrain_cnn_acc(last_conv): 92.0%
+% pretrain_cnn_acc(last_fc): 92.1%
+% random_cnn_acc(last_conv): 40.6%
+% random_cnn_acc(last_fc): 39.1%
 \end{document}
