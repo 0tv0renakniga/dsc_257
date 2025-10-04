@@ -403,9 +403,69 @@ The $\ell_1$ distance is like counting how much you need to move marbles between
 %------------------
 \subsection*{Solution 7}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Part a:  What is the dimensionality of each of the representations (raw pixel, HoG, VGG-last-fc, VGG-last-conv)?}
-\subsubsection*{Part b:  Report test accuracies for 1-nearest neighbor classification using the various representations (raw pixel, HoG, VGG-last-fc, VGG-last-conv, random-VGG-last-fc, random-VGG-last-conv).}
-\subsubsection*{Part c:  show first 5 correct/incorrect test and coresponding training for each model(raw,hog,etc.)}
+\subsubsection*{Part a: Dimensionality for each of the representations (raw pixel, HoG, VGG-last-fc, VGG-last-conv)}
+\begin{center} 
+  \begin{tabular}{|c|c|} 
+    \hline Feature Type & Dimensionality \\ 
+    \hline 
+    Raw Pixel & 3072 \\ 
+    HoG & 512  \\
+    VGG-last-fc & 4096 \\
+    VGG-last-conv & 512 \\ 
+    \hline
+  \end{tabular}
+\end{center}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\subsubsection*{Part b: Test accuracies for 1-nearest neighbor classification using the various representations (raw pixel, HoG, VGG-last-fc, VGG-last-conv, random-VGG-last-fc, random-VGG-last-conv).}
+\begin{center} 
+  \begin{tabular}{|c|c|} 
+    \hline Feature Type & 1-NN test accuracy (\%) \\ 
+    \hline 
+    Raw Pixel & 35.4 \\ 
+    HoG & 36.6  \\
+    VGG-last-fc & 92.1 \\
+    VGG-last-conv & 92.0 \\
+    random VGG-last-fc & 39.1 \\
+    random VGG-last-conv & 40.6 \\ 
+    \hline
+  \end{tabular}
+\end{center}
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+\subsection*{Solution 7}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Part c:  Raw Pixel correct/incorrect}
+
+\begin{figure}[h]
+  \includegraphics[height=0.75\textheight,width=\textwidth]{raw_pixel.png}
+  \caption{First five correct/incorrect images for Raw Pixel}
+\end{figure}
+
+\newpage
+
+\subsection*{Solution 7}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Part c:  HoG correct/incorrect}
+
+\begin{figure}[h]
+  \includegraphics[height=0.75\textheight,width=\textwidth]{hog.png}
+  \caption{First five correct/incorrect images for HoG}
+\end{figure}
+
+\newpage
+
+\subsection*{Solution 7}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Part c:  VGG-last-fc correct/incorrect}
+
+\begin{figure}[h]
+  \includegraphics[height=0.75\textheight,width=\textwidth]{vgg_last_fc.png}
+  \caption{First five correct/incorrect images for VGG-last-fc}
+\end{figure}
 % raw_acc: 35.4%
 % hog_acc: 36.6%
 % pretrain_cnn_acc(last_conv): 92.0%
