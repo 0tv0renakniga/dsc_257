@@ -227,92 +227,95 @@ The second component of $x$ violates the first rule, all components for a point 
 \subsection*{Solution 5}
 \noindent\rule{\textwidth}{0.4pt}\\
 
-\subsubsection*{Step 1: Define $\Delta_3$ and identify key properties}
+\subsubsection*{Visualizing the Simplex $\Delta_3$ in 2D Projections}
 \parbox{\textwidth}{
-The probability simplex $\Delta_3$ is defined as:
-$$\Delta_3 = \left\{x \in \mathbb{R}^4 : x_i \geq 0 \text{ for all } i = 1,2,3,4, \text{ and } \sum_{i=1}^{4} x_i = 1\right\}$$
-
-This is a 3-dimensional simplex (tetrahedron) embedded in 4-dimensional space. However, due to the constraint $\sum x_i = 1$, we can visualize it in 3D by using three coordinates and letting the fourth be determined by the constraint.
-
-The given points are the vertices of the simplex:
-\begin{itemize}
-\item $\begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix}$ corresponds to $\begin{bmatrix} 1 \\ 0 \\ 0 \\ 0 \end{bmatrix}$ in 4D
-\item $\begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix}$ corresponds to $\begin{bmatrix} 0 \\ 1 \\ 0 \\ 0 \end{bmatrix}$ in 4D
-\item $\begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix}$ corresponds to $\begin{bmatrix} 0 \\ 0 \\ 1 \\ 0 \end{bmatrix}$ in 4D
-\end{itemize}
+Here are the three 2D views of the probability simplex $\Delta_3$. Each plot is a \textit{shadow} of the 3D triangle, viewed along one of the principal axes.
 }
 
-\subsubsection*{Step 2: Determine coordinates and sketch description}
-\parbox{\textwidth}{
-The fourth vertex (not shown) would be $\begin{bmatrix} 0 \\ 0 \\ 0 \\ 1 \end{bmatrix}$, which corresponds to $\begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix}$ in our 3D representation (since the fourth coordinate is $1 - 0 - 0 - 0 = 1$).
-
-The most central point (centroid) of the simplex is:
-$$\text{centroid} = \frac{1}{4}\left(\begin{bmatrix} 1 \\ 0 \\ 0 \\ 0 \end{bmatrix} + \begin{bmatrix} 0 \\ 1 \\ 0 \\ 0 \end{bmatrix} + \begin{bmatrix} 0 \\ 0 \\ 1 \\ 0 \end{bmatrix} + \begin{bmatrix} 0 \\ 0 \\ 0 \\ 1 \end{bmatrix}\right) = \begin{bmatrix} 1/4 \\ 1/4 \\ 1/4 \\ 1/4 \end{bmatrix}$$
-
-In 3D coordinates, this is $\begin{bmatrix} 1/4 \\ 1/4 \\ 1/4 \end{bmatrix}$.
-
-\textbf{Sketch Description:}
-\begin{itemize}
-\item Draw 3D coordinate axes labeled $x_1$, $x_2$, $x_3$
-\item The simplex is a triangular region (actually a tetrahedron) with vertices at:
-  \begin{itemize}
-  \item $(1, 0, 0)$ on the $x_1$-axis
-  \item $(0, 1, 0)$ on the $x_2$-axis  
-  \item $(0, 0, 1)$ on the $x_3$-axis
-  \item $(0, 0, 0)$ at the origin (representing the fourth vertex)
-  \end{itemize}
-\item Connect these four points to form a tetrahedron
-\item Mark the centroid at $(1/4, 1/4, 1/4)$
-\end{itemize}
-}
-
-\subsubsection*{\normalfont}{$\therefore$ Final Answer}
-The most central point in $\Delta_3$ has coordinates: $\begin{bmatrix} 1/4 \\ 1/4 \\ 1/4 \end{bmatrix}$ (or $\begin{bmatrix} 0.25 \\ 0.25 \\ 0.25 \end{bmatrix}$)
-
-Note: The fourth coordinate is $1 - 1/4 - 1/4 - 1/4 = 1/4$
-
-\subsubsection*{\normalfont}{Graduate Level Explanation}
-The 3-simplex $\Delta_3$ is a regular tetrahedron when embedded properly in 3D space. Each vertex represents a pure probability distribution (all probability mass on one outcome), while interior points represent mixed distributions. The centroid represents the uniform distribution over 4 outcomes. This geometric structure is fundamental in Bayesian statistics, where it represents the space of all possible probability distributions over 4 categories. The simplex's convex hull property ensures that convex combinations of probability distributions remain valid probability distributions, making it a natural space for optimization in machine learning algorithms like EM or variational inference.
-
-\subsubsection*{\normalfont}{Explanation for 5 year old}
-Imagine a pyramid made of triangles (like the ones in Egypt, but pointier)! Each corner of the pyramid represents putting all your marbles in one basket - like having 100\% chocolate ice cream, or 100\% vanilla, or 100\% strawberry, or 100\% mint. The very center of the pyramid is where you have equal amounts of all four flavors - 25\% of each! Any point inside the pyramid represents some mix of the four flavors that adds up to 100\%.
-\begin{figure}[h]
+%---------------------------------------------------
+%  FIGURE 1: x1 vs x2 Projection
+%---------------------------------------------------
+\begin{figure}[h!]
 \centering
-\begin{tikzpicture}[scale=2.5, line join=round, line cap=round]
-% 3D coordinate system
-\draw[->] (0,0) -- (1.2,0) node[right] {$x_1$};
-\draw[->] (0,0) -- (-0.6,1.0) node[above left] {$x_2$};
-\draw[->] (0,0) -- (0,1.2) node[above] {$x_3$};
+\begin{tikzpicture}[scale=4]
+    % Axes
+    \draw[->, thick] (0,0) -- (1.2,0) node[below] {$x_1$};
+    \draw[->, thick] (0,0) -- (0,1.2) node[left] {$x_2$};
 
-% Tetrahedron edges (visible faces)
-\draw[thick, blue!70] (1,0) -- (0,0) -- (-0.5,0.866) -- cycle;
-\draw[thick, blue!70] (1,0) -- (0,1) -- (-0.5,0.866);
-\draw[thick, blue!70] (0,0) -- (0,1);
-\draw[thick, blue!70] (1,0) -- (0,1);
+    % The projected simplex region (x1 + x2 <= 1)
+    \fill[blue!10] (0,0) -- (1,0) -- (0,1) -- cycle;
+    \draw[blue, thick] (1,0) -- (0,1);
 
-% Fill the visible triangular faces with light color
-\fill[blue!10, opacity=0.3] (1,0) -- (0,0) -- (-0.5,0.866) -- cycle;
-\fill[blue!15, opacity=0.3] (1,0) -- (0,1) -- (-0.5,0.866) -- cycle;
+    % The three vertices of the simplex
+    \fill[red] (1,0) circle (1pt) node[shift={(0, -1)}] {$\begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix}$};
+    \fill[red] (0,1) circle (1pt) node[shift={(-1, 0)}] {$\begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix}$};
+    \fill[red] (0,0) circle (1pt) node[below left] {$\begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix}$};
 
-% Mark the vertices
-\fill[red] (1,0) circle (0.03) node[below right] {$\begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix}$};
-\fill[red] (-0.5,0.866) circle (0.03) node[above left] {$\begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix}$};
-\fill[red] (0,1) circle (0.03) node[above right] {$\begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix}$};
-\fill[red] (0,0) circle (0.03) node[below left] {$\begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix}$};
-
-% Mark the centroid
-\fill[green!70!black] (0.125,0.466) circle (0.025) node[right] {$\begin{bmatrix} 1/4 \\ 1/4 \\ 1/4 \end{bmatrix}$};
-
-% Add some grid lines for reference
-\draw[gray!30, dashed] (0,0) -- (1,0);
-\draw[gray!30, dashed] (0,0) -- (-0.5,0.866);
-\draw[gray!30, dashed] (0,0) -- (0,1);
-
+    % The central point (centroid)
+    \fill[green!50!black] (1/3, 1/3) circle (1.5pt) node[shift={(0.5,0.5)}, black] {Central Point $\begin{bmatrix} 1/3 \\ 1/3 \\ 1/3 \end{bmatrix}$};
 \end{tikzpicture}
-\caption{The probability simplex $\Delta_3$ showing vertices and centroid}
+\caption{View 1: Projection onto the $x_1$-$x_2$ plane.}
+\label{fig:x1x2}
+\end{figure}
+
+%---------------------------------------------------
+%  FIGURE 2: x2 vs x3 Projection
+%---------------------------------------------------
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=4]
+    % Axes
+    \draw[->, thick] (0,0) -- (1.2,0) node[below] {$x_2$};
+    \draw[->, thick] (0,0) -- (0,1.2) node[left] {$x_3$};
+
+    % The projected simplex region (x2 + x3 <= 1)
+    \fill[blue!10] (0,0) -- (1,0) -- (0,1) -- cycle;
+    \draw[blue, thick] (1,0) -- (0,1);
+
+    % The three vertices of the simplex
+    \fill[red] (1,0) circle (1pt) node[shift={(0, -1)}] {$\begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix}$};
+    \fill[red] (0,1) circle (1pt) node[shift={(-1, 0)}] {$\begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix}$};
+    \fill[red] (0,0) circle (1pt) node[below left] {$\begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix}$};
+
+    % The central point (centroid)
+    \fill[green!50!black] (1/3, 1/3) circle (1.5pt) node[shift={(0.5,0.5)}, black] {Central Point $\begin{bmatrix} 1/3 \\ 1/3 \\ 1/3 \end{bmatrix}$};
+\end{tikzpicture}
+\caption{View 2: Projection onto the $x_2$-$x_3$ plane.}
+\label{fig:x2x3}
+\end{figure}
+
+\newpage
+
+\subsection*{Solution 5}
+\noindent\rule{\textwidth}{0.4pt}\\
+%---------------------------------------------------
+%  FIGURE 3: x1 vs x3 Projection
+%---------------------------------------------------
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=4]
+    % Axes
+    \draw[->, thick] (0,0) -- (1.2,0) node[below] {$x_1$};
+    \draw[->, thick] (0,0) -- (0,1.2) node[left] {$x_3$};
+
+    % The projected simplex region (x1 + x3 <= 1)
+    \fill[blue!10] (0,0) -- (1,0) -- (0,1) -- cycle;
+    \draw[blue, thick] (1,0) -- (0,1);
+
+    % The three vertices of the simplex
+    \fill[red] (1,0) circle (1pt) node[shift={(0, -1)}] {$\begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix}$};
+    \fill[red] (0,1) circle (1pt) node[shift={(-1, 0)}] {$\begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix}$};
+    \fill[red] (0,0) circle (1pt) node[below left] {$\begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix}$};
+
+    % The central point (centroid)
+    \fill[green!50!black] (1/3, 1/3) circle (1.5pt) node[shift={(0.5,0.5)}, black] {Central Point $\begin{bmatrix} 1/3 \\ 1/3 \\ 1/3 \end{bmatrix}$};
+\end{tikzpicture}
+\caption{View 3: Projection onto the $x_1$-$x_3$ plane.}
+\label{fig:x1x3}
 \end{figure}
 
 \noindent\rule{\textwidth}{0.4pt}\\
+
 \newpage
 
 %------------------
