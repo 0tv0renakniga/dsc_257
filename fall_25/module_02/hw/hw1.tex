@@ -324,62 +324,91 @@ Here are the three 2D views of the probability simplex $\Delta_3$. Each plot is 
 \subsection*{Solution 6}
 \noindent\rule{\textwidth}{0.4pt}\\
 
-\subsubsection*{Step 1: Recall the formulas for $\ell_1$ distance and KL divergence}
-\parbox{\textwidth}{
-    IDK.. LOG IS BASE e NOT 2
-The $\ell_1$ distance (Manhattan distance) between two vectors $u$ and $v$ is:
-$$\|u - v\|_1 = \sum_{i=1}^{n} |u_i - v_i|$$
+\subsubsection*{6 (a): $\ell_1$ for $p$ and $q$}
 
-The KL divergence between two probability distributions $P$ and $Q$ is:
-$$KL(P \| Q) = \sum_{i=1}^{n} P_i \log\left(\frac{P_i}{Q_i}\right)$$
-where we use the convention that $0 \log(0/Q_i) = 0$ and $P_i \log(P_i/0) = \infty$ if $P_i > 0$.
+\parbox{\textwidth}{The $\ell_1$ distance between two vectors $p, q \in \mathbb{R}^n$ is given by:
+$$\|p-q\|_1 = \sum_{i=1}^n |p_i - q_i|$$
+
+Let $p = \begin{bmatrix} 1/2 \\ 1/4 \\ 1/8 \\ 1/8 \end{bmatrix}$ and $q = \begin{bmatrix} 1/4 \\ 1/4 \\ 1/4 \\ 1/4 \end{bmatrix}$
+
+\begin{align*}
+    \|p-q\|_1 &= \left|\frac{1}{2} - \frac{1}{4}\right| + \left|\frac{1}{4} - \frac{1}{4}\right| + \left|\frac{1}{8} - \frac{1}{4}\right| + \left|\frac{1}{8} - \frac{1}{4}\right| \\
+    &= \left|\frac{2}{4} - \frac{1}{4}\right| + |0| + \left|\frac{1}{8} - \frac{2}{8}\right| + \left|\frac{1}{8} - \frac{2}{8}\right| \\
+    &= \frac{1}{4} + 0 + \left|-\frac{1}{8}\right| + \left|-\frac{1}{8}\right| \\
+    &= \frac{1}{4} + \frac{1}{8} + \frac{1}{8} = \frac{2}{8} + \frac{1}{8} + \frac{1}{8} = \frac{4}{8} = \frac{1}{2}
+\end{align*}
+}
+\subsubsection*{\normalfont}{$\therefore$ $\ell_{1}= \frac{1}{2}$}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+\subsection*{Solution 6}
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\subsubsection*{6 (b): $\ell_1$ for $q$ and $r$}
+\parbox{\textwidth}{The $\ell_1$ distance between two vectors $q, r \in \mathbb{R}^n$ is given by:
+$$\|q-r\|_1 = \sum_{i=1}^n |q_i - r_i|$$
+
+Let $q = \begin{bmatrix} 1/4 \\ 1/4 \\ 1/4 \\ 1/4 \end{bmatrix}$ and $r = \begin{bmatrix} 1/2 \\ 0 \\ 1/4 \\ 1/4 \end{bmatrix}$
+
+\begin{align*}
+\|q-r\|_1 &= \sum_{i=1}^{4} |q_i - r_i| \\
+&= \left|\frac{1}{4} - \frac{1}{2}\right| + \left|\frac{1}{4} - 0\right| + \left|\frac{1}{4} - \frac{1}{4}\right| + \left|\frac{1}{4} - \frac{1}{4}\right| \\
+&= \left|\frac{1}{4} - \frac{2}{4}\right| + \left|\frac{1}{4}\right| + |0| + |0| \\
+&= \left|-\frac{1}{4}\right| + \frac{1}{4} + 0 + 0 \\
+&= \frac{1}{4} + \frac{1}{4} \\
+&= \frac{1}{2}
+\end{align*}
 }
 
-\subsubsection*{Step 2: Calculate each distance and divergence}
+\subsubsection*{\normalfont}{$\therefore$ $\ell_1 = \frac{1}{2}$}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+\subsection*{Solution 6}
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\subsubsection*{6 (c): KL divergence $K(p, q)$}
 \parbox{\textwidth}{
-\textbf{Part (i):} $\|p - q\|_1$ where $p = \begin{bmatrix} 1/2 \\ 1/4 \\ 1/8 \\ 1/8 \end{bmatrix}$ and $q = \begin{bmatrix} 1/4 \\ 1/4 \\ 1/4 \\ 1/4 \end{bmatrix}$
-
-$$p - q = \begin{bmatrix} 1/2 - 1/4 \\ 1/4 - 1/4 \\ 1/8 - 1/4 \\ 1/8 - 1/4 \end{bmatrix} = \begin{bmatrix} 1/4 \\ 0 \\ -1/8 \\ -1/8 \end{bmatrix}$$
-
-$$\|p - q\|_1 = |1/4| + |0| + |-1/8| + |-1/8| = 1/4 + 0 + 1/8 + 1/8 = 1/4 + 1/4 = 1/2$$
-
-\textbf{Part (ii):} $\|q - r\|_1$ where $q = \begin{bmatrix} 1/4 \\ 1/4 \\ 1/4 \\ 1/4 \end{bmatrix}$ and $r = \begin{bmatrix} 1/2 \\ 0 \\ 1/4 \\ 1/4 \end{bmatrix}$
-
-$$q - r = \begin{bmatrix} 1/4 - 1/2 \\ 1/4 - 0 \\ 1/4 - 1/4 \\ 1/4 - 1/4 \end{bmatrix} = \begin{bmatrix} -1/4 \\ 1/4 \\ 0 \\ 0 \end{bmatrix}$$
-
-$$\|q - r\|_1 = |-1/4| + |1/4| + |0| + |0| = 1/4 + 1/4 + 0 + 0 = 1/2$$
-
-\textbf{Part (iii):} $KL(p \| q)$
-
-$$KL(p \| q) = \sum_{i=1}^{4} p_i \log\left(\frac{p_i}{q_i}\right)$$
-$$= \frac{1}{2}\log\left(\frac{1/2}{1/4}\right) + \frac{1}{4}\log\left(\frac{1/4}{1/4}\right) + \frac{1}{8}\log\left(\frac{1/8}{1/4}\right) + \frac{1}{8}\log\left(\frac{1/8}{1/4}\right)$$
-$$= \frac{1}{2}\log(2) + \frac{1}{4}\log(1) + \frac{1}{8}\log(1/2) + \frac{1}{8}\log(1/2)$$
-$$= \frac{1}{2}\log(2) + 0 + \frac{1}{8}(-\log(2)) + \frac{1}{8}(-\log(2))$$
-$$= \frac{1}{2}\log(2) - \frac{1}{4}\log(2) = \frac{1}{4}\log(2)$$
-
-\textbf{Part (iv):} $KL(q \| r)$
-
-$$KL(q \| r) = \sum_{i=1}^{4} q_i \log\left(\frac{q_i}{r_i}\right)$$
-$$= \frac{1}{4}\log\left(\frac{1/4}{1/2}\right) + \frac{1}{4}\log\left(\frac{1/4}{0}\right) + \frac{1}{4}\log\left(\frac{1/4}{1/4}\right) + \frac{1}{4}\log\left(\frac{1/4}{1/4}\right)$$
-
-Since $r_2 = 0$ and $q_2 = 1/4 > 0$, we have $\log(q_2/r_2) = \log(1/4/0) = +\infty$.
-
-Therefore: $KL(q \| r) = +\infty$
+The Kullback-Leibler (KL) divergence from a distribution $p$ to a distribution $q$ is defined as:
+$$K(p, q) = \sum_{i} p_i \ln \frac{p_i}{q_i}$$
+Let $p = \begin{bmatrix} 1/2 \\ 1/4 \\ 1/8 \\ 1/8 \end{bmatrix}$ and $q = \begin{bmatrix} 1/4 \\ 1/4 \\ 1/4 \\ 1/4 \end{bmatrix}$
 }
 
-\subsubsection*{\normalfont}{$\therefore$ Final Answers}
-\begin{enumerate}
-\item $\|p - q\|_1 = \frac{1}{2}$
-\item $\|q - r\|_1 = \frac{1}{2}$
-\item $KL(p \| q) = \frac{1}{4}\log(2) \approx 0.173$
-\item $KL(q \| r) = +\infty$
-\end{enumerate}
+\begin{align*}
+K(p, q) &= \sum_{i=1}^{4} p_i \ln\left(\frac{p_i}{q_i}\right) \\
+&= p_1 \ln\left(\frac{p_1}{q_1}\right) + p_2 \ln\left(\frac{p_2}{q_2}\right) + p_3 \ln\left(\frac{p_3}{q_3}\right) + p_4 \ln\left(\frac{p_4}{q_4}\right) \\
+&= \frac{1}{2}\ln\left(\frac{1/2}{1/4}\right) + \frac{1}{4}\ln\left(\frac{1/4}{1/4}\right) + \frac{1}{8}\ln\left(\frac{1/8}{1/4}\right) + \frac{1}{8}\ln\left(\frac{1/8}{1/4}\right) \\
+&= \frac{1}{2}\ln(2) + \frac{1}{4}\ln(1) + \frac{1}{8}\ln\left(\frac{1}{2}\right) + \frac{1}{8}\ln\left(\frac{1}{2}\right) \\
+&= \frac{1}{2}\ln(2) + \frac{1}{4}(0) - \frac{1}{8}\ln(2) - \frac{1}{8}\ln(2) \\
+&= \frac{1}{2}\ln(2) - \frac{2}{8}\ln(2) \\
+&= \left(\frac{1}{2} - \frac{1}{4}\right)\ln(2) \\
+&= \frac{1}{4}\ln(2)
+\end{align*}
 
-\subsubsection*{\normalfont}{Graduate Level Explanation}
-The $\ell_1$ distance is symmetric and satisfies the triangle inequality, making it a proper metric on the probability simplex. Interestingly, both pairs have the same $\ell_1$ distance despite having different structures. The KL divergence, however, is asymmetric and not a true metric. $KL(p \| q)$ is finite because $q$ has full support (no zero entries), but $KL(q \| r) = \infty$ because $r$ has a zero entry where $q$ has positive probability. This illustrates a fundamental property: KL divergence from a distribution with full support to one with restricted support is infinite, making it useful for detecting when probability mass is assigned to impossible events in the reference distribution.
+\subsubsection*{\normalfont{$\therefore$ $K(p,q) = \frac{1}{4}\ln(2)$}}
+\noindent\rule{\textwidth}{0.4pt}\\
 
-\subsubsection*{\normalfont}{Explanation for 5 year old}
-The $\ell_1$ distance is like counting how much you need to move marbles between jars to make them the same - it's always the same no matter which direction you go. But KL divergence is like asking "how surprised would I be?" If one jar is completely empty but you expected marbles there, you'd be infinitely surprised! That's why one answer is infinity - it's like expecting something that's impossible.
+\newpage
+
+\subsection*{Solution 6}
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\subsubsection*{6 (d): KL divergence $K(q, r)$}
+\parbox{\textwidth}{
+The Kullback-Leibler (KL) divergence from a distribution $p$ to a distribution $q$ is defined as:
+$$K(p, q) = \sum_{i} p_i \ln \frac{p_i}{q_i}$$
+Let $q = \begin{bmatrix} 1/4 \\ 1/4 \\ 1/4 \\ 1/4 \end{bmatrix}$ and $r = \begin{bmatrix} 1/2 \\ 0 \\ 1/4 \\ 1/4 \end{bmatrix}$ \\
+
+Looking at the second component ($i=2$). Here, $q_2 = \frac{1}{4} > 0$ while $r_2 = 0$. The corresponding term in the KL divergence sum, $q_2 \ln\left(\frac{q_2}{r_2}\right)$, involves division by zero. \\
+
+Hence, the divergence will be infinite.
+}
+\subsubsection*{\normalfont}{$\therefore$ $K(q, r) = \infty$}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
