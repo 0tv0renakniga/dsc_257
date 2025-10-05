@@ -198,12 +198,8 @@ The dimension of vector $p$ is $3$ and $k=n-1$ where $k$ is the dimension of the
 \subsection*{Solution 4}
 \noindent\rule{\textwidth}{0.4pt}\\
 
-\subsubsection*{Step 1: Understand what scaling means and the constraints of $\Delta_2$}
+\subsubsection*{Step 1: Define probability simplex $\Delta_2$ }
 \parbox{\textwidth}{
-Scaling a vector means multiplying all entries by the same positive constant $c > 0$.
-
-The probability simplex $\Delta_2$ is defined as:
-$$\Delta_2 = \left\{x \in \mathbb{R}^3 : x_i \geq 0 \text{ for all } i = 1,2,3, \text{ and } \sum_{i=1}^{3} x_i = 1\right\}$$
 
 For a point to be scalable to $\Delta_2$, after scaling it must satisfy:
 \begin{itemize}
@@ -212,27 +208,14 @@ For a point to be scalable to $\Delta_2$, after scaling it must satisfy:
 \end{itemize}
 }
 
-\subsubsection*{Step 2: Find a point that violates the constraints}
+\subsubsection*{Step 2: Give example that violates one of the rules in Step 1}
 \parbox{\textwidth}{
-Since we need a 2-dimensional point, let's consider $x = \begin{bmatrix} a \\ b \end{bmatrix}$ where we interpret this as a 3-dimensional vector $\begin{bmatrix} a \\ b \\ 0 \end{bmatrix}$.
+Let $x = \begin{bmatrix} 1 \\ -2 \end{bmatrix}$
 
-For any point with a negative component, scaling cannot make it non-negative. 
-
-Example: Let $x = \begin{bmatrix} 1 \\ -2 \end{bmatrix}$
-
-If we scale by any $c > 0$: $cx = \begin{bmatrix} c \\ -2c \end{bmatrix}$
-
-The second component $-2c < 0$ for any $c > 0$, so this scaled vector cannot satisfy the non-negativity constraint of $\Delta_2$.
+The second component of $x$ violates the first rule, all components for a point must be non-negative $\Delta_2$.
 }
 
-\subsubsection*{\normalfont}{$\therefore$ Final Answer}
-Example: $x = \begin{bmatrix} 1 \\ -2 \end{bmatrix}$ (or any 2D point with at least one negative component)
-
-\subsubsection*{\normalfont}{Graduate Level Explanation}
-The key insight is that scaling preserves the sign of each component - it cannot transform negative values to positive ones. Since the probability simplex requires all components to be non-negative, any vector containing negative components cannot be scaled to lie within it. This geometric constraint is fundamental in applications like topic modeling or mixture models, where negative probabilities are meaningless. The orthant restriction (non-negativity) combined with the sum constraint defines the simplex as a bounded convex polytope, and scaling operations represent rays from the origin that either intersect this polytope or miss it entirely.
-
-\subsubsection*{\normalfont}{Explanation for 5 year old}
-Imagine you have a recipe with ingredients, but one of the "amounts" is negative - like "negative 2 cups of flour." No matter how much you shrink or grow the recipe (scaling), you'll still need a negative amount of flour, which doesn't make sense! The probability simplex is like a rule that says "all ingredients must be positive amounts," so any recipe with negative ingredients can never follow this rule, no matter how you scale it.
+\subsubsection*{\normalfont}{$\therefore$ the point $x = \begin{bmatrix} 1 \\ -2 \end{bmatrix}$ cannot be scaled to lie in $\Delta_{2}$}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
