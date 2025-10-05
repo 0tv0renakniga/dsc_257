@@ -472,4 +472,136 @@ The $\ell_1$ distance is like counting how much you need to move marbles between
 % pretrain_cnn_acc(last_fc): 92.1%
 % random_cnn_acc(last_conv): 40.6%
 % random_cnn_acc(last_fc): 39.1%
+
+\newpage
+
+\subsection*{Solution 1: Scalability on the Probability Simplex}
+
+\subsubsection*{Step 1: Define the Probability Simplex $\Delta_2$}
+\parbox{\textwidth}{
+  The probability simplex $\Delta_k$ is the set of all $k$-dimensional vectors with non-negative components that sum to 1. For $k=2$, a vector $p = \begin{bmatrix} p_1 \\ p_2 \end{bmatrix}$ is in $\Delta_2$ if and only if it satisfies two conditions:
+\begin{enumerate}
+    \item \textbf{Non-negativity:} $p_1 \geq 0$ and $p_2 \geq 0$.
+    \item \textbf{Sum-to-one:} $p_1 + p_2 = 1$.
+\end{enumerate}
+The question asks if for any vector $p \in \mathbb{R}^2$ and scalar $c > 0$, the condition $c \cdot p \in \Delta_2$ implies that $p \in \Delta_2$.}
+
+\subsubsection*{Step 2: Analyze the Constraints under Scaling}
+\parbox{\textwidth}{Let $q = c \cdot p = \begin{bmatrix} c p_1 \\ c p_2 \end{bmatrix}$. We are given that $q \in \Delta_2$.
+\begin{itemize}
+    \item \textbf{Non-negativity:} Since $c > 0$ and we are given $c p_1 \geq 0$ and $c p_2 \geq 0$, it must be that $p_1 \geq 0$ and $p_2 \geq 0$. This condition is satisfied for $p$.
+    \item \textbf{Sum-to-one:} We are given that the components of $q$ sum to 1: $c p_1 + c p_2 = 1$. Factoring out $c$, we get $c(p_1 + p_2) = 1$, which implies $p_1 + p_2 = \frac{1}{c}$.
+\end{itemize}
+For $p$ to be in $\Delta_2$, its components must sum to 1, i.e., $p_1 + p_2 = 1$. This only holds if $\frac{1}{c} = 1$, which means $c=1$. Since the statement must hold for any $c > 0$, we can find a counterexample by choosing $c \neq 1$.}
+
+\subsubsection*{Step 3: Construct a Counterexample}
+\parbox{\textwidth}{Let $c=2$. Choose a point $q \in \Delta_2$, for example, $q = \begin{bmatrix} 0.5 \\ 0.5 \end{bmatrix}$.
+If $c \cdot p = q$, then $p = \frac{1}{c} q = \frac{1}{2} \begin{bmatrix} 0.5 \\ 0.5 \end{bmatrix} = \begin{bmatrix} 0.25 \\ 0.25 \end{bmatrix}$.
+Let's check if this $p$ is in $\Delta_2$:
+\begin{itemize}
+    \item \textbf{Non-negativity:} $p_1 = 0.25 \geq 0$ and $p_2 = 0.25 \geq 0$. (Satisfied)
+    \item \textbf{Sum-to-one:} $p_1 + p_2 = 0.25 + 0.25 = 0.5 \neq 1$. (Not satisfied)
+\end{itemize}
+Since $p$ does not satisfy the sum-to-one constraint, $p \notin \Delta_2$. Thus, the statement is false.}
+
+\subsubsection*{\normalfont}{$\therefore$ Final Answer}\\
+\parbox{\textwidth}{The statement is \textbf{false}. A counterexample is $p = \begin{bmatrix} 0.25 \\ 0.25 \end{bmatrix}$ and $c=2$. Here, $c \cdot p = \begin{bmatrix} 0.5 \\ 0.5 \end{bmatrix} \in \Delta_2$, but $p \notin \Delta_2$ because its components sum to $0.5$, not $1$.}
+
+\subsubsection*{\normalfont}{Graduate Level Explanation}\\
+\parbox{\textwidth}{
+  The probability simplex $\Delta_k$ is an affine subspace of $\mathbb{R}^k$, specifically the intersection of the hyperplane $\sum x_i = 1$ and the non-negative orthant $\mathbb{R}^k_+$. While the non-negative orthant is a convex cone (closed under non-negative scalar multiplication), the hyperplane $\sum x_i = 1$ is not a linear subspace as it does not contain the origin. Scaling a vector $p$ by $c \neq 1$ moves it off this hyperplane, thus violating the sum-to-one constraint. The set of vectors whose scaled versions lie on the simplex forms a cone over the simplex, but these vectors are not, in general, on the simplex themselves.}
+
+\subsubsection*{\normalfont}{Explanation for a 5 year old}\\
+\parbox{\textwidth}{Imagine a recipe for one special juice drink says you need 1 cup of ingredients in total. This "1 cup total" rule is very important. You find a bottle of juice that follows the rule. Your friend says, "I have a different bottle, and if I pour out half of it, it's exactly the same as your juice." Your friend's bottle might follow the non-negativity rule (it has juice in it), but it must have had 2 cups of ingredients to begin with. So, your friend's original bottle did not follow the "1 cup total" rule.}
+
+\noindent\rule{\textwidth}{0.4pt}\\\\
+
+\subsection*{Solution 2: Sketching the Probability Simplex $\Delta_3$}
+
+\subsubsection*{Step 1: Define the Geometry of $\Delta_3$}
+\parbox{\textwidth}{The probability simplex $\Delta_3$ is the set of points $p = \begin{bmatrix} p_1 & p_2 & p_3 \end{bmatrix}^\top$ in $\mathbb{R}^3$ satisfying:
+\begin{enumerate}
+    \item $p_1 \geq 0, p_2 \geq 0, p_3 \geq 0$ (it lies in the first octant).
+    \item $p_1 + p_2 + p_3 = 1$ (it lies on a plane).
+\end{enumerate}
+The intersection of the plane $p_1+p_2+p_3=1$ with the first octant forms a bounded, closed shape. To identify the shape, we find its vertices.}
+
+\subsubsection*{Step 2: Identify the Vertices and the Central Point}
+\parbox{\textwidth}{The vertices of the shape are the points where the plane intersects the coordinate axes.
+\begin{itemize}
+    \item Intersection with $p_1$-axis ($p_2=0, p_3=0$): $p_1 = 1$. Vertex $v_1 = \begin{bmatrix} 1 & 0 & 0 \end{bmatrix}^\top$.
+    \item Intersection with $p_2$-axis ($p_1=0, p_3=0$): $p_2 = 1$. Vertex $v_2 = \begin{bmatrix} 0 & 1 & 0 \end{bmatrix}^\top$.
+    \item Intersection with $p_3$-axis ($p_1=0, p_2=0$): $p_3 = 1$. Vertex $v_3 = \begin{bmatrix} 0 & 0 & 1 \end{bmatrix}^\top$.
+\end{itemize}
+Connecting these three vertices in 3D space forms an equilateral triangle. The "most central" point of this triangle is its barycenter (or centroid), which is the average of the coordinates of its vertices.}
+
+\subsubsection*{Step 3: Calculate the Centroid}
+\parbox{\textwidth}{The coordinates of the centroid $p_c$ are:
+$$ p_c = \frac{v_1 + v_2 + v_3}{3} = \frac{1}{3} \left( \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix} + \begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix} + \begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix} \right) = \frac{1}{3} \begin{bmatrix} 1 \\ 1 \\ 1 \end{bmatrix} = \begin{bmatrix} 1/3 \\ 1/3 \\ 1/3 \end{bmatrix} $$
+This point corresponds to the uniform probability distribution over three outcomes.}
+
+\subsubsection*{\normalfont}{$\therefore$ Final Answer}\\
+\parbox{\textwidth}{\textbf{Sketch Description:} The probability simplex $\Delta_3$ is an equilateral triangle in 3D space whose vertices are at the standard basis vectors $\begin{bmatrix} 1, 0, 0 \end{bmatrix}^\top$, $\begin{bmatrix} 0, 1, 0 \end{bmatrix}^\top$, and $\begin{bmatrix} 0, 0, 1 \end{bmatrix}^\top$.
+
+\textbf{Most Central Point:} The coordinates of the most central point (the barycenter) are $\begin{bmatrix} 1/3 \\ 1/3 \\ 1/3 \end{bmatrix}^\top$.}
+
+\subsubsection*{\normalfont}{Graduate Level Explanation}\\
+\parbox{\textwidth}{The standard $k$-simplex, $\Delta_k$, is a $(k-1)$-dimensional convex polytope embedded in $\mathbb{R}^k$. For $k=3$, this results in a 2-dimensional triangle. The vertices are the standard basis vectors $e_1, e_2, e_3$, representing deterministic probability distributions. The barycenter of the simplex, $(1/k, \dots, 1/k)^\top$, corresponds to the uniform probability distribution. In information theory, this is the distribution with the maximum Shannon entropy, representing the state of maximum uncertainty.}
+
+\subsubsection*{\normalfont}{Explanation for a 5 year old}\\
+\parbox{\textwidth}{Imagine a big glass cube. Now, imagine you slice it with a flat piece of glass. The slice starts at the number 1 on the `x` line, goes to the number 1 on the `y` line, and also to the number 1 on the `z` line. The shape of this flat slice inside the corner of the cube is a perfect triangle. The very middle of that triangle is its balancing point. That special point is at $(1/3, 1/3, 1/3)$, which means it's an equal distance from all three number lines.}
+
+\noindent\rule{\textwidth}{0.4pt}\\\\
+
+\subsection*{Solution 3: $\ell_1$ Distance and KL Divergence}
+
+\subsubsection*{Step 1: Calculate the $\ell_1$ Distance}
+\parbox{\textwidth}{The $\ell_1$ distance between two vectors $p, q \in \mathbb{R}^n$ is given by $\|p-q\|_1 = \sum_{i=1}^n |p_i - q_i|$.
+For $p = \begin{bmatrix} 1/2 & 1/4 & 1/8 & 1/8 \end{bmatrix}^\top$ and $q = \begin{bmatrix} 1/4 & 1/4 & 1/4 & 1/4 \end{bmatrix}^\top$:
+\begin{align*}
+    \|p-q\|_1 &= \left|\frac{1}{2} - \frac{1}{4}\right| + \left|\frac{1}{4} - \frac{1}{4}\right| + \left|\frac{1}{8} - \frac{1}{4}\right| + \left|\frac{1}{8} - \frac{1}{4}\right| \\
+    &= \left|\frac{2}{4} - \frac{1}{4}\right| + |0| + \left|\frac{1}{8} - \frac{2}{8}\right| + \left|\frac{1}{8} - \frac{2}{8}\right| \\
+    &= \frac{1}{4} + 0 + \left|-\frac{1}{8}\right| + \left|-\frac{1}{8}\right| \\
+    &= \frac{1}{4} + \frac{1}{8} + \frac{1}{8} = \frac{2}{8} + \frac{1}{8} + \frac{1}{8} = \frac{4}{8} = \frac{1}{2}
+\end{align*}}
+
+\subsubsection*{Step 2: Calculate the KL Divergence $K(p, q)$}
+\parbox{\textwidth}{The Kullback-Leibler (KL) divergence from $q$ to $p$ is $K(p, q) = \sum_{i=1}^n p_i \ln \frac{p_i}{q_i}$.
+\begin{align*}
+    K(p, q) &= p_1 \ln\left(\frac{p_1}{q_1}\right) + p_2 \ln\left(\frac{p_2}{q_2}\right) + p_3 \ln\left(\frac{p_3}{q_3}\right) + p_4 \ln\left(\frac{p_4}{q_4}\right) \\
+    &= \frac{1}{2} \ln\left(\frac{1/2}{1/4}\right) + \frac{1}{4} \ln\left(\frac{1/4}{1/4}\right) + \frac{1}{8} \ln\left(\frac{1/8}{1/4}\right) + \frac{1}{8} \ln\left(\frac{1/8}{1/4}\right) \\
+    &= \frac{1}{2} \ln(2) + \frac{1}{4} \ln(1) + \frac{1}{8} \ln\left(\frac{1}{2}\right) + \frac{1}{8} \ln\left(\frac{1}{2}\right) \\
+    &= \frac{1}{2} \ln(2) + 0 - \frac{1}{8} \ln(2) - \frac{1}{8} \ln(2) \\
+    &= \left(\frac{1}{2} - \frac{1}{8} - \frac{1}{8}\right) \ln(2) = \left(\frac{4}{8} - \frac{2}{8}\right) \ln(2) = \frac{2}{8} \ln(2) = \frac{1}{4} \ln(2)
+\end{align*}}
+
+\subsubsection*{Step 3: Calculate the KL Divergence $K(q, p)$}
+\parbox{\textwidth}{The KL divergence from $p$ to $q$ is $K(q, p) = \sum_{i=1}^n q_i \ln \frac{q_i}{p_i}$.
+\begin{align*}
+    K(q, p) &= q_1 \ln\left(\frac{q_1}{p_1}\right) + q_2 \ln\left(\frac{q_2}{p_2}\right) + q_3 \ln\left(\frac{q_3}{p_3}\right) + q_4 \ln\left(\frac{q_4}{p_4}\right) \\
+    &= \frac{1}{4} \ln\left(\frac{1/4}{1/2}\right) + \frac{1}{4} \ln\left(\frac{1/4}{1/4}\right) + \frac{1}{4} \ln\left(\frac{1/4}{1/8}\right) + \frac{1}{4} \ln\left(\frac{1/4}{1/8}\right) \\
+    &= \frac{1}{4} \ln\left(\frac{1}{2}\right) + \frac{1}{4} \ln(1) + \frac{1}{4} \ln(2) + \frac{1}{4} \ln(2) \\
+    &= -\frac{1}{4} \ln(2) + 0 + \frac{1}{4} \ln(2) + \frac{1}{4} \ln(2) \\
+    &= \frac{1}{4} \ln(2)
+\end{align*}}
+
+\subsubsection*{\normalfont}{$\therefore$ Final Answer}\\
+\parbox{\textwidth}{For the given probability distributions $p$ and $q$:
+\begin{itemize}
+    \item The $\ell_1$ distance is $\|p-q\|_1 = \mathbf{\frac{1}{2}}$.
+    \item The KL divergence from $q$ to $p$ is $K(p, q) = \mathbf{\frac{1}{4} \ln(2)}$.
+    \item The KL divergence from $p$ to $q$ is $K(q, p) = \mathbf{\frac{1}{4} \ln(2)}$.
+\end{itemize}}
+
+\subsubsection*{\normalfont}{Graduate Level Explanation}\\
+\parbox{\textwidth}{The $\ell_1$ distance is a true metric satisfying symmetry and the triangle inequality; on the probability simplex, it is equivalent to twice the total variation distance. The Kullback-Leibler divergence, conversely, is not a metric. It is asymmetric ($K(p,q) \neq K(q,p)$ in general, although they coincide in this specific case) and does not satisfy the triangle inequality. It is a Bregman divergence generated by the negative entropy function, and it quantifies the expected inefficiency (in terms of information) of using a code optimized for distribution $q$ to encode data from the true distribution $p$. By Gibbs' inequality, $K(p,q) \geq 0$ with equality if and only if $p=q$.}
+
+\subsubsection*{\normalfont}{Explanation for a 5 year old}\\
+\parbox{\textwidth}{\textbf{L1 Distance:} Imagine you have two towers built from 4 kinds of colored blocks. Tower P has 4 red, 2 blue, 1 green, 1 yellow. Tower Q has 2 red, 2 blue, 2 green, 2 yellow. The "distance" is how many blocks you have to move to make Tower P look exactly like Tower Q. You need to take 2 red blocks away and add 1 green and 1 yellow. That's 4 moves in total. Our math gives an answer of 1/2, which is like a grown-up way of counting this.
+
+\textbf{KL Divergence:} This is like a guessing game. Your bag of marbles has the colors mixed like in Tower P. Your friend thinks the colors are mixed like in Tower Q. The KL number measures how "surprised" your friend will be, on average, each time they pull a marble from your bag. A bigger number means more surprise! It's not usually the same amount of surprise as if you pulled from their bag, but for these special towers, it happens to be the same.}
+
+\end{document}
+
+
 \end{document}
