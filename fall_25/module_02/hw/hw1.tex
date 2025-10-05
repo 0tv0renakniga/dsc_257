@@ -165,8 +165,7 @@ $$
 %------------------
 \subsection*{Solution 3}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsection*{Solution 3 (a)}
-\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 3 (a)}
 \subsubsection*{Step 1: Normalize the vector $x$}
 \parbox{\textwidth}{
 Let $x = \begin{bmatrix} 10 \\ 15 \\ 25 \end{bmatrix}$
@@ -180,8 +179,9 @@ $$p = \frac{1}{50} \cdot x = \frac{1}{50} \begin{bmatrix} 10 \\ 15 \\ 25 \end{bm
 \subsubsection*{\normalfont}{$\therefore$ the result ($p$) of scaling vertor $x$ is the following:}
 $$p = \begin{bmatrix} 0.2 \\ 0.3 \\ 0.5 \end{bmatrix}$$ \\
 
-\subsection*{Solution 3 (b)}
 \noindent\rule{\textwidth}{0.4pt}\\
+
+\subsubsection*{Solution 3 (b)}
 \subsubsection*{Step 1: Define dimension of the probability simplex}
 \parbox{\textwidth}{
 The dimension of vector $p$ is $3$ and $k=n-1$ where $k$ is the dimension of the probability simplex
@@ -400,8 +400,8 @@ K(p, q) &= \sum_{i=1}^{4} p_i \ln\left(\frac{p_i}{q_i}\right) \\
 
 \subsubsection*{6 (d): KL divergence $K(q, r)$}
 \parbox{\textwidth}{
-The Kullback-Leibler (KL) divergence from a distribution $p$ to a distribution $q$ is defined as:
-$$K(p, q) = \sum_{i} p_i \ln \frac{p_i}{q_i}$$
+The Kullback-Leibler (KL) divergence from a distribution $q$ to a distribution $r$ is defined as:
+$$K(q, r) = \sum_{i} q_i \ln \frac{q_i}{r_i}$$
 Let $q = \begin{bmatrix} 1/4 \\ 1/4 \\ 1/4 \\ 1/4 \end{bmatrix}$ and $r = \begin{bmatrix} 1/2 \\ 0 \\ 1/4 \\ 1/4 \end{bmatrix}$ \\
 
 Looking at the second component ($i=2$). Here, $q_2 = \frac{1}{4} > 0$ while $r_2 = 0$. The corresponding term in the KL divergence sum, $q_2 \ln\left(\frac{q_2}{r_2}\right)$, involves division by zero. \\
@@ -418,6 +418,157 @@ Hence, the divergence will be infinite.
 %------------------
 \subsection*{Solution 7}
 \noindent\rule{\textwidth}{0.4pt}\\
+
+\subsubsection*{Python Code}
+\begin{lstlisting}
+import numpy as np
+import matplotlib.pyplot as plt
+from extract_feature import compute_or_load_features
+from sklearn.neighbors import KNeighborsClassifier
+
+def run_nearest_neighbor(x_train, y_train, x_test, y_test):
+    # create classifier    
+    nn_classifier = KNeighborsClassifier(n_neighbors=1, algorithm='auto')
+
+    # train 
+    nn_classifier.fit(x_train, y_train)
+
+    # test and report accuracy
+    test_acc = nn_classifier.score(x_test, y_test)
+
+    print("Nearest neighbor accuracy on the test set: %f"%test_acc)
+
+    return nn_classifier
+
+
+def analyze_nn(classifier, x_train, y_train, x_test, y_test, x_test_features, N, model_type):
+    """
+    generalization to grab indices, predictions, and make plots
+    """
+    # list of image labels
+    CIFAR_CLASSES = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+
+    # get predictions of classifier on test data
+    y_pred = classifier.predict(x_test_features)
+    
+    # define bool condtion where classifier made correct prediction
+    is_correct = (y_pred == y_test)
+    
+    # get indices for correct and incorrect samples
+    correct_indices_test = np.where(is_correct)[0][:N]
+    incorrect_indices_test = np.where(~is_correct)[0][:N]
+    
+    # make image plots 
+    def plot_pairs(title, test_indices):
+        
+        # check just in case of bad result.. nema nista
+        if len(test_indices) == 0:
+            return
+            
+        # Get the feature vectors for the selected test images (flattened)
+        selected_test_features = x_test_features[test_indices]
+        
+        # get nearest neighbor
+        # note: kneighbors -> (distances, indices).. only need the indices.
+        _, nn_train_indices_2D = classifier.kneighbors(X=selected_test_features, n_neighbors=1)
+        
+        # 2D -> 1D
+        nn_train_indices = nn_train_indices_2D.flatten()
+        
+        # get images and labels for the selected test points
+        test_images_sample = x_test[test_indices]
+        test_labels_sample = y_test[test_indices]
+        
+        #get the RAW neighbor image and label from the training points
+        nn_images_sample = x_train[nn_train_indices]
+        nn_labels_sample = y_train[nn_train_indices]
+        
+        # prediction is nearest neighbor label
+        y_pred_sample = nn_labels_sample
+        
+        # reshape (N, C, H, W) to (N, H, W, C) for plot
+        test_images_plt = test_images_sample.transpose(0, 2, 3, 1)
+        nn_images_plt = nn_images_sample.transpose(0, 2, 3, 1)
+
+        N_plot = len(test_indices)
+        
+        # just in case only 1 image is plotted (axes will be 1D instead of 2D)
+        if N_plot == 1:
+            fig, axes = plt.subplots(N_plot, 2, figsize=(6, 2))
+            axes = axes[np.newaxis, :] 
+        else:
+            fig, axes = plt.subplots(N_plot, 2, figsize=(6, 2 * N_plot))
+            
+        fig.suptitle(title, fontsize=14, y=1.02)
+        
+        for i in range(N_plot):
+            is_correct = (test_labels_sample[i] == y_pred_sample[i])
+            pred_color = 'green' if is_correct else 'red'
+            
+            # plot test image
+            axes[i, 0].imshow(test_images_plt[i] / 255.0)
+            axes[i, 0].set_title(f"Test ({CIFAR_CLASSES[test_labels_sample[i]]})", fontsize=10)
+            axes[i, 0].axis('off')
+            
+            # plot nearest neighbor
+            axes[i, 1].imshow(nn_images_plt[i] / 255.0)
+            axes[i, 1].set_title(
+                f"NN ({CIFAR_CLASSES[nn_labels_sample[i]]})", 
+                fontsize=10, 
+                color=pred_color
+            )
+            axes[i, 1].axis('off')
+        
+        plt.tight_layout(rect=[0, 0.03, 1, 0.98])
+        plt.show()
+        fig.savefig(f"{title.split(' ')[2].lower()}_{model_type}.png")
+
+    # plot correct and incorrect cases
+    plot_pairs(f"First {N} Correct Predictions ({model_type})", correct_indices_test)
+    plot_pairs(f"First {N} Incorrect Predictions ({model_type})", incorrect_indices_test)
+
+# raw pixel 
+raw_pixel_train_features, raw_pixel_test_features = compute_or_load_features(x_train, x_test, "raw_pixel")
+raw_pixel_knn_classifier = run_nearest_neighbor(raw_pixel_train_features, y_train, raw_pixel_test_features, y_test)
+analyze_nn(
+    classifier=raw_pixel_knn_classifier,
+    x_train=x_train,  
+    y_train=y_train,
+    x_test=x_test,    
+    y_test=y_test,
+    x_test_features=raw_pixel_test_features, 
+    N=5,
+    model_type="raw_pixel"
+)
+
+# HoG
+hog_train_features, hog_test_features = compute_or_load_features(x_train, x_test, "hog")
+hog_knn_classifier = run_nearest_neighbor(hog_train_features, y_train, hog_test_features, y_test)
+analyze_nn(
+    classifier=hog_knn_classifier,
+    x_train=x_train,  
+    y_train=y_train,
+    x_test=x_test,    
+    y_test=y_test,
+    x_test_features=hog_test_features, 
+    N=5,
+    model_type="hog"
+)
+
+# vgg-last-fc
+pretrained_cnn_last_fc_train_features, pretrained_cnn_last_fc_test_features = compute_or_load_features(x_train, x_test, "pretrained_cnn", "last_fc")
+pretrained_cnn_last_fc_knn_classifier = run_nearest_neighbor(pretrained_cnn_last_fc_train_features, y_train, pretrained_cnn_last_fc_test_features, y_test)
+analyze_nearest_neighbors_simple(
+    classifier=pretrained_cnn_last_fc_knn_classifier,
+    x_train=x_train,  
+    y_train=y_train,
+    x_test=x_test,    
+    y_test=y_test,
+    x_test_features=pretrained_cnn_last_fc_test_features, 
+    N=5,
+    model_type='vgg_last_fc'
+)
+\end{lstlisting}
 \subsubsection*{Part a: Dimensionality for each of the representations (raw pixel, HoG, VGG-last-fc, VGG-last-conv)}
 \begin{center} 
   \begin{tabular}{|c|c|} 
@@ -486,6 +637,63 @@ Hence, the divergence will be infinite.
 
 \subsection*{Solution 8}
 \noindent\rule{\textwidth}{0.4pt}\\
+
+\subsubsection*{Python Code}
+\begin{lstlisting}
+import numpy as np
+from sklearn.neighbors import NearestNeighbors
+
+filename = 'glove.6B.300d.txt'
+with open(filename) as f:
+    content = f.read().splitlines()
+
+# initialize vecs and words 'containers'
+n = len(content)
+vecs = np.zeros((n, 300))
+words = ["" for i in range(n)] 
+for index, rawline in enumerate(content):
+    line = rawline.split()
+    words[index] = line[0]
+    # need4numpy speed
+    vecs[index] = np.array(line[1:], dtype=np.float32)
+
+# make dict for access to word and index
+word_to_index = {word: i for i, word in enumerate(words)}
+
+# initialize target words
+target_words = ['communism', 'africa', 'happy', 'sad', 'upset', 'computer', 'cat', 'dollar']
+
+# find 5 nearest neighbors (n).. remember k = n+1
+n_neighbors = 6
+
+# initialize  and fit the nn model
+nn_model = NearestNeighbors(n_neighbors=n_neighbors, metric='euclidean', algorithm='auto')
+nn_model.fit(vecs)
+
+# gracefully check for typo
+try:
+    target_indices = [word_to_index[word] for word in target_words]
+except KeyError as e:
+    print(f" error: word '{e.args[0]}' was not found.")
+    exit()
+
+# extract the corresponding vectors for the target words from vecs
+target_vectors = vecs[target_indices]
+
+# find the nearest neighbors
+distances, indices = nn_model.kneighbors(target_vectors)
+
+# format and print results
+results = {}
+for i, word in enumerate(target_words):
+    neighbor_indices = indices[i][1:]
+    neighbor_words = [words[idx] for idx in neighbor_indices]
+    results[word] = neighbor_words
+
+print(f"5 nearest neighbors in {filename} for {target_words}")
+print(results)
+
+\end{lstlisting}
 \subsubsection*{Word Vectors: 5 closest words}
 \begin{center} 
   \begin{tabular}{|c|c|} 
