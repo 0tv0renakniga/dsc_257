@@ -1,0 +1,171 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+\title{DSC 257R: Unsupervised Learning \\ Homework 2}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Distances and similarities}
+
+\textbf{Note:} Recall that for vectors in $\mathbb{R}^{d}$, the $\ell_{1}, \ell_{2}$, and $\ell_{\infty}$ norms are defined as follows.
+
+\begin{itemize}
+\item The $\ell_{1}$ norm: $\|x\|_{1}=\sum_{i=1}^{d}\left|x_{i}\right|$.
+\item The $\ell_{2}$ (Euclidean) norm: $\|x\|_{2}=\sqrt{\sum_{i=1}^{d} x_{i}^{2}}$.
+\item The $\ell_{\infty}$ norm: $\|x\|_{\infty}=\max _{i}\left|x_{i}\right|$.
+\end{itemize}
+
+The $\ell_{p}$ distance between two points $x, x^{\prime} \in \mathbb{R}^{d}$ is then the norm of $x-x^{\prime}$, that is, $\left\|x-x^{\prime}\right\|_{p}$.
+
+\begin{enumerate}
+
+\item For the point $x=\begin{bmatrix} 1 \\ -2 \\ 3 \end{bmatrix}$ in $\mathbb{R}^{3}$, compute the following.
+    \begin{enumerate}
+    \item $\|x\|_{1}$
+    \item $\|x\|_{2}$
+    \item $\|x\|_{\infty}$
+    \end{enumerate}
+
+\item Consider the following two points in $\mathbb{R}^{4}$:
+    \[
+    x=\begin{bmatrix} -1 \\ 1 \\ -1 \\ 1 \end{bmatrix}, \quad x^{\prime}=\begin{bmatrix} 1 \\ 1 \\ 1 \\ 1 \end{bmatrix}
+    \]
+    \begin{enumerate}
+    \item What is the $\ell_{2}$ distance between them?
+    \item What is the $\ell_{1}$ distance between them?
+    \item What is the $\ell_{\infty}$ distance between them?
+    \end{enumerate}
+
+\item Comparing the $\ell_{1}, \ell_{2}$, and $\ell_{\infty}$ norms.
+    \begin{enumerate}
+    \item Of all points $x \in \mathbb{R}^{d}$ with $\|x\|_{\infty}=1$, which has the largest $\ell_{1}$ norm? The largest $\ell_{2}$ norm?
+    \item Of all points $x \in \mathbb{R}^{d}$ with $\|x\|_{2}=1$, which has the largest $\ell_{1}$ norm? The largest $\ell_{\infty}$ norm?
+    \end{enumerate}
+
+    Here are some useful relationships between these three norms: for any $x \in \mathbb{R}^{d}$,
+    \[
+    \|x\|_{1} \geq \|x\|_{2} \geq \|x\|_{\infty}
+    \]
+    \[
+    \|x\|_{1} \leq \|x\|_{2} \cdot \sqrt{d} \leq \|x\|_{\infty} \cdot d
+    \]
+
+\item Weighted $\ell_{2}$ norm. Let $w_{1}, \ldots, w_{d} \geq 0$ be any non-negative numbers. Let $w=\left(w_{1}, \ldots, w_{d}\right)$ and define
+    \[
+    \|x\|_{w}=\sqrt{\sum_{i=1}^{d} w_{i} x_{i}^{2}}
+    \]
+    a weighted version of the $\ell_{2}$ norm on $\mathbb{R}^{d}$. Sketch the region $\|x\|_{w} \leq 1$ (we would describe this as the unit ball of the $\|\cdot\|_{w}$ norm) for $d=2$ and $w=(1,4)$.
+
+\item The following table specifies a distance function on the space $\mathcal{X}=\{A, B, C, D\}$. Is this a metric? Justify your answer.
+
+    \begin{table}[h]
+    \centering
+    \begin{tabular}{c|cccc}
+    & $A$ & $B$ & $C$ & $D$ \\
+    \hline
+    $A$ & 0 & 2 & 1 & 5 \\
+    $B$ & 2 & 0 & 4 & 3 \\
+    $C$ & 1 & 4 & 0 & 2 \\
+    $D$ & 5 & 3 & 2 & 0
+    \end{tabular}
+    \end{table}
+
+\item KL divergence properties. The KL divergence between two distributions $p$ and $q$ over a discrete (countable) set of outcomes $\mathcal{X}$ is given by
+    \[
+    K(p, q)=\sum_{x \in \mathcal{X}} p(x) \log \frac{p(x)}{q(x)}
+    \]
+    \begin{enumerate}
+    \item What is the largest this distance could be in the case $|\mathcal{X}|=2$?
+    \item Show by means of a small example, with $|\mathcal{X}|=2$, that this distance function is not symmetric.
+    \end{enumerate}
+
+\item Jaccard example. What is the Jaccard similarity between the following two sets?
+    \[
+    A=\{1,3,5,7,9\}, \quad B=\{2,3,5,7\}
+    \]
+
+\item Jaccard similarity for text data. When using the Jaccard similarity on text data, it is common to map a piece of text to the set of bigrams or trigrams in it. A bigram is a pair of words that appear consecutively in the text; a trigram is a triple of words that appear consecutively.
+
+    Consider, for example, the sentence $x=$ "a rose is a rose is a rose". It has
+    \begin{itemize}
+    \item bigrams $B(x)=\{(\text{a, rose}), (\text{rose, is}), (\text{is, a})\}$ and
+    \item trigrams $T(x)=\{(\text{a, rose, is}), (\text{rose, is, a}), (\text{is, a, rose})\}$.
+    \end{itemize}
+
+    To compute the similarity between two sentences $x$ and $x^{\prime}$, we could use the Jaccard similarity between $B(x)$ and $B(x^{\prime})$, or between $T(x)$ and $T(x^{\prime})$.
+
+    Compute the bigram-based Jaccard similarity between the following two sentences: "Napoleon was born in 1769" and "Napoleon was born when?". (You may assume the question mark is discarded when processing the second sentence.)
+
+\item Cosine similarity.
+    \begin{enumerate}
+    \item Compute the cosine similarity between $x=\begin{bmatrix} 1 \\ 2 \\ 3 \end{bmatrix}$ and $x^{\prime}=\begin{bmatrix} 3 \\ 2 \\ 1 \end{bmatrix}$.
+    \item When is the cosine similarity between two vectors equal to zero? Give a precise characterization in terms of the angle between the vectors.
+    \item Suppose that data lie in $\mathbb{R}^{2}$. Sketch the set of points whose cosine similarity to $x=\begin{bmatrix} 1 \\ 2 \end{bmatrix}$ is at least 0.9. In your picture, mark $x$; the rest of the sketch can be very rough, as long as it gives approximately the correct shape of the region.
+    \end{enumerate}
+
+\section*{Simple summary statistics}
+
+\item Loaded dice. A six-sided dice is loaded so that
+    \[
+    \operatorname{Pr}(1)=\operatorname{Pr}(2)=\frac{1}{3}, \quad \operatorname{Pr}(3)=\operatorname{Pr}(4)=\operatorname{Pr}(5)=\operatorname{Pr}(6)=\frac{1}{12}
+    \]
+    \begin{enumerate}
+    \item Let the random variable $X$ denote the outcome of rolling the dice. Compute the mean and median of $X$.
+    \item Compute the variance and standard deviation of $X$.
+    \item The dice is rolled 10 times, with outcomes
+        \[
+        2,5,1,4,2,2,5,6,1,2
+        \]
+        What is the empirical distribution corresponding to these observations?
+    \item Continuing from (c), what are the mean, median, variance, and standard deviation of the empirical distribution?
+    \end{enumerate}
+
+\item For which of the following random variables do you think the mean might be significantly different from the median? Give a brief justification in each case; there is quite a bit of subjectivity in this problem, so what matters is your reasoning.
+    \begin{enumerate}
+    \item Pick a person at random from a big city (e.g., New York), and let $H$ denote their height.
+    \item Let $C$ denote the cost of their house.
+    \item Let $G$ denote their high school GPA.
+    \item Let $S$ denote their salary.
+    \end{enumerate}
+
+\item A random variable $Z$ has mean $-1$ and standard deviation $2$. What is $\mathbb{E}\left[Z^{2}\right]$?
+
+\item Two random variables $X, Y$ take values in $\{1,2,3\}$ and have a joint distribution given by the following table.
+
+    \begin{table}[h]
+    \centering
+    \begin{tabular}{c|ccc}
+    & \multicolumn{3}{c}{$Y$} \\
+    \cline{2-4}
+    $X$ & 1 & 2 & 3 \\
+    \hline
+    1 & 0.1 & 0.2 & 0.05 \\
+    2 & 0.1 & 0.1 & 0.1 \\
+    3 & 0.1 & 0.2 & 0.05
+    \end{tabular}
+    \end{table}
+
+    \begin{enumerate}
+    \item Determine whether $X$ and $Y$ are independent or not. Justify your answer.
+    \item Compute the covariance and correlation between $X$ and $Y$.
+    \end{enumerate}
+
+\item Correlation between linearly related variables. Let $X$ be any random variable that takes values in $\mathbb{R}$, and let $Y=a X+b$ for some constants $a, b$.
+    \begin{enumerate}
+    \item Give a formula for the covariance between $X$ and $Y$, in terms of the variance of $X$.
+    \item What is the correlation between $X$ and $Y$?
+    \end{enumerate}
+
+\item Do deterministic relationships imply correlation? Suppose $X \in\{-1,0,1\}$ takes each value with probability exactly $1 / 3$. Specify a function $f$ on $\{-1,0,1\}$ such that $Y=f(X)$ is uncorrelated with $X$.
+
+\end{enumerate}
+
+\end{document}
+
