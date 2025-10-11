@@ -223,52 +223,189 @@ Let $x = \begin{bmatrix} -1 \\ 1 \\ -1 \\ 1 \end{bmatrix}$ and $x^{\prime}=\begi
 \subsection*{Solution 3}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 3 (a)}
-\subsubsection*{Step 1: Define Euclidean distance ($\ell_2$)}
+\subsubsection*{(i): Maximize $\|x\|_1$ given $\|x\|_{\infty}=1$}
 \parbox{\textwidth}{
-
-$$\ell_2 = \|p - q\|_2 = \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2}$$
-
+We are given the constraint $\|x\|_{\infty} = \max_{i} |x_i| = 1$. This implies that $|x_i| \le 1$ for all components $i=1, \dots, d$. The objective is to maximize the $\ell_1$-norm, which is the sum of the absolute values of the components, $\|x\|_1 = \sum_{i=1}^d |x_i|$. To make this sum as large as possible, each term $|x_i|$ in the sum must be maximized. The constraint allows each $|x_i|$ to be at most 1. Therefore, the maximum is achieved when $|x_i|=1$ for all $i$.
 }
-
-\subsubsection*{Step 2: Compute $\ell_2$}
+\begin{align*}
+    \|x\|_1 &= \sum_{i=1}^d |x_i| \\
+    &\le \sum_{i=1}^d 1 \quad (\text{since } |x_i| \le \|x\|_{\infty} = 1) \\
+    &\le d
+\end{align*}
 \parbox{\textwidth}{
-Let $p=1$ and $q=10$
-$$
-\begin{aligned}
-\ell_2 &= \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2}\\
-\ell_2 &= \sqrt{\sum_{i=1}^{1} (1 - 10)^2}\\
-\ell_2 &= \sqrt{(- 9)^2}\\
-\ell_2 &= 9
-\end{aligned}
-$$
+This maximum value is achieved by any vector $x$ where all components are either $+1$ or $-1$.
 }
-\subsubsection*{\normalfont}{$\therefore$ $\ell_{2} = 9$}
+\subsubsection*{\normalfont}{$\therefore$ The vector $x = \begin{bmatrix} \pm 1 \\ \pm 1 \\ \vdots \\ \pm 1 \end{bmatrix}$ maximizes the norm, with a value of $\|x\|_1 = d$.}
+
+\subsubsection*{(ii): Maximize $\|x\|_2$ given $\|x\|_{\infty}=1$}
+\parbox{\textwidth}{
+Given the same constraint $\|x\|_{\infty} = 1$, which implies $x_i^2 \le 1$ for all $i$, we seek to maximize the $\ell_2$-norm, $\|x\|_2 = \sqrt{\sum_{i=1}^d x_i^2}$. This is equivalent to maximizing the squared norm, $\|x\|_2^2 = \sum_{i=1}^d x_i^2$. To maximize this sum of squares, each term $x_i^2$ must be maximized. Given the constraint, the maximum value for any $x_i^2$ is $1^2=1$. This occurs when $|x_i|=1$ for all $i$.
+}
+\begin{align*}
+    \|x\|_2^2 &= \sum_{i=1}^d x_i^2 \\
+    &\le \sum_{i=1}^d 1^2 \quad (\text{since } x_i^2 \le \|x\|_{\infty}^2 = 1) \\
+    &\le d \\
+    \implies \|x\|_2 &\le \sqrt{d}
+\end{align*}
+\parbox{\textwidth}{
+This maximum is achieved by the same set of vectors as in the previous case, where all components are $\pm 1$.
+}
+\subsubsection*{\normalfont}{$\therefore$ The vector $x = \begin{bmatrix} \pm 1 \\ \pm 1 \\ \vdots \\ \pm 1 \end{bmatrix}$ maximizes the norm, with a value of $\|x\|_2 = \sqrt{d}$.}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
-\subsubsection*{Solution 2 (b)}
-\subsubsection*{Step 1: Define Euclidean distance ($\ell_2$)}
+\newpage
+
+%------------------
+% Solution for 3(b)
+%------------------
+\subsection*{Solution 3}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 3 (b)}
+\subsubsection*{(i): Maximize $\|x\|_1$ given $\|x\|_{2}=1$}
 \parbox{\textwidth}{
+We are given the constraint $\|x\|_{2} = 1$, or $\sum_{i=1}^d x_i^2 = 1$. We seek to maximize $\|x\|_1 = \sum_{i=1}^d |x_i|$. By the Cauchy-Schwarz inequality, for vectors $u=(|x_1|, \dots, |x_d|)$ and $v=(1, \dots, 1)$, we have $(\sum |x_i|)^2 \le (\sum |x_i|^2)(\sum 1^2)$. This is precisely $(\|x\|_1)^2 \le (\|x\|_2^2)(d)$.
+}
+\begin{align*}
+    (\|x\|_1)^2 &= \left(\sum_{i=1}^d |x_i|\right)^2 \\
+    &\le \left(\sum_{i=1}^d x_i^2\right) \left(\sum_{i=1}^d 1^2\right) \quad (\text{Cauchy-Schwarz Inequality}) \\
+    &\le (1)(d) \\
+    \implies \|x\|_1 &\le \sqrt{d}
+\end{align*}
+\parbox{\textwidth}{
+Equality holds when the vectors are linearly dependent, meaning $|x_1|=|x_2|=\dots=|x_d|=c$. The constraint $\sum x_i^2 = 1$ implies $d \cdot c^2 = 1$, so $c=1/\sqrt{d}$.
+}
+\subsubsection*{\normalfont}{$\therefore$ The vector $x = \begin{bmatrix} \pm 1/\sqrt{d} \\ \vdots \\ \pm 1/\sqrt{d} \end{bmatrix}$ maximizes the norm, with a value of $\|x\|_1 = \sqrt{d}$.}
+
+\subsubsection*{(ii): Maximize $\|x\|_{\infty}$ given $\|x\|_{2}=1$}
+\parbox{\textwidth}{
+Given the constraint $\sum_{i=1}^d x_i^2 = 1$, we seek to maximize $\|x\|_{\infty} = \max_i |x_i|$. Let $|x_k|$ be the component with the maximum absolute value. From the constraint, we can write $x_k^2 + \sum_{i \ne k} x_i^2 = 1$. Since the sum of squares is non-negative, it must be that $x_k^2 \le 1$, which implies $|x_k| = \|x\|_{\infty} \le 1$.
+}
+\begin{align*}
+    \|x\|_{\infty}^2 &= (\max_i |x_i|)^2 \\
+    &= \max_i (x_i^2) \\
+    &\le \sum_{i=1}^d x_i^2 \quad (\text{as all terms are non-negative}) \\
+    &\le 1 \\
+    \implies \|x\|_{\infty} &\le 1
+\end{align*}
+\parbox{\textwidth}{
+This maximum value of 1 is achieved when one component has a magnitude of 1, which forces all other components to be zero to satisfy the constraint.
+}
+\subsubsection*{\normalfont}{$\therefore$ Any standard basis vector $e_k$ (e.g., $x=\begin{bmatrix} 1 \\ 0 \\ \vdots \\ 0 \end{bmatrix}$) maximizes the norm, giving $\|x\|_{\infty}=1$.}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+\subsubsection*{\normalfont}{Graduate Level Explanation}
+This exercise demonstrates the geometric relationship between the unit balls of different $\ell_p$ norms. The task of maximizing one norm subject to a constraint on another is equivalent to finding the point on the surface of one unit ball that is "farthest" from the origin as measured by the other norm's metric. The results confirm the well-known norm inequalities for $x \in \mathbb{R}^d$:
+$$ \|x\|_{\infty} \le \|x\|_{2} \le \|x\|_{1} \le \sqrt{d}\|x\|_{2} \le d\|x\|_{\infty} $$
+Our findings show that these bounds are tight:
+\begin{itemize}
+    \item When constrained to the $\ell_\infty$ unit ball (a hypercube), the points that maximize the $\ell_1$ and $\ell_2$ norms are the corners of the hypercube, such as the vector of all ones. At these points, the inequalities $\|x\|_1 \le d\|x\|_{\infty}$ and $\|x\|_2 \le \sqrt{d}\|x\|_{\infty}$ become equalities.
+    \item When constrained to the $\ell_2$ unit ball (a hypersphere), the point that maximizes the $\ell_1$ norm is where the energy is distributed equally among all components (e.g., $(1/\sqrt{d}, \dots, 1/\sqrt{d})$). This point makes the inequality $\|x\|_1 \le \sqrt{d}\|x\|_2$ an equality. Conversely, the $\ell_\infty$ norm is maximized when all energy is concentrated in a single component (e.g., a basis vector like $(1, 0, \dots, 0)$), which corresponds to the points where the hypersphere intersects the coordinate axes and makes the inequality $\|x\|_{\infty} \le \|x\|_2$ an equality.
+\end{itemize}
+
+\subsubsection*{\normalfont}{Explanation for 5 year old}
+Imagine a big, flat playground. We're going to draw two different "play zones" you have to stay inside.
+\begin{enumerate}
+    \item A perfect \textbf{square} play zone.
+    \item A perfect \textbf{circle} play zone.
+\end{enumerate}
+Now, we want to find the spot inside your zone that is the "farthest" from the very center of the playground. But we have different ways to measure "farthest"!
+\begin{itemize}
+    \item \textbf{Walking Distance:} How many steps you take along the grid lines (like city blocks) to get back to the center.
+    \item \textbf{Flying Distance:} The straight line distance if you could fly like a bird.
+\end{itemize}
+Here is what we find:
+\begin{itemize}
+    \item If you are in the \textbf{SQUARE} zone: The farthest place you can be, for \textit{both} walking and flying, is always at one of the four \textbf{corners} of the square!
+    \item If you are in the \textbf{CIRCLE} zone: It gets tricky!
+    \begin{itemize}
+        \item To get the biggest \textbf{Walking Distance}, you should stand exactly in the middle of the curvy edge, halfway between North and East. You have to walk a medium amount in two directions.
+        \item To get the biggest "single-step" distance (the longest part of your walk), you should stand right at the top of the circle (the "North Pole"). Here, you put all your effort into one big step North and took zero steps East or West.
+    \end{itemize}
+\end{itemize}
+So, the "best" spot depends on both the shape of your play zone and how you decide to measure the distance!
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+\subsubsection*{Solution 4}
+\subsubsection*{Solution: Derivation of the Unit Ball Equation}
+\parbox{\textwidth}{
+We are asked to find and sketch the unit ball for the weighted norm $\|x\|_w = \sqrt{\sum_{i=1}^d w_i x_i^2}$ in $d=2$ dimensions with the weight vector $w=(w_1, w_2) = (1, 4)$. The unit ball is the set of all points $x = (x_1, x_2)$ such that $\|x\|_w \le 1$. The boundary of this set is defined by the equation $\|x\|_w = 1$. We derive the explicit equation for this boundary below.
+}
+\begin{align*}
+    \|x\|_w &= 1 \\
+    \sqrt{w_1 x_1^2 + w_2 x_2^2} &= 1 \\
+    \sqrt{1 \cdot x_1^2 + 4 \cdot x_2^2} &= 1 \\
+    x_1^2 + 4x_2^2 &= 1 \quad (\text{Squaring both sides})
+\end{align*}
+\parbox{\textwidth}{
+This equation can be rewritten in the standard form for an ellipse, $\frac{x_1^2}{a^2} + \frac{x_2^2}{b^2} = 1$, as:
+$$ \frac{x_1^2}{1^2} + \frac{x_2^2}{(1/2)^2} = 1 $$
+This shows the unit ball is an ellipse centered at the origin.
+}
+
+\subsubsection*{Solution: Sketch of the Unit Ball}
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=2]
+    % Fill the ellipse
+    \fill[cyan!20] (0,0) ellipse (1cm and 0.5cm);
+    
+    % Draw the axes
+    \draw[->, thick] (-1.5,0) -- (1.5,0) node[right] {$x_1$};
+    \draw[->, thick] (0,-1) -- (0,1) node[above] {$x_2$};
+    
+    % Draw the ellipse boundary
+    \draw[thick, color=blue] (0,0) ellipse (1cm and 0.5cm);
+    
+    % Add ticks and labels
+    \foreach \x in {-1, 1}
+        \draw (\x,0.07) -- (\x,-0.07) node[below right] {$\x$};
+    \foreach \y in {-0.5, 0.5}
+        \draw (0.07,\y) -- (-0.07,\y) node[above right] {$\y$};
+    \node[below left] at (0,0) {$0$};
+\end{tikzpicture}
+\caption{The unit ball $\|x\|_w \le 1$ for the weight vector $w=(1,4)$ is an ellipse centered at the origin with semi-major axis of length 1 along the $x_1$-axis and semi-minor axis of length 1/2 along the $x_2$-axis.}
+\end{figure}
+
+\subsubsection*{\normalfont}{$\therefore$ The unit ball is an ellipse defined by $x_1^2 + 4x_2^2 \le 1$, with a semi-major axis of length 1 and a semi-minor axis of length 1/2.}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+\subsubsection*{\normalfont}{Graduate Level Explanation}
+
+\parbox{\textwidth}{
+The weighted $\ell_2$ norm, $\|x\|_w$, is a specific instance of a norm induced by a quadratic form. The squared norm, $\|x\|_w^2 = x^T W x$, where $W$ is a diagonal matrix of the weights ($W = \text{diag}(w_1, \dots, w_d)$), defines the geometry of the vector space. The unit ball, defined by $x^T W x \le 1$, is an ellipsoid whose principal axes are aligned with the coordinate axes.
+
+This structure is directly related to the \textbf{Mahalanobis distance}, where the distance from a point $x$ to the origin is given by $\sqrt{x^T \Sigma^{-1} x}$, with $\Sigma$ being the covariance matrix. Our weighted norm corresponds to a Mahalanobis distance where the features are uncorrelated, and the covariance matrix $\Sigma$ is diagonal with entries $\Sigma_{ii} = 1/w_i$.
+
+A large weight $w_i$ corresponds to a small variance $\sigma_i^2 = 1/w_i$ in that direction. Geometrically, this means the space is "tighter" or less variant along that axis. Consequently, the unit ball is contracted along any axis with a weight $w_i > 1$ and expanded along any axis with $w_i < 1$. In our case, $w_2=4$ implies a variance of $1/4$, leading to an axis length of $\sqrt{1/4} = 1/2$. The weights effectively warp the standard Euclidean space, transforming the spherical $\ell_2$ unit ball into an ellipsoid.
+}
+\subsubsection*{\normalfont}{Explanation for 5 year old}
+
+\parbox{\textwidth}{
+Imagine you have a perfectly round balloon. That's like the normal way we measure distance (the regular unit circle).
+
+Now, let's think about the "weights". A weight is like a special rule for stretching the balloon's rubber.
+\begin{itemize}
+    \item For the side-to-side direction ($x_1$), the weight is 1. That's a normal rule, so we don't stretch the balloon at all in that direction. It stays as wide as it was.
+    \item For the up-and-down direction ($x_2$), the weight is 4. That's a super strong rule! It's like the rubber in that direction is four times tighter and harder to stretch.
+\end{itemize}
+
+Because the up-and-down rubber is so tight, the balloon can't puff out very far in that direction. It gets \textbf{squished vertically}!
+
+So, our perfectly round balloon gets squished into a short, wide oval shape (an ellipse). It's still just as wide as it was before, but it's only half as tall because the "heavy" weight of 4 squashed it from the top and bottom.
 
 $$\ell_2 = \|p - q\|_2 = \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2}$$
 
 }
-
-\subsubsection*{Step 2: Compute $\ell_2$}
-\parbox{\textwidth}{
-Let $p = \begin{bmatrix} -1 \\ 12 \end{bmatrix}, q = \begin{bmatrix} 6 \\ -12 \end{bmatrix}$
-$$
-\begin{aligned}
-\ell_2 &= \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2}\\
-\ell_2 &= \sqrt{(p_1 - q_1)^{2}+(p_2 - q_2)^{2}}\\
-\ell_2 &= \sqrt{(-1 - 6)^{2}+(12 - (-12))^{2}}\\
-\ell_2 &= \sqrt{(-7)^{2}+(24)^{2}}\\
-\ell_2 &= \sqrt{625}\\
-\ell_2 &= 25
-\end{aligned}
-$$
-}
-\subsubsection*{\normalfont}{$\therefore$ $\ell_{2} = 25$}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
