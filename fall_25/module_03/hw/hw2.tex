@@ -54,7 +54,7 @@
 \subsubsection*{Solution 1 (a)}
 \subsubsection*{Define $\ell_1$}
 \parbox{\textwidth}{
-$\ell_1$ or $||x||_1$ is defined as:
+The $\ell_1$ or $||x||_1$ is defined as:
 $$\ell_{1} = ||x||_1 = \sum_{i=1}^{d} |x_{i}| $$
 }
 \subsubsection*{Compute $\ell_1$}
@@ -86,7 +86,7 @@ Let $x=\begin{bmatrix} 1 \\ -2 \\ 3 \end{bmatrix}$ \\
 \subsubsection*{Solution 1 (b)}
 \subsubsection*{Define $\ell_2$}
 \parbox{\textwidth}{
-$\ell_2$ or $||x||_2$ is defined as:
+The $\ell_2$ or $||x||_2$ is defined as:
 $$\ell_{2} = ||x||_2 = \sqrt{\sum_{i=1}^{d} x_{i}^2} $$
 }
 \subsubsection*{Compute $\ell_2$}
@@ -118,7 +118,7 @@ Let $x=\begin{bmatrix} 1 \\ -2 \\ 3 \end{bmatrix}$ \\
 \subsubsection*{Solution 1 (c)}
 \subsubsection*{Define $\ell_{\infty}$}
 \parbox{\textwidth}{
-$\ell_{\infty}$ or $||x||_{\infty}$ is defined as:
+The $\ell_{\infty}$ or $||x||_{\infty}$ is defined as:
 $$\ell_{\infty} = ||x||_{\infty} = \text{max}_{i}\left|x_{i}\right| $$
 }
 \subsubsection*{Compute $\ell_{\infty}$}
@@ -133,7 +133,6 @@ Let $x=\begin{bmatrix} 1 \\ -2 \\ 3 \end{bmatrix}$ \\
 \end{align*}
 }
 
-
 \subsubsection*{\normalfont}{$\therefore$ $||x||_{\infty} = 3$}
 
 \noindent\rule{\textwidth}{0.4pt}\\
@@ -142,41 +141,88 @@ Let $x=\begin{bmatrix} 1 \\ -2 \\ 3 \end{bmatrix}$ \\
 
 
 %------------------
-% Solution for 1(b)
+% Solution for 2(a)
 %------------------
-\subsection*{Solution 1}
+\subsection*{Solution 2}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 2 (a)}
+
+\subsubsection*{Define $\ell_{2}$ distance}
+\parbox{\textwidth}{The $\ell_2$ distance is defined as:
+$$d(x, x^{\prime})_{\ell_2} = \sqrt{\sum_{i=1}^{n} (x_i-x_{i}^{\prime})^2}$$
+}
+\subsubsection*{Compute $\ell_{2}$ distance}
+\parbox{\textwidth}{
+Let $x = \begin{bmatrix} -1 \\ 1 \\ -1 \\ 1 \end{bmatrix}$ and $x^{\prime}=\begin{bmatrix} 1 \\ 1 \\ 1 \\ 1 \end{bmatrix}$
+\begin{align*}
+    d(x, x^{\prime})_{\ell_2} &= \sqrt{(x_{1}-x_{1}^{\prime})^2 + (x_{2}-x_{2}^{\prime})^2 + (x_{3}-x_{3}^{\prime})^2 + (x_{4}-x_{4}^{\prime})^2} \\
+    &= \sqrt{((-1)-1)^2 + (1-1)^2 + ((-1)- 1)^2 + (1-1)^2} \\
+    &= \sqrt{(2)^2 + (0)^2 + (2)^2 + (0)^2} \\
+            &= \sqrt{4 + 0 + 4 + 0} \\
+            &= \sqrt{8} 
+\end{align*}
+}
+\subsubsection*{\normalfont}{$\therefore d(x, x^{\prime})_{\ell_2} = \sqrt{8}$}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+\newpage
+
+\subsection*{Solution 2}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 2 (b)}
+
+\subsubsection*{Define $\ell_{1}$ distance}
+\parbox{\textwidth}{The $\ell_1$ distance is defined as:
+$$d(x, x^{\prime})_{\ell_1} = \sum_{i=1}^{n} |x_i - x_{i}^{\prime}|$$
+}
+\subsubsection*{Compute $\ell_{1}$ distance}
+\parbox{\textwidth}{
+Let $x = \begin{bmatrix} -1 \\ 1 \\ -1 \\ 1 \end{bmatrix}$ and $x^{\prime}=\begin{bmatrix} 1 \\ 1 \\ 1 \\ 1 \end{bmatrix}$
+\begin{align*}
+    d(x, x^{\prime})_{\ell_1} &= |x_{1}-x_{1}^{\prime}| + |x_{2}-x_{2}^{\prime}| + |x_{3}-x_{3}^{\prime}| + |x_{4}-x_{4}^{\prime}| \\
+    &= |-1 - 1| + |1 - 1| + |-1 - 1| + |1 - 1| \\
+    &= |-2| + |0| + |-2| + |0| \\
+    &= 2 + 0 + 2 + 0 \\
+    &= 4
+\end{align*}
+}
+\subsubsection*{\normalfont}{$\therefore d(x, x^{\prime})_{\ell_1} = 4$}
+
 \noindent\rule{\textwidth}{0.4pt}\\
 
-\subsubsection*{Solution 1 (b)}
-\subsubsection*{Define $\ell_2$}
-\parbox{\textwidth}{
-$\ell_2$ or $||x||_2$ is defined as:
-$$\ell_{2} = ||x||_2 = \sqrt{\sum_{i=1}^{d} x_{i}^{2} }$$
-}
+\newpage
 
-
-\subsubsection*{\normalfont}{$\therefore$ we can express the dataspace $\chi$ as: $\chi = \mathbb{R}^{10}$}
-
+\subsection*{Solution 2}
 \noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 2 (c)}
 
-\subsubsection*{Solution 1 (b)}
-\subsubsection*{Step 1: Identify characteristics of the dataspace}
-\parbox{\textwidth}{
-We are given 3 dimensional vectors where each element is zero or one ($x_{i} \in [0,1]$):
+\subsubsection*{Define $\ell_{\infty}$ distance}
+\parbox{\textwidth}{The $\ell_\infty$ distance is defined as:
+$$d(x, x^{\prime})_{\ell_\infty} = \max_{i} |x_i - x_{i}^{\prime}|$$
 }
-
-\subsubsection*{\normalfont}{$\therefore$ we can express the dataspace $\chi$ as: $\chi = {[0,1]}^{3}$}
+\subsubsection*{Compute $\ell_{\infty}$ distance}
+\parbox{\textwidth}{
+Let $x = \begin{bmatrix} -1 \\ 1 \\ -1 \\ 1 \end{bmatrix}$ and $x^{\prime}=\begin{bmatrix} 1 \\ 1 \\ 1 \\ 1 \end{bmatrix}$
+\begin{align*}
+    d(x, x^{\prime})_{\ell_\infty} &= \max\{|x_1 - x_1^{\prime}|, |x_2 - x_2^{\prime}|, |x_3 - x_3^{\prime}|, |x_4 - x_4^{\prime}|\} \\
+    &= \max\{|-1 - 1|, |1 - 1|, |-1 - 1|, |1 - 1|\} \\
+    &= \max\{|-2|, |0|, |-2|, |0|\} \\
+    &= \max\{2, 0, 2, 0\} \\
+    &= 2
+\end{align*}
+}
+\subsubsection*{\normalfont}{$\therefore d(x, x^{\prime})_{\ell_\infty} = 2$}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
 
 %------------------
-% Solution for 2(a),2(b), and 2(c)
+% Solution for 3(a)
 %------------------
-\subsection*{Solution 2}
+\subsection*{Solution 3}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 2 (a)}
+\subsubsection*{Solution 3 (a)}
 \subsubsection*{Step 1: Define Euclidean distance ($\ell_2$)}
 \parbox{\textwidth}{
 
