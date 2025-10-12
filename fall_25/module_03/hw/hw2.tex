@@ -220,36 +220,49 @@ Let $x = \begin{bmatrix} -1 \\ 1 \\ -1 \\ 1 \end{bmatrix}$ and $x^{\prime}=\begi
 %------------------
 % Solution for 3(a)
 %------------------
-\subsection*{Solution 3}
+\section*{Solution 3}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 3 (a)}
-\subsubsection*{(i): Maximize $\|x\|_1$ given $\|x\|_{\infty}=1$}
-\parbox{\textwidth}{
-We are given the constraint $\|x\|_{\infty} = \max_{i} |x_i| = 1$. This implies that $|x_i| \le 1$ for all components $i=1, \dots, d$. The objective is to maximize the $\ell_1$-norm, which is the sum of the absolute values of the components, $\|x\|_1 = \sum_{i=1}^d |x_i|$. To make this sum as large as possible, each term $|x_i|$ in the sum must be maximized. The constraint allows each $|x_i|$ to be at most 1. Therefore, the maximum is achieved when $|x_i|=1$ for all $i$.
-}
+\subsection*{Solution 3 (a)}
+\subsubsection*{(i) max($\ell_1$) given $\|x\|_{\infty}=1$}
+
+%\subsubsection*{Find implications given $\|x\|_{\infty}=1$}
+\begin{enumerate}
+  \item Find implications given $\|x\|_{\infty}=1$
+
+\begin{flushleft}
+Given the constraint $\|x\|_{\infty} = \max_{i} |x_i| = 1$. It follows that $|x_i| \le 1$ : $\forall i \in \{1,2,...,d\}$ where $d$ is the dimension of vector $x$.
+The $\ell_1$-norm, is the sum of the absolute values of the components($x_i$) in the vector $x$ or :
+\end{flushleft}
+
+$$\ell_1 = \sum_{i=1}^d |x_i| = |x_1| + |x_2| + \ldots + |x_d|$$ 
+\begin{flushleft}
+Each term $|x_i|$ in the sum must be maximized in order to maximaize $\ell_1$-norm. The given constraint($\|x\|_{\infty}=1$) allows each $|x_i|$ to be at most 1. Hence, the maximum is achieved when $|x_i|=1$ or $x_i=\pm1$.
+\end{flushleft}
+  \item Find value of $\ell_1$-norm
+\end{enumerate}
 \begin{align*}
     \|x\|_1 &= \sum_{i=1}^d |x_i| \\
     &\le \sum_{i=1}^d 1 \quad (\text{since } |x_i| \le \|x\|_{\infty} = 1) \\
     &\le d
 \end{align*}
-\parbox{\textwidth}{
-This maximum value is achieved by any vector $x$ where all components are either $+1$ or $-1$.
-}
+
 \subsubsection*{\normalfont}{$\therefore$ The vector $x = \begin{bmatrix} \pm 1 \\ \pm 1 \\ \vdots \\ \pm 1 \end{bmatrix}$ maximizes the norm, with a value of $\|x\|_1 = d$.}
 
 \subsubsection*{(ii): Maximize $\|x\|_2$ given $\|x\|_{\infty}=1$}
-\parbox{\textwidth}{
-Given the same constraint $\|x\|_{\infty} = 1$, which implies $x_i^2 \le 1$ for all $i$, we seek to maximize the $\ell_2$-norm, $\|x\|_2 = \sqrt{\sum_{i=1}^d x_i^2}$. This is equivalent to maximizing the squared norm, $\|x\|_2^2 = \sum_{i=1}^d x_i^2$. To maximize this sum of squares, each term $x_i^2$ must be maximized. Given the constraint, the maximum value for any $x_i^2$ is $1^2=1$. This occurs when $|x_i|=1$ for all $i$.
-}
+\begin{enumerate}
+  \item \parbox{\textwidth}{Apply part (i) results and solve for $\ell_2$-norm}
+\begin{flushleft}
+  Given the same constraint $\|x\|_{\infty} = 1$. From the results in part $(i)$:
+\end{flushleft}
+\end{enumerate}
+
 \begin{align*}
-    \|x\|_2^2 &= \sum_{i=1}^d x_i^2 \\
-    &\le \sum_{i=1}^d 1^2 \quad (\text{since } x_i^2 \le \|x\|_{\infty}^2 = 1) \\
-    &\le d \\
-    \implies \|x\|_2 &\le \sqrt{d}
+    \|x\|_2 &= \sqrt{\sum_{i=1}^d x_i^2} \\
+    &= \sqrt{\sum_{i=1}^d |x_i|} \quad (\text{since all} x_i \in \{-1,1\} for finding max) \\
+    &\le \sqrt{\ell_1} \quad (\text{definition of  } \ell_1) \\
+    &\le \sqrt{d} 
 \end{align*}
-\parbox{\textwidth}{
-This maximum is achieved by the same set of vectors as in the previous case, where all components are $\pm 1$.
-}
+
 \subsubsection*{\normalfont}{$\therefore$ The vector $x = \begin{bmatrix} \pm 1 \\ \pm 1 \\ \vdots \\ \pm 1 \end{bmatrix}$ maximizes the norm, with a value of $\|x\|_2 = \sqrt{d}$.}
 
 \noindent\rule{\textwidth}{0.4pt}\\
@@ -259,12 +272,13 @@ This maximum is achieved by the same set of vectors as in the previous case, whe
 %------------------
 % Solution for 3(b)
 %------------------
+%%%
 \subsection*{Solution 3}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 3 (b)}
 \subsubsection*{(i): Maximize $\|x\|_1$ given $\|x\|_{2}=1$}
 \parbox{\textwidth}{
-We are given the constraint $\|x\|_{2} = 1$, or $\sum_{i=1}^d x_i^2 = 1$. We seek to maximize $\|x\|_1 = \sum_{i=1}^d |x_i|$. By the Cauchy-Schwarz inequality, for vectors $u=(|x_1|, \dots, |x_d|)$ and $v=(1, \dots, 1)$, we have $(\sum |x_i|)^2 \le (\sum |x_i|^2)(\sum 1^2)$. This is precisely $(\|x\|_1)^2 \le (\|x\|_2^2)(d)$.
+Given the constraint $\|x\|_{2} = 1$, or $\sum_{i=1}^d x_i^2 = 1$. We seek to maximize $\|x\|_1 = \sum_{i=1}^d |x_i|$. By the Cauchy-Schwarz inequality, for vectors $u=(|x_1|, \dots, |x_d|)$ and $v=(1, \dots, 1)$, we have $(\sum |x_i|)^2 \le (\sum |x_i|^2)(\sum 1^2)$. This is precisely $(\|x\|_1)^2 \le (\|x\|_2^2)(d)$.
 }
 \begin{align*}
     (\|x\|_1)^2 &= \left(\sum_{i=1}^d |x_i|\right)^2 \\
@@ -332,24 +346,28 @@ So, the "best" spot depends on both the shape of your play zone and how you deci
 
 \newpage
 
+%------------------
+% Solution for 4
+%------------------
 \subsubsection*{Solution 4}
-\subsubsection*{Solution: Derivation of the Unit Ball Equation}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Find Unit Ball Equation}
 \parbox{\textwidth}{
-We are asked to find and sketch the unit ball for the weighted norm $\|x\|_w = \sqrt{\sum_{i=1}^d w_i x_i^2}$ in $d=2$ dimensions with the weight vector $w=(w_1, w_2) = (1, 4)$. The unit ball is the set of all points $x = (x_1, x_2)$ such that $\|x\|_w \le 1$. The boundary of this set is defined by the equation $\|x\|_w = 1$. We derive the explicit equation for this boundary below.
+  Given $||x||_w \leq 1$ dimension $d=2$ and the weight vector $w=(w_1, w_2) = (1, 4)$. We can solve for the equation of this boundary by looking at the max value of the weighted-norm ($||x||_w = 1$).
 }
 \begin{align*}
     \|x\|_w &= 1 \\
-    \sqrt{w_1 x_1^2 + w_2 x_2^2} &= 1 \\
-    \sqrt{1 \cdot x_1^2 + 4 \cdot x_2^2} &= 1 \\
-    x_1^2 + 4x_2^2 &= 1 \quad (\text{Squaring both sides})
+    \sqrt{\sum_{i=1}^d w_i x_i^2} &= 1  \quad (\text{Definition of norm for } d = 2) \\
+    \sqrt{w_1 x_1^2 + w_2 x_2^2} &= 1  \quad (\text{Expanding summation}) \\
+    \sqrt{1 \cdot x_1^2 + 4 \cdot x_2^2} &= 1 \quad (\text{Substituting givens}) \\ 
+    x_1^2 + 4x_2^2 &= 1 \quad (\text{Squaring both sides}) \\
+    \frac{x_1^2}{1^2} + \frac{x_2^2}{(1/2)^2} &= 1 \quad (\text{Arange into equation of ellipse})
 \end{align*}
 \parbox{\textwidth}{
-This equation can be rewritten in the standard form for an ellipse, $\frac{x_1^2}{a^2} + \frac{x_2^2}{b^2} = 1$, as:
-$$ \frac{x_1^2}{1^2} + \frac{x_2^2}{(1/2)^2} = 1 $$
-This shows the unit ball is an ellipse centered at the origin.
+Hence, the unit ball is an ellipse centered at the origin from the result above.
 }
 
-\subsubsection*{Solution: Sketch of the Unit Ball}
+\subsubsection*{Sketch of the Unit Ball}
 \begin{figure}[h!]
 \centering
 \begin{tikzpicture}[scale=2]
@@ -365,12 +383,12 @@ This shows the unit ball is an ellipse centered at the origin.
     
     % Add ticks and labels
     \foreach \x in {-1, 1}
-        \draw (\x,0.07) -- (\x,-0.07) node[below right] {$\x$};
+        \draw (\x,0.07) -- (\x,-0.07) node[shift={(0, -0.6)}] {$\x$};
     \foreach \y in {-0.5, 0.5}
-        \draw (0.07,\y) -- (-0.07,\y) node[above right] {$\y$};
+        \draw (0.07,\y) -- (-0.07,\y) node[shift={(0.5, -0.25)}] {$\y$};
     \node[below left] at (0,0) {$0$};
 \end{tikzpicture}
-\caption{The unit ball $\|x\|_w \le 1$ for the weight vector $w=(1,4)$ is an ellipse centered at the origin with semi-major axis of length 1 along the $x_1$-axis and semi-minor axis of length 1/2 along the $x_2$-axis.}
+%\caption{The unit ball $\|x\|_w \le 1$ for the weight vector $w=(1,4)$ is an ellipse centered at the origin with semi-major axis of length 1 along the $x_1$-axis and semi-minor axis of length 1/2 along the $x_2$-axis.}
 \end{figure}
 
 \subsubsection*{\normalfont}{$\therefore$ The unit ball is an ellipse defined by $x_1^2 + 4x_2^2 \le 1$, with a semi-major axis of length 1 and a semi-minor axis of length 1/2.}
@@ -379,41 +397,12 @@ This shows the unit ball is an ellipse centered at the origin.
 
 \newpage
 
-\subsubsection*{\normalfont}{Graduate Level Explanation}
-
-\parbox{\textwidth}{
-The weighted $\ell_2$ norm, $\|x\|_w$, is a specific instance of a norm induced by a quadratic form. The squared norm, $\|x\|_w^2 = x^T W x$, where $W$ is a diagonal matrix of the weights ($W = \text{diag}(w_1, \dots, w_d)$), defines the geometry of the vector space. The unit ball, defined by $x^T W x \le 1$, is an ellipsoid whose principal axes are aligned with the coordinate axes.
-
-This structure is directly related to the \textbf{Mahalanobis distance}, where the distance from a point $x$ to the origin is given by $\sqrt{x^T \Sigma^{-1} x}$, with $\Sigma$ being the covariance matrix. Our weighted norm corresponds to a Mahalanobis distance where the features are uncorrelated, and the covariance matrix $\Sigma$ is diagonal with entries $\Sigma_{ii} = 1/w_i$.
-
-A large weight $w_i$ corresponds to a small variance $\sigma_i^2 = 1/w_i$ in that direction. Geometrically, this means the space is "tighter" or less variant along that axis. Consequently, the unit ball is contracted along any axis with a weight $w_i > 1$ and expanded along any axis with $w_i < 1$. In our case, $w_2=4$ implies a variance of $1/4$, leading to an axis length of $\sqrt{1/4} = 1/2$. The weights effectively warp the standard Euclidean space, transforming the spherical $\ell_2$ unit ball into an ellipsoid.
-}
-\subsubsection*{\normalfont}{Explanation for 5 year old}
-
-\parbox{\textwidth}{
-Imagine you have a perfectly round balloon. That's like the normal way we measure distance (the regular unit circle).
-
-Now, let's think about the "weights". A weight is like a special rule for stretching the balloon's rubber.
-\begin{itemize}
-    \item For the side-to-side direction ($x_1$), the weight is 1. That's a normal rule, so we don't stretch the balloon at all in that direction. It stays as wide as it was.
-    \item For the up-and-down direction ($x_2$), the weight is 4. That's a super strong rule! It's like the rubber in that direction is four times tighter and harder to stretch.
-\end{itemize}
-
-Because the up-and-down rubber is so tight, the balloon can't puff out very far in that direction. It gets \textbf{squished vertically}!
-
-So, our perfectly round balloon gets squished into a short, wide oval shape (an ellipse). It's still just as wide as it was before, but it's only half as tall because the "heavy" weight of 4 squashed it from the top and bottom.
-
-$$\ell_2 = \|p - q\|_2 = \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2}$$
-
-}
-
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\newpage
-
+%------------------
+% Solution for 5
+%------------------
 \subsection*{Solution 5}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Problem Statement}
+\subsubsection*{Distance Table Discription}
 \parbox{\textwidth}{
 We are given a set of points $\mathcal{X}=\{A, B, C, D\}$ and a function $d: \mathcal{X} \times \mathcal{X} \to \mathbb{R}$ defined by the following distance table. We will determine if $d$ is a metric by checking the required axioms.
 }
@@ -436,12 +425,12 @@ This axiom requires that $d(x, y) \geq 0$ for all $x, y \in \mathcal{X}$, and th
     \item \textbf{Non-negativity:} All entries in the table are non-negative, so this condition holds.
     \item \textbf{Identity:} The diagonal entries are all zero, so $d(x, x) = 0$. All off-diagonal entries are strictly positive, so $d(x, y) > 0$ when $x \neq y$.
 \end{itemize}
-\textbf{Conclusion:} The first axiom is satisfied.
+Hence, $d$ satisifies the first axiom (non-negativity \& identity of indiscernibles).
 }
 
 \subsubsection*{Axiom 2: Symmetry}
 \parbox{\textwidth}{
-This axiom requires that $d(x, y) = d(y, x)$ for all $x, y \in \mathcal{X}$. This corresponds to the distance matrix being symmetric across its main diagonal. By inspection:
+This axiom requires that $d(x, y) = d(y, x)$ for all $x, y \in \mathcal{X}$. Using the distance table above we can look up the folowiing:
 \begin{itemize}
     \item $d(A, B) = 2 = d(B, A)$
     \item $d(A, C) = 1 = d(C, A)$
@@ -450,20 +439,22 @@ This axiom requires that $d(x, y) = d(y, x)$ for all $x, y \in \mathcal{X}$. Thi
     \item $d(B, D) = 4 = d(D, B)$
     \item $d(C, D) = 2 = d(D, C)$
 \end{itemize}
-\textbf{Conclusion:} The symmetry axiom is satisfied.
+Hence, $d$ satisifies the second axiom (symmetry).
 }
 
 \subsubsection*{Axiom 3: The Triangle Inequality}
 \parbox{\textwidth}{
-This axiom requires that for any three points $x, y, z \in \mathcal{X}$, the inequality $d(x, z) \leq d(x, y) + d(y, z)$ must hold. We search for a counterexample. Let's test the path from point $A$ to point $D$ by way of point $C$. We set $x=A$, $y=C$, and $z=D$.
+This axiom requires that for any three points $x, y, z \in \mathcal{X}$, the inequality $d(x, z) \leq d(x, y) + d(y, z)$ must hold. \\
+Let $x=A$, $y=C$, and $z=D$.
 }
 \begin{align*}
+    d(x, z) &\leq d(x, y) + d(y, z) \\
     d(A, D) &\leq d(A, C) + d(C, D) \\
     5 &\leq 1 + 2 \\
-    5 &\leq 3 \quad (\text{This is FALSE})
+    5 &\leq 3 \quad (\textbf{False})
 \end{align*}
 \parbox{\textwidth}{
-\textbf{Conclusion:} Since we have found a set of points $\{A, C, D\}$ for which the triangle inequality does not hold, the function $d$ fails this axiom.
+Hence, the triangle inequality does not hold, and $d$ fails the third axiom.
 }
 
 \subsubsection*{\normalfont}{$\therefore$ The function $d$ is not a metric because it fails the triangle inequality.}
@@ -472,34 +463,10 @@ This axiom requires that for any three points $x, y, z \in \mathcal{X}$, the ine
 
 \newpage
 
-\subsubsection*{\normalfont}{Graduate Level Explanation}
-The triangle inequality is the most crucial axiom for establishing a coherent geometric structure on a set. It formalizes the intuitive concept that the length of a direct path between two points, $d(x, z)$, cannot be greater than the length of an indirect path that goes through an intermediate point $y$. When this axiom fails, as it does here with $d(A, D) > d(A, C) + d(C, D)$, the function does not induce a proper metric space. The set $\{A,B,C,D\}$ equipped with this function $d$ is not a metric space.
-
-Such a function, which satisfies non-negativity, identity, and symmetry but not the triangle inequality, is sometimes called a \textbf{semimetric}. The failure implies a non-intuitive geometry where "shortcuts" exist that are longer than the direct route, making standard topological concepts like open balls and convergence behave unpredictably. In applied contexts, this could represent a flawed cost matrix where, for instance, a direct flight from A to D is inexplicably more expensive than two separate flights (A to C, then C to D).
-
-\subsubsection*{\normalfont}{Explanation for 5 year old}
-Imagine you have a treasure map that shows four cities: A, B, C, and D. The numbers on the map tell you how many minutes it takes to walk between the cities. 
-
-The map must follow one very important rule: a shortcut can't be longer than going straight! This is called the "Triangle Rule."
-
-Let's look at the path from city \textbf{A} to city \textbf{D}.
-\begin{itemize}
-    \item The map says the direct road from \textbf{A} to \textbf{D} takes \textbf{5 minutes}.
-\end{itemize}
-But what if we take a shortcut through city \textbf{C}?
-\begin{itemize}
-    \item The map says going from \textbf{A} to \textbf{C} takes \textbf{1 minute}.
-    \item Then, going from \textbf{C} to \textbf{D} takes \textbf{2 minutes}.
-\end{itemize}
-If you add those up, the shortcut through C only takes $1 + 2 = \textbf{3 minutes}$ in total!
-
-Wait a minute... that can't be right! How can the direct path take 5 minutes when a shortcut only takes 3 minutes? The direct path is supposed to be the fastest. Since this map has a silly rule-breaking path, it's a broken map! That's why we say it's \textbf{not a metric}.
-
-
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\newpage
-
+%------------------
+% Solution for 6(a)
+%------------------
+%%%
 \subsection*{Solution 6}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 6 (a)}
@@ -524,6 +491,10 @@ Let $p=(1, 0)$ and $q=(0, 1)$. This means $p(x_1)=1, p(x_2)=0$ and $q(x_1)=0, q(
 
 \newpage
 
+%------------------
+% Solution for 6(b)
+%------------------
+%%%
 \subsection*{Solution 6}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 6 (b)}
@@ -578,71 +549,32 @@ Since the surprise is \textbf{infinite} in the first game but just a \textbf{lit
 
 \newpage
 
+%------------------
+% Solution for 7
+%------------------
 \subsection*{Solution 7}
 \noindent\rule{\textwidth}{0.4pt}\\
 
-\subsubsection*{Solution: Jaccard Similarity Calculation}
-
+\subsubsection*{Define Jaccard Similarity}
 \parbox{\textwidth}{
-We are asked to compute the Jaccard similarity, J(A, B), for the following two sets:
-\\
-A = \{1, 3, 5, 7, 9\}
-\\
-B = \{2, 3, 5, 7\}
-\\
-The Jaccard similarity is defined as the size of the intersection of the sets divided by the size of their union.
+Jaccard similarity between two sets $A$ and $B$ is the following:
+
+$$J(A,B) = \frac{|A \cap B|}{|A \cup B|}$$
 }
-
-\subsubsection*{Step 1: Compute the Intersection}
+\subsubsection*{Compute Jaccard Similarity}
 \parbox{\textwidth}{
-The intersection of A and B, denoted A intersect B, is the set of elements common to both sets.
-\\
-A intersect B = \{3, 5, 7\}
-\\
-The size of the intersection is $|$A intersect B$|$ = 3.
-}
+Let $A = \{1, 3, 5, 7, 9\}$ and $B = \{2, 3, 5, 7\}$
 
-\subsubsection*{Step 2: Compute the Union}
-\parbox{\textwidth}{
-The union of A and B, denoted A union B, is the set of all unique elements present in either set.
-\\
-A union B = \{1, 2, 3, 5, 7, 9\}
-\\
-The size of the union is $|$A union B$|$ = 6.
-}
-
-\subsubsection*{Step 3: Compute the Jaccard Similarity}
-\parbox{\textwidth}{
-We now apply the formula J(A, B) = $|$A intersect B$|$ / $|$A union B$|$.
 \begin{align*}
-    J(A, B) &= |\{3, 5, 7\}| / |\{1, 2, 3, 5, 7, 9\}| \\
-            &= 3 / 6 \\
-            &= 0.5
+    J(A, B) &= \frac{|A \cap B|}{|A \cup B|} \\
+    &= \frac{|\{1, 3, 5, 7, 9\} \cap \{2, 3, 5, 7\}|}{|\{1, 3, 5, 7, 9\} \cup \{2, 3, 5, 7\}|} \\
+    &= \frac{|\{3, 5, 7\}|}{|\{1, 2, 3, 5, 7, 9\}|} \\
+    &= \frac{3}{6} \\
+    &= \frac{1}{2}
 \end{align*}
 }
 
-\subsubsection*{\normalfont}{$\therefore$ The Jaccard similarity J(A, B) is 0.5 or 50\%.}
-
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\newpage
-
-\subsubsection*{\normalfont}{Graduate Level Explanation}
-
-\parbox{\textwidth}{
-The Jaccard index is a statistic used for gauging the similarity and diversity of sample sets. It is particularly effective for sparse binary data, where the number of shared attributes (the intersection) is compared against the total number of unique attributes observed across both sets (the union). For binary vectors representing sets, this is also known as the Tanimoto coefficient. It is widely used in applications like document similarity analysis (where sets are bags of words), image segmentation, and bioinformatics. The corresponding Jaccard distance, defined as d\_J(A, B) = 1 - J(A, B), is a metric and measures dissimilarity. In this case, the Jaccard distance would be 1 - 0.5 = 0.5.
-}
-
-\subsubsection*{\normalfont}{Explanation for 5 year old}
-
-\parbox{\textwidth}{
-Imagine you have a box of toys (Box A) and your friend has a box of toys (Box B). We want to see how similar your toy boxes are!
-\begin{enumerate}
-    \item First, we look at all the toys you BOTH have. This is the "intersection". Let's say you both have a car, a block, and a teddy bear. That's 3 shared toys.
-    \item Next, we pour all the toys from both boxes into one big pile and count every DIFFERENT toy just once. This is the "union". Maybe in the big pile, there are 6 unique toys in total.
-    \item To get the similarity score, we just divide the number of shared toys by the total number of unique toys. So, 3 divided by 6 is 1/2. Your toy boxes are 50\% similar!
-\end{enumerate}
-}
+\subsubsection*{\normalfont}{$\therefore$ The Jaccard similarity $J(A, B)$ is $\frac{1}{2}$ or 50\%.}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
