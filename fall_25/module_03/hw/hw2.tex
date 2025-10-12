@@ -227,7 +227,6 @@ Let $x = \begin{bmatrix} -1 \\ 1 \\ -1 \\ 1 \end{bmatrix}$ and $x^{\prime}=\begi
 \subsection*{Solution 3 (a)}
 \subsubsection*{(i) max($\ell_1$) given $\|x\|_{\infty}=1$}
 
-%\subsubsection*{Find implications given $\|x\|_{\infty}=1$}
 \begin{enumerate}
   \item Find implications given $\|x\|_{\infty}=1$
 
@@ -250,6 +249,11 @@ Each term $|x_i|$ in the sum must be maximized in order to maximaize $\ell_1$-no
 
 \subsubsection*{\normalfont}{$\therefore$ The vector $x = \begin{bmatrix} \pm 1 \\ \pm 1 \\ \vdots \\ \pm 1 \end{bmatrix}$ maximizes the norm, with a value of $\|x\|_1 = d$.}
 
+\newpage
+
+\section*{Solution 3}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsection*{Solution 3 (a)}
 \subsubsection*{(ii): Maximize $\|x\|_2$ given $\|x\|_{\infty}=1$}
 \begin{enumerate}
   \item \parbox{\textwidth}{Apply part (i) results and solve for $\ell_2$-norm}
@@ -274,28 +278,66 @@ Each term $|x_i|$ in the sum must be maximized in order to maximaize $\ell_1$-no
 %------------------
 % Solution for 3(b)
 %------------------
-%%%
 \subsection*{Solution 3}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 3 (b)}
 \subsubsection*{(i): Maximize $\|x\|_1$ given $\|x\|_{2}=1$}
-\parbox{\textwidth}{
-Given the constraint $\|x\|_{2} = 1$, or $\sum_{i=1}^d x_i^2 = 1$. We seek to maximize $\|x\|_1 = \sum_{i=1}^d |x_i|$. By the Cauchy-Schwarz inequality, for vectors $u=(|x_1|, \dots, |x_d|)$ and $v=(1, \dots, 1)$, we have $(\sum |x_i|)^2 \le (\sum |x_i|^2)(\sum 1^2)$. This is precisely $(\|x\|_1)^2 \le (\|x\|_2^2)(d)$.
-}
+\begin{enumerate}
+  \item Find implications given $\|x\|_{2}=1$
+
+\begin{flushleft}
+Given the constraint $\|x\|_{2} = 1$. By the Cauchy-Schwarz inequality, for vectors $u=(|x_1|, \dots, |x_d|)$ and $v=(1, \dots, 1)$, we have $(\sum |x_i|)^2 \le (\sum |x_i|^2)(\sum 1^2)$. This is precisely $(\|x\|_1)^2 \le (\|x\|_2^2)(d)$.
+\end{flushleft}
+  \item Find value for $\ell_1$-norm
 \begin{align*}
     (\|x\|_1)^2 &= \left(\sum_{i=1}^d |x_i|\right)^2 \\
     &\le \left(\sum_{i=1}^d x_i^2\right) \left(\sum_{i=1}^d 1^2\right) \quad (\text{Cauchy-Schwarz Inequality}) \\
     &\le (1)(d) \\
-    \implies \|x\|_1 &\le \sqrt{d}
+    &\text{(Taking square root)} \\
+    \|x\|_1 &\le \sqrt{d}
 \end{align*}
-\parbox{\textwidth}{
-Equality holds when the vectors are linearly dependent, meaning $|x_1|=|x_2|=\dots=|x_d|=c$. The constraint $\sum x_i^2 = 1$ implies $d \cdot c^2 = 1$, so $c=1/\sqrt{d}$.
-}
+
+\begin{flushleft}
+Each term $|x_i|$ in the sum must be maximized in order to maximaize $\ell_1$-norm. The given constraint($\|x\|_{\infty}=1$) allows each $|x_i|$ to be at most 1. Hence, the maximum is achieved when $|x_i|=1$ or $x_i=\pm1$.
+\end{flushleft}
+\end{enumerate}
+
 \subsubsection*{\normalfont}{$\therefore$ The vector $x = \begin{bmatrix} \pm 1/\sqrt{d} \\ \vdots \\ \pm 1/\sqrt{d} \end{bmatrix}$ maximizes the norm, with a value of $\|x\|_1 = \sqrt{d}$.}
 
+\newpage
+\subsection*{Solution 3}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 3 (b)}
 \subsubsection*{(ii): Maximize $\|x\|_{\infty}$ given $\|x\|_{2}=1$}
+\begin{enumerate}
+  \item Find implications given $\|x\|_{2}=1$
+
+\begin{flushleft}
+Given the constraint $\|x\|_{2} = 1$. Let $|x_k|$ be the component with the maximum absolute value. From the constraint, we can write $x_k^2 + \sum_{i=1}^{k-1} x_i^2 = 1$. Since the sum of squares is non-negative, it must be that $x_k^2 \le 1$, which implies $|x_k| = \|x\|_{\infty} \le 1$.
+\end{flushleft}
+  \item Find value for $\ell_{\infty}$-norm
+\begin{align*}
+    \|x\|_{\infty}^2 &= (\max_i |x_i|)^2 \\
+    &= \max_i (x_i^2) \\
+    &\le \sum_{i=1}^d x_i^2 \quad (\text{as all terms are non-negative}) \\
+    &\le 1 \\
+    &\text{(Taking square root)} \\
+    \|x\|_{\infty} &\le 1
+\end{align*}
+
+\begin{flushleft}
+This maximum value of 1 is achieved when one component has a magnitude of 1, which forces all other components to be zero to satisfy the constraint.
+\end{flushleft}
+\end{enumerate}
+
+\subsubsection*{\normalfont}{$\therefore$ The vector $x=\begin{bmatrix} 1 \\ 0 \\ \vdots \\ 0 \end{bmatrix}$ maximizes the norm(\textit{note: 1 can be in any dimension of x, it does not have to be $x_0$}), with a value of $\|x\|_{\infty}=1$.}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
 \parbox{\textwidth}{
-Given the constraint $\sum_{i=1}^d x_i^2 = 1$, we seek to maximize $\|x\|_{\infty} = \max_i |x_i|$. Let $|x_k|$ be the component with the maximum absolute value. From the constraint, we can write $x_k^2 + \sum_{i \ne k} x_i^2 = 1$. Since the sum of squares is non-negative, it must be that $x_k^2 \le 1$, which implies $|x_k| = \|x\|_{\infty} \le 1$.
+Given the constraint $\|x\|_{2} = 1$. Let $|x_k|$ be the component with the maximum absolute value. From the constraint, we can write $x_k^2 + \sum_{i=1}^{k-1} x_i^2 = 1$. Since the sum of squares is non-negative, it must be that $x_k^2 \le 1$, which implies $|x_k| = \|x\|_{\infty} \le 1$.
 }
 \begin{align*}
     \|x\|_{\infty}^2 &= (\max_i |x_i|)^2 \\
@@ -308,41 +350,6 @@ Given the constraint $\sum_{i=1}^d x_i^2 = 1$, we seek to maximize $\|x\|_{\inft
 This maximum value of 1 is achieved when one component has a magnitude of 1, which forces all other components to be zero to satisfy the constraint.
 }
 \subsubsection*{\normalfont}{$\therefore$ Any standard basis vector $e_k$ (e.g., $x=\begin{bmatrix} 1 \\ 0 \\ \vdots \\ 0 \end{bmatrix}$) maximizes the norm, giving $\|x\|_{\infty}=1$.}
-
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\newpage
-
-\subsubsection*{\normalfont}{Graduate Level Explanation}
-This exercise demonstrates the geometric relationship between the unit balls of different $\ell_p$ norms. The task of maximizing one norm subject to a constraint on another is equivalent to finding the point on the surface of one unit ball that is "farthest" from the origin as measured by the other norm's metric. The results confirm the well-known norm inequalities for $x \in \mathbb{R}^d$:
-$$ \|x\|_{\infty} \le \|x\|_{2} \le \|x\|_{1} \le \sqrt{d}\|x\|_{2} \le d\|x\|_{\infty} $$
-Our findings show that these bounds are tight:
-\begin{itemize}
-    \item When constrained to the $\ell_\infty$ unit ball (a hypercube), the points that maximize the $\ell_1$ and $\ell_2$ norms are the corners of the hypercube, such as the vector of all ones. At these points, the inequalities $\|x\|_1 \le d\|x\|_{\infty}$ and $\|x\|_2 \le \sqrt{d}\|x\|_{\infty}$ become equalities.
-    \item When constrained to the $\ell_2$ unit ball (a hypersphere), the point that maximizes the $\ell_1$ norm is where the energy is distributed equally among all components (e.g., $(1/\sqrt{d}, \dots, 1/\sqrt{d})$). This point makes the inequality $\|x\|_1 \le \sqrt{d}\|x\|_2$ an equality. Conversely, the $\ell_\infty$ norm is maximized when all energy is concentrated in a single component (e.g., a basis vector like $(1, 0, \dots, 0)$), which corresponds to the points where the hypersphere intersects the coordinate axes and makes the inequality $\|x\|_{\infty} \le \|x\|_2$ an equality.
-\end{itemize}
-
-\subsubsection*{\normalfont}{Explanation for 5 year old}
-Imagine a big, flat playground. We're going to draw two different "play zones" you have to stay inside.
-\begin{enumerate}
-    \item A perfect \textbf{square} play zone.
-    \item A perfect \textbf{circle} play zone.
-\end{enumerate}
-Now, we want to find the spot inside your zone that is the "farthest" from the very center of the playground. But we have different ways to measure "farthest"!
-\begin{itemize}
-    \item \textbf{Walking Distance:} How many steps you take along the grid lines (like city blocks) to get back to the center.
-    \item \textbf{Flying Distance:} The straight line distance if you could fly like a bird.
-\end{itemize}
-Here is what we find:
-\begin{itemize}
-    \item If you are in the \textbf{SQUARE} zone: The farthest place you can be, for \textit{both} walking and flying, is always at one of the four \textbf{corners} of the square!
-    \item If you are in the \textbf{CIRCLE} zone: It gets tricky!
-    \begin{itemize}
-        \item To get the biggest \textbf{Walking Distance}, you should stand exactly in the middle of the curvy edge, halfway between North and East. You have to walk a medium amount in two directions.
-        \item To get the biggest "single-step" distance (the longest part of your walk), you should stand right at the top of the circle (the "North Pole"). Here, you put all your effort into one big step North and took zero steps East or West.
-    \end{itemize}
-\end{itemize}
-So, the "best" spot depends on both the shape of your play zone and how you decide to measure the distance!
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -473,12 +480,14 @@ Hence, the triangle inequality does not hold, and $d$ fails the third axiom.
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 6 (a)}
 
-\subsubsection*{The Largest Possible Value of $K(p, q)$}
+\subsubsection*{Find Largest Possible Value of $K(p, q)$}
+
 \parbox{\textwidth}{
-The KL divergence becomes unbounded and approaches infinity if there is an outcome $x \in \mathcal{X}$ that is possible under the true distribution $p$ (i.e., $p(x) > 0$) but is considered impossible by the approximating distribution $q$ (i.e., $q(x) = 0$). This situation violates the condition of absolute continuity. The term $p(x) \log \frac{p(x)}{q(x)}$ becomes infinite, driving the entire sum to infinity. We demonstrate this with two deterministic but opposing distributions.
-}
-\parbox{\textwidth}{
-Let $p=(1, 0)$ and $q=(0, 1)$. This means $p(x_1)=1, p(x_2)=0$ and $q(x_1)=0, q(x_2)=1$.
+Given $|\mathcal{X}| = 2$. This means that $\mathcal{X}$ is a set containing two elements. \\
+
+Let $\mathcal{X} = \{0,1\}$, $p=(1, 0)$ and $q=(0, 1)$. \\
+$p=(1, 0)$: $p(x_1)=1$, $p(x_2)=0$ \\
+$q=(0, 1)$: $q(x_1)=0$, $q(x_2)=1$ \\
 \begin{align*}
     K(p, q) &= p(x_1) \log\frac{p(x_1)}{q(x_1)} + p(x_2) \log\frac{p(x_2)}{q(x_2)} \\
     &= 1 \cdot \log\frac{1}{0} + 0 \cdot \log\frac{0}{1} \\
@@ -502,27 +511,31 @@ Let $p=(1, 0)$ and $q=(0, 1)$. This means $p(x_1)=1, p(x_2)=0$ and $q(x_1)=0, q(
 \subsubsection*{Solution 6 (b)}
 
 
-\subsubsection*{(b): Proof of Non-Symmetry}
-\parbox{\textwidth}{
-To prove that the KL divergence is not a symmetric function, we must provide a concrete example where $K(p, q) \neq K(q, p)$. We choose one distribution to be uniform and the other to be deterministic. This highlights the asymmetry in how KL divergence penalizes impossible events.
-}
-\parbox{\textwidth}{
-Let $p = (1/2, 1/2)$ and $q = (1, 0)$. First, we compute $K(p, q)$.
-\begin{align*}
+\subsubsection*{Show $K(p, q)$ Non-Symmetry}
+\begin{flushleft}
+  Let $p = (1/2, 1/2)$ and $q = (1, 0)$
+\end{flushleft}
+\begin{enumerate}
+  \item Compute $K(p,q)$
+  \begin{align*}
     K(p, q) &= p(x_1) \log\frac{p(x_1)}{q(x_1)} + p(x_2) \log\frac{p(x_2)}{q(x_2)} \\
     &= \frac{1}{2} \log\frac{1/2}{1} + \frac{1}{2} \log\frac{1/2}{0} \\
     &= \frac{1}{2} \log\frac{1}{2} + \infty \\
     &= \infty
 \end{align*}
-Next, we compute the reverse divergence, $K(q, p)$.
-\begin{align*}
+  \item Compute $K(q,p)$
+  \begin{align*}
     K(q, p) &= q(x_1) \log\frac{q(x_1)}{p(x_1)} + q(x_2) \log\frac{q(x_2)}{p(x_2)} \\
     &= 1 \cdot \log\frac{1}{1/2} + 0 \cdot \log\frac{0}{1/2} \\
     &= \log(2) + 0 \\
     &= \log(2)
 \end{align*}
-}
-\subsubsection*{\normalfont}{$\therefore$ Since $K(p, q) = \infty$ and $K(q, p) = \log(2)$, we have shown that $K(p, q) \neq K(q, p)$, and thus KL divergence is not symmetric.}
+\begin{flushleft}
+  Hence, $\infty \neq \log(2)$
+\end{flushleft}
+\end{enumerate}
+
+\subsubsection*{\normalfont}{$\therefore$ $K(p, q) \neq K(q, p)$, and the KL divergence is not symmetric.}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
