@@ -662,28 +662,8 @@ In a Euclidean vector space, a dot product of zero signifies that the two vector
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 9 (c)}
 
-\subsubsection*{Question: Geometric Region}
-Sketch the region of all vectors $y \in \mathbb{R}^2$ whose cosine similarity with the vector $x = [1, 2]^T$ is at least 0.9.
-
-\subsubsection*{Step 1: Define the Geometric Constraint}
-\parbox{\textwidth}{
-The cosine similarity between two non-zero vectors $x$ and $y$ in $\mathbb{R}^n$ is defined as the cosine of the angle $\theta$ between them. The region $R$ is the set of all points $y \in \mathbb{R}^2$ that satisfy the inequality:
-$$ \text{cos}(\theta) = \frac{x \cdot y}{\|x\|_2 \|y\|_2} \geq 0.9 $$
-Since this constraint depends only on the angle $\theta$ between the vectors and not on the magnitude of $y$, the region is unbounded and extends radially from the origin. The boundary of this region is defined by the equality $\text{cos}(\theta) = 0.9$.
-}
-
-\subsubsection*{Step 2: Calculate Angular Boundaries}
-The maximum allowable angle, $\theta_{\text{max}}$, between any vector $y$ in the region and the reference vector $x$ is given by the boundary condition. The reference vector $x = [1, 2]^T$ itself forms an angle $\phi$ with the positive $x_1$-axis.
-\begin{align*}
-    \text{Boundary Condition:}\quad \cos(\theta_{\text{max}}) &= 0.9 \\
-    \implies \theta_{\text{max}} &= \arccos(0.9) \approx 25.84^\circ \\
-    \\
-    \text{Reference Vector Angle:}\quad \phi &= \arctan\left(\frac{x_2}{x_1}\right) = \arctan\left(\frac{2}{1}\right) \approx 63.43^\circ
-\end{align*}
-The region is therefore an angular sector (a cone in $\mathbb{R}^2$) centered at angle $\phi \approx 63.43^\circ$, with an angular radius of $\theta_{\text{max}} \approx 25.84^\circ$. The cone is bounded by the angles $\phi - \theta_{\text{max}} \approx 37.59^\circ$ and $\phi + \theta_{\text{max}} \approx 89.27^\circ$.
-
-\subsubsection*{Step 3: Sketch of the Region}
-The shaded region below represents the cone containing all vectors $y$ satisfying the condition.
+\subsubsection*{Sketch of the Region}
+The shaded region below represents the cone containing all vectors $y$ satisfying $cos(\theta) \geq 0.9$.
 \begin{center}
 \begin{tikzpicture}[scale=1.5]
     % Define angles
@@ -701,8 +681,8 @@ The shaded region below represents the cone containing all vectors $y$ satisfyin
     \fill[blue!20, opacity=0.8] (0,0) -- (\angleA:3.2) arc (\angleA:\angleB:3.2) -- cycle;
 
     % Draw boundary vectors
-    \draw[->, thick, blue] (0,0) -- (\angleA:3.2) node[below right, xshift=5mm, yshift=-2mm] {Boundary};
-    \draw[->, thick, blue] (0,0) -- (\angleB:3.2) node[above right, xshift=5mm, yshift=2mm] {Boundary};
+    \draw[->, thick, blue] (0,0) -- (\angleA:3.2) node[below right, xshift=5mm, yshift=-2mm] {Lower Boundary};
+    \draw[->, thick, blue] (0,0) -- (\angleB:3.2) node[above right, xshift=5mm, yshift=2mm] {Upper Boundary};
 
     % Draw the reference vector x
     \draw[->, very thick, red] (0,0) -- (1,2) node[above right, xshift=2mm, yshift=2mm] {$x=[1,2]^T$};
@@ -713,81 +693,18 @@ The shaded region below represents the cone containing all vectors $y$ satisfyin
     \coordinate (X_vec) at (1,2);
     \coordinate (B1) at (\angleA:3.2);
     \coordinate (B2) at (\angleB:3.2);
-
-    % Draw and label angles
+    % idk wft anything about geometry 
+    % Draw and label angles 
     % Angle phi from x_1 axis to vector x
-    \draw pic[draw, angle radius=1.2cm, pic text=$\phi$, pic text options={above=2mm, left=5mm}] {angle=X--O--X_vec};
+    %\draw pic[draw, angle radius=1.2cm, pic text=$\phi$, pic text options={above=2mm, left=5mm}] {angle=X--O--X_vec};
     % Angle theta_max from vector x to lower boundary
-    \draw pic[draw, angle radius=0.7cm, pic text=$\theta_{\text{max}}$, pic text options={right=2mm}] {angle=B1--O--X_vec};
+    %\draw pic[draw, angle radius=0.7cm, pic text=$\theta_{\text{max}}$, pic text options={right=2mm}] {angle=B1--O--X_vec};
     % Angle theta_max from vector x to upper boundary
-    \draw pic[draw, angle radius=0.7cm, pic text=$\theta_{\text{max}}$, pic text options={above=2mm, right=2mm}] {angle=X_vec--O--B2};
+    %\draw pic[draw, angle radius=0.7cm, pic text=$\theta_{\text{max}}$, pic text options={above=2mm, right=2mm}] {angle=X_vec--O--B2};
 \end{tikzpicture}
 \end{center}
-\begin{center}
-\begin{tikzpicture}[scale=1.5]
-    % Define angles
-    \def\phi{63.43}
-    \def\thetaMax{25.84}
-    \def\angleA{\phi - \thetaMax} % Lower bound angle
-    \def\angleB{\phi + \thetaMax} % Upper bound angle
-
-    % Draw axes
-    \draw[->, thick] (-0.5, 0) -- (3.2, 0) node[right] {$x_1$};
-    \draw[->, thick] (0, -0.5) -- (0, 3.2) node[above] {$x_2$};
-    \node[below left] at (0,0) {$O$};
-
-    % Shade the conical region
-    \fill[blue!20, opacity=0.8] (0,0) -- (\angleA:3) arc (\angleA:\angleB:3) -- cycle;
-
-    % Draw boundary vectors
-    \draw[->, thick, blue] (0,0) -- (\angleA:3) node[below right] {Boundary};
-    \draw[->, thick, blue] (0,0) -- (\angleB:3) node[above] {Boundary};
-
-    % Draw the reference vector x
-    \draw[->, very thick, red] (0,0) -- (1,2) node[above right] {$x=[1,2]^T$};
-
-    % Draw and label angles
-    \draw[->] (1,0) arc (0:\angleA:1) node[midway, right] {$\theta_{\text{max}}$};
-    \draw[->] (1,0) arc (0:\angleB:1) node[midway, above right] {$\theta_{\text{max}}$};
-    \draw[->] (1,0) arc (0:\phi:1.5) node[midway, above right] {$\phi$};
-\end{tikzpicture}
-\end{center}
-
-\subsubsection*{(c): Sketch of a High-Similarity Region}
-\parbox{\textwidth}{
-We want to sketch the region in $\mathbb{R}^2$ where any vector $x^{\prime}$ has a cosine similarity of at least 0.9 with the vector $x = [1, 2]^T$. The condition is $\text{cos}(\theta) \ge 0.9$, which implies that the angle $\theta$ between $x$ and $x'$ must satisfy $|\theta| \le \arccos(0.9) \approx 25.84^\circ$.
-\\~\\
-\textbf{Description of the Sketch:}
-\begin{itemize}
-    \item Draw the standard Cartesian axes, $x_1$ and $x_2$.
-    \item Draw the reference vector $x$ as an arrow from the origin $(0,0)$ to the point $(1,2)$.
-    \item The region of high similarity is a double-sided cone (a pair of sectors in 2D) centered on the line passing through the origin and the point $(1,2)$.
-    \item The cone opens with an angle of $2 \times 25.84^\circ$. Any vector $x'$ that originates at $(0,0)$ and whose tip lies within this cone satisfies the condition.
-\end{itemize}
-}
-\subsubsection*{\normalfont}{$\therefore$ The region is a cone centered on the vector $x$ with an angular radius of $\arccos(0.9)$.}
 
 \noindent\rule{\textwidth}{0.4pt}\\
-
-\newpage
-
-\subsubsection*{\normalfont}{Graduate Level Explanation}
-
-\parbox{\textwidth}{
-Cosine similarity is a measure of orientation, not magnitude. By normalizing the vectors to unit length via the $\ell_2$-norm, it isolates the angle between them, making it an effective measure of similarity in applications where vector length is a confounding variable. For instance, in Natural Language Processing, documents are often represented as high-dimensional TF-IDF vectors. A longer document might have a larger Euclidean distance from a shorter one, even if they discuss the same topic. Cosine similarity correctly identifies them as similar by disregarding their "length" (i.e., word count) and focusing solely on their "direction" (i.e., topic, as defined by the distribution of word frequencies). This property is also critical in recommender systems, where it can measure the similarity of user preferences irrespective of the total number of items they have rated.
-}
-
-\subsubsection*{\normalfont}{Explanation for 5 year old}
-
-\parbox{\textwidth}{
-Imagine you and your friend are each pointing with an arrow. Cosine similarity doesn't care how long your arrows are, only which way they're pointing!
-\begin{itemize}
-    \item If you both point in the \textbf{exact same direction}, the similarity is \textbf{1}. Perfect match!
-    \item If your arrows make a perfect "L" shape (a right angle), the similarity is \textbf{0}. You're not pointing in similar directions at all.
-    \item If you point in the \textbf{exact opposite direction} of your friend, the similarity is \textbf{-1}. You completely disagree!
-\end{itemize}
-It's just a score from -1 to 1 that tells you how much your arrows line up.
-}
 
 \newpage
 %------------------
