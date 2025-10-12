@@ -16,6 +16,8 @@
 \usepackage{subcaption}
 \usepackage{comment}
 
+\usetikzlibrary{angles, quotes}
+
 % Set page geometry
 \geometry{a4paper, margin=1in}
 
@@ -580,6 +582,10 @@ Let $A = \{1, 3, 5, 7, 9\}$ and $B = \{2, 3, 5, 7\}$
 
 \newpage
 
+%------------------
+% Solution for 8
+%------------------
+%%%
 \subsection*{Solution 8}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution: Bigram Jaccard Similarity}
@@ -654,55 +660,157 @@ To see how similar your sentences are, we just divide the number of matching con
 
 \newpage
 
+%------------------
+% Solution for 9 (a)
+%------------------
 \subsection*{Solution 9}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 9 (a)}
-
-\subsubsection*{(a): Calculating Cosine Similarity}
+\subsubsection*{Define Cosine Similarity}
 \parbox{\textwidth}{
-We compute the cosine similarity for the vectors $x = [1, 2, 3]^T$ and $x' = [3, 2, 1]^T$ using the formula $\text{cos}(\theta) = \frac{x \cdot x'}{\|x\|_2 \|x'\|_2}$. First, we compute the dot product and the $\ell_2$-norms.
-\\
-Dot Product: $x \cdot x' = (1)(3) + (2)(2) + (3)(1)$
-\\
-Norms: $\|x\|_2 = \sqrt{1^2 + 2^2 + 3^2}$ and $\|x'\|_2 = \sqrt{3^2 + 2^2 + 1^2}$
+  The cosine similarity between two vectors $x$ and $y$ is defined as:
+  $$\text{cos}(\theta) = \frac{x \cdot y}{||x|| ||y||} = \frac{\sum_{i=1}^{n}x_{i}y_{i}}{\sqrt{\sum_{i=1}^{n}x_{i}^2}\sqrt{\sum_{i=1}^{n}y_{i}^2}}$$
+}
+\subsubsection*{Compute Cosine Similarity}
+\parbox{\textwidth}{
+  Let $x=\begin{bmatrix} 1 \\ 2 \\ 3 \end{bmatrix}$ and $x^{\prime}=\begin{bmatrix} 1 \\ 2 \\ 3 \end{bmatrix}$
+
 }
 \begin{align*}
-    \text{cos}(\theta) &= \frac{(1)(3) + (2)(2) + (3)(1)}{\sqrt{1^2+2^2+3^2} \sqrt{3^2+2^2+1^2}} \\
+    \text{cos}(\theta) &= \frac{x \cdot x^{\prime}}{||x|| ||x^{\prime}||} \\
+    &= \frac{\sum_{i=1}^{n}x_{i}x^{\prime}_{i}}{\sqrt{\sum_{i=1}^{n}x_{i}^2}\sqrt{\sum_{i=1}^{n}{x^{\prime}}_{i}^2}} \\
+    &= \frac{(1)(3) + (2)(2) + (3)(1)}{\sqrt{1^2+2^2+3^2} \sqrt{3^2+2^2+1^2}} \\
     &= \frac{3 + 4 + 3}{\sqrt{1+4+9} \sqrt{9+4+1}} \\
     &= \frac{10}{\sqrt{14} \sqrt{14}} \\
     &= \frac{10}{14} \\
     &= \frac{5}{7}
 \end{align*}
-\subsubsection*{\normalfont}{$\therefore$ The cosine similarity between $x$ and $x'$ is $5/7$.}
+\subsubsection*{\normalfont}{$\therefore$ The cosine similarity between $x$ and $x'$ is $\frac{5}{7}$.}
 
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
 
+%------------------
+% Solution for 9 (b)
+%------------------
 \subsection*{Solution 9}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 9 (b)}
 \subsubsection*{(b): Characterization of Zero Similarity}
 \parbox{\textwidth}{
-The cosine similarity between two non-zero vectors $x$ and $x'$ is zero if and only if the numerator of the formula is zero.
-$$ \text{cos}(\theta) = 0 \iff x \cdot x' = 0 $$
-In a Euclidean vector space, a dot product of zero signifies that the two vectors are \textbf{orthogonal} (perpendicular) to each other. The angle $\theta$ between them is $90^\circ$ or $\pi/2$ radians. Geometrically, they form a right angle.
+The cosine similarity between two non-zero vectors $x$ and $x^{\prime}$ is zero if and only if the numerator of the formula is zero.
+$$ \text{cos}(\theta) = 0 \iff x \cdot x^{\prime} = 0 $$
+In a Euclidean vector space, a dot product of zero signifies that the two vectors are orthogonal (perpendicular) to each other. The angle $\theta$ between them is $90^\circ$ or $\pi/2$ radians. Geometrically, they form a right angle.
 }
-\subsubsection*{\normalfont}{$\therefore$ A cosine similarity of zero means the vectors are orthogonal.}
+\subsubsection*{\normalfont}{$\therefore$ A cosine similarity of zero means the vectors are orthogonal to each other.}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
-
+%------------------
+% Solution for 9 (c)
+%------------------
+%%% come back.. image i dont get
 \subsection*{Solution 9}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 9 (c)}
 
+\subsubsection*{Question: Geometric Region}
+Sketch the region of all vectors $y \in \mathbb{R}^2$ whose cosine similarity with the vector $x = [1, 2]^T$ is at least 0.9.
+
+\subsubsection*{Step 1: Define the Geometric Constraint}
+\parbox{\textwidth}{
+The cosine similarity between two non-zero vectors $x$ and $y$ in $\mathbb{R}^n$ is defined as the cosine of the angle $\theta$ between them. The region $R$ is the set of all points $y \in \mathbb{R}^2$ that satisfy the inequality:
+$$ \text{cos}(\theta) = \frac{x \cdot y}{\|x\|_2 \|y\|_2} \geq 0.9 $$
+Since this constraint depends only on the angle $\theta$ between the vectors and not on the magnitude of $y$, the region is unbounded and extends radially from the origin. The boundary of this region is defined by the equality $\text{cos}(\theta) = 0.9$.
+}
+
+\subsubsection*{Step 2: Calculate Angular Boundaries}
+The maximum allowable angle, $\theta_{\text{max}}$, between any vector $y$ in the region and the reference vector $x$ is given by the boundary condition. The reference vector $x = [1, 2]^T$ itself forms an angle $\phi$ with the positive $x_1$-axis.
+\begin{align*}
+    \text{Boundary Condition:}\quad \cos(\theta_{\text{max}}) &= 0.9 \\
+    \implies \theta_{\text{max}} &= \arccos(0.9) \approx 25.84^\circ \\
+    \\
+    \text{Reference Vector Angle:}\quad \phi &= \arctan\left(\frac{x_2}{x_1}\right) = \arctan\left(\frac{2}{1}\right) \approx 63.43^\circ
+\end{align*}
+The region is therefore an angular sector (a cone in $\mathbb{R}^2$) centered at angle $\phi \approx 63.43^\circ$, with an angular radius of $\theta_{\text{max}} \approx 25.84^\circ$. The cone is bounded by the angles $\phi - \theta_{\text{max}} \approx 37.59^\circ$ and $\phi + \theta_{\text{max}} \approx 89.27^\circ$.
+
+\subsubsection*{Step 3: Sketch of the Region}
+The shaded region below represents the cone containing all vectors $y$ satisfying the condition.
+\begin{center}
+\begin{tikzpicture}[scale=1.5]
+    % Define angles
+    \def\phi{63.43}
+    \def\thetaMax{25.84}
+    \def\angleA{\phi - \thetaMax} % Lower bound angle
+    \def\angleB{\phi + \thetaMax} % Upper bound angle
+
+    % Draw axes
+    \draw[->, thick] (-0.5, 0) -- (3.5, 0) node[right] {$x_1$};
+    \draw[->, thick] (0, -0.5) -- (0, 3.5) node[above] {$x_2$};
+    \node[below left] at (0,0) {$O$};
+
+    % Shade the conical region
+    \fill[blue!20, opacity=0.8] (0,0) -- (\angleA:3.2) arc (\angleA:\angleB:3.2) -- cycle;
+
+    % Draw boundary vectors
+    \draw[->, thick, blue] (0,0) -- (\angleA:3.2) node[below right, xshift=5mm, yshift=-2mm] {Boundary};
+    \draw[->, thick, blue] (0,0) -- (\angleB:3.2) node[above right, xshift=5mm, yshift=2mm] {Boundary};
+
+    % Draw the reference vector x
+    \draw[->, very thick, red] (0,0) -- (1,2) node[above right, xshift=2mm, yshift=2mm] {$x=[1,2]^T$};
+
+    % Define coordinates for angles
+    \coordinate (O) at (0,0);
+    \coordinate (X) at (1,0);
+    \coordinate (X_vec) at (1,2);
+    \coordinate (B1) at (\angleA:3.2);
+    \coordinate (B2) at (\angleB:3.2);
+
+    % Draw and label angles
+    % Angle phi from x_1 axis to vector x
+    \draw pic[draw, angle radius=1.2cm, pic text=$\phi$, pic text options={above=2mm, left=5mm}] {angle=X--O--X_vec};
+    % Angle theta_max from vector x to lower boundary
+    \draw pic[draw, angle radius=0.7cm, pic text=$\theta_{\text{max}}$, pic text options={right=2mm}] {angle=B1--O--X_vec};
+    % Angle theta_max from vector x to upper boundary
+    \draw pic[draw, angle radius=0.7cm, pic text=$\theta_{\text{max}}$, pic text options={above=2mm, right=2mm}] {angle=X_vec--O--B2};
+\end{tikzpicture}
+\end{center}
+\begin{center}
+\begin{tikzpicture}[scale=1.5]
+    % Define angles
+    \def\phi{63.43}
+    \def\thetaMax{25.84}
+    \def\angleA{\phi - \thetaMax} % Lower bound angle
+    \def\angleB{\phi + \thetaMax} % Upper bound angle
+
+    % Draw axes
+    \draw[->, thick] (-0.5, 0) -- (3.2, 0) node[right] {$x_1$};
+    \draw[->, thick] (0, -0.5) -- (0, 3.2) node[above] {$x_2$};
+    \node[below left] at (0,0) {$O$};
+
+    % Shade the conical region
+    \fill[blue!20, opacity=0.8] (0,0) -- (\angleA:3) arc (\angleA:\angleB:3) -- cycle;
+
+    % Draw boundary vectors
+    \draw[->, thick, blue] (0,0) -- (\angleA:3) node[below right] {Boundary};
+    \draw[->, thick, blue] (0,0) -- (\angleB:3) node[above] {Boundary};
+
+    % Draw the reference vector x
+    \draw[->, very thick, red] (0,0) -- (1,2) node[above right] {$x=[1,2]^T$};
+
+    % Draw and label angles
+    \draw[->] (1,0) arc (0:\angleA:1) node[midway, right] {$\theta_{\text{max}}$};
+    \draw[->] (1,0) arc (0:\angleB:1) node[midway, above right] {$\theta_{\text{max}}$};
+    \draw[->] (1,0) arc (0:\phi:1.5) node[midway, above right] {$\phi$};
+\end{tikzpicture}
+\end{center}
 
 \subsubsection*{(c): Sketch of a High-Similarity Region}
 \parbox{\textwidth}{
-We want to sketch the region in $\mathbb{R}^2$ where any vector $x'$ has a cosine similarity of at least 0.9 with the vector $x = [1, 2]^T$. The condition is $\text{cos}(\theta) \ge 0.9$, which implies that the angle $\theta$ between $x$ and $x'$ must satisfy $|\theta| \le \arccos(0.9) \approx 25.84^\circ$.
+We want to sketch the region in $\mathbb{R}^2$ where any vector $x^{\prime}$ has a cosine similarity of at least 0.9 with the vector $x = [1, 2]^T$. The condition is $\text{cos}(\theta) \ge 0.9$, which implies that the angle $\theta$ between $x$ and $x'$ must satisfy $|\theta| \le \arccos(0.9) \approx 25.84^\circ$.
 \\~\\
 \textbf{Description of the Sketch:}
 \begin{itemize}
@@ -737,7 +845,10 @@ It's just a score from -1 to 1 that tells you how much your arrows line up.
 }
 
 \newpage
-
+%------------------
+% Solution for 10 (a)
+%------------------
+%%%
 \subsection*{Solution 10}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution  10 (a)}
@@ -755,7 +866,10 @@ E[X] &= (1)\left(\frac{1}{3}\right) + (2)\left(\frac{1}{3}\right) + (3)\left(\fr
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
-
+%------------------
+% Solution for 10 (b)
+%------------------
+%%%
 \subsection*{Solution 10}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution  10 (b)}
@@ -778,6 +892,10 @@ E[X^2] &= (1^2)\left(\frac{1}{3}\right) + (2^2)\left(\frac{1}{3}\right) + (3^2)\
 
 \newpage
 
+%------------------
+% Solution for 10 (c)
+%------------------
+%%%
 \subsection*{Solution 10}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution  10 (c)}
@@ -792,6 +910,10 @@ E[X^2] &= (1^2)\left(\frac{1}{3}\right) + (2^2)\left(\frac{1}{3}\right) + (3^2)\
 
 \newpage
 
+%------------------
+% Solution for 10 (d)
+%------------------
+%%%
 \subsection*{Solution 10}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution  10 (d)}
@@ -826,7 +948,9 @@ s &= \sqrt{3.0} \approx 1.732
 \parbox{\textwidth}{Imagine you have a magic cookie jar. The \textbf{plan} (the theoretical part) says that for every 12 cookies you pull out, you *should* get 4 chocolate chip, 4 oatmeal, 1 sugar, 1 peanut butter, 1 ginger, and 1 snickerdoodle. The plan's ``average cookie'' is a mix between a chocolate chip and an oatmeal cookie. \\ \\ But then, you actually pull out just 10 cookies. This is your \textbf{handful} (the empirical part). In your handful, you got a lot of oatmeal cookies and no sugar cookies at all! What happened in your one small handful is a little different from the big plan for the whole jar. If you kept pulling out cookies all day (thousands of them!), your handful would start to look a lot more like the original plan.}
 
 \newpage
-
+%------------------
+% Solution for 11 (a)
+%------------------
 \subsection*{Solution 11}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution  11 (a)}
@@ -840,13 +964,15 @@ s &= \sqrt{3.0} \approx 1.732
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
-
+%------------------
+% Solution for 11 (b)
+%------------------
 \subsection*{Solution 11}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution  11 (b)}
 
 \parbox{\textwidth}{
-    \textbf{Justification:} The distribution of housing costs is almost always characterized by a strong \textbf{right-skew (positive skew)}. While most houses fall within a certain price range, there is a long tail of extremely expensive properties (mansions, luxury estates). These high-value outliers pull the arithmetic average significantly upward, while the median remains a more robust measure of the "typical" house price, unaffected by these extreme values.
+    \textbf{Justification:} The distribution of housing costs is almost always characterized by a strong right-skew. Most houses fall within a certain price range, there is a long tail of extremely expensive properties. These high-value outliers pull the mean significantly upward, while the median remains a more robust measure of the "typical" house price, unaffected by these extreme values.
 }
 
 \subsubsection*{\normalfont $\therefore$ We expect $\text{Mean}(C) > \text{Median}(C)$. A significant difference.}
@@ -855,27 +981,31 @@ s &= \sqrt{3.0} \approx 1.732
 
 \newpage
 
-
+%------------------
+% Solution for 11 (c)
+%------------------
 \subsection*{Solution 11}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution  11 (c)}
 
 \parbox{\textwidth}{
-    \textbf{Justification:} The distribution of GPAs is often \textbf{left-skewed (negative skew)}. This is due to a "ceiling effect," where a large number of students achieve high grades clustered near the maximum possible GPA (e.g., 4.0), while fewer students have very low GPAs. This clustering at the high end pulls the median towards the right, while the lower-end scores pull the mean to the left. However, this skew is often less pronounced than in financial data.
+    \textbf{Justification:} The distribution of GPAs is often left-skewed. This is due to a "ceiling effect," where a large number of students achieve high grades clustered near the maximum possible GPA ($\approx$ 4.0), while fewer students have very low GPAs. This clustering at the high end pulls the median towards the right, while the lower-end scores pull the mean to the left.
 }
 
-\subsubsection*{\normalfont $\therefore$ We expect $\text{Mean}(G) < \text{Median}(G)$, but the difference may not be as significant as for cost or salary.}
+\subsubsection*{\normalfont $\therefore$ We expect $\text{Mean}(G) < \text{Median}(G)$, but the difference may not be as significant as for  house cost or salary.}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
-
+%------------------
+% Solution for 11 (d)
+%------------------
 \subsection*{Solution 11}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution  11 (d)}
 
 \parbox{\textwidth}{
-    \textbf{Justification:} Similar to housing costs, salary data exhibits a pronounced \textbf{right-skew}. The vast majority of people earn salaries within a relatively modest range. However, a small number of individuals (CEOs, top athletes, etc.) have extraordinarily high incomes. These outliers exert a strong influence on the mean, pulling it far to the right of the median. The median salary is therefore a much more accurate representation of a typical worker's earnings.
+    \textbf{Justification:} Similar to housing costs, salary data exhibits a pronounced right-skew. The majority of people earn modest. However, a small number of individuals (CEOs, top athletes, etc.) have high incomes. These outliers have strong influence on the mean, that pulls it far to the right of the median. The median salary is therefore a much more accurate representation of a typical worker's salary.
 }
 \vspace{1em}
 \subsubsection*{\normalfont $\therefore$ We expect $\text{Mean}(S) > \text{Median}(S)$. A significant difference.}
@@ -884,91 +1014,52 @@ s &= \sqrt{3.0} \approx 1.732
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
-
-\subsubsection*{\normalfont Graduate Level Explanation}
-\parbox{\textwidth}{
-The \textbf{mean} ($\mu$) is the first moment of a distribution, representing its center of mass. It is defined as the expected value of the random variable $X$, so that $\mu = E[X]$. The mean minimizes the expected squared error, i.e., $\mu = \arg\min_c E[(X-c)^2]$. Its sensitivity to the magnitude of every data point makes it susceptible to being heavily influenced by outliers.
-
-\vspace{0.5em}
-
-The \textbf{median} ($m$) is the value that separates the higher half from the lower half of a data set. More formally, it is a value that minimizes the L1-norm or the expected absolute error, $m = \arg\min_c E[|X-c|]$. This property makes the median a \textbf{robust} estimator of central tendency, as it is insensitive to the magnitude of extreme outliers.
-
-\vspace{0.5em}
-
-In a \textbf{symmetric distribution}, the center of mass and the 50th percentile coincide, thus $\mu = m$. In a \textbf{skewed distribution}, the mass in the tail pulls the mean in its direction. For a right-skewed distribution, the long tail of high-value outliers pulls $\mu > m$. Conversely, for a left-skewed distribution, the tail of low-value outliers pulls $\mu < m$. The median remains a better indicator of the central location of the bulk of the probability mass.
-}
-
-\vspace{2em}
-
-\subsubsection*{\normalfont Explanation for a 5-Year-Old}
-\parbox{\textwidth}{
-Imagine five kids are sharing candy. Four kids get 2 pieces of candy each. But one super-lucky kid gets 50 pieces!
-
-\vspace{0.5em}
-
-If we use the \textbf{mean} (the "average"), we add all the candy up ($2+2+2+2+50 = 58$) and divide by the number of kids (5). The mean is almost 12 pieces per kid! That doesn't sound right, because most kids only got 2. The one kid with 50 pieces pulled the average way up.
-
-\vspace{0.5em}
-
-If we use the \textbf{median} (the "middle"), we line the kids up by how much candy they have: 2, 2, \textbf{2}, 2, 50. The kid in the middle has 2 pieces. The median is 2. This is a much better description of what a typical kid got.
-
-\vspace{0.5em}
-
-So, the \textbf{mean is sensitive} to that one kid with a huge amount of candy (an outlier), while the \textbf{median just looks at the middle} and doesn't care how much the richest kid has.
-}
-
-\newpage
-
+%------------------
+% Solution for 12
+%------------------
 \subsection*{Solution 12}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{nesto ovdje}
-
-\subsubsection*{Question 1: Derivation of the Second Raw Moment}
+\subsubsection*{Define relationships}
 
 \parbox{\textwidth}{
-The second raw moment, denoted as $E[Z^2]$, can be derived from the first raw moment (the mean, $\mu = E[Z]$) and the second central moment (the variance, $Var[Z] = \sigma^2$) using the fundamental relationship:
-$$ Var[Z] = E[Z^2] - (E[Z])^2 $$
+We know the following relationships are true:
+$$ Var[Z] = E[Z^2] - (E[Z])^2$$
+$$\sigma^{2} = \text{Var}[Z]$$ 
+$$E[Z] = \mu$$
 Rearranging this formula allows us to solve for $E[Z^2]$:
 $$ E[Z^2] = Var[Z] + (E[Z])^2 = \sigma^2 + \mu^2 $$
-Given the values $E[Z] = -1$ and the standard deviation $SD[Z] = \sigma = 2$, we can calculate the variance as $\sigma^2 = 2^2 = 4$.
-}
 
+}
+\subsubsection*{Compute $E[Z^{2}]$}
+\parbox{\textwidth}{
+Given: $\mu = E[Z] = -1$ and the standard deviation $SD[Z] = \sigma = 2$
+}
 \begin{align*}
 E[Z^2] &= \sigma^2 + \mu^2 \\
-&= (SD[Z])^2 + (E[Z])^2 \\
 &= (2)^2 + (-1)^2 \\
 &= 4 + 1 \\
 &= 5
 \end{align*}
 
-\subsubsection*{\normalfont}{$\therefore$ The second raw moment $E[Z^2]$ is 5.}
-
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\subsubsection*{\normalfont}{Graduate Level Explanation}
-The relationship $Var(Z) = E[Z^2] - (E[Z])^2$ provides a direct conversion between the second central moment ($Var(Z)$) and the first two raw moments ($E[Z]$ and $E[Z^2]$). In general, central moments, $E[(Z-\mu)^k]$, describe the shape of a distribution relative to its mean, while raw moments, $E[Z^k]$, describe the distribution relative to the origin. This specific formula is a fundamental identity derived from the linearity of expectation and is crucial when working with moment-generating functions (MGFs) or characteristic functions, as raw moments are easily derived from them via differentiation. Physically, in signal processing, if $Z$ represents a random signal, $E[Z]$ is its DC component, and $E[Z^2]$ is related to its total average power. The variance, representing the second central moment, is then interpreted as the AC power of the signal.
-
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\subsubsection*{\normalfont}{Explanation for a 5-Year-Old}
-Imagine you are playing a game. Your \textbf{average score} is your mean ($E[Z]$). Let's say your average is -1. How much your scores jump around from that average is the \textbf{wildness} (standard deviation, $\sigma$). Let's say the wildness is 2. We want to find the "average of the scores squared" ($E[Z^2]$). To get this, you just follow a simple rule: combine the \textbf{wildness squared} with the \textbf{average score squared}.
-$$ \text{Average Score Squared} = (\text{Wildness})^2 + (\text{Average Score})^2 $$
-So, we calculate $(2 \times 2) + (-1 \times -1) = 4 + 1 = 5$. It's a fundamental statistical rule that connects how spread out your scores are with what your average score is.
-
-
+\subsubsection*{\normalfont}{$\therefore$ $E[Z^2]$ is 5.}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
 
+%------------------
+% Solution for 13 (a)
+%------------------
 \subsection*{Solution 13}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution  13 (a)}
-
-\subsubsection*{Part (a): Are X and Y Independent?}
-
+\subsubsection*{Define X and Y Independence}
 \parbox{\textwidth}{
-Two discrete random variables $X$ and $Y$ are independent if and only if $P(X=x, Y=y) = P(X=x)P(Y=y)$ for all possible pairs $(x, y)$. A single counterexample is sufficient to prove dependence. First, we compute the marginal probability mass functions, $P(X=x)$ and $P(Y=y)$, by summing the rows and columns of the joint PMF table, respectively.
+Two discrete random variables $X$ and $Y$ are independent if and only if $P(X=x, Y=y) = P(X=x)P(Y=y)$ for all possible pairs $(x, y)$.
+\subsubsection*{Compute Marginal Probability Mass Functions}
+
+
+ We sum rows and columns of the joint PMF table to compute $P(X=x)$ and $P(Y=y)$.
 \begin{align*}
     P(X=1) &= 0.10 + 0.20 + 0.05 = 0.35 \\
     P(X=2) &= 0.10 + 0.15 + 0.05 = 0.30 \\
@@ -981,8 +1072,8 @@ Two discrete random variables $X$ and $Y$ are independent if and only if $P(X=x,
 \end{align*}
 }
 \vspace{1em}
-
-We test the independence condition for the pair $(X=1, Y=1)$:
+\subsubsection*{Test Independence Condition}
+The test below is the independence condition for the pair $(X=1, Y=1)$:
 \begin{align*}
     P(X=1, Y=1) &\stackrel{?}{=} P(X=1)P(Y=1) \\
     0.10 &\stackrel{?}{=} (0.35)(0.30) \\
@@ -994,61 +1085,50 @@ We test the independence condition for the pair $(X=1, Y=1)$:
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
-
+%------------------
+% Solution for 13 (b)
+%------------------
 \subsection*{Solution 13}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution  13 (b)}
 
-\subsubsection*{Part (b): What are the Covariance and Correlation of X and Y?}
-
+\subsubsection*{Define Covariance and Correlation of X and Y}
 \parbox{\textwidth}{
-To find the covariance and correlation, we must first compute the expectations $E[X]$, $E[Y]$, and $E[XY]$. The covariance is then given by $\text{Cov}[X, Y] = E[XY] - E[X]E[Y]$, and the correlation is $\rho_{X, Y} = \frac{\text{Cov}[X, Y]}{\sigma_X \sigma_Y}$.
+The covariance is as follows:
+$$\text{Cov}[X, Y] = E[XY] - E[X]E[Y]$$
+The correlation is as follows
+$$\rho_{X, Y} = \frac{\text{Cov}[X, Y]}{\sigma_X \sigma_Y}$$
 }
-\vspace{1em}
 
-\textbf{1. Calculate Expectations:}
+\subsubsection*{Compute Expectations $X$ $Y$ and $XY$}
+
 \begin{align*}
-    E[X] &= \sum_{x} x P(X=x) \\
-         &= 1(0.35) + 2(0.30) + 3(0.35) \\
-         &= 0.35 + 0.60 + 1.05 = \mathbf{2.0} \\
-    \\
-    E[Y] &= \sum_{y} y P(Y=y) \\
-         &= 1(0.30) + 2(0.50) + 3(0.20) \\
-         &= 0.30 + 1.00 + 0.60 = \mathbf{1.9} \\
-    \\
+  E[X] &= \sum_{x} x P(X=x) = 1(0.35) + 2(0.30) + 3(0.35) = 0.35 + 0.60 + 1.05 = 2.0 \\
+  E[Y] &= \sum_{y} y P(Y=y) = 1(0.30) + 2(0.50) + 3(0.20) = 0.30 + 1.00 + 0.60 = 1.9 \\
     E[XY] &= \sum_{x,y} xy P(X=x, Y=y) \\
           &= (1)(1)(0.10) + (1)(2)(0.20) + (1)(3)(0.05) \\
           &\quad + (2)(1)(0.10) + (2)(2)(0.15) + (2)(3)(0.05) \\
           &\quad + (3)(1)(0.10) + (3)(2)(0.15) + (3)(3)(0.10) \\
           &= 0.10 + 0.40 + 0.15 + 0.20 + 0.60 + 0.30 + 0.30 + 0.90 + 0.90 \\
-          &= \mathbf{3.85}
+          &= 3.85
 \end{align*}
 
-\textbf{2. Calculate Covariance:}
-\begin{align*}
-    \text{Cov}[X, Y] &= E[XY] - E[X]E[Y] \\
-                   &= 3.85 - (2.0)(1.9) \\
-                   &= 3.85 - 3.80 = \mathbf{0.05}
-\end{align*}
+\subsubsection*{Compute Covariance}
+$$\text{Cov}[X, Y] = E[XY] - E[X]E[Y] = 3.85 - (2.0)(1.9) = 3.85 - 3.80 = 0.05$$
 
-\textbf{3. Calculate Variances and Standard Deviations:}
+\subsubsection*{Compute Variances and Standard Deviations}
 \begin{align*}
     E[X^2] &= 1^2(0.35) + 2^2(0.30) + 3^2(0.35) = 0.35 + 1.20 + 3.15 = 4.7 \\
     \text{Var}[X] &= E[X^2] - (E[X])^2 = 4.7 - 2.0^2 = 0.7 \\
-    \sigma_X &= \sqrt{0.7} \approx 0.8367 \\
+    \sigma_X &= \sqrt{0.7} \\
     \\
     E[Y^2] &= 1^2(0.30) + 2^2(0.50) + 3^2(0.20) = 0.30 + 2.00 + 1.80 = 4.1 \\
     \text{Var}[Y] &= E[Y^2] - (E[Y])^2 = 4.1 - 1.9^2 = 4.1 - 3.61 = 0.49 \\
-    \sigma_Y &= \sqrt{0.49} = 0.7
+    \sigma_Y &= \sqrt{0.49}
 \end{align*}
 
-\textbf{4. Calculate Correlation Coefficient:}
-\begin{align*}
-    \rho_{X, Y} &= \frac{\text{Cov}[X, Y]}{\sigma_X \sigma_Y} \\
-               &= \frac{0.05}{\sqrt{0.7} \cdot \sqrt{0.49}} \\
-               &= \frac{0.05}{(0.8367)(0.7)} \\
-               &\approx \frac{0.05}{0.5857} \approx \mathbf{0.0854}
-\end{align*}
+\subsubsection*{Compute Correlation Coefficient}
+$$\rho_{X, Y} = \frac{\text{Cov}[X, Y]}{\sigma_X \sigma_Y} = \frac{0.05}{\sqrt{0.7} \cdot \sqrt{0.49}} \approx 0.0854$$
 
 \subsubsection*{\normalfont{$\therefore$ The covariance is $\text{Cov}[X, Y] = 0.05$, and the correlation coefficient is $\rho_{X, Y} \approx 0.0854$. This indicates a very weak positive linear relationship between $X$ and $Y$.}}
 
@@ -1056,37 +1136,18 @@ To find the covariance and correlation, we must first compute the expectations $
 
 \newpage
 
-\subsubsection*{\normalfont{Graduate Level Explanation}}
-Two random variables $X$ and $Y$ are independent if and only if the $\sigma$-algebras they generate, $\sigma(X)$ and $\sigma(Y)$, are independent. For discrete variables, this is equivalent to the factorization of the joint PMF, $p_{X,Y}(x,y) = p_X(x)p_Y(y)$, for all $(x,y)$ in the support.
-\\ \\
-Covariance and correlation are measures of the \textbf{linear dependence} between two random variables. A non-zero correlation implies dependence, but the converse is not true. Two variables can be functionally dependent yet have zero correlation if the relationship is non-linear. For example, if $X \sim \text{Uniform}\{-1, 0, 1\}$ and $Y=X^2$, then $X$ and $Y$ are clearly dependent. However, $E[X]=0$ and $E[XY]=E[X^3]=0$, so $\text{Cov}[X,Y]=0$. In this problem, because $\text{Cov}[X,Y] \neq 0$, we have a second confirmation that $X$ and $Y$ are dependent. The joint PMF is the most fundamental description, as it fully defines the probability measure for the random vector $(X, Y)$ and allows for the computation of any property, including marginals, conditionals, and moments.
-
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\subsubsection*{\normalfont{Explanation for a 5-Year-Old}}
-Imagine two friends, Alex (who is variable X) and Ben (who is variable Y). They each have a bag with balls numbered 1, 2, and 3.
-\\ \\
-\textbf{Independence}: If they are ``independent,'' it means that when Alex picks a number, it tells you \textit{nothing} about what number Ben is likely to pick. Knowing Alex picked a `3` doesn't make it any more or less likely that Ben will pick a `1`, `2`, or `3`. In our problem, we found out they are \textbf{not} independent. This means that knowing what number Alex picks gives you a small hint about what Ben might pick.
-\\ \\
-\textbf{Correlation}: This is a number that tells us \textit{how much} Alex's choice is connected to Ben's choice.
-\begin{itemize}
-    \item If the number is close to \textbf{+1}, it means they are best buddies. When Alex picks a high number (like 3), Ben is very likely to pick a high number too.
-    \item If the number is close to \textbf{-1}, they are opposites. When Alex picks a high number, Ben is very likely to pick a low number (like 1).
-    \item If the number is close to \textbf{0}, it means there isn't a clear "high-high" or "high-low" pattern.
-\end{itemize}
-We found a number that is very, very close to 0 (it was 0.0854). This means that while Alex and Ben are not totally independent, there is only a tiny, tiny hint of a pattern where if one picks a higher number, the other one might also pick a slightly higher number. But the connection is so weak, it's almost not there.
-
-
-\newpage
-
+%------------------
+% Solution for 14 (a)
+%------------------
 \subsection*{Solution 14}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution  14 (a)}
-\subsubsection*{Part (a): Deriving the Covariance $\text{Cov}[X, Y]$}
 \parbox{\textwidth}{
-We begin by finding the expectation of $Y$, $E[Y]$, using the linearity of expectation:
+The expectation of $Y$, $E[Y]$, via the linearity of expectation is defined as:
 $$ E[Y] = E[aX + b] = aE[X] + b $$
-The covariance between $X$ and $Y$ is defined as $\text{Cov}[X, Y] = E[(X - E[X])(Y - E[Y])]$. Substituting the expression for $E[Y]$, we derive the covariance as follows:
+The covariance between $X$ and $Y$ is defined as:
+$$\text{Cov}[X, Y] = E[(X - E[X])(Y - E[Y])]$$
+Now,substitute the expression for $E[Y]$ into the expression for covariance:
 }
 \begin{align*}
 \text{Cov}[X, Y] &= E\left[ (X - E[X])(Y - E[Y]) \right] \\
@@ -1098,73 +1159,53 @@ The covariance between $X$ and $Y$ is defined as $\text{Cov}[X, Y] = E[(X - E[X]
 &= a \cdot \text{Var}[X]
 \end{align*}
 
-\subsubsection*{\normalfont}{$\therefore$ The covariance between $X$ and $Y$ is $\text{Cov}[X, Y] = a \cdot \text{Var}[X]$.}
+\subsubsection*{\normalfont}{$\therefore$ The covariance between $X$ and $Y$ ,in terms of $X$ is the following:}
+$$\text{Cov}[X, Y] = a \cdot \text{Var}[X]$$
 
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
-
+%------------------
+% Solution for 14 (b)
+%------------------
 \subsection*{Solution 14}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution  14 (b)}
 
 \subsubsection*{Part (b): Deriving the Correlation $\rho_{X, Y}$}
 \parbox{\textwidth}{
-The correlation coefficient $\rho_{X, Y}$ is defined as $\rho_{X, Y} = \frac{\text{Cov}[X, Y]}{\text{SD}[X]\text{SD}[Y]}$. We first need to find the standard deviation of $Y$, $\text{SD}[Y]$.
+The correlation coefficient $\rho_{X, Y}$ is defined as:
+$$\rho_{X, Y} = \frac{\text{Cov}[X, Y]}{\text{SD}[X]\text{SD}[Y]}$$
+The variance of $Y$ is the following:
 $$ \text{Var}[Y] = \text{Var}[aX + b] = a^2 \text{Var}[X] $$
+First, we need find the standard deviation of $Y$:
 $$ \text{SD}[Y] = \sqrt{\text{Var}[Y]} = \sqrt{a^2 \text{Var}[X]} = |a|\sqrt{\text{Var}[X]} = |a| \cdot \text{SD}[X] $$
-Now we substitute the known quantities into the correlation formula:
+Now, substitute the known quantities into the correlation formula:
 }
 \begin{align*}
 \rho_{X, Y} &= \frac{\text{Cov}[X, Y]}{\text{SD}[X]\text{SD}[Y]} \\
 &= \frac{a \cdot \text{Var}[X]}{\text{SD}[X] \cdot (|a| \cdot \text{SD}[X])} \\
 &= \frac{a \cdot (\text{SD}[X])^2}{|a| \cdot (\text{SD}[X])^2} \\
-&= \frac{a}{|a|} \\
-&= \text{sgn}(a)
+&= \frac{a}{|a|} 
 \end{align*}
 
-\subsubsection*{\normalfont}{$\therefore$ The correlation between $X$ and $Y$ is $\rho_{X, Y} = \text{sgn}(a)$, which is $1$ if $a>0$, $-1$ if $a<0$, and undefined if $a=0$.}
+\subsubsection*{\normalfont}{$\therefore$ The correlation between $X$ and $Y$ is $\rho_{X, Y} = \frac{a}{|a|}$, which is $1$ if $a>0$, $-1$ if $a<0$, and undefined if $a=0$.}
 
 
 \noindent\rule{\textwidth}{0.4pt}\\
-
-\newpage
-
-\subsubsection*{\normalfont}{Graduate Level Explanation}
-The result $\rho_{X, Y} = \pm 1$ provides a foundational insight into the nature of the Pearson correlation coefficient. Correlation measures the strength and direction of a \textbf{linear relationship} between two variables. Since $Y=aX+b$ is, by definition, a perfect linear function of $X$, the magnitude of the correlation must be maximal, which is 1. The sign of the correlation is determined entirely by the slope of the line, $a$. A positive slope ($a>0$) means $X$ and $Y$ move in the same direction, yielding $\rho_{X,Y}=1$. A negative slope ($a<0$) means they move in opposite directions, yielding $\rho_{X,Y}=-1$.
-
-It is critical to note that the additive constant, $b$, has no impact on the final correlation. This is because correlation, like covariance and variance, is a measure of spread and co-movement, not of location. The term $b$ simply shifts the mean of $Y$ ($E[Y] = aE[X] + b$) but does not alter its variance ($\text{Var}[Y] = a^2\text{Var}[X]$). Since the correlation coefficient is standardized by the variables' standard deviations, it is invariant to shifts in location.
-
-\subsubsection*{\normalfont}{Explanation for a 5-Year-Old}
-Imagine you have a magic growing toy ($X$). Every year it gets older, it also gets taller in a very specific way. Let's say for every 1 year it gets older ($X$), it grows exactly 3 inches taller ($Y$). So, $Y = 3X$.
-
-If you know the toy's age, you know its height perfectly! They are perfectly linked together. When its age goes up, its height \textbf{must} go up. This perfect link is what we call a correlation of \textbf{1}. It's the highest score you can get!
-
-Now, what if we started measuring the toy from a small stool that is 10 inches tall? The rule becomes $Y = 3X + 10$. The toy is always 10 inches taller than before, but the way it grows each year doesn't change. It still grows exactly 3 inches for every 1 year. The link between its age and growth is still perfect. The $+10$ is like the stool ($b$)—it changes the starting point but not the relationship.
-
-If the magic toy got shorter as it got older (a weird toy!), the link would still be perfect, but it would be going in the opposite direction. That would be a perfect negative link, which is a correlation of \textbf{-1}.
-
 
 \newpage
 
 \subsection*{Solution 15}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{nesto ovdje}
-
-\parbox{\textwidth}{
-    Let $X$ be a discrete random variable with the sample space $\Omega_X = \{-1, 0, 1\}$ and a uniform probability mass function $P(X=x) = \frac{1}{3}$ for all $x \in \Omega_X$. Find a non-trivial function $Y = f(X)$ such that $X$ and $Y$ are deterministically dependent but have zero covariance, i.e., $\text{Cov}[X, Y] = 0$.
-}
-
 \vspace{1em}
-\noindent\rule{\textwidth}{0.4pt}\\
 
-\subsubsection*{Part 1: Determine E[X] and Simplify the Covariance Condition}
-\parbox{\textwidth}{
+\begin{flushleft}
     Two random variables $X$ and $Y$ are uncorrelated if their covariance is zero. The covariance is defined as:
     $$ \text{Cov}[X, Y] = E[XY] - E[X]E[Y] $$
     We first calculate the expected value of $X$, $E[X]$.
-}
+\end{flushleft}
 \begin{align*}
     E[X] &= \sum_{x \in \Omega_X} x \cdot P(X=x) \\
          &= (-1) \cdot P(X=-1) + (0) \cdot P(X=0) + (1) \cdot P(X=1) \\
@@ -1175,18 +1216,15 @@ If the magic toy got shorter as it got older (a weird toy!), the link would stil
 \parbox{\textwidth}{
     Since $E[X] = 0$, the covariance formula simplifies significantly:
     $$ \text{Cov}[X, Y] = E[XY] - (0) \cdot E[Y] = E[XY] $$
-    Therefore, for $X$ and $Y$ to be uncorrelated, we only need to find a function $f$ such that $\mathbf{E[X f(X)] = 0}$.
-}
-
-\vspace{1em}
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\subsubsection*{Part 2: Derive and Test the Function $f(X)$}
-\parbox{\textwidth}{
-    The condition $E[X f(X)] = 0$ expands to:
+    Hence, for $X$ and $Y$ to be uncorrelated, we only need to find a function $f$ such that:
+    $$E[X f(X)] = 0$$\\
+    Next we expand the  condition $E[X f(X)] = 0$:\\
     $$ E[X f(X)] = \sum_{x \in \Omega_X} x f(x) P(X=x) = \frac{1}{3} \left( (-1)f(-1) + (0)f(0) + (1)f(1) \right) = 0 $$
-    This implies that we need $-f(-1) + f(1) = 0$, or $\mathbf{f(-1) = f(1)}$. A simple, non-linear function that satisfies this condition is the quadratic function $f(x) = x^2$. Let's define $Y = X^2$ and verify that $E[XY] = 0$.
+    This implies that we need $-f(-1) + f(1) = 0$, or $f(-1) = f(1)$.\\
+
+    Let $f(x) = x^{2}$ and verify that $E[XY] = 0$.
 }
+
 \begin{align*}
     E[XY] &= E[X \cdot X^2] = E[X^3] \\
           &= \sum_{x \in \Omega_X} x^3 \cdot P(X=x) \\
@@ -1195,35 +1233,12 @@ If the magic toy got shorter as it got older (a weird toy!), the link would stil
           &= -\frac{1}{3} + 0 + \frac{1}{3} \\
           &= 0
 \end{align*}
-\parbox{\textwidth}{
-    Since $E[XY] = 0$ and $E[X]=0$, we have $\text{Cov}[X, Y] = 0$. The variable $Y=X^2$ is perfectly determined by $X$, yet they are linearly uncorrelated.
-}
 
-\vspace{1em}
-\noindent\rule{\textwidth}{0.4pt}\\
+\begin{flushleft}
+    For $Y = f(X) = X^{2}$ we have $E[XY] = 0$ and $E[X]=0$, and $\text{Cov}[X, Y] = 0$. The variable $Y=X^2$ is determined by $X$, yet they are linearly uncorrelated.
+\end{flushleft}
 
-\subsubsection*{\normalfont{$\therefore$ Final Answer}}
-A suitable function is $\mathbf{Y = f(X) = X^2}$.
-
-\vspace{1em}
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\subsubsection*{\normalfont{Graduate Level Explanation}}
-\parbox{\textwidth}{
-    Covariance and its normalized counterpart, the Pearson correlation coefficient ($\rho_{X,Y}$), are measures of \textbf{linear dependence} only. They quantify the strength and direction of a linear relationship between two variables. In this case, the relationship $Y=X^2$ is perfectly deterministic but also perfectly non-linear (it is parabolic). The distribution of $X$ is symmetric about the origin, which means its first moment, $E[X]$, is zero. The covariance calculation hinges on the third moment, $E[X^3]$, because $E[XY] = E[X \cdot X^2] = E[X^3]$. Due to the symmetry of the underlying distribution of $X$, the negative contribution from $X=-1$ (i.e., $(-1)^3 = -1$) exactly cancels the positive contribution from $X=1$ (i.e., $1^3 = 1$). This results in $E[X^3]=0$ and thus $\text{Cov}[X,Y]=0$. This is a canonical example of \textbf{uncorrelated dependence}, illustrating that a lack of linear correlation does not imply statistical independence. Independence implies zero covariance, but the converse is not true.
-}
-
-\vspace{1em}
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\subsubsection*{\normalfont{Explanation for a 5-Year-Old}}
-\parbox{\textwidth}{
-    Imagine two friends, Xavier (X) and Yasmin (Y). They have a secret rule: Yasmin's number is always Xavier's number multiplied by itself ($Y = X \times X$). So if Xavier picks -1, Yasmin's number must be 1. If Xavier picks 1, Yasmin's number must also be 1. Yasmin's number is perfectly predictable from Xavier's.
-    \newline\newline
-    Now, "correlation" is a way to ask: when Xavier's number goes up, does Yasmin's number also tend to go up? Or does it go down? We are only checking if they follow a straight line together.
-    \newline\newline
-    But look at their game. When Xavier goes from -1 to 0, his number goes up, but Yasmin's number goes down (from 1 to 0). But when Xavier goes from 0 to 1, his number goes up, and Yasmin's number also goes up (from 0 to 1). They don't stick to a simple "go up together" or "one goes up, one goes down" rule. Because their relationship isn't a straight line, the correlation calculator gets confused and says "zero correlation!" even though they are perfectly linked by their secret rule.
-}
+\subsubsection*{\normalfont{$\therefore$ the function is $f(X) = X^{2}$}}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
