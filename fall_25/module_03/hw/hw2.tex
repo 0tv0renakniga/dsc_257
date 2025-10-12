@@ -541,29 +541,6 @@ $q=(0, 1)$: $q(x_1)=0$, $q(x_2)=1$ \\
 
 \newpage
 
-\subsubsection*{\normalfont}{Graduate Level Explanation}
-The Kullback-Leibler divergence is a measure of \textbf{relative entropy}, not a distance metric. Its failure to be a metric is fundamental to its interpretation. The non-symmetry shown above is a key property. $K(p, q)$ measures the information lost when $q$ is used to approximate $p$; this is an inherently directional concept.
-
-The unboundedness of $K(p, q)$ is a direct consequence of the violation of \textbf{absolute continuity}. The divergence is finite if and only if the support of $p$ is a subset of the support of $q$ (denoted $\text{supp}(p) \subseteq \text{supp}(q)$ or $p \ll q$). If this condition fails, there exists an event $x$ for which $p(x) > 0$ but $q(x) = 0$. The model $q$ assigns zero probability to an event that can actually occur, leading to an infinite "surprise" or error. This property is crucial in variational inference and Bayesian model comparison, where an infinite divergence signals a catastrophic failure of the approximating distribution to cover the posterior's support. KL divergence is a member of the broader classes of \textit{f-divergences} and \textit{Bregman divergences}, none of which are required to be symmetric. 
-
-\subsubsection*{\normalfont}{Explanation for 5 year old}
-Imagine a guessing game. The "Truth" knows the right answer ($p$), and you are making a guess ($q$). The KL divergence is a number that tells us how surprised the Truth is by your guess. A bigger number means more surprise!
-
-\begin{itemize}
-    \item \textbf{Why it can be infinite:} The Truth is "The secret animal is a Dog" ($p$ is 100\% Dog). You guess, "I am 100\% certain it's a Cat!" ($q$ is 100\% Cat). You said a Dog was impossible! When the Truth reveals it's a Dog, your surprise is infinite because you were completely wrong about something that was certain.
-    
-    \item \textbf{Why it's not the same backwards:} Let's look at two cases.
-    \begin{enumerate}
-        \item The Truth is "The secret animal could be a Dog or a Cat, 50/50 chance" ($p$ is 50/50). You guess, "It's definitely a Dog!" ($q$ is 100\% Dog). The Truth is infinitely surprised because you said a Cat was impossible, but it was possible.
-        
-        \item Now let's switch! The Truth is "It's definitely a Dog" ($q$ is 100\% Dog). You guess, "It could be a Dog or a Cat, 50/50 chance" ($p$ is 50/50). Is the Truth surprised? A little bit! The Truth is surprised you weren't more confident, but not infinitely surprised, because you at least said a Dog was possible.
-    \end{enumerate}
-\end{itemize}
-Since the surprise is \textbf{infinite} in the first game but just a \textbf{little bit} in the second game, the "surprise-o-meter" doesn't work the same forwards and backwards! 
-
-
-\newpage
-
 %------------------
 % Solution for 7
 %------------------
@@ -601,73 +578,28 @@ Let $A = \{1, 3, 5, 7, 9\}$ and $B = \{2, 3, 5, 7\}$
 %%%
 \subsection*{Solution 8}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution: Bigram Jaccard Similarity}
+\subsubsection*{Convert Sentences to Bigrams}
 \parbox{\textwidth}{
-We are asked to compute the Jaccard similarity based on word bigrams for the following two sentences, where $x'$ is pre-processed to remove punctuation:
+Let: \\
 \\
-$x$: ``Napoleon was born in 1769''
+$x$: ''Napoleon was born in 1769'' $\rightarrow$ $B(x) = \{(\text{Napoleon, was}), (\text{was, born}), (\text{born, in}), (\text{in, 1769})\}$
 \\
-$x'$: ``Napoleon was born when''
+$x^{\prime}$: ''Napoleon was born when'' $\rightarrow$ $B(x^{\prime}) = \{(\text{Napoleon, was}), (\text{was, born}), (\text{born, when})\}$
 \\
-The Jaccard similarity for the bigram sets $B(x)$ and $B(x')$ is defined as $J(B(x), B(x')) = \frac{|B(x) \cap B(x')|}{|B(x) \cup B(x')|}$.
+The Jaccard similarity for the bigram sets $B(x)$ and $B(x^{\prime})$ is defined as:
+$$J(B(x), B(x^{\prime})) = \frac{|B(x) \cap B(x^{\prime})|}{|B(x) \cup B(x^{\prime})|}$$
 }
 
-\subsubsection*{Step 1: Derive Bigram Sets}
-\parbox{\textwidth}{
-First, we generate the sets of consecutive word pairs (bigrams) for each sentence.
-\begin{itemize}
-    \item $B(x) = \{(\text{Napoleon, was}), (\text{was, born}), (\text{born, in}), (\text{in, 1769})\}$
-    \item $B(x') = \{(\text{Napoleon, was}), (\text{was, born}), (\text{born, when})\}$
-\end{itemize}
-The sizes of the sets are $|B(x)| = 4$ and $|B(x')| = 3$.
-}
-
-\subsubsection*{Step 2: Compute Intersection and Union of Sets}
-\parbox{\textwidth}{
-Next, we find the intersection (common bigrams) and the union (all unique bigrams) of the two sets.
-\begin{itemize}
-    \item Intersection: $B(x) \cap B(x') = \{(\text{Napoleon, was}), (\text{was, born})\}$
-    \item Union: $B(x) \cup B(x') = \{(\text{Napoleon, was}), (\text{was, born}), (\text{born, in}), (\text{in, 1769}), (\text{born, when})\}$
-\end{itemize}
-The sizes are $|B(x) \cap B(x')| = 2$ and $|B(x) \cup B(x')| = 5$.
-}
-
-\subsubsection*{Step 3: Compute the Jaccard Similarity}
-\parbox{\textwidth}{
-Finally, we apply the Jaccard similarity formula using the sizes of the intersection and union.
+\subsubsection*{Compute Jaccard Similarity}
 \begin{align*}
-    J(B(x), B(x')) &= \frac{|B(x) \cap B(x')|}{|B(x) \cup B(x')|} \\
-                  &= \frac{2}{5} \\
-                  &= 0.4
+    &J(B(x), B(x^{\prime})) = \frac{|B(x) \cap B(x^{\prime})|}{|B(x) \cup B(x^{\prime})|} \\
+    &= \frac{|\{(\text{Napoleon, was}), (\text{was, born}), (\text{born, in}), (\text{in, 1769})\} \cap \{(\text{Napoleon, was}), (\text{was, born}), (\text{born, when})\}|}{|\{(\text{Napoleon, was}), (\text{was, born}), (\text{born, in}), (\text{in, 1769})\}\cup \{(\text{Napoleon, was}), (\text{was, born}), (\text{born, when})\}|} \\
+    &= \frac{|\{(\text{Napoleon, was}), (\text{was, born})\}|}{|\{(\text{Napoleon, was}), (\text{was, born}), (\text{born, when}),(\text{born, in}), (\text{in, 1769})\}|} \\
+    &= \frac{2}{5} 
 \end{align*}
-}
 
-\subsubsection*{\normalfont}{$\therefore$ The bigram-based Jaccard similarity between the two sentences is 0.4}
 
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\newpage
-
-\subsubsection*{\normalfont}{Graduate Level Explanation}
-
-\parbox{\textwidth}{
-Using Jaccard similarity over n-grams (in this case, bigrams) allows for a measure of text similarity that captures local syntactic and semantic structure, which is a significant improvement over simple bag-of-words models. Unlike methods that treat words as independent, n-grams preserve word order within a small window. This makes the metric sensitive to phrasal correspondence but robust to larger-scale sentence reordering. It is particularly effective for tasks like plagiarism detection, identifying near-duplicate documents, and record linkage, where detecting overlapping text chunks is more important than understanding deep semantic meaning. While it is computationally simpler than embedding-based methods like cosine similarity on BERT vectors, it effectively balances structural awareness with efficiency.
-}
-
-\subsubsection*{\normalfont}{Explanation for 5 year old}
-
-\parbox{\textwidth}{
-Imagine you and your friend are building sentences with Lego bricks, where each brick is a word.
-
-Instead of just counting how many of the same color bricks you both used, we're going to look at how you connected them. We'll look at every pair of bricks stuck together. A pair of word-bricks is a "bigram".
-
-\begin{enumerate}
-    \item First, we find all the two-brick connections that are exactly the same in both of your sentences. Let's say you find \textbf{2} matching connections.
-    \item Next, we count all the unique connections you both made. Maybe in total, there are \textbf{5} different connections.
-\end{enumerate}
-
-To see how similar your sentences are, we just divide the number of matching connections by the total number of connections: 2 divided by 5. That gives a similarity score! It tells us how much of the sentences were built in the same way.
-}
+\subsubsection*{\normalfont}{$\therefore$ The Jaccard similarity $J(B(x), B(x^{\prime}))$ is $\frac{2}{5}$ or 40\%.}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
