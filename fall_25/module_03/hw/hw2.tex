@@ -336,25 +336,6 @@ This maximum value of 1 is achieved when one component has a magnitude of 1, whi
 
 \newpage
 
-\parbox{\textwidth}{
-Given the constraint $\|x\|_{2} = 1$. Let $|x_k|$ be the component with the maximum absolute value. From the constraint, we can write $x_k^2 + \sum_{i=1}^{k-1} x_i^2 = 1$. Since the sum of squares is non-negative, it must be that $x_k^2 \le 1$, which implies $|x_k| = \|x\|_{\infty} \le 1$.
-}
-\begin{align*}
-    \|x\|_{\infty}^2 &= (\max_i |x_i|)^2 \\
-    &= \max_i (x_i^2) \\
-    &\le \sum_{i=1}^d x_i^2 \quad (\text{as all terms are non-negative}) \\
-    &\le 1 \\
-    \implies \|x\|_{\infty} &\le 1
-\end{align*}
-\parbox{\textwidth}{
-This maximum value of 1 is achieved when one component has a magnitude of 1, which forces all other components to be zero to satisfy the constraint.
-}
-\subsubsection*{\normalfont}{$\therefore$ Any standard basis vector $e_k$ (e.g., $x=\begin{bmatrix} 1 \\ 0 \\ \vdots \\ 0 \end{bmatrix}$) maximizes the norm, giving $\|x\|_{\infty}=1$.}
-
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\newpage
-
 %------------------
 % Solution for 4
 %------------------
@@ -647,7 +628,7 @@ $$J(B(x), B(x^{\prime})) = \frac{|B(x) \cap B(x^{\prime})|}{|B(x) \cup B(x^{\pri
 \parbox{\textwidth}{
 The cosine similarity between two non-zero vectors $x$ and $x^{\prime}$ is zero if and only if the numerator of the formula is zero.
 $$ \text{cos}(\theta) = 0 \iff x \cdot x^{\prime} = 0 $$
-In a Euclidean vector space, a dot product of zero signifies that the two vectors are orthogonal (perpendicular) to each other. The angle $\theta$ between them is $90^\circ$ or $\pi/2$ radians. Geometrically, they form a right angle.
+In a Euclidean vector space, a dot product of zero signifies that the two vectors are orthogonal (perpendicular) to each other. The angle $\theta$ between them is $90^\circ$ or $\frac{\pi}{2}$ radians. Geometrically, they form a right angle.
 }
 \subsubsection*{\normalfont}{$\therefore$ A cosine similarity of zero means the vectors are orthogonal to each other.}
 
@@ -836,14 +817,6 @@ SD &= \sqrt{3}
 
 \newpage
 
-\subsubsection*{\normalfont\bf{Graduate Level Explanation: Theoretical vs. Empirical}}
-\parbox{\textwidth}{The theoretical distribution describes the true, underlying probability model of the random variable $X$. Its moments, such as the mean $\mu = E[X]$ and variance $\sigma^2 = \text{Var}(X)$, are fixed population parameters derived from this model. The empirical distribution, conversely, is constructed from a finite sample of observations. Its statistics, like the sample mean $\bar{x}$ and sample variance $s^2$, are estimates of the true parameters. The \textbf{Law of Large Numbers (LLN)} states that as the sample size $N$ approaches infinity, the sample mean $\bar{x}$ converges in probability to the theoretical mean $\mu$. Similarly, other empirical moments converge to their theoretical counterparts. The discrepancy between our calculated theoretical values ($\mu=2.5, \sigma^2 \approx 2.58$) and empirical values ($\bar{x}=3.0, s^2=3.0$) is expected due to random sampling variation in our small sample ($N=10$).}
-
-
-\subsubsection*{\normalfont\bf{Explanation for a 5-Year-Old}}
-\parbox{\textwidth}{Imagine you have a magic cookie jar. The \textbf{plan} (the theoretical part) says that for every 12 cookies you pull out, you *should* get 4 chocolate chip, 4 oatmeal, 1 sugar, 1 peanut butter, 1 ginger, and 1 snickerdoodle. The plan's ``average cookie'' is a mix between a chocolate chip and an oatmeal cookie. \\ \\ But then, you actually pull out just 10 cookies. This is your \textbf{handful} (the empirical part). In your handful, you got a lot of oatmeal cookies and no sugar cookies at all! What happened in your one small handful is a little different from the big plan for the whole jar. If you kept pulling out cookies all day (thousands of them!), your handful would start to look a lot more like the original plan.}
-
-\newpage
 %------------------
 % Solution for 11 (a)
 %------------------
