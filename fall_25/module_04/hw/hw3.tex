@@ -550,9 +550,43 @@ data = np.loadtxt
 \subsubsection*{Solution 7}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 7 (a)}
-\parbox{\textwidth}{
-something something something
-}
+\subsubsection*{Optimal Centers}
+\begin{flushleft}
+To find the optimal centers for $k=3$, we must inspect the structure of the dataset. By inspection, we see that there exists three distinct groups:
+\begin{enumerate}
+  \item The point $\begin{bmatrix}1 \\ 8\end{bmatrix}$.
+  \begin{enumerate}
+    \item One center, $\mu_1^*$, covers the outlier $\begin{bmatrix}1 \\ 8\end{bmatrix}$. The optimal placement is on the point itself.
+  \end{enumerate}
+  \item A square-like cluster.
+  \begin{enumerate}
+    \item A second center, $\mu_2^*$, covers the cluster $\{\begin{bmatrix}1 \\ 1\end{bmatrix}, \begin{bmatrix}1 \\ 2\end{bmatrix}, \begin{bmatrix}2 \\ 1\end{bmatrix}, \begin{bmatrix}2 \\ 2\end{bmatrix}\}$. The center of the minimal enclosing circle is their geometric mean, $\begin{bmatrix}1.5 \\ 1.5\end{bmatrix}$.
+  \end{enumerate}
+  \item a horizontal line segment.
+  \begin{enumerate}
+    \item A third center, $\mu_3^*$, covers the segment $\{\begin{bmatrix}5 \\ 1\end{bmatrix}, \begin{bmatrix}6 \\ 1\end{bmatrix}\}$. The optimal placement is the midpoint, $\begin{bmatrix}5.5 \\ 1\end{bmatrix}$.
+  \end{enumerate}
+\end{enumerate}
+\vspace{0.25cm}
+Hence, the optimal centers are:
+$$ M^* = \left\{ \mu_1^*, \mu_2^*, \mu_3^* \right\} = \left\{ \begin{bmatrix}1 \\ 8\end{bmatrix}, \begin{bmatrix}1.5 \\ 1.5\end{bmatrix}, \begin{bmatrix}5.5 \\ 1\end{bmatrix} \right\} $$
+\end{flushleft}
+
+\subsubsection*{Optimal Cost}
+\begin{flushleft}
+Calculate the radius from the center to the farthest point in each cluster since we are in a $2D$ space.
+\end{flushleft}
+\begin{align*}
+    \text{radius}_1 &= \left\lVert \begin{bmatrix}1 \\ 8\end{bmatrix} - \begin{bmatrix}1 \\ 8\end{bmatrix} \right\rVert_2 = 0 \\
+    \text{radius}_2 &= \left\lVert \begin{bmatrix}1 \\ 1\end{bmatrix} - \begin{bmatrix}1.5 \\ 1.5\end{bmatrix} \right\rVert_2 = \sqrt{(-0.5)^2 + (-0.5)^2} = \sqrt{0.5} \\
+    \text{radius}_3 &= \left\lVert \begin{bmatrix}5 \\ 1\end{bmatrix} - \begin{bmatrix}5.5 \\ 1\end{bmatrix} \right\rVert_2 = \sqrt{(-0.5)^2} = 0.5
+\end{align*}
+\begin{flushleft}
+The cost is the maximum of these radii above, so $J^*(M^*) = \max(0, \sqrt{0.5}, 0.5) = \sqrt{0.5}$.
+\end{flushleft}
+
+\subsubsection*{\normalfont}{$\therefore$ The optimal centers are $\left\{ \begin{bmatrix}1 \\ 8\end{bmatrix}, \begin{bmatrix}1.5 \\ 1.5\end{bmatrix}, \begin{bmatrix}5.5 \\ 1\end{bmatrix} \right\}$ with a minimum cost of $J^*=\sqrt{0.5} $.}
+
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
@@ -563,12 +597,60 @@ something something something
 \subsubsection*{Solution 7}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 7 (b)}
-\parbox{\textwidth}{
-something something something
-}
-\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Select $\mu_2$}
+\begin{flushleft}
+Find the point in $X$ that is farthest from the initial center $\mu_1 = \begin{bmatrix}1 \\ 1\end{bmatrix}$. 
+\end{flushleft}
+\begin{align*}
+    d^2\left(\begin{bmatrix}1 \\ 8\end{bmatrix}, \mu_1\right) &= (1-1)^2 + (8-1)^2 = 49 \quad (\text{Max}) \\
+    d^2\left(\begin{bmatrix}6 \\ 1\end{bmatrix}, \mu_1\right) &= (6-1)^2 + (1-1)^2 = 25 \\
+    d^2\left(\begin{bmatrix}5 \\ 1\end{bmatrix}, \mu_1\right) &= (5-1)^2 + (1-1)^2 = 16 \\
+    d^2\left(\begin{bmatrix}2 \\ 2\end{bmatrix}, \mu_1\right) &= (2-1)^2 + (2-1)^2 = 2
+\end{align*}
+\begin{flushleft}
+The farthest point is $\begin{bmatrix}1 \\ 8\end{bmatrix}$, so $\mu_2 = \begin{bmatrix}1 \\ 8\end{bmatrix}$. The current centers are $M_2 = \left\{\begin{bmatrix}1 \\ 1\end{bmatrix}, \begin{bmatrix}1 \\ 8\end{bmatrix}\right\}$.
+\end{flushleft}
+
+\subsubsection*{Select $\mu_3$}
+\begin{flushleft}
+Find the point $x \in X \setminus M_2$ that maximizes $\min_{\mu \in M_2} \lVert x - \mu \rVert_2$. To check this condition we must look at the minimum squared distance for each remaining point to the set $M_2$.
+\end{flushleft}
+\begin{align*}
+    x = \begin{bmatrix}6 \\ 1\end{bmatrix}:& \quad \min(d^2(x, \mu_1)=25, d^2(x, \mu_2)=74) = 25 \quad (\text{Max}) \\
+    x = \begin{bmatrix}5 \\ 1\end{bmatrix}:& \quad \min(d^2(x, \mu_1)=16, d^2(x, \mu_2)=65) = 16 \\
+    x = \begin{bmatrix}2 \\ 2\end{bmatrix}:& \quad \min(d^2(x, \mu_1)=2, d^2(x, \mu_2)=37) = 2 \\
+    x = \begin{bmatrix}2 \\ 1\end{bmatrix}:& \quad \min(d^2(x, \mu_1)=1, d^2(x, \mu_2)=50) = 1
+\end{align*}
+\begin{flushleft}
+Hence, the point maximizing this minimum distance is: $\begin{bmatrix}6 \\ 1\end{bmatrix}$, so $\mu_3 = \begin{bmatrix}6 \\ 1\end{bmatrix}$.
+\end{flushleft}
+
+\subsubsection*{Final Centers}
+\begin{flushleft}
+Hence, the final set of centers is:
+$$ M^{(F)} = \left\{ \begin{bmatrix}1 \\ 1\end{bmatrix}, \begin{bmatrix}1 \\ 8\end{bmatrix}, \begin{bmatrix}6 \\ 1\end{bmatrix} \right\} $$
+\end{flushleft}
 
 \newpage
+\subsubsection*{Solution 7}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 7 (b)}
+\subsubsection*{Final Cost}
+\begin{flushleft}
+The cost $J^{(F)}$ is the maximum distance from any point in $X$ to its nearest center in $M^{(F)}$. Now, find the maximum of the minimum squared distances for all non-center points.
+\end{flushleft}
+\begin{align*}
+    d^2_{\min}\left(\begin{bmatrix}2 \\ 2\end{bmatrix}, M^{(F)}\right) &= \min\left(d^2(\begin{bmatrix}2 \\ 2\end{bmatrix}, \mu_1)=2, d^2(\begin{bmatrix}2 \\ 2\end{bmatrix}, \mu_2)=37, d^2(\begin{bmatrix}2 \\ 2\end{bmatrix}, \mu_3)=17\right) = 2 \quad (\text{Max}) \\
+    d^2_{\min}\left(\begin{bmatrix}5 \\ 1\end{bmatrix}, M^{(F)}\right) &= \min(16, 65, 1) = 1
+\end{align*}
+\begin{flushleft}
+The maximum squared distance is 2. The cost is the square root of this value.
+$$ J^{(F)}(M^{(F)}) = \sqrt{2} $$
+\end{flushleft}
+
+\subsubsection*{\normalfont}{$\therefore$ the centers are: $\left\{ \begin{bmatrix}1 \\ 1\end{bmatrix}, \begin{bmatrix}1 \\ 8\end{bmatrix}, \begin{bmatrix}6 \\ 1\end{bmatrix} \right\}$ with a cost of $J^{(F)}=\sqrt{2}$.}
+
+\noindent\rule{\textwidth}{0.4pt}\\
 
 \begin{comment}
 %------------------
