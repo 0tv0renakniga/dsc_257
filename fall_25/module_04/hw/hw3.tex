@@ -394,22 +394,108 @@ Solving for $k$:
 \subsubsection*{Solution 5}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 5 (a)}
-\parbox{\textwidth}{
-something something something
-}
+\subsubsection*{Optimal Clusters}
+\begin{flushleft}
+The k-means objective is to find a set of $k$ centers $M=\{\mu_1, \dots, \mu_k\}$ that minimizes the sum of squared Euclidean distances from each data point to its nearest center. By inspection, the optimal partitioning separates the negative numbers, the positive numbers, and the origin. \\
+\vspace{0.25cm}
+Hence, the optimal clusters are $C_1^* = \{-10, -8\}$, $C_2^* = \{0\}$, and $C_3^* = \{8, 10\}$.
+\end{flushleft}
+
+\subsubsection*{Optimal Centers}
+The optimal centers $\mu_j^*$ are calculated as the mean of the points in each optimal cluster $C_j^*$:
+
+\begin{align*}
+\mu_1^* = &\frac{-10 + (-8)}{2} = -9 \\
+\mu_2^* = &\frac{0}{1} = 0 \\
+\mu_3^* = &\frac{8 + 10}{2} = 9
+\end{align*}
+
+\vspace{0.25cm}
+
+Hence, the optimal centers are:
+
+$$\mu_1^* = -9 \quad \mu_2^* = 0 \quad \mu_3^* = 9$$
+
+\subsubsection*{Optimal Cost}
+The globally optimal cost, $J^*$, is the sum of squared distances for this configuration:
+\begin{align*}
+    J^* &= \sum_{x \in C_1^*} (x - \mu_1^*)^2 + \sum_{x \in C_2^*} (x - \mu_2^*)^2 + \sum_{x \in C_3^*} (x - \mu_3^*)^2 \\
+    &= \left( (-10 - (-9))^2 + (-8 - (-9))^2 \right) + \left( (0 - 0)^2 \right) + \left( (8 - 9)^2 + (10 - 9)^2 \right) \\
+    &= \left( (-1)^2 + 1^2 \right) + 0 + \left( (-1)^2 + 1^2 \right) \\
+    &= (1 + 1) + 0 + (1 + 1) \\
+    &= 4
+\end{align*}
+
+\subsubsection*{\normalfont}{$\therefore$ The optimal centers are $\{-9, 0, 9\}$ with a minimum cost of $J^*=4$.}
+
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
 
 %------------------
 % Solution for 5 (b)
-%-----------------
+%------------------
 \subsubsection*{Solution 5}
-\noindent\rule{\textwidth}{0.4pt}\\
+\noindent\rule{\textwidth}{0.4pt}
 \subsubsection*{Solution 5 (b)}
-\parbox{\textwidth}{
-something something something
-}
+Let
+$$\mu_1 = -10 \quad \mu_2 = -8 \quad \mu_3 = 0 \quad \text{ and } \quad k = 3$$
+\subsubsection*{Assignment}
+Assign each point in $X$ to the closest mean.
+\begin{align*}
+  x_1 &= -10 \rightarrow \mu_1 \text{ is closest } \rightarrow C_1 = \{-10\} \\
+  x_2 &= -8 \rightarrow \mu_2 \text{ is closest } \rightarrow C_2 = \{-8\} \\
+  x_3 &= 0 \rightarrow \mu_3 \text{ is closest } \rightarrow C_3 = \{0\} \\
+  x_4 &= 8 \rightarrow \mu_3 \text{ is closest } \rightarrow C_3 = \{0, 8\} \\
+  x_5 &= 0 \rightarrow \mu_3 \text{ is closest } \rightarrow C_3 = \{0, 8 ,10\} 
+\end{align*}
+
+\begin{flushleft}
+  Hence, the resulting clusters are: $C_1 = \{-10\} \quad C_2 = \{-8\} \quad C_3 = \{0, 8, 10\}$
+\end{flushleft}
+
+
+\subsubsection*{Update Centers}
+\begin{flushleft}
+Recalculate centers as means of the new clusters:
+\end{flushleft}
+
+
+$$\mu_1^{(1)} = \frac{-10}{1} = -10 \quad \mu_2^{(1)} = \frac{-8}{1} = -8 \quad \mu_3^{(1)} = \frac{0 + 8 + 10}{3} = 6 $$
+
+\begin{flushleft}
+  Hence, the new centers are: $ M^{(1)} = \{-10,-8,6\}$
+\end{flushleft}
+
+
+\subsubsection*{Second Assignment}
+Assign each point in $X$ to the closest mean.
+\begin{align*}
+  x_1 &= -10 \rightarrow \mu_1 \text{ is closest } \rightarrow C_1 = \{-10\} \\
+  x_2 &= -8 \rightarrow \mu_2 \text{ is closest } \rightarrow C_2 = \{-8\} \\
+  x_3 &= 0 \rightarrow \mu_3 \text{ is closest } \rightarrow C_3 = \{0\} \\
+  x_4 &= 8 \rightarrow \mu_3 \text{ is closest } \rightarrow C_3 = \{0, 8\} \\
+  x_5 &= 0 \rightarrow \mu_3 \text{ is closest } \rightarrow C_3 = \{0, 8 ,10\} 
+\end{align*}
+
+\subsubsection*{Final Centers}
+
+\begin{flushleft}
+  Since the cluster assignments did not change, the centers will not change either. \\
+  Hence, the final centers are: $ M^{(F)} = \{-10,-8,6\}$
+\end{flushleft}
+
+\subsubsection*{Final Cost}
+
+\begin{align*}
+    J^F &= \left( (-10 - (-10))^2 \right) + \left( (-8 - (-8))^2 \right) + \left( (0 - 6)^2 + (8 - 6)^2 + (10 - 6)^2 \right) \\
+    &= 0 + 0 + \left( (-6)^2 + 2^2 + 4^2 \right) \\
+    &= 36 + 4 + 16 \\
+    &= 56
+\end{align*}
+
+\subsubsection*{\normalfont}{$\therefore$ The algorithm terminates at the centers $\{-10, -8, 6\}$ with a cost of $J^F=56$.}
+
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
