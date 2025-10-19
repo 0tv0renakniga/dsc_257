@@ -55,18 +55,56 @@
 \subsubsection*{Online Algorithm Implementation: Mean}
 
 \begin{lstlisting}
-import numpy as np
-import matplotlib.pyplot as plt
 """
 Implementation of online algo from class
 read data-1.txt using np.loadtxt(data-1.txt)
 """
-data = np.loadtxt
+# load libraries
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# quick check data-1.txt has 5000 pts
+# cat data-1.txt | wc -l -> 5000
+
+# load data-1.txt
+data = np.loadtxt('data-1.txt')
+
+def online_algorithm_mean(data):
+    mean_i = []
+    dt = []
+    current_mean = 0
+    for t,x_t in enumerate(data):
+        dt.append(t+1)
+        current_mean = current_mean + ((x_t-current_mean)/(t+1))
+        mean_i.append(current_mean)
+    print(f"final mean: {mean_i[-1]}")
+    return dt, mean_i
+
+def plot_mean_dt(dt,mean_i,true_mean):
+    fig,ax = plt.subplots(nrows=1,ncols=1,figsize=(8,10))
+    sns.lineplot(x=dt,y=mean_i,markers='o',ax=ax,color='blue',label='OA')
+    sns.lineplot(x=dt,y=[true_mean for i in dt],markers='--',ax=ax,color='red',label='True Mean')
+    ax.set_xlabel('dt')
+    ax.set_ylabel('mean')
+    ax.set_ylim(min(mean_i)-1e5,true_mean+1e5)
+    print(min(mean_i))
+    title = f"Online Algorithim(OA) for Mean\n True Mean: {true_mean:.3f} \n OA Mean: {mean_i[-1]:.3f}"
+    ax.set_title(title)
+    fig.savefig('hw3_q1.png')
+
+# calc true mean and print it
+true_mean = sum(data)/len(data)
+print(true_mean)
+
+dt, mean_i = online_algorithm_mean(data)
+plot_mean_dt(dt,mean_i,true_mean)
 \end{lstlisting}
 
+
+\subsubsection*{Comments}
 \parbox{\textwidth}{
-ANSWER THIS: \textit{show resilt from code.. idk it print the final mean}
-ANSWER THIS: \textit{how does online algo mean compare to true mean}
+The true mean is $2,991,834.673$ and is identical to the final mean calculated via \texttt{online\_algorithm\_mean(data)} function.
 }
 
 \newpage
@@ -78,17 +116,12 @@ ANSWER THIS: \textit{how does online algo mean compare to true mean}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 1 (b)}
 \subsubsection*{Plot}
-\subsubsection*{mean $\Delta$t}
-\parbox{\textwidth}{
-ANSWER THIS: \textit{plot all 5000 intermediate values of mean, from code in 1 (a)}
 
-}
-\begin{comment}
-  \begin{figure}[h]
-  \includegraphics[height=0.75\textheight,width=\textwidth]{raw_pixel.png}
-  \caption{First five correct/incorrect images for Raw Pixel}
+\begin{figure}[h]
+  \includegraphics[height=0.75\textheight,width=\textwidth]{hw3_q1.png}
+  \caption{Figure shows all 5000 intermediate values of mean}
 \end{figure}
-\end{comment}
+
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
