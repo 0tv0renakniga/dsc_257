@@ -20,6 +20,11 @@
 \usepackage{booktabs}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{siunitx}
 
 
 % Set page geometry
@@ -506,16 +511,49 @@ Assign each point in $X$ to the closest mean.
 \subsubsection*{Solution 6}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 6 (a)}
-\parbox{\textwidth}{
-something something something
-}
+\subsubsection*{Dendrogram}
+
+\begin{figure}[h]
+  \includegraphics[height=0.75\textheight,width=\textwidth]{hw3_q6.png}
+  \caption{Figure shows the animal dendrogram.}
+\end{figure}
+
 \begin{lstlisting}
 import numpy as np
 import matplotlib.pyplot as plt
-"""
-code different
-"""
-data = np.loadtxt
+from scipy.cluster import hierarchy
+from sklearn.cluster import KMeans
+from collections import defaultdict
+
+# set plot figure size for better readability of the dendrogram
+plt.rcParams['figure.figsize'] = (8, 10)
+
+# read predicate-matrix-continuous.txt as numpy array
+X = np.loadtxt('predicate-matrix-continuous.txt')
+
+# read classes.txt to create animal name list
+animal_names = []
+with open('classes.txt', 'r') as f:
+    for line in f:
+        parts = line.strip().split()
+        # The name is the second part, possibly with '+'
+        animal_names.append(parts[1])
+
+# perform hierarchical clustering using Ward's linkage method
+Z = hierarchy.linkage(X, method='ward')
+
+# plot the dendrogram
+plt.figure()
+hierarchy.dendrogram(
+    Z,
+    labels=animal_names,
+    orientation='right',
+    leaf_font_size=10
+)
+plt.title("Hierarchical Clustering Dendrogram (Ward's Method)")
+plt.xlabel("Euclidean Distance")
+plt.tight_layout()
+plt.show()
 \end{lstlisting}
 
 \noindent\rule{\textwidth}{0.4pt}\\
@@ -528,21 +566,96 @@ data = np.loadtxt
 \subsubsection*{Solution 6}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 6 (b)}
-\parbox{\textwidth}{
-something something something
-}
+\subsubsection*{Python Code}
 \begin{lstlisting}
 import numpy as np
 import matplotlib.pyplot as plt
-"""
-code different
-"""
-data = np.loadtxt
+from scipy.cluster import hierarchy
+from sklearn.cluster import KMeans
+from collections import defaultdict
+
+# read predicate-matrix-continuous.txt as numpy array
+X = np.loadtxt('predicate-matrix-continuous.txt')
+
+# read classes.txt to create animal name list
+animal_names = []
+with open('classes.txt', 'r') as f:
+    for line in f:
+        parts = line.strip().split()
+        # The name is the second part, possibly with '+'
+        animal_names.append(parts[1])
+
+# perform hierarchical clustering using Ward's linkage method
+Z = hierarchy.linkage(X, method='ward')
+
+# get 10 clusters from the hierarchical model
+ward_clusters = hierarchy.fcluster(Z, 10, criterion='maxclust')
+
+# group animals by their assigned cluster
+ward_cluster_dict = defaultdict(list)
+for i, cluster_id in enumerate(ward_clusters):
+    ward_cluster_dict[cluster_id].append(animal_names[i])
+
+# calculate the k-means cost (sum of squared distances) for this clustering
+ward_cost = 0.0
+centroids = {}
+for i in range(1, 11):
+    # get all data points for the current cluster
+    cluster_points = X[ward_clusters == i]
+    # calculate the centroid (mean) of the cluster
+    centroid = np.mean(cluster_points, axis=0)
+    centroids[i] = centroid
+    # calculate sum of squared distances from points to the centroid
+    ward_cost += np.sum((cluster_points - centroid)**2)
+
+print("wards clustering (k=10)")
+for cid, animals in sorted(ward_cluster_dict.items()):
+    print(f"cluster {cid}: {', '.join(animals)}")
+print(f"\nkmeans cost for wards clustering: {ward_cost:.4f}")
+
+ run kmeans 10 times with different random initializations
+kmeans = KMeans(n_clusters=10, n_init=10, random_state=42)
+kmeans.fit(X)
+
+# inertia_ attribute stores the ssd (kmeans cost) for the best of the 10 runs
+kmeans_cost = kmeans.inertia_
+
+print("\n--- kmeans algorithm (10 runs) ---")
+print(f"best kmeans cost found: {kmeans_cost:.4f}")
 \end{lstlisting}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
+
+\subsubsection*{Solution 6}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 6 (b)}
+\subsubsection*{Results}
+\begin{table}[h]
+\centering
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.45\textwidth} >{\raggedleft\arraybackslash}p{0.2\textwidth} >{\raggedleft\arraybackslash}p{0.25\textwidth}}
+\toprule
+\textbf{Cluster} & \textbf{Method} & \textbf{Cost} \\
+\midrule
+1: tiger, leopard, fox, wolf, weasel, bobcat, lion & Ward's Method & \num{679136.2673} \\
+2: dalmatian, persian cat, german shepherd, siamese cat, chihuahua, collie & & \\
+3: grizzly bear, giant panda, polar bear & & \\
+4: skunk, mole, hamster, squirrel, rabbit, rat, mouse, raccoon & & \\
+5: spider monkey, gorilla, chimpanzee, bat & & \\
+6: beaver, otter & & \\
+7: killer whale, blue whale, humpback whale, seal, walrus, dolphin & & \\
+8: hippopotamus, elephant, rhinoceros & & \\
+9: moose, ox, sheep, buffalo, pig, cow & & \\
+10: antelope, horse, giraffe, zebra, deer & & \\
+\midrule
+Best K-means Cost found (10 runs) & K-means & \num{707405.1627} \\
+\bottomrule
+\end{tabular}
+\caption{Comparison of Clustering Results for $k=10$}
+\label{tab:clustering_results}
+\end{table}
+
 
 %------------------
 % Solution for 7 (a)
