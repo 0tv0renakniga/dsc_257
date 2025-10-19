@@ -15,6 +15,8 @@
 \usepackage{float}
 \usepackage{subcaption}
 \usepackage{comment}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 
 % Set page geometry
 \geometry{a4paper, margin=1in}
@@ -133,12 +135,28 @@ The true mean is $2,991,834.673$ and is identical to the final mean calculated v
 \subsubsection*{Solution 2}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 2 (a)}
-\subsubsection*{pseudocode (ko zna??.. niko nista nej zna) for variance}
-\parbox{\textwidth}{
-remember $\text{Var}[X]=E[X^2]-E[X]^2$
-ANSWER THIS: \textit{how does online algo mean compare to true mean}
-}
+\subsubsection*{Pseudocode}
 
+\begin{algorithm}
+\caption{Online Variance Calculation}
+\begin{algorithmic}
+\State \textbf{Initialize:}
+\State \quad $t \gets 0$ \Comment{Count of data points}
+\State \quad $\mu \gets 0.0$ \Comment{Running mean of X}
+\State \quad $M_2 \gets 0.0$ \Comment{Running mean of X\textsuperscript{2}}
+\State \quad $v \gets 0.0$ \Comment{Running variance}
+
+\State \textbf{For each new data point} $x_t$:
+  \State \quad $t \gets t + 1$
+  \State \quad $\mu \gets \mu + (x_t - \mu) / t$ \Comment{Update mean of X}
+  \State \quad $M_2 \gets M_2 + (x_t^2 - M_2) / t$ \Comment{Update mean of X\textsuperscript{2}}
+  \State \quad $v \gets M_2 - \mu^2$ \Comment{Calculate current variance}
+\end{algorithmic}
+\end{algorithm}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
 %------------------
 % Solution for 2(b)
 %------------------
@@ -148,18 +166,40 @@ ANSWER THIS: \textit{how does online algo mean compare to true mean}
 \subsubsection*{Online Algorithm Implementation: Variance}
 
 \begin{lstlisting}
+# load libraries
 import numpy as np
-import matplotlib.pyplot as plt
-"""
-Implementation of online algo from class
-read data-1.txt using np.loadtxt(data-1.txt)
-"""
-data = np.loadtxt
+
+# load data-1.txt
+data = np.loadtxt('data-1.txt')
+
+def online_algorithm_variance(data):
+    mean_x = 0.0
+    mean_x_squared = 0.0
+    variances = []
+
+    for t,x_t in enumerate(data):
+        # Update the mean of x
+        mean_x = mean_x + ((x_t-mean_x)/(t+1))
+        # Update the mean of x-squared
+        mean_x_squared = mean_x_squared + ((x_t**2-mean_x_squared)/(t+1))
+        
+        variances.append(mean_x_squared - mean_x**2)
+
+    print(f"final variance: {variances[-1]:.3f}")
+    return variances
+
+# calc true variance and print
+true_variance = np.var(data)
+print(f"true variance: {true_variance:.3f}")
+
+# calc online_algorithm_variance
+variances = online_algorithm_variance(data)
 \end{lstlisting}
 
+
+\subsubsection*{Comments}
 \parbox{\textwidth}{
-remember $\text{Var}[X]=E[X^2]-E[X]^2$
-ANSWER THIS: \textit{how does online algo variance compare to true variance}
+The true variance using numpy: $36,618,966,207,041.938$ while the variance calculated via \texttt{online\_algorithm\_variance(data)} was: $36,618,966,207,041.961$. This discrepancy between the true and \textit{online variance calculation} arises because the online formula is sensitive to floating point precision errors, especially when subtracting two large, similar numbers. 
 }
 
 \noindent\rule{\textwidth}{0.4pt}\\
