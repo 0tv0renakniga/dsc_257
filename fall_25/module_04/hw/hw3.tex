@@ -17,6 +17,10 @@
 \usepackage{comment}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{subcaption}
+
 
 % Set page geometry
 \geometry{a4paper, margin=1in}
@@ -57,10 +61,6 @@
 \subsubsection*{Online Algorithm Implementation: Mean}
 
 \begin{lstlisting}
-"""
-Implementation of online algo from class
-read data-1.txt using np.loadtxt(data-1.txt)
-"""
 # load libraries
 import numpy as np
 import matplotlib.pyplot as plt
@@ -214,17 +214,19 @@ The true variance using numpy: $36,618,966,207,041.938$ while the variance calcu
 \subsubsection*{True Median}
 
 \begin{lstlisting}
+# load libraries
 import numpy as np
-import matplotlib.pyplot as plt
-"""
-Implementation of online algo from class
-read data-1.txt using np.loadtxt(data-1.txt)
-"""
-data = np.loadtxt
+
+# load data-1.txt
+data = np.loadtxt('data-1.txt')
+
+# calc true median
+true_median = np.median(data)
+print(f"true median: {true_median:.3f}")
 \end{lstlisting}
 
 \parbox{\textwidth}{
-ANSWER THIS: \textit{report true median of data-1.txt}
+The true median using numpy: $1,526$
 }
 
 \newpage
@@ -233,36 +235,106 @@ ANSWER THIS: \textit{report true median of data-1.txt}
 %------------------
 \subsubsection*{Solution 3}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 3 (b)}
+\subsubsection*{Solution 3 (b)/(c)}
 \subsubsection*{Random Sample with Replacement Algorithm Implementation: Median}
 
 \begin{lstlisting}
+# load libraries
 import numpy as np
-import matplotlib.pyplot as plt
-"""
-Implementation of online algo from class
-read data-1.txt using np.loadtxt(data-1.txt)
-"""
-data = np.loadtxt
+import random
+
+# load data-1.txt
+data = np.loadtxt('data-1.txt')
+
+def estimate_online_median(data, k, repetitions):
+
+    print(f"--- Starting estimations for k={k} ---")
+    for rep in range(repetitions):
+        # initialize the sample array 's' with the first data point.
+        # from s1=s2=...=sk=x1
+        s = np.full(k, data[0])
+
+        # get x_t from t=2,3,...,t
+        for i in range(1, n):
+            t = i + 1  
+            x_t = data[i] 
+
+            # for j=1,2,...,k then sj = xt with probability 1/t.
+            for j in range(k):
+                if random.random() < (1.0 / t):
+                    s[j] = x_t
+        
+        # calculate the median of the final sample for each repetition
+        estimated_median = np.median(s)
+        print(f"repetition {rep + 1:2d}: estimated median = {estimated_median}")
+    print("-" * (35 + len(str(k))))
+
+
+# part (a): calc and print the true median
+true_median = np.median(data)
+print("--- true median calculation ---")
+print(f"true median: {true_median}\n")
+
+# part (b): simulation for k=100
+estimate_online_median(data, k=100, repetitions=10)
+
+# part (c): simulation for k=500
+estimate_online_median(data, k=500, repetitions=10)
 \end{lstlisting}
 
-\parbox{\textwidth}{
-ANSWER THIS: \textit{report true median of data-1.txt}
-}
-
 \newpage
-%------------------
-% Solution for 3(c)
-%------------------
+
 \subsubsection*{Solution 3}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 3 (c)}
-\subsubsection*{Random Sample with Replacement Algorithm Implementation: Median(sample: 500)}
-\parbox{\textwidth}{
-just repeat (b) with $n = 500$
-}
-\noindent\rule{\textwidth}{0.4pt}
+\subsubsection*{Solution 3 (b)/(c)}
+\subsubsection*{Random Sample with Replacement Algorithm Results: Median}
+\begin{table}[h]
+\centering
+\begin{subtable}{.48\textwidth}
+\centering
+\caption{Estimated Medians for $k=100$}
+\begin{tabular}{cc}
+\toprule
+Repetition & Estimated Median \\
+\midrule
+1 & 1750.0 \\
+2 & 1094.0 \\
+3 & 1236.0 \\
+4 & 1166.0 \\
+5 & 1552.5 \\
+6 & 1338.5 \\
+7 & 1583.5 \\
+8 & 1635.0 \\
+9 & 1805.5 \\
+10 & 1376.0 \\
+\bottomrule
+\end{tabular}
+\end{subtable}
+%
+\begin{subtable}{.48\textwidth}
+\centering
+\caption{Estimated Medians for $k=500$}
+\begin{tabular}{cc}
+\toprule
+Repetition & Estimated Median \\
+\midrule
+1 & 1422.0 \\
+2 & 1498.5 \\
+3 & 1404.5 \\
+4 & 1328.5 \\
+5 & 1592.5 \\
+6 & 1452.5 \\
+7 & 1520.5 \\
+8 & 1444.5 \\
+9 & 1541.5 \\
+10 & 1567.0 \\
+\bottomrule
+\end{tabular}
+\end{subtable}
+\caption{Comparison of estimated medians for different sample sizes. \textit{Note: as $k$ grows sufficiently large the calculation for the median of a sample using the random sample with replacement should converge to the true median.}}
+\end{table}
 
+\noindent\rule{\textwidth}{0.4pt}
 \newpage
 
 %------------------
@@ -270,9 +342,38 @@ just repeat (b) with $n = 500$
 %------------------
 \subsubsection*{Solution 4}
 \noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Mathematical Justification}
 \parbox{\textwidth}{
-something something something
+An $\epsilon$-heavy hitter is an element in a data stream of length $m$ whose frequency is greater than or equal to $\epsilon m$[cite: 9]. We need to find the maximum number of such elements when $\epsilon = 0.05$.
+\vspace{10pt}
+
+Let $k$ be the number of distinct $\epsilon$-heavy hitters. Let the frequency of the $i$-th heavy hitter be denoted by $f_i$.
 }
+
+\begin{align*}
+    % Step 1: Define the condition for a single heavy hitter
+    \text{By definition, for each of the } k \text{ heavy hitters:} \\
+    f_i &\geq \epsilon m \\
+    % Step 2: State the constraint on the sum of frequencies
+    \text{The sum of frequencies of these distinct items cannot exceed the total stream length } m\text{:} \\
+    \sum_{i=1}^{k} f_i &\leq m \\
+    % Step 3: Combine the two constraints
+    \text{Substituting the minimum frequency for each heavy hitter into the sum:} \\
+    \sum_{i=1}^{k} (\epsilon m) &\leq \sum_{i=1}^{k} f_i \leq m \\
+    % Step 4: Simplify the inequality
+    k \cdot \epsilon \cdot m &\leq m \\
+    % Step 5: Solve for k
+    \text{Since } m > 0 \text{, we can divide by } m \text{:} \\
+    k \cdot \epsilon &\leq 1 \\
+    k &\leq \frac{1}{\epsilon} \\
+    % Step 6: Substitute the given value for epsilon
+    \text{Substituting } \epsilon = 0.05\text{:} \\
+    k &\leq \frac{1}{0.05} \\
+    k &\leq 20
+\end{align*}
+
+\subsubsection*{\normalfont}{$\therefore$ $k \leq 20$ demonstrates that for $\epsilon=0.05$, there can be at most \textbf{20} $\epsilon$-heavy hitters in the stream.}
+
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
