@@ -61,58 +61,14 @@
 %------------------
 \subsection*{Solution 1}
 \noindent\rule{\textwidth}{0.4pt}\\
-
 \subsubsection*{Solution 1 (a)}
-\subsubsection*{Online Algorithm Implementation: Mean}
 
-\begin{lstlisting}
-# load libraries
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-# quick check data-1.txt has 5000 pts
-# cat data-1.txt | wc -l -> 5000
-
-# load data-1.txt
-data = np.loadtxt('data-1.txt')
-
-def online_algorithm_mean(data):
-    mean_i = []
-    dt = []
-    current_mean = 0
-    for t,x_t in enumerate(data):
-        dt.append(t+1)
-        current_mean = current_mean + ((x_t-current_mean)/(t+1))
-        mean_i.append(current_mean)
-    print(f"final mean: {mean_i[-1]}")
-    return dt, mean_i
-
-def plot_mean_dt(dt,mean_i,true_mean):
-    fig,ax = plt.subplots(nrows=1,ncols=1,figsize=(8,10))
-    sns.lineplot(x=dt,y=mean_i,markers='o',ax=ax,color='blue',label='OA')
-    sns.lineplot(x=dt,y=[true_mean for i in dt],markers='--',ax=ax,color='red',label='True Mean')
-    ax.set_xlabel('dt')
-    ax.set_ylabel('mean')
-    ax.set_ylim(min(mean_i)-1e5,true_mean+1e5)
-    print(min(mean_i))
-    title = f"Online Algorithim(OA) for Mean\n True Mean: {true_mean:.3f} \n OA Mean: {mean_i[-1]:.3f}"
-    ax.set_title(title)
-    fig.savefig('hw3_q1.png')
-
-# calc true mean and print it
-true_mean = sum(data)/len(data)
-print(true_mean)
-
-dt, mean_i = online_algorithm_mean(data)
-plot_mean_dt(dt,mean_i,true_mean)
-\end{lstlisting}
+Let $x = \begin{bmatrix}3 \\ 4\end{bmatrix}$
 
 
-\subsubsection*{Comments}
-\parbox{\textwidth}{
-The true mean is $2,991,834.673$ and is identical to the final mean calculated via \texttt{online\_algorithm\_mean(data)} function.
-}
+\subsubsection*{\normalfont}{$\therefore$ the unit vector $u$ is the following:}
+
+\noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
 
@@ -122,13 +78,26 @@ The true mean is $2,991,834.673$ and is identical to the final mean calculated v
 \subsection*{Solution 1}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 1 (b)}
+
+Let $x = \begin{bmatrix}-4 \\ 12 \\ 3\end{bmatrix}$
+
+\subsubsection*{\normalfont}{$\therefore$ the unit vector $u$ is the following:}
+
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 1(c)
+%------------------
+\subsection*{Solution 1}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 1 (c)}
 \subsubsection*{Plot}
+Let $x = \begin{bmatrix}1 \\ 1 \\ \vdots \\ 1\end{bmatrix}$ such that $|x| = d$
 
-\begin{figure}[h]
-  \includegraphics[height=0.75\textheight,width=\textwidth]{hw3_q1.png}
-  \caption{Figure shows all 5000 intermediate values of mean}
-\end{figure}
-
+\subsubsection*{\normalfont}{$\therefore$ the unit vector $u$ is the following:}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -142,22 +111,8 @@ The true mean is $2,991,834.673$ and is identical to the final mean calculated v
 \subsubsection*{Solution 2 (a)}
 \subsubsection*{Pseudocode}
 
-\begin{algorithm}
-\caption{Online Variance Calculation}
-\begin{algorithmic}
-\State \textbf{Initialize:}
-\State \quad $t \gets 0$ \Comment{Count of data points}
-\State \quad $\mu \gets 0.0$ \Comment{Running mean of X}
-\State \quad $M_2 \gets 0.0$ \Comment{Running mean of X\textsuperscript{2}}
-\State \quad $v \gets 0.0$ \Comment{Running variance}
+\subsubsection*{\normalfont}{$\therefore$ the projection of point $x \in \mathbb{R}^2$ onto the direction of $u$ is: }
 
-\State \textbf{For each new data point} $x_t$:
-  \State \quad $t \gets t + 1$
-  \State \quad $\mu \gets \mu + (x_t - \mu) / t$ \Comment{Update mean of X}
-  \State \quad $M_2 \gets M_2 + (x_t^2 - M_2) / t$ \Comment{Update mean of X\textsuperscript{2}}
-  \State \quad $v \gets M_2 - \mu^2$ \Comment{Calculate current variance}
-\end{algorithmic}
-\end{algorithm}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -168,44 +123,7 @@ The true mean is $2,991,834.673$ and is identical to the final mean calculated v
 \subsubsection*{Solution 2}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 2 (b)}
-\subsubsection*{Online Algorithm Implementation: Variance}
-
-\begin{lstlisting}
-# load libraries
-import numpy as np
-
-# load data-1.txt
-data = np.loadtxt('data-1.txt')
-
-def online_algorithm_variance(data):
-    mean_x = 0.0
-    mean_x_squared = 0.0
-    variances = []
-
-    for t,x_t in enumerate(data):
-        # Update the mean of x
-        mean_x = mean_x + ((x_t-mean_x)/(t+1))
-        # Update the mean of x-squared
-        mean_x_squared = mean_x_squared + ((x_t**2-mean_x_squared)/(t+1))
-        
-        variances.append(mean_x_squared - mean_x**2)
-
-    print(f"final variance: {variances[-1]:.3f}")
-    return variances
-
-# calc true variance and print
-true_variance = np.var(data)
-print(f"true variance: {true_variance:.3f}")
-
-# calc online_algorithm_variance
-variances = online_algorithm_variance(data)
-\end{lstlisting}
-
-
-\subsubsection*{Comments}
-\parbox{\textwidth}{
-The true variance using numpy: $36,618,966,207,041.938$ while the variance calculated via \texttt{online\_algorithm\_variance(data)} was: $36,618,966,207,041.961$. This discrepancy between the true and \textit{online variance calculation} arises because the online formula is sensitive to floating point precision errors, especially when subtracting two large, similar numbers. 
-}
+\subsubsection*{Use draw to make grid and show result from 2(a)}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -216,290 +134,122 @@ The true variance using numpy: $36,618,966,207,041.938$ while the variance calcu
 \subsubsection*{Solution 3}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 3 (a)}
-\subsubsection*{True Median}
+\subsubsection*{Maximized Projection}
 
-\begin{lstlisting}
-# load libraries
-import numpy as np
+Let $x = \begin{bmatrix}-4 \\ 3\end{bmatrix}$
 
-# load data-1.txt
-data = np.loadtxt('data-1.txt')
 
-# calc true median
-true_median = np.median(data)
-print(f"true median: {true_median:.3f}")
-\end{lstlisting}
+\subsubsection*{\normalfont}{$\therefore$ the unit vector $u$ is the following:}
 
-\parbox{\textwidth}{
-The true median using numpy: $1,526$
-}
+\noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
+
 %------------------
 % Solution for 3(b)
 %------------------
 \subsubsection*{Solution 3}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 3 (b)/(c)}
-\subsubsection*{Random Sample with Replacement Algorithm Implementation: Median}
+\subsubsection*{Solution 3 (b)}
+\subsubsection*{Minimized Projection}
 
-\begin{lstlisting}
-# load libraries
-import numpy as np
-import random
-
-# load data-1.txt
-data = np.loadtxt('data-1.txt')
-
-def estimate_online_median(data, k, repetitions):
-
-    print(f"--- Starting estimations for k={k} ---")
-    for rep in range(repetitions):
-        # initialize the sample array 's' with the first data point.
-        # from s1=s2=...=sk=x1
-        s = np.full(k, data[0])
-
-        # get x_t from t=2,3,...,t
-        for i in range(1, n):
-            t = i + 1  
-            x_t = data[i] 
-
-            # for j=1,2,...,k then sj = xt with probability 1/t.
-            for j in range(k):
-                if random.random() < (1.0 / t):
-                    s[j] = x_t
-        
-        # calculate the median of the final sample for each repetition
-        estimated_median = np.median(s)
-        print(f"repetition {rep + 1:2d}: estimated median = {estimated_median}")
-    print("-" * (35 + len(str(k))))
+Let $x = \begin{bmatrix}-4 \\ 3\end{bmatrix}$
 
 
-# part (a): calc and print the true median
-true_median = np.median(data)
-print("--- true median calculation ---")
-print(f"true median: {true_median}\n")
+\subsubsection*{\normalfont}{$\therefore$ the unit vector $u$ is the following:}
 
-# part (b): simulation for k=100
-estimate_online_median(data, k=100, repetitions=10)
-
-# part (c): simulation for k=500
-estimate_online_median(data, k=500, repetitions=10)
-\end{lstlisting}
-
-\newpage
-
-\subsubsection*{Solution 3}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 3 (b)/(c)}
-\subsubsection*{Random Sample with Replacement Algorithm Results: Median}
-\begin{table}[h]
-\centering
-\begin{subtable}{.48\textwidth}
-\centering
-\caption{Estimated Medians for $k=100$}
-\begin{tabular}{cc}
-\toprule
-Repetition & Estimated Median \\
-\midrule
-1 & 1750.0 \\
-2 & 1094.0 \\
-3 & 1236.0 \\
-4 & 1166.0 \\
-5 & 1552.5 \\
-6 & 1338.5 \\
-7 & 1583.5 \\
-8 & 1635.0 \\
-9 & 1805.5 \\
-10 & 1376.0 \\
-\bottomrule
-\end{tabular}
-\end{subtable}
-%
-\begin{subtable}{.48\textwidth}
-\centering
-\caption{Estimated Medians for $k=500$}
-\begin{tabular}{cc}
-\toprule
-Repetition & Estimated Median \\
-\midrule
-1 & 1422.0 \\
-2 & 1498.5 \\
-3 & 1404.5 \\
-4 & 1328.5 \\
-5 & 1592.5 \\
-6 & 1452.5 \\
-7 & 1520.5 \\
-8 & 1444.5 \\
-9 & 1541.5 \\
-10 & 1567.0 \\
-\bottomrule
-\end{tabular}
-\end{subtable}
-\caption{Comparison of estimated medians for different sample sizes. \textit{Note: as $k$ grows sufficiently large the calculation for the median of a sample using the random sample with replacement should converge to the true median.}}
-\end{table}
 
-\noindent\rule{\textwidth}{0.4pt}
 \newpage
 
 %------------------
-% Solution for 4
+% Solution for 3(c)
+%------------------
+\subsubsection*{Solution 3}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 3 (c)}
+\subsubsection*{Zero Projection}
+
+Let $x = \begin{bmatrix}-4 \\ 3\end{bmatrix}$
+
+
+\subsubsection*{\normalfont}{$\therefore$ the unit vector $u$ is the following:}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 4 (a)
 %------------------
 \subsubsection*{Solution 4}
 \noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 4 (a)}
+Let $\Sigma$,
 
-\begin{flushleft}
-An $\epsilon$-heavy hitter is an element in a data stream of length $m$ whose frequency is greater than or equal to $\epsilon m$. We need to find the maximum number of such elements when $\epsilon = 0.05$.
-\\
+$$\Sigma = \begin{bmatrix}1\hspace{0.5cm} 2\hspace{0.5cm} 0 \\2\hspace{0.5cm} 9\hspace{0.5cm} 0\\0\hspace{0.5cm} 0\hspace{0.5cm} 4\end{bmatrix} \hspace{0.25cm} \text{ and } \hspace{0.25cm} x = \begin{bmatrix}0 \\ 1\\ 0\end{bmatrix}$$
 
-Let $k$ be the number of distinct $\epsilon$-heavy hitters. Let the frequency of the $i$-th heavy hitter be denoted by $f_i$.
-\\
-
-By definition, for each of the $k$ heavy hitters:
-\end{flushleft}
-
-\[ f_i \geq \epsilon m \]
-\begin{flushleft}
-  The sum of frequencies of these distinct items cannot exceed the total stream length $m$:
-\end{flushleft}
-
-\[ \sum_{i=1}^{k} f_i \leq m \]
-
-\begin{flushleft}
-Substitute the minimum frequency for each heavy hitter into the sum:  
-\end{flushleft}
-
-\[ \sum_{i=1}^{k} (\epsilon m) \leq \sum_{i=1}^{k} f_i \leq m \]
-\[ k \cdot \epsilon \cdot m \leq m \]
-
-\begin{flushleft}
-Since $m > 0$, we can divide both sides by $m$:  
-\end{flushleft}
-
-\[ k \cdot \epsilon \leq 1 \]
-
-\begin{flushleft}
-Solving for $k$:
-\end{flushleft}
-
-\[ k \leq \frac{1}{\epsilon} \]
-\[ k \leq \frac{1}{0.05} \]
-\[ k \leq 20 \]  
-
-
-\subsubsection*{\normalfont}{$\therefore$ $k \leq 20$ demonstrates that for $\epsilon=0.05$, there can be at most 20 $\epsilon$-heavy hitters in the stream.}
+\subsubsection*{\normalfont}{$\therefore$ the unit vector $u$ is the following:}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
 
 %------------------
-% Solution for 5 (a)
+% Solution for 4 (b)
 %------------------
-\subsubsection*{Solution 5}
+\subsubsection*{Solution 4}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 5 (a)}
-\subsubsection*{Optimal Clusters}
-\begin{flushleft}
-The k-means objective is to find a set of $k$ centers $M=\{\mu_1, \dots, \mu_k\}$ that minimizes the sum of squared Euclidean distances from each data point to its nearest center. By inspection, the optimal partitioning separates the negative numbers, the positive numbers, and the origin. \\
-\vspace{0.25cm}
-Hence, the optimal clusters are $C_1^* = \{-10, -8\}$, $C_2^* = \{0\}$, and $C_3^* = \{8, 10\}$.
-\end{flushleft}
+\subsubsection*{Solution 4 (b)}
+Let $\Sigma$,
 
-\subsubsection*{Optimal Centers}
-The optimal centers $\mu_j^*$ are calculated as the mean of the points in each optimal cluster $C_j^*$:
+$$\Sigma = \begin{bmatrix}1\hspace{0.5cm} 2\hspace{0.5cm} 0 \\2\hspace{0.5cm} 9\hspace{0.5cm} 0\\0\hspace{0.5cm} 0\hspace{0.5cm} 4\end{bmatrix} \hspace{0.25cm} \text{ and } \hspace{0.25cm} x = \frac{1}{\sqrt{3}}\begin{bmatrix}1 \\ 1\\ 1\end{bmatrix}$$
 
-\begin{align*}
-\mu_1^* = &\frac{-10 + (-8)}{2} = -9 \\
-\mu_2^* = &\frac{0}{1} = 0 \\
-\mu_3^* = &\frac{8 + 10}{2} = 9
-\end{align*}
-
-\vspace{0.25cm}
-
-Hence, the optimal centers are:
-
-$$\mu_1^* = -9 \quad \mu_2^* = 0 \quad \mu_3^* = 9$$
-
-\subsubsection*{Optimal Cost}
-The globally optimal cost, $J^*$, is the sum of squared distances for this configuration:
-\begin{align*}
-    J^* &= \sum_{x \in C_1^*} (x - \mu_1^*)^2 + \sum_{x \in C_2^*} (x - \mu_2^*)^2 + \sum_{x \in C_3^*} (x - \mu_3^*)^2 \\
-    &= \left( (-10 - (-9))^2 + (-8 - (-9))^2 \right) + \left( (0 - 0)^2 \right) + \left( (8 - 9)^2 + (10 - 9)^2 \right) \\
-    &= \left( (-1)^2 + 1^2 \right) + 0 + \left( (-1)^2 + 1^2 \right) \\
-    &= (1 + 1) + 0 + (1 + 1) \\
-    &= 4
-\end{align*}
-
-\subsubsection*{\normalfont}{$\therefore$ The optimal centers are $\{-9, 0, 9\}$ with a minimum cost of $J^*=4$.}
+\subsubsection*{\normalfont}{$\therefore$ the unit vector $u$ is the following:}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
 
 %------------------
-% Solution for 5 (b)
+% Solution for 4 (c)
+%------------------
+\subsubsection*{Solution 4}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 4 (c)}
+Let $\Sigma$,
+
+$$\Sigma = \begin{bmatrix}1\hspace{0.5cm} 2\hspace{0.5cm} 0 \\2\hspace{0.5cm} 9\hspace{0.5cm} 0\\0\hspace{0.5cm} 0\hspace{0.5cm} 4\end{bmatrix} $$\\
+
+Find $u$ given it is in the form:
+$$au_{1}^{2}+bu_{2}^{2}+cu_{3}^{2}+du_{1}u_{2}$$
+
+\subsubsection*{\normalfont}{$\therefore$ the unit vector $u$ is the following:}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 5
 %------------------
 \subsubsection*{Solution 5}
-\noindent\rule{\textwidth}{0.4pt}
-\subsubsection*{Solution 5 (b)}
-Let
-$$\mu_1 = -10 \quad \mu_2 = -8 \quad \mu_3 = 0 \quad \text{ and } \quad k = 3$$
-\subsubsection*{Assignment}
-Assign each point in $X$ to the closest mean.
-\begin{align*}
-  x_1 &= -10 \rightarrow \mu_1 \text{ is closest } \rightarrow C_1 = \{-10\} \\
-  x_2 &= -8 \rightarrow \mu_2 \text{ is closest } \rightarrow C_2 = \{-8\} \\
-  x_3 &= 0 \rightarrow \mu_3 \text{ is closest } \rightarrow C_3 = \{0\} \\
-  x_4 &= 8 \rightarrow \mu_3 \text{ is closest } \rightarrow C_3 = \{0, 8\} \\
-  x_5 &= 0 \rightarrow \mu_3 \text{ is closest } \rightarrow C_3 = \{0, 8 ,10\} 
-\end{align*}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 5}
+Let $\Sigma$,
 
-\begin{flushleft}
-  Hence, the resulting clusters are: $C_1 = \{-10\} \quad C_2 = \{-8\} \quad C_3 = \{0, 8, 10\}$
-\end{flushleft}
+\[
+\Sigma =
+\begin{bmatrix}
+    5 & 0 & 0 & 0 & 0 \\
+    0 & 10 & 0 & 0 & 0 \\
+    0 & 0 & 20 & 0 & 0 \\
+    0 & 0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 0 & 4 \\
+\end{bmatrix}
+\]
 
-
-\subsubsection*{Update Centers}
-\begin{flushleft}
-Recalculate centers as means of the new clusters:
-\end{flushleft}
-
-
-$$\mu_1^{(1)} = \frac{-10}{1} = -10 \quad \mu_2^{(1)} = \frac{-8}{1} = -8 \quad \mu_3^{(1)} = \frac{0 + 8 + 10}{3} = 6 $$
-
-\begin{flushleft}
-  Hence, the new centers are: $ M^{(1)} = \{-10,-8,6\}$
-\end{flushleft}
-
-
-\subsubsection*{Second Assignment}
-Assign each point in $X$ to the closest mean.
-\begin{align*}
-  x_1 &= -10 \rightarrow \mu_1 \text{ is closest } \rightarrow C_1 = \{-10\} \\
-  x_2 &= -8 \rightarrow \mu_2 \text{ is closest } \rightarrow C_2 = \{-8\} \\
-  x_3 &= 0 \rightarrow \mu_3 \text{ is closest } \rightarrow C_3 = \{0\} \\
-  x_4 &= 8 \rightarrow \mu_3 \text{ is closest } \rightarrow C_3 = \{0, 8\} \\
-  x_5 &= 0 \rightarrow \mu_3 \text{ is closest } \rightarrow C_3 = \{0, 8 ,10\} 
-\end{align*}
-
-\subsubsection*{Final Centers}
-
-\begin{flushleft}
-  Since the cluster assignments did not change, the centers will not change either. \\
-  Hence, the final centers are: $ M^{(F)} = \{-10,-8,6\}$
-\end{flushleft}
-
-\subsubsection*{Final Cost}
-
-\begin{align*}
-    J^F &= \left( (-10 - (-10))^2 \right) + \left( (-8 - (-8))^2 \right) + \left( (0 - 6)^2 + (8 - 6)^2 + (10 - 6)^2 \right) \\
-    &= 0 + 0 + \left( (-6)^2 + 2^2 + 4^2 \right) \\
-    &= 36 + 4 + 16 \\
-    &= 56
-\end{align*}
-
-\subsubsection*{\normalfont}{$\therefore$ The algorithm terminates at the centers $\{-10, -8, 6\}$ with a cost of $J^F=56$.}
+\subsubsection*{\normalfont}{$\therefore$ the unit vector $u$ is the following:}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -511,50 +261,32 @@ Assign each point in $X$ to the closest mean.
 \subsubsection*{Solution 6}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 6 (a)}
-\subsubsection*{Dendrogram}
+\subsubsection*{Mean and Variance of $X\cdot u$}
+Let $\Sigma$,
 
-\begin{figure}[h]
-  \includegraphics[height=0.75\textheight,width=\textwidth]{hw3_q6.png}
-  \caption{Figure shows the animal dendrogram.}
-\end{figure}
-
-\begin{lstlisting}
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.cluster import hierarchy
-from sklearn.cluster import KMeans
-from collections import defaultdict
-
-# set plot figure size for better readability of the dendrogram
-plt.rcParams['figure.figsize'] = (8, 10)
-
-# read predicate-matrix-continuous.txt as numpy array
-X = np.loadtxt('predicate-matrix-continuous.txt')
-
-# read classes.txt to create animal name list
-animal_names = []
-with open('classes.txt', 'r') as f:
-    for line in f:
-        parts = line.strip().split()
-        # The name is the second part, possibly with '+'
-        animal_names.append(parts[1])
-
-# perform hierarchical clustering using Ward's linkage method
-Z = hierarchy.linkage(X, method='ward')
-
-# plot the dendrogram
-plt.figure()
-hierarchy.dendrogram(
-    Z,
-    labels=animal_names,
-    orientation='right',
-    leaf_font_size=10
-)
-plt.title("Hierarchical Clustering Dendrogram (Ward's Method)")
-plt.xlabel("Euclidean Distance")
-plt.tight_layout()
-plt.show()
-\end{lstlisting}
+\[
+\mathbb{E}\text{(X)}=
+\begin{bmatrix}
+  1 \\
+  2 \\
+  3
+\end{bmatrix}
+\text{, cov(X)} =
+\begin{bmatrix}
+    5 & -3 & 0 \\
+   -3 & 5 & 0 \\
+    0 & 0 & 4
+\end{bmatrix}
+\text{, }
+u= \frac{1}{\sqrt{3}}
+\begin{bmatrix}
+  1 \\
+  1 \\
+  1
+\end{bmatrix}
+\]
+\subsubsection*{Find Mean and Variance of $X\cdot u$}
+\subsubsection*{\normalfont}{$\therefore$ The optimal centers are $\{-9, 0, 9\}$ with a minimum cost of $J^*=4$.}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -566,7 +298,214 @@ plt.show()
 \subsubsection*{Solution 6}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 6 (b)}
-\subsubsection*{Python Code}
+\subsubsection*{Eigenvectors of cov(X)}
+Let $\Sigma$,
+
+\[
+\mathbb{E}\text{(X)}=
+\begin{bmatrix}
+  1 \\
+  2 \\
+  3
+\end{bmatrix}
+\text{, cov(X)} =
+\begin{bmatrix}
+    5 & -3 & 0 \\
+   -3 & 5 & 0 \\
+    0 & 0 & 4
+\end{bmatrix}
+\text{, }
+u= \frac{1}{\sqrt{3}}
+\begin{bmatrix}
+  1 \\
+  1 \\
+  1
+\end{bmatrix}
+\]
+\subsubsection*{Find Eigenvectors from list}
+\[
+\begin{bmatrix}
+  1 \\
+  0 \\
+  0
+\end{bmatrix}
+\text{ , }
+\begin{bmatrix}
+  0 \\
+  1 \\
+  0
+\end{bmatrix}
+\text{ , }
+\begin{bmatrix}
+  0 \\
+  0 \\
+  1
+\end{bmatrix}
+\text{ , }
+\frac{1}{\sqrt{2}}
+\begin{bmatrix}
+  1 \\
+  1 \\
+  0
+\end{bmatrix}
+\text{ , }
+\frac{1}{\sqrt{2}}
+\begin{bmatrix}
+  0 \\
+  1 \\
+  1
+\end{bmatrix}
+\text{ , }
+\frac{1}{\sqrt{2}}
+\begin{bmatrix}
+  1 \\
+  -1 \\
+  0
+\end{bmatrix}
+\]
+\subsubsection*{\normalfont}{$\therefore$ The optimal centers are $\{-9, 0, 9\}$ with a minimum cost of $J^*=4$.}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 6 (c)
+%------------------
+\subsubsection*{Solution 6}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 6 (c)}
+\subsubsection*{Eigenvalues}
+Let $\Sigma$,
+
+\[
+\mathbb{E}\text{(X)}=
+\begin{bmatrix}
+  1 \\
+  2 \\
+  3
+\end{bmatrix}
+\text{, cov(X)} =
+\begin{bmatrix}
+    5 & -3 & 0 \\
+   -3 & 5 & 0 \\
+    0 & 0 & 4
+\end{bmatrix}
+\text{, }
+u= \frac{1}{\sqrt{3}}
+\begin{bmatrix}
+  1 \\
+  1 \\
+  1
+\end{bmatrix}
+\]
+\subsubsection*{Find Eigenvalues to each of Eigenvectors in part (b)}
+\[
+\begin{bmatrix}
+  1 \\
+  0 \\
+  0
+\end{bmatrix}
+\text{ , }
+\begin{bmatrix}
+  0 \\
+  1 \\
+  0
+\end{bmatrix}
+\text{ , }
+\begin{bmatrix}
+  0 \\
+  0 \\
+  1
+\end{bmatrix}
+\text{ , }
+\frac{1}{\sqrt{2}}
+\begin{bmatrix}
+  1 \\
+  1 \\
+  0
+\end{bmatrix}
+\text{ , }
+\frac{1}{\sqrt{2}}
+\begin{bmatrix}
+  0 \\
+  1 \\
+  1
+\end{bmatrix}
+\text{ , }
+\frac{1}{\sqrt{2}}
+\begin{bmatrix}
+  1 \\
+  -1 \\
+  0
+\end{bmatrix}
+\]
+
+\subsubsection*{\normalfont}{$\therefore$ The optimal centers are $\{-9, 0, 9\}$ with a minimum cost of $J^*=4$.}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 6 (d)
+%------------------
+\subsubsection*{Solution 6}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 6 (d)}
+\subsubsection*{PCA in 2 dim which direction would it project onto}
+
+\subsubsection*{\normalfont}{$\therefore$ The optimal centers are $\{-9, 0, 9\}$ with a minimum cost of $J^*=4$.}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+
+%------------------
+% Solution for 6 (e)
+%------------------
+\subsubsection*{Solution 6}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 6 (e)}
+\subsubsection*{PCA restult from (d) on the point below}
+\[
+x=
+\begin{bmatrix}
+  4 \\
+  0 \\
+  2
+\end{bmatrix}
+\]
+
+\subsubsection*{\normalfont}{$\therefore$ The optimal centers are $\{-9, 0, 9\}$ with a minimum cost of $J^*=4$.}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 6 (f)
+%------------------
+\subsubsection*{Solution 6}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 6 (f)}
+\subsubsection*{Restult from (e), reconstruct 3d point}
+
+
+\subsubsection*{\normalfont}{$\therefore$ The optimal centers are $\{-9, 0, 9\}$ with a minimum cost of $J^*=4$.}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 7 (a)
+%------------------
+\subsubsection*{Solution 7}
+\noindent\rule{\textwidth}{0.4pt}
+\subsubsection*{Solution 7 (a)}
+\subsubsection*{Code}
 \begin{lstlisting}
 import numpy as np
 import matplotlib.pyplot as plt
@@ -574,131 +513,13 @@ from scipy.cluster import hierarchy
 from sklearn.cluster import KMeans
 from collections import defaultdict
 
-# read predicate-matrix-continuous.txt as numpy array
-X = np.loadtxt('predicate-matrix-continuous.txt')
-
-# read classes.txt to create animal name list
-animal_names = []
-with open('classes.txt', 'r') as f:
-    for line in f:
-        parts = line.strip().split()
-        # The name is the second part, possibly with '+'
-        animal_names.append(parts[1])
-
-# perform hierarchical clustering using Ward's linkage method
-Z = hierarchy.linkage(X, method='ward')
-
-# get 10 clusters from the hierarchical model
-ward_clusters = hierarchy.fcluster(Z, 10, criterion='maxclust')
-
-# group animals by their assigned cluster
-ward_cluster_dict = defaultdict(list)
-for i, cluster_id in enumerate(ward_clusters):
-    ward_cluster_dict[cluster_id].append(animal_names[i])
-
-# calculate the k-means cost (sum of squared distances) for this clustering
-ward_cost = 0.0
-centroids = {}
-for i in range(1, 11):
-    # get all data points for the current cluster
-    cluster_points = X[ward_clusters == i]
-    # calculate the centroid (mean) of the cluster
-    centroid = np.mean(cluster_points, axis=0)
-    centroids[i] = centroid
-    # calculate sum of squared distances from points to the centroid
-    ward_cost += np.sum((cluster_points - centroid)**2)
-
-print("wards clustering (k=10)")
-for cid, animals in sorted(ward_cluster_dict.items()):
-    print(f"cluster {cid}: {', '.join(animals)}")
-print(f"\nkmeans cost for wards clustering: {ward_cost:.4f}")
-
- run kmeans 10 times with different random initializations
-kmeans = KMeans(n_clusters=10, n_init=10, random_state=42)
-kmeans.fit(X)
-
-# inertia_ attribute stores the ssd (kmeans cost) for the best of the 10 runs
-kmeans_cost = kmeans.inertia_
-
-print("\n--- kmeans algorithm (10 runs) ---")
-print(f"best kmeans cost found: {kmeans_cost:.4f}")
+# set plot figure size for better readability of the dendrogram
+plt.rcParams['figure.figsize'] = (8, 10)
 \end{lstlisting}
 
-\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Plot: position of each animal(each label with name)}
 
-\newpage
-
-\subsubsection*{Solution 6}
-\noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 6 (b)}
-\subsubsection*{Results}
-\begin{table}[h]
-\centering
-\begin{tabular}{>{\raggedright\arraybackslash}p{0.45\textwidth} >{\raggedleft\arraybackslash}p{0.2\textwidth} >{\raggedleft\arraybackslash}p{0.25\textwidth}}
-\toprule
-\textbf{Cluster} & \textbf{Method} & \textbf{Cost} \\
-\midrule
-1: tiger, leopard, fox, wolf, weasel, bobcat, lion & Ward's Method & \num{679136.2673} \\
-2: dalmatian, persian cat, german shepherd, siamese cat, chihuahua, collie & & \\
-3: grizzly bear, giant panda, polar bear & & \\
-4: skunk, mole, hamster, squirrel, rabbit, rat, mouse, raccoon & & \\
-5: spider monkey, gorilla, chimpanzee, bat & & \\
-6: beaver, otter & & \\
-7: killer whale, blue whale, humpback whale, seal, walrus, dolphin & & \\
-8: hippopotamus, elephant, rhinoceros & & \\
-9: moose, ox, sheep, buffalo, pig, cow & & \\
-10: antelope, horse, giraffe, zebra, deer & & \\
-\midrule
-Best K-means Cost found (10 runs) & K-means & \num{707405.1627} \\
-\bottomrule
-\end{tabular}
-\caption{Comparison of Clustering Results for $k=10$}
-\label{tab:clustering_results}
-\end{table}
-
-
-%------------------
-% Solution for 7 (a)
-%------------------
-\subsubsection*{Solution 7}
-\noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 7 (a)}
-\subsubsection*{Optimal Centers}
-\begin{flushleft}
-To find the optimal centers for $k=3$, we must inspect the structure of the dataset. By inspection, we see that there exists three distinct groups:
-\begin{enumerate}
-  \item The point $\begin{bmatrix}1 \\ 8\end{bmatrix}$.
-  \begin{enumerate}
-    \item One center, $\mu_1^*$, covers the outlier $\begin{bmatrix}1 \\ 8\end{bmatrix}$. The optimal placement is on the point itself.
-  \end{enumerate}
-  \item A square-like cluster.
-  \begin{enumerate}
-    \item A second center, $\mu_2^*$, covers the cluster $\{\begin{bmatrix}1 \\ 1\end{bmatrix}, \begin{bmatrix}1 \\ 2\end{bmatrix}, \begin{bmatrix}2 \\ 1\end{bmatrix}, \begin{bmatrix}2 \\ 2\end{bmatrix}\}$. The center of the minimal enclosing circle is their geometric mean, $\begin{bmatrix}1.5 \\ 1.5\end{bmatrix}$.
-  \end{enumerate}
-  \item a horizontal line segment.
-  \begin{enumerate}
-    \item A third center, $\mu_3^*$, covers the segment $\{\begin{bmatrix}5 \\ 1\end{bmatrix}, \begin{bmatrix}6 \\ 1\end{bmatrix}\}$. The optimal placement is the midpoint, $\begin{bmatrix}5.5 \\ 1\end{bmatrix}$.
-  \end{enumerate}
-\end{enumerate}
-\vspace{0.25cm}
-Hence, the optimal centers are:
-$$ M^* = \left\{ \mu_1^*, \mu_2^*, \mu_3^* \right\} = \left\{ \begin{bmatrix}1 \\ 8\end{bmatrix}, \begin{bmatrix}1.5 \\ 1.5\end{bmatrix}, \begin{bmatrix}5.5 \\ 1\end{bmatrix} \right\} $$
-\end{flushleft}
-
-\subsubsection*{Optimal Cost}
-\begin{flushleft}
-Calculate the radius from the center to the farthest point in each cluster since we are in a $2D$ space.
-\end{flushleft}
-\begin{align*}
-    \text{radius}_1 &= \left\lVert \begin{bmatrix}1 \\ 8\end{bmatrix} - \begin{bmatrix}1 \\ 8\end{bmatrix} \right\rVert_2 = 0 \\
-    \text{radius}_2 &= \left\lVert \begin{bmatrix}1 \\ 1\end{bmatrix} - \begin{bmatrix}1.5 \\ 1.5\end{bmatrix} \right\rVert_2 = \sqrt{(-0.5)^2 + (-0.5)^2} = \sqrt{0.5} \\
-    \text{radius}_3 &= \left\lVert \begin{bmatrix}5 \\ 1\end{bmatrix} - \begin{bmatrix}5.5 \\ 1\end{bmatrix} \right\rVert_2 = \sqrt{(-0.5)^2} = 0.5
-\end{align*}
-\begin{flushleft}
-The cost is the maximum of these radii above, so $J^*(M^*) = \max(0, \sqrt{0.5}, 0.5) = \sqrt{0.5}$.
-\end{flushleft}
-
-\subsubsection*{\normalfont}{$\therefore$ The optimal centers are $\left\{ \begin{bmatrix}1 \\ 8\end{bmatrix}, \begin{bmatrix}1.5 \\ 1.5\end{bmatrix}, \begin{bmatrix}5.5 \\ 1\end{bmatrix} \right\}$ with a minimum cost of $J^*=\sqrt{0.5} $.}
+\subsubsection*{\normalfont}{$\therefore$ The algorithm terminates at the centers $\{-10, -8, 6\}$ with a cost of $J^F=56$.}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -708,62 +529,127 @@ The cost is the maximum of these radii above, so $J^*(M^*) = \max(0, \sqrt{0.5},
 % Solution for 7 (b)
 %------------------
 \subsubsection*{Solution 7}
-\noindent\rule{\textwidth}{0.4pt}\\
+\noindent\rule{\textwidth}{0.4pt}
 \subsubsection*{Solution 7 (b)}
-\subsubsection*{Select $\mu_2$}
-\begin{flushleft}
-Find the point in $X$ that is farthest from the initial center $\mu_1 = \begin{bmatrix}1 \\ 1\end{bmatrix}$. 
-\end{flushleft}
-\begin{align*}
-    d^2\left(\begin{bmatrix}1 \\ 8\end{bmatrix}, \mu_1\right) &= (1-1)^2 + (8-1)^2 = 49 \quad (\text{Max}) \\
-    d^2\left(\begin{bmatrix}6 \\ 1\end{bmatrix}, \mu_1\right) &= (6-1)^2 + (1-1)^2 = 25 \\
-    d^2\left(\begin{bmatrix}5 \\ 1\end{bmatrix}, \mu_1\right) &= (5-1)^2 + (1-1)^2 = 16 \\
-    d^2\left(\begin{bmatrix}2 \\ 2\end{bmatrix}, \mu_1\right) &= (2-1)^2 + (2-1)^2 = 2
-\end{align*}
-\begin{flushleft}
-The farthest point is $\begin{bmatrix}1 \\ 8\end{bmatrix}$, so $\mu_2 = \begin{bmatrix}1 \\ 8\end{bmatrix}$. The current centers are $M_2 = \left\{\begin{bmatrix}1 \\ 1\end{bmatrix}, \begin{bmatrix}1 \\ 8\end{bmatrix}\right\}$.
-\end{flushleft}
+\subsubsection*{Code: t-SNE algorithm}
+\begin{lstlisting}
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.cluster import hierarchy
+from sklearn.cluster import KMeans
+from collections import defaultdict
+from sklearn.manifold import TSNE
+## note set seed so perplexity results don't vary
+Z = TSNE(n components=2, perplexity=10.0).fit transform(X)
+\end{lstlisting}
 
-\subsubsection*{Select $\mu_3$}
-\begin{flushleft}
-Find the point $x \in X \setminus M_2$ that maximizes $\min_{\mu \in M_2} \lVert x - \mu \rVert_2$. To check this condition we must look at the minimum squared distance for each remaining point to the set $M_2$.
-\end{flushleft}
-\begin{align*}
-    x = \begin{bmatrix}6 \\ 1\end{bmatrix}:& \quad \min(d^2(x, \mu_1)=25, d^2(x, \mu_2)=74) = 25 \quad (\text{Max}) \\
-    x = \begin{bmatrix}5 \\ 1\end{bmatrix}:& \quad \min(d^2(x, \mu_1)=16, d^2(x, \mu_2)=65) = 16 \\
-    x = \begin{bmatrix}2 \\ 2\end{bmatrix}:& \quad \min(d^2(x, \mu_1)=2, d^2(x, \mu_2)=37) = 2 \\
-    x = \begin{bmatrix}2 \\ 1\end{bmatrix}:& \quad \min(d^2(x, \mu_1)=1, d^2(x, \mu_2)=50) = 1
-\end{align*}
-\begin{flushleft}
-Hence, the point maximizing this minimum distance is: $\begin{bmatrix}6 \\ 1\end{bmatrix}$, so $\mu_3 = \begin{bmatrix}6 \\ 1\end{bmatrix}$.
-\end{flushleft}
+\subsubsection*{t-SNE algorithm: Perplexity = 5}
+\subsubsection*{t-SNE algorithm: Perplexity = 10}
+\subsubsection*{t-SNE algorithm: Perplexity = 25}
+\subsubsection*{t-SNE algorithm: Perplexity = 50}
 
-\subsubsection*{Final Centers}
-\begin{flushleft}
-Hence, the final set of centers is:
-$$ M^{(F)} = \left\{ \begin{bmatrix}1 \\ 1\end{bmatrix}, \begin{bmatrix}1 \\ 8\end{bmatrix}, \begin{bmatrix}6 \\ 1\end{bmatrix} \right\} $$
-\end{flushleft}
+\subsubsection*{Plot: position of each animal(each label with name)}
+
+\subsubsection*{\normalfont}{$\therefore$ The algorithm terminates at the centers $\{-10, -8, 6\}$ with a cost of $J^F=56$.}
+
+%------------------
+% Solution for 7 (c)
+%------------------
+\subsubsection*{Solution 7}
+\noindent\rule{\textwidth}{0.4pt}
+\subsubsection*{Solution 7 (c)}
+\subsubsection*{Code: t-SNE algorithm}
+\begin{lstlisting}
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.cluster import hierarchy
+from sklearn.cluster import KMeans
+from collections import defaultdict
+from sklearn.manifold import TSNE
+## note set seed so perplexity results don't vary
+Z = TSNE(n components=2, perplexity=10.0).fit transform(X)
+\end{lstlisting}
+
+\subsubsection*{idk wtf do, so much in this part}
+\subsubsection*{Plot 1}
+\subsubsection*{Plot 2}
+
+\noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
-\subsubsection*{Solution 7}
-\noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 7 (b)}
-\subsubsection*{Final Cost}
-\begin{flushleft}
-The cost $J^{(F)}$ is the maximum distance from any point in $X$ to its nearest center in $M^{(F)}$. Now, find the maximum of the minimum squared distances for all non-center points.
-\end{flushleft}
-\begin{align*}
-    d^2_{\min}\left(\begin{bmatrix}2 \\ 2\end{bmatrix}, M^{(F)}\right) &= \min\left(d^2(\begin{bmatrix}2 \\ 2\end{bmatrix}, \mu_1)=2, d^2(\begin{bmatrix}2 \\ 2\end{bmatrix}, \mu_2)=37, d^2(\begin{bmatrix}2 \\ 2\end{bmatrix}, \mu_3)=17\right) = 2 \quad (\text{Max}) \\
-    d^2_{\min}\left(\begin{bmatrix}5 \\ 1\end{bmatrix}, M^{(F)}\right) &= \min(16, 65, 1) = 1
-\end{align*}
-\begin{flushleft}
-The maximum squared distance is 2. The cost is the square root of this value.
-$$ J^{(F)}(M^{(F)}) = \sqrt{2} $$
-\end{flushleft}
 
-\subsubsection*{\normalfont}{$\therefore$ the centers are: $\left\{ \begin{bmatrix}1 \\ 1\end{bmatrix}, \begin{bmatrix}1 \\ 8\end{bmatrix}, \begin{bmatrix}6 \\ 1\end{bmatrix} \right\}$ with a cost of $J^{(F)}=\sqrt{2}$.}
+%------------------
+% Solution for 8
+%------------------
+\subsubsection*{Solution 8}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Best rank-2 approx to $M$}
+
+\[
+M =
+\begin{bmatrix}
+    1 & 0 & 0 & 0\\
+    0 & 0 & 0 & 1\\
+    0 & 0 & 1 & 0\\
+    0 & 1 & 0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+    4 & 0 & 0 & 0\\
+    0 & 3 & 0 & 0\\
+    0 & 0 & 2 & 0\\
+    0 & 0 & 0 & 1
+\end{bmatrix}\begin{bmatrix}
+    1 & 0 & 0 & 0 & 0\\
+    0 & 1 & 0 & 0 & 0\\
+    0 & 0 & 1 & 0 & 0\\
+    0 & 0 & 0 & 1 & 0
+\end{bmatrix}
+\]
+
+\subsubsection*{\normalfont}{$\therefore$ The algorithm terminates at the centers $\{-10, -8, 6\}$ with a cost of $J^F=56$.}
+
 
 \noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 9 (a)
+%------------------
+\subsubsection*{Solution 9}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 9 (a)}
+\subsubsection*{SVN}
+
+\[
+M =
+\begin{bmatrix}
+    1 & 2 & 3 \\
+    4 & 5 & 6 
+\end{bmatrix}
+\]
+
+\subsubsection*{\normalfont}{$\therefore$ The algorithm terminates at the centers $\{-10, -8, 6\}$ with a cost of $J^F=56$.}
+
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 9 (b)
+%------------------
+\subsubsection*{Solution 9}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 9 (b)}
+\subsubsection*{idk proof: $uv^{T}=ab^T$}
+
+\subsubsection*{\normalfont}{$\therefore$ The algorithm terminates at the centers $\{-10, -8, 6\}$ with a cost of $J^F=56$.}
+
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
 
 \begin{comment}
 %------------------
