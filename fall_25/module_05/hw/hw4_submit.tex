@@ -53,7 +53,7 @@
 
 \pagestyle{fancy}
 \chead{DSC 257: Unsupervised Learning (Fall 2025)}
-\lhead{Homework 3}
+\lhead{Homework 4}
 \rhead{Randall Rogers}
 
 %------------------
@@ -63,10 +63,20 @@
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 1 (a)}
 
-Let $x = \begin{bmatrix}3 \\ 4\end{bmatrix}$
-
+Let $x = \begin{bmatrix}3 \\ 4\end{bmatrix}$.
+To find the unit vector $u$, we must divide $x$ by its $L_2$-norm, $\|x\|_2 = \sqrt{x_1^2 + x_2^2}$.
+\begin{align*}
+    \|x\|_2 &= \sqrt{3^2 + 4^2} \\
+            &= \sqrt{9 + 16} \\
+            &= \sqrt{25} \\
+            &= 5
+\end{align*}
+Now, we compute $u = \frac{x}{\|x\|_2}$.
 
 \subsubsection*{\normalfont}{$\therefore$ the unit vector $u$ is the following:}
+\begin{align*}
+    u = \frac{1}{5} \begin{bmatrix}3 \\ 4\end{bmatrix} = \begin{bmatrix} 3/5 \\ 4/5 \end{bmatrix}
+\end{align*}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -79,10 +89,20 @@ Let $x = \begin{bmatrix}3 \\ 4\end{bmatrix}$
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 1 (b)}
 
-Let $x = \begin{bmatrix}-4 \\ 12 \\ 3\end{bmatrix}$
+Let $x = \begin{bmatrix}-4 \\ 12 \\ 3\end{bmatrix}$.
+First, we find the $L_2$-norm of $x$, $\|x\|_2 = \sqrt{x_1^2 + x_2^2 + x_3^2}$.
+\begin{align*}
+    \|x\|_2 &= \sqrt{(-4)^2 + 12^2 + 3^2} \\
+            &= \sqrt{16 + 144 + 9} \\
+            &= \sqrt{169} \\
+            &= 13
+\end{align*}
+The unit vector $u$ is $u = \frac{x}{\|x\|_2}$.
 
 \subsubsection*{\normalfont}{$\therefore$ the unit vector $u$ is the following:}
-
+\begin{align*}
+    u = \frac{1}{13} \begin{bmatrix}-4 \\ 12 \\ 3\end{bmatrix} = \begin{bmatrix} -4/13 \\ 12/13 \\ 3/13 \end{bmatrix}
+\end{align*}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -95,9 +115,19 @@ Let $x = \begin{bmatrix}-4 \\ 12 \\ 3\end{bmatrix}$
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 1 (c)}
 \subsubsection*{Plot}
-Let $x = \begin{bmatrix}1 \\ 1 \\ \vdots \\ 1\end{bmatrix}$ such that $|x| = d$
+Let $x = \begin{bmatrix}1 \\ 1 \\ \vdots \\ 1\end{bmatrix}$ such that $|x| = d$.
+This vector consists of $d$ entries, each equal to 1. We find its $L_2$-norm:
+\begin{align*}
+    \|x\|_2 &= \sqrt{\sum_{i=1}^{d} 1^2} \\
+            &= \sqrt{1 + 1 + \dots + 1} \quad (d \text{ times}) \\
+            &= \sqrt{d}
+\end{align*}
+The unit vector $u$ is $u = \frac{x}{\|x\|_2}$.
 
 \subsubsection*{\normalfont}{$\therefore$ the unit vector $u$ is the following:}
+\begin{align*}
+    u = \frac{1}{\sqrt{d}} \begin{bmatrix}1 \\ 1 \\ \vdots \\ 1\end{bmatrix} = \begin{bmatrix} 1/\sqrt{d} \\ 1/\sqrt{d} \\ \vdots \\ 1/\sqrt{d} \end{bmatrix}
+\end{align*}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -109,25 +139,95 @@ Let $x = \begin{bmatrix}1 \\ 1 \\ \vdots \\ 1\end{bmatrix}$ such that $|x| = d$
 \subsubsection*{Solution 2}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 2 (a)}
-\subsubsection*{Pseudocode}
+
+Given point $x = \begin{bmatrix}-2 \\ 4\end{bmatrix}$ and direction $u = \begin{bmatrix}1 \\ 2\end{bmatrix}$.
+The projection of vector $x$ onto vector $u$ is given by the formula:
+$\text{proj}_u x = \frac{x \cdot u}{\|u\|^2} u$.
+
+First, calculate the dot product $x \cdot u$:
+\begin{align*}
+    x \cdot u &= (-2)(1) + (4)(2) \\
+              &= -2 + 8 \\
+              &= 6
+\end{align*}
+Next, calculate the squared $L_2$-norm of $u$, $\|u\|^2$:
+\begin{align*}
+    \|u\|^2 &= 1^2 + 2^2 \\
+            &= 1 + 4 \\
+            &= 5
+\end{align*}
+Now, substitute these values into the projection formula:
+\begin{align*}
+    \text{proj}_u x &= \frac{6}{5} \begin{bmatrix}1 \\ 2\end{bmatrix} \\
+\end{align*}
 
 \subsubsection*{\normalfont}{$\therefore$ the projection of point $x \in \mathbb{R}^2$ onto the direction of $u$ is: }
-
+\begin{align*}
+    \text{proj}_u x &= \begin{bmatrix} 6/5 \\ 12/5 \end{bmatrix} = \begin{bmatrix} 1.2 \\ 2.4 \end{bmatrix}
+\end{align*}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
+
 %------------------
 % Solution for 2(b)
 %------------------
 \subsubsection*{Solution 2}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 2 (b)}
-\subsubsection*{Use draw to make grid and show result from 2(a)}
+\subsubsection*{Plot}
+The projection is calculated to be:
+$$\text{proj}_u x = \begin{bmatrix} 1.2 \\ 2.4 \end{bmatrix}$$
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=0.8,
+    axis_style/.style={->, thick, gray},
+    vector_style/.style={->, thick, blue},
+    point_style/.style={red, fill, circle, inner sep=2pt},
+    projection_style/.style={->, thick, green!70!black},
+    dashed_line/.style={dashed, gray}
+]
+    % Set up the grid
+    \draw[help lines, dashed, opacity=0.5] (-3,-1) grid (3,5);
+
+    % Draw axes
+    \draw[axis_style] (-3,0) -- (3,0) node[below] {$x_1$};
+    \draw[axis_style] (0,-1) -- (0,5) node[left] {$x_2$};
+
+    % Mark origin
+    \node at (0,0) [below left] {$O$};
+
+    % Plot point x
+    \node (x_point) at (-2,4) [point_style, label={left:$x=\begin{bmatrix}-2 \\ 4\end{bmatrix}$}] {};
+    \draw[vector_style, orange!70!black] (0,0) -- (-2,4) node[above left, color=black, xshift=-0.2cm, yshift=0.2cm] {};
+
+    % Plot direction u
+    \draw[vector_style, blue] (0,0) -- (1,2) node[shift={(0.5, -1)}] {$u=\begin{bmatrix}1 \\ 2\end{bmatrix}$};
+    % Extend the line for direction u for projection
+    \draw[blue, thick, dotted] (-2,-4) -- (2.5,5); % Line representing the span of u
+
+    % Plot the projection point
+    \node (proj_point) at (1.2,2.4) [point_style, label={right:$\text{proj}_u x=\begin{bmatrix}1.2 \\ 2.4\end{bmatrix}$}] {};
+    \draw[projection_style] (0,0) -- (1.2,2.4) node[below right, color=black, xshift=0.2cm, yshift=-0.2cm] {};
+
+    % Draw the orthogonal line from x to its projection
+    \draw[dashed_line] (-2,4) -- (1.2,2.4);
+
+    % Add labels for coordinates
+    \foreach \x in {-2,-1,1,2} \draw (\x,0) -- (\x,-0.1) node[below] {\x};
+    \foreach \y in {-1,1,2,3,4} \draw (0,\y) -- (-0.1,\y) node[left] {\y};
+
+\end{tikzpicture}
+\caption{Projection of point $x$ onto direction $u$.}
+\label{fig:projection_x_on_u}
+\end{figure}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
+
 %------------------
 % Solution for 3(a)
 %------------------
@@ -135,11 +235,24 @@ Let $x = \begin{bmatrix}1 \\ 1 \\ \vdots \\ 1\end{bmatrix}$ such that $|x| = d$
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 3 (a)}
 \subsubsection*{Maximized Projection}
-
-Let $x = \begin{bmatrix}-4 \\ 3\end{bmatrix}$
-
+Let, \\ 
+$$x = \begin{bmatrix}-4 \\ 3\end{bmatrix}$$ \\
+We can define the dot product as:
+$$x \cdot u = |x||u|cos(\theta) \rightarrow \frac{x \cdot u}{|u|} = |x|cos(\theta)$$
+The projection of $x$ onto a unit vector $u$ is:
+$$\text{proj}_u x = \frac{x \cdot u}{\|u\|^2} u $$
+Hence, the project of $x$ onto $u$ is maximized when $u$ is in the direction of $x$ or (i.e., $\theta=0$). \\
+It follows that:
+\begin{align*}
+    \frac{x_1u1 + x_2u2}{\sqrt{u_{1}^{2}+u_{2}^{2}}} &= \sqrt{x_{1}^{2}+x_{2}^{2}}cos(\theta) \\
+    \frac{-4u1 + 3u2}{\sqrt{u_{1}^{2}+u_{2}^{2}}} &= \sqrt{(-4)^{2}+3^{2}}\cos(0) \\
+    \frac{-4u_1 + 3u_2}{\sqrt{u_{1}^{2}+u_{2}^{2}}} &= 5 \\
+    \frac{-\frac{4u_1}{5} + \frac{3}{5}u_2}{\sqrt{u_{1}^{2}+u_{2}^{2}}} &= 1 \\
+\end{align*}
 
 \subsubsection*{\normalfont}{$\therefore$ the unit vector $u$ is the following:}
+
+$$u = \begin{bmatrix} -\frac{4}{5} \\[2pt] \frac{3}{5} \end{bmatrix}$$
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -152,11 +265,24 @@ Let $x = \begin{bmatrix}-4 \\ 3\end{bmatrix}$
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 3 (b)}
 \subsubsection*{Minimized Projection}
-
-Let $x = \begin{bmatrix}-4 \\ 3\end{bmatrix}$
-
+Let, \\
+$$x = \begin{bmatrix}-4 \\ 3\end{bmatrix}$$ \\
+We can define the dot product as:
+$$x \cdot u = \|x\|\,\|u\|\cos(\theta) \rightarrow \frac{x \cdot u}{\|u\|} = \|x\|\cos(\theta)$$
+The projection of $x$ onto a unit vector $u$ is:
+$$\text{proj}_u x = \frac{x \cdot u}{\|u\|^2} u.$$
+Hence, the projection of $x$ onto $u$ is minimized when $u$ is opposite to $x$ (i.e., $\theta=\pi$). \\
+It follows that:
+\begin{align*}
+    \frac{x_1u_1 + x_2u_2}{\sqrt{u_{1}^{2}+u_{2}^{2}}} &= \sqrt{x_{1}^{2}+x_{2}^{2}}\cos(\theta) \\
+    \frac{-4u_1 + 3u_2}{\sqrt{u_{1}^{2}+u_{2}^{2}}} &= \sqrt{(-4)^{2}+3^{2}}\cos(\pi) \\
+    \frac{-4u_1 + 3u_2}{\sqrt{u_{1}^{2}+u_{2}^{2}}} &= 5(-1) = -5 \\
+    \frac{-\frac{4}{5}u_1 + \frac{3}{5}u_2}{\sqrt{u_{1}^{2}+u_{2}^{2}}} &= -1
+\end{align*}
 
 \subsubsection*{\normalfont}{$\therefore$ the unit vector $u$ is the following:}
+
+$$u = \begin{bmatrix} \frac{4}{5} \\[2pt] -\frac{3}{5} \end{bmatrix}$$
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -169,11 +295,26 @@ Let $x = \begin{bmatrix}-4 \\ 3\end{bmatrix}$
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 3 (c)}
 \subsubsection*{Zero Projection}
+Let, \\
+$$x = \begin{bmatrix}-4 \\ 3\end{bmatrix}$$ \\
+We can define the dot product as:
+$$x \cdot u = \|x\|\,\|u\|\cos(\theta).$$
+The projection of $x$ onto $u$ is zero when $x \cdot u = 0$ (i.e., $\theta \in\left\{\frac{\pi}{2}, \frac{3\pi}{2}\right\}$). For $u=\begin{bmatrix}u_1 \\ u_2\end{bmatrix}$,
+\begin{align*}
+    x \cdot u &= -4u_1 + 3u_2 = 0 \;\;\Longrightarrow\;\; 3u_2 = 4u_1 \;\;\Longrightarrow\;\; u_2 = \frac{4}{3}u_1.
+\end{align*}
+A direction orthogonal to $x$ is $v=\begin{bmatrix}3 \\ 4\end{bmatrix}$ since $x \cdot v = -12 + 12 = 0$, and $\|v\|=\sqrt{3^2+4^2}=5$. Normalizing yields the unit directions:
+\begin{align*}
+    u^{(1)} = \frac{1}{5}\begin{bmatrix}3 \\ 4\end{bmatrix} = \begin{bmatrix}\frac{3}{5} \\[2pt] \frac{4}{5}\end{bmatrix},
+    \qquad
+    u^{(2)} = -u^{(1)} = \begin{bmatrix}-\frac{3}{5} \\[2pt] -\frac{4}{5}\end{bmatrix}.
+\end{align*}
 
-Let $x = \begin{bmatrix}-4 \\ 3\end{bmatrix}$
+\subsubsection*{\normalfont}{$\therefore$ the unit vector(s) $u$ are the following:}
 
-
-\subsubsection*{\normalfont}{$\therefore$ the unit vector $u$ is the following:}
+$$u^{(1)} = \begin{bmatrix}\frac{3}{5} \\[2pt] \frac{4}{5}\end{bmatrix}
+\quad \text{and} \quad
+u^{(2)} = \begin{bmatrix}-\frac{3}{5} \\[2pt] -\frac{4}{5}\end{bmatrix}$$
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -185,11 +326,39 @@ Let $x = \begin{bmatrix}-4 \\ 3\end{bmatrix}$
 \subsubsection*{Solution 4}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 4 (a)}
-Let $\Sigma$,
-
-$$\Sigma = \begin{bmatrix}1\hspace{0.5cm} 2\hspace{0.5cm} 0 \\2\hspace{0.5cm} 9\hspace{0.5cm} 0\\0\hspace{0.5cm} 0\hspace{0.5cm} 4\end{bmatrix} \hspace{0.25cm} \text{ and } \hspace{0.25cm} x = \begin{bmatrix}0 \\ 1\\ 0\end{bmatrix}$$
-
-\subsubsection*{\normalfont}{$\therefore$ the unit vector $u$ is the following:}
+Let $\Sigma$ and direction $x$,
+\[
+\Sigma = \begin{bmatrix}
+1 & 2 & 0 \\
+2 & 9 & 0 \\
+0 & 0 & 4
+\end{bmatrix}
+\qquad\text{and}\qquad
+x = \begin{bmatrix}0 \\ 1 \\ 0\end{bmatrix}
+\]
+The variance in direction $x$ is $x^\top \Sigma x$.
+\begin{align*}
+\mathrm{Var}(x)
+&= x^\top \Sigma x \\
+&= \begin{bmatrix}0 & 1 & 0\end{bmatrix}
+\begin{bmatrix}
+1 & 2 & 0 \\
+2 & 9 & 0 \\
+0 & 0 & 4
+\end{bmatrix}
+\begin{bmatrix}0 \\ 1 \\ 0\end{bmatrix} \\
+&= \begin{bmatrix}0 & 1 & 0\end{bmatrix}
+\begin{bmatrix}
+(1\cdot0) + (2\cdot1) + (0\cdot0) \\
+(2\cdot0) + (9\cdot1) + (0\cdot0) \\
+(0\cdot0) + (0\cdot1) + (4\cdot0)
+\end{bmatrix} \\
+&= \begin{bmatrix}0 & 1 & 0\end{bmatrix}
+\begin{bmatrix}2 \\ 9 \\ 0\end{bmatrix}\\
+&= (2\cdot0) + (9\cdot1) + (0\cdot0) \\
+&= 9
+\end{align*}
+\subsubsection*{\normalfont}{$\therefore$ the variance in the direction $\begin{bmatrix}0 \\ 1 \\ 0\end{bmatrix}$ is $9$.}\\
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -201,11 +370,40 @@ $$\Sigma = \begin{bmatrix}1\hspace{0.5cm} 2\hspace{0.5cm} 0 \\2\hspace{0.5cm} 9\
 \subsubsection*{Solution 4}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 4 (b)}
-Let $\Sigma$,
+Let $\Sigma$ and unit direction $x$,
+\[
+\Sigma = \begin{bmatrix}
+1 & 2 & 0 \\
+2 & 9 & 0 \\
+0 & 0 & 4
+\end{bmatrix}
+\qquad\text{and}\qquad
+x = \frac{1}{\sqrt{3}}\begin{bmatrix}1 \\ 1 \\ 1\end{bmatrix}
+\]
+\begin{align*}
+\mathrm{Var}(x)
+&= x^\top \Sigma x \\
+&= \left(\frac{1}{\sqrt{3}}\begin{bmatrix}1 & 1 & 1\end{bmatrix}\right)
+\begin{bmatrix}
+1 & 2 & 0 \\
+2 & 9 & 0 \\
+0 & 0 & 4
+\end{bmatrix}
+\left(\frac{1}{\sqrt{3}}\begin{bmatrix}1 \\ 1 \\ 1\end{bmatrix}\right) \\
+&= \left(\frac{1}{\sqrt{3}} \cdot \frac{1}{\sqrt{3}}\right)
+\begin{bmatrix}
+(1\cdot1) + (2\cdot1) + (0\cdot1) \\
+(2\cdot1) + (9\cdot1) + (0\cdot1) \\
+(0\cdot1) + (0\cdot1) + (4\cdot1)
+\end{bmatrix} \\
+&= \frac{1}{3}\begin{bmatrix}1 & 1 & 1\end{bmatrix}
+\begin{bmatrix}3 \\ 11 \\ 4\end{bmatrix}\\
+&= \frac{1}{3}(3 + 11 + 4) \\
+&= \frac{18}{3} \\
+&= 6
+\end{align*}
 
-$$\Sigma = \begin{bmatrix}1\hspace{0.5cm} 2\hspace{0.5cm} 0 \\2\hspace{0.5cm} 9\hspace{0.5cm} 0\\0\hspace{0.5cm} 0\hspace{0.5cm} 4\end{bmatrix} \hspace{0.25cm} \text{ and } \hspace{0.25cm} x = \frac{1}{\sqrt{3}}\begin{bmatrix}1 \\ 1\\ 1\end{bmatrix}$$
-
-\subsubsection*{\normalfont}{$\therefore$ the unit vector $u$ is the following:}
+\subsubsection*{\normalfont}{$\therefore$ the variance in the direction $\frac{1}{\sqrt{3}}\begin{bmatrix}1 \\ 1 \\ 1\end{bmatrix}$ is $6$.} \\
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -217,14 +415,27 @@ $$\Sigma = \begin{bmatrix}1\hspace{0.5cm} 2\hspace{0.5cm} 0 \\2\hspace{0.5cm} 9\
 \subsubsection*{Solution 4}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 4 (c)}
-Let $\Sigma$,
-
-$$\Sigma = \begin{bmatrix}1\hspace{0.5cm} 2\hspace{0.5cm} 0 \\2\hspace{0.5cm} 9\hspace{0.5cm} 0\\0\hspace{0.5cm} 0\hspace{0.5cm} 4\end{bmatrix} $$\\
-
-Find $u$ given it is in the form:
-$$au_{1}^{2}+bu_{2}^{2}+cu_{3}^{2}+du_{1}u_{2}$$
-
-\subsubsection*{\normalfont}{$\therefore$ the unit vector $u$ is the following:}
+Let $\Sigma$ be as above and $u=\begin{bmatrix}u_1 \\ u_2 \\ u_3\end{bmatrix}\in\mathbb{R}^3$.
+\begin{align*}
+u^\top \Sigma u
+&= \begin{bmatrix}u_1 & u_2 & u_3\end{bmatrix}
+\begin{bmatrix}
+1 & 2 & 0 \\
+2 & 9 & 0 \\
+0 & 0 & 4
+\end{bmatrix}
+\begin{bmatrix}u_1 \\ u_2 \\ u_3\end{bmatrix} \\
+&= \begin{bmatrix}u_1 & u_2 & u_3\end{bmatrix}
+\begin{bmatrix}u_1 + 2u_2 \\ 2u_1 + 9u_2 \\ 4u_3\end{bmatrix} \\
+&= u_1(u_1 + 2u_2) + u_2(2u_1 + 9u_2) + u_3(4u_3) \\
+&= u_1^2 + 4u_1u_2 + 9u_2^2 + 4u_3^2.
+\end{align*}
+Hence, we the form $a u_1^2 + b u_2^2 + c u_3^2 + d u_1 u_2$, and $a$,$b$,$c$,$d$ are:
+\[
+a = 1,\quad b = 9,\quad c = 4,\quad d = 4
+\]
+\subsubsection*{\normalfont}{$\therefore$ the variance function is:} 
+$$u^\top\Sigma u = u_1^2 + 4u_1u_2 + 9u_2^2 + 4u_3^2$$
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -237,7 +448,6 @@ $$au_{1}^{2}+bu_{2}^{2}+cu_{3}^{2}+du_{1}u_{2}$$
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 5}
 Let $\Sigma$,
-
 \[
 \Sigma =
 \begin{bmatrix}
@@ -248,8 +458,50 @@ Let $\Sigma$,
     0 & 0 & 0 & 0 & 4 \\
 \end{bmatrix}
 \]
+For any unit direction $u=\begin{bmatrix}u_1\\u_2\\u_3\\u_4\\u_5\end{bmatrix}\in\mathbb{R}^5$ with $\|u\|_2=1$, the variance in direction $u$ is
+\begin{align*}
+\mathrm{Var}(u) &= u^\top \Sigma u \\
+&=
+\begin{bmatrix}
+  u_1 & u_2 & u_3 & u_4 & u_5 
+\end{bmatrix}
+\begin{bmatrix}
+    5 & 0 & 0 & 0 & 0 \\
+    0 & 10 & 0 & 0 & 0 \\
+    0 & 0 & 20 & 0 & 0 \\
+    0 & 0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 0 & 4 
+\end{bmatrix}
+\begin{bmatrix}u_1\\u_2\\u_3\\u_4\\u_5\end{bmatrix}\\
+% First, multiply the matrix \Sigma by the vector u
+&=
+\begin{bmatrix}
+  u_1 & u_2 & u_3 & u_4 & u_5 
+\end{bmatrix}
+\begin{bmatrix}
+    (5u_1 + 0u_2 + 0u_3 + 0u_4 + 0u_5) \\
+    (0u_1 + 10u_2 + 0u_3 + 0u_4 + 0u_5) \\
+    (0u_1 + 0u_2 + 20u_3 + 0u_4 + 0u_5) \\
+    (0u_1 + 0u_2 + 0u_3 + 1u_4 + 0u_5) \\
+    (0u_1 + 0u_2 + 0u_3 + 0u_4 + 4u_5)
+\end{bmatrix} \\
+&=
+\begin{bmatrix}
+  u_1 & u_2 & u_3 & u_4 & u_5 
+\end{bmatrix}
+\begin{bmatrix}
+    5u_1 \\
+    10u_2 \\
+    20u_3 \\
+    1u_4 \\
+    4u_5
+\end{bmatrix}\\
+% Now, perform the final dot product
+&= u_1(5u_1) + u_2(10u_2) + u_3(20u_3) + u_4(1u_4) + u_5(4u_5) \\
+&= 5u_1^2 + 10u_2^2 + 20u_3^2 + u_4^2 + 4u_5^2
+\end{align*}
 
-\subsubsection*{\normalfont}{$\therefore$ the unit vector $u$ is the following:}
+\subsubsection*{\normalfont}{$\therefore$ the direction of maximum variance is $u=\begin{bmatrix}0\\0\\1\\0\\0\end{bmatrix}$ (the third standard basis vector).} \\
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -262,31 +514,31 @@ Let $\Sigma$,
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 6 (a)}
 \subsubsection*{Mean and Variance of $X\cdot u$}
-Let $\Sigma$,
-
-\[
-\mathbb{E}\text{(X)}=
+Let,
+ $$\mu = \mathbb{E}[X] = \begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix} \text{  and   } \Sigma=\operatorname{cov}(X)=
 \begin{bmatrix}
-  1 \\
-  2 \\
-  3
-\end{bmatrix}
-\text{, cov(X)} =
+5 & -3 & 0 \\
+-3 & 5 & 0 \\
+0 & 0 & 4
+\end{bmatrix} \text{  and   } u=\dfrac{1}{\sqrt{3}}\begin{bmatrix}1 \\ 1 \\ 1\end{bmatrix}$$
+\begin{align*}
+\mathbb{E}[X\cdot u] &= u^\top \mu \\
+&= \frac{1}{\sqrt{3}}\begin{bmatrix}1 & 1 & 1\end{bmatrix}\begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix} \\
+&= \frac{1}{\sqrt{3}}(1+2+3) \\
+&= \frac{6}{\sqrt{3}}\\\\
+\operatorname{Var}(X\cdot u) &= u^\top \Sigma u \\
+&= \left(\frac{1}{\sqrt{3}}\begin{bmatrix}1 & 1 & 1\end{bmatrix}\right)
 \begin{bmatrix}
-    5 & -3 & 0 \\
-   -3 & 5 & 0 \\
-    0 & 0 & 4
+5 & -3 & 0 \\
+-3 & 5 & 0 \\
+0 & 0 & 4
 \end{bmatrix}
-\text{, }
-u= \frac{1}{\sqrt{3}}
-\begin{bmatrix}
-  1 \\
-  1 \\
-  1
-\end{bmatrix}
-\]
-\subsubsection*{Find Mean and Variance of $X\cdot u$}
-\subsubsection*{\normalfont}{$\therefore$ The optimal centers are $\{-9, 0, 9\}$ with a minimum cost of $J^*=4$.}
+\left(\frac{1}{\sqrt{3}}\begin{bmatrix}1 \\ 1 \\ 1\end{bmatrix}\right) \\
+&= \frac{1}{3}\begin{bmatrix}1 & 1 & 1\end{bmatrix}\begin{bmatrix}2 \\ 2 \\ 4\end{bmatrix} \\
+&= \frac{1}{3}(2+2+4) \\
+&= \frac{8}{3}
+\end{align*}
+\subsubsection*{\normalfont}{$\therefore$ $\mathbb{E}[X\cdot u]=\frac{6}{\sqrt{3}}$ and $\operatorname{Var}(X\cdot u)=\dfrac{8}{3}$.}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -298,72 +550,48 @@ u= \frac{1}{\sqrt{3}}
 \subsubsection*{Solution 6}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 6 (b)}
-\subsubsection*{Eigenvectors of cov(X)}
-Let $\Sigma$,
+Let
+\[
+\Sigma=\begin{bmatrix}
+5 & -3 & 0\\
+-3 & 5 & 0\\
+0 & 0 & 4
+\end{bmatrix},
+\quad
+v_1=\begin{bmatrix}1\\0\\0\end{bmatrix},\;
+v_2=\begin{bmatrix}0\\1\\0\end{bmatrix},\;
+v_3=\begin{bmatrix}0\\0\\1\end{bmatrix},
+\]
+\[
+v_4=\frac{1}{\sqrt{2}}\begin{bmatrix}1\\1\\0\end{bmatrix},\;
+v_5=\frac{1}{\sqrt{2}}\begin{bmatrix}0\\1\\1\end{bmatrix},\;
+v_6=\frac{1}{\sqrt{2}}\begin{bmatrix}1\\-1\\0\end{bmatrix}
+\]
+Check each candidate via $\Sigma v=\lambda v$:
 
-\[
-\mathbb{E}\text{(X)}=
-\begin{bmatrix}
-  1 \\
-  2 \\
-  3
-\end{bmatrix}
-\text{, cov(X)} =
-\begin{bmatrix}
-    5 & -3 & 0 \\
-   -3 & 5 & 0 \\
-    0 & 0 & 4
-\end{bmatrix}
-\text{, }
-u= \frac{1}{\sqrt{3}}
-\begin{bmatrix}
-  1 \\
-  1 \\
-  1
-\end{bmatrix}
-\]
-\subsubsection*{Find Eigenvectors from list}
-\[
-\begin{bmatrix}
-  1 \\
-  0 \\
-  0
-\end{bmatrix}
-\text{ , }
-\begin{bmatrix}
-  0 \\
-  1 \\
-  0
-\end{bmatrix}
-\text{ , }
-\begin{bmatrix}
-  0 \\
-  0 \\
-  1
-\end{bmatrix}
-\text{ , }
-\frac{1}{\sqrt{2}}
-\begin{bmatrix}
-  1 \\
-  1 \\
-  0
-\end{bmatrix}
-\text{ , }
-\frac{1}{\sqrt{2}}
-\begin{bmatrix}
-  0 \\
-  1 \\
-  1
-\end{bmatrix}
-\text{ , }
-\frac{1}{\sqrt{2}}
-\begin{bmatrix}
-  1 \\
-  -1 \\
-  0
-\end{bmatrix}
-\]
-\subsubsection*{\normalfont}{$\therefore$ The optimal centers are $\{-9, 0, 9\}$ with a minimum cost of $J^*=4$.}
+\begin{align*}
+\Sigma v_1 &= \begin{bmatrix}5\\-3\\0\end{bmatrix}&
+&\neq \lambda \begin{bmatrix}1\\0\\0\end{bmatrix}\;\text{for any }\lambda
+&\quad \Longrightarrow\quad v_1\ \text{is not an eigenvector}.\\[6pt]
+\Sigma v_2 &= \begin{bmatrix}-3\\5\\0\end{bmatrix}&
+&\neq \lambda \begin{bmatrix}0\\1\\0\end{bmatrix}\;\text{for any }\lambda
+&\quad\Longrightarrow\quad v_2\ \text{is not an eigenvector}.\\[6pt]
+\Sigma v_3 &= \begin{bmatrix}0\\0\\4\end{bmatrix}&
+&= 4\begin{bmatrix}0\\0\\1\end{bmatrix}
+&\quad\Longrightarrow\quad v_3\ \text{is an eigenvector with }\lambda=4.\\[6pt]
+\Sigma v_4 &= \frac{1}{\sqrt{2}}\begin{bmatrix}2\\2\\0\end{bmatrix}&
+&= 2\left(\frac{1}{\sqrt{2}}\begin{bmatrix}1\\1\\0\end{bmatrix}\right)
+&\quad\Longrightarrow\quad v_4\ \text{is an eigenvector with }\lambda=2.\\[6pt]
+\Sigma v_5 &= \frac{1}{\sqrt{2}}\begin{bmatrix}-3\\5\\4\end{bmatrix}&
+&\neq \lambda \left(\frac{1}{\sqrt{2}}\begin{bmatrix}0\\1\\1\end{bmatrix}\right)\ \text{for any }\lambda
+&\quad\Longrightarrow\quad v_5\ \text{is not an eigenvector}.\\[6pt]
+\Sigma v_6 &= \frac{1}{\sqrt{2}}\begin{bmatrix}8\\-8\\0\end{bmatrix}&
+&= 8\left(\frac{1}{\sqrt{2}}\begin{bmatrix}1\\-1\\0\end{bmatrix}\right)
+&\quad\Longrightarrow\quad v_6\ \text{is an eigenvector with }\lambda=8.
+\end{align*}
+
+\subsubsection*{\normalfont}{$\therefore$ From the provided list, the eigenvectors are:}
+$$\dfrac{1}{\sqrt{2}}\begin{bmatrix}1\\1\\0\end{bmatrix}\text{ with eigenvalue } 2\text{, } \dfrac{1}{\sqrt{2}}\begin{bmatrix}1\\-1\\0\end{bmatrix}\text{ with eigenvalue }8\text{, and }\begin{bmatrix}0\\0\\1\end{bmatrix} \text{ with eigenvalue } 4$$
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -375,73 +603,12 @@ u= \frac{1}{\sqrt{3}}
 \subsubsection*{Solution 6}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 6 (c)}
-\subsubsection*{Eigenvalues}
-Let $\Sigma$,
+\subsubsection*{Eigenvalues for the eigenvectors from (b)}
+From the computations in (b),
 
-\[
-\mathbb{E}\text{(X)}=
-\begin{bmatrix}
-  1 \\
-  2 \\
-  3
-\end{bmatrix}
-\text{, cov(X)} =
-\begin{bmatrix}
-    5 & -3 & 0 \\
-   -3 & 5 & 0 \\
-    0 & 0 & 4
-\end{bmatrix}
-\text{, }
-u= \frac{1}{\sqrt{3}}
-\begin{bmatrix}
-  1 \\
-  1 \\
-  1
-\end{bmatrix}
-\]
-\subsubsection*{Find Eigenvalues to each of Eigenvectors in part (b)}
-\[
-\begin{bmatrix}
-  1 \\
-  0 \\
-  0
-\end{bmatrix}
-\text{ , }
-\begin{bmatrix}
-  0 \\
-  1 \\
-  0
-\end{bmatrix}
-\text{ , }
-\begin{bmatrix}
-  0 \\
-  0 \\
-  1
-\end{bmatrix}
-\text{ , }
-\frac{1}{\sqrt{2}}
-\begin{bmatrix}
-  1 \\
-  1 \\
-  0
-\end{bmatrix}
-\text{ , }
-\frac{1}{\sqrt{2}}
-\begin{bmatrix}
-  0 \\
-  1 \\
-  1
-\end{bmatrix}
-\text{ , }
-\frac{1}{\sqrt{2}}
-\begin{bmatrix}
-  1 \\
-  -1 \\
-  0
-\end{bmatrix}
-\]
-
-\subsubsection*{\normalfont}{$\therefore$ The optimal centers are $\{-9, 0, 9\}$ with a minimum cost of $J^*=4$.}
+$$\lambda\!\left(\tfrac{1}{\sqrt{2}}\begin{bmatrix}1 \\ 1 \\ 0\end{bmatrix}\right)=2,\quad \text{eigenvalue: } 2$$\\
+$$\lambda\!\left(\tfrac{1}{\sqrt{2}}\begin{bmatrix}1 \\ -1 \\ 0\end{bmatrix}\right)=8,\quad \text{eigenvalue: } 8$$ \\
+$$\lambda\!\left(\begin{bmatrix}0 \\ 0 \\ 1\end{bmatrix}\right)=4, \quad \text{eigenvalue: } 4$$ \\
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -453,14 +620,17 @@ u= \frac{1}{\sqrt{3}}
 \subsubsection*{Solution 6}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 6 (d)}
-\subsubsection*{PCA in 2 dim which direction would it project onto}
-
-\subsubsection*{\normalfont}{$\therefore$ The optimal centers are $\{-9, 0, 9\}$ with a minimum cost of $J^*=4$.}
+\subsubsection*{PCA: 2D projection directions}
+Eigenvalues (descending) are $8,4,2$. Thus the top two principal directions are the eigenvectors for $8$ and $4$:
+\[
+v_1=\frac{1}{\sqrt{2}}\begin{bmatrix}1 \\ -1 \\ 0\end{bmatrix},\qquad
+v_2=\begin{bmatrix}0 \\ 0 \\ 1\end{bmatrix}.
+\]
+\subsubsection*{\normalfont}{$\therefore$ PCA projects onto $\left\{\tfrac{1}{\sqrt{2}}\begin{bmatrix}1 \\ -1 \\ 0\end{bmatrix},\;\begin{bmatrix}0 \\ 0 \\ 1\end{bmatrix}\right\}$}\\
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
-
 
 %------------------
 % Solution for 6 (e)
@@ -468,17 +638,29 @@ u= \frac{1}{\sqrt{3}}
 \subsubsection*{Solution 6}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 6 (e)}
-\subsubsection*{PCA restult from (d) on the point below}
-\[
-x=
-\begin{bmatrix}
-  4 \\
-  0 \\
-  2
-\end{bmatrix}
-\]
+\subsubsection*{2D PCA projection}
+Let, \\
+$$x=\begin{bmatrix}4 \\ 0 \\ 2\end{bmatrix} \quad \mu = \begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix} \quad v_1=\tfrac{1}{\sqrt{2}}\begin{bmatrix}1 \\ -1 \\ 0\end{bmatrix} \quad v_2=\begin{bmatrix}0 \\ 0 \\ 1\end{bmatrix}$$ \\
 
-\subsubsection*{\normalfont}{$\therefore$ The optimal centers are $\{-9, 0, 9\}$ with a minimum cost of $J^*=4$.}
+\begin{enumerate}
+  \item Center $x$ by $\mu$
+  $$x-\mu=\begin{bmatrix}4-1 \\ 0-2 \\ 2-3\end{bmatrix}=\begin{bmatrix}3 \\ -2 \\ -1\end{bmatrix}$$
+  \item Find $y_1$
+  \begin{align*}
+    y_1 &= v_1^\top (x-\mu) \\
+    &= \frac{1}{\sqrt{2}}\begin{bmatrix}1 & -1 & 0\end{bmatrix}\begin{bmatrix}3 \\ -2 \\ -1\end{bmatrix} \\
+    &= \frac{1}{\sqrt{2}}(3+2) \\
+    &= \frac{5}{\sqrt{2}} \\
+  \end{align*}
+  \item Find $y_2$
+  \begin{align*}
+    y_2 &= v_2^\top (x-\mu) \\
+    &= \begin{bmatrix}0 & 0 & 1\end{bmatrix}\begin{bmatrix}3 \\ -2 \\ -1\end{bmatrix} \\
+    &= -1
+  \end{align*}
+\end{enumerate}
+
+\subsubsection*{\normalfont}{$\therefore$ The 2D PCA coordinates are $\begin{bmatrix}\dfrac{5}{\sqrt{2}} \\[2pt] -1\end{bmatrix}$}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -490,10 +672,24 @@ x=
 \subsubsection*{Solution 6}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 6 (f)}
-\subsubsection*{Restult from (e), reconstruct 3d point}
+\subsubsection*{Reconstruction from 2D PCA}
+Let, \\
+$$\mu = \begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix} \quad y_1 = \frac{5}{\sqrt{2}} \quad y_2 = -1 \quad v_1=\tfrac{1}{\sqrt{2}}\begin{bmatrix}1 \\ -1 \\ 0\end{bmatrix} \quad v_2=\begin{bmatrix}0 \\ 0 \\ 1\end{bmatrix}$$ \\
 
+\begin{align*}
+x &= \mu + y_1 v_1 + y_2 v_2\\
+&= \begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix}
++ \frac{5}{\sqrt{2}}\left(\frac{1}{\sqrt{2}}\begin{bmatrix}1 \\ -1 \\ 0\end{bmatrix}\right)
++ (-1)\begin{bmatrix}0 \\ 0 \\ 1\end{bmatrix} \\
+&= \begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix}
++ \frac{5}{2}\begin{bmatrix}1 \\ -1 \\ 0\end{bmatrix}
++ \begin{bmatrix}0 \\ 0 \\ -1\end{bmatrix}
+&= \begin{bmatrix}1+\frac{5}{2} \\ 2-\frac{5}{2} \\ 3-1\end{bmatrix}\\
+&= \begin{bmatrix}\frac{7}{2} \\-\frac{1}{2} \\ 2\end{bmatrix}
+\end{align*}
+\subsubsection*{\normalfont}{$\therefore$ The 3D reconstruction is:}
 
-\subsubsection*{\normalfont}{$\therefore$ The optimal centers are $\{-9, 0, 9\}$ with a minimum cost of $J^*=4$.}
+$$x=\begin{bmatrix}\tfrac{7}{2} \\[2pt] -\tfrac{1}{2} \\ 2\end{bmatrix}$$
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -584,7 +780,7 @@ Z = TSNE(n components=2, perplexity=10.0).fit transform(X)
 \subsubsection*{Solution 8}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Best rank-2 approx to $M$}
-
+Let, \\
 \[
 M =
 \begin{bmatrix}
@@ -604,22 +800,90 @@ M =
     0 & 0 & 1 & 0 & 0\\
     0 & 0 & 0 & 1 & 0
 \end{bmatrix}
+\]\\
+
+\begin{flushleft}
+The SVD of $M$ is given in the form $M = U \Sigma V^T = \sum_{i=1}^4 \sigma_i u_i v_i^T$.
+The best rank-2 approximation, $M_2$, is found by taking the first two terms of the SVD sum, corresponding to the two largest singular values:
+\end{flushleft}
+
+$$M_2 = \sigma_1 u_1 v_1^T + \sigma_2 u_2 v_2^T$$
+
+\begin{flushleft}
+  From the matrices $U$ (columns $u_i$) and $V^T$ (rows $v_i^T$), we identify the required components:
+\end{flushleft}
+
+\[
+M =
+\underbrace{\begin{bmatrix}
+    1 & 0 & 0 & 0\\
+    0 & 0 & 0 & 1\\
+    0 & 0 & 1 & 0\\
+    0 & 1 & 0 & 0
+\end{bmatrix}}_{U}
+\underbrace{\begin{bmatrix}
+    4 & 0 & 0 & 0\\
+    0 & 3 & 0 & 0\\
+    0 & 0 & 2 & 0\\
+    0 & 0 & 0 & 1
+\end{bmatrix}}_{\Sigma_{4\times4}}
+\underbrace{\begin{bmatrix}
+    1 & 0 & 0 & 0 & 0\\
+    0 & 1 & 0 & 0 & 0\\
+    0 & 0 & 1 & 0 & 0\\
+    0 & 0 & 0 & 1 & 0
+\end{bmatrix}}_{V^\top}
 \]
+It follows that:
 
-\subsubsection*{\normalfont}{$\therefore$ The algorithm terminates at the centers $\{-10, -8, 6\}$ with a cost of $J^F=56$.}
+$$\sigma_1 = 4 \quad u_1 = \begin{bmatrix} 1 \\ 0 \\ 0 \\ 0 \end{bmatrix} \quad v_1^T = \begin{bmatrix} 1 & 0 & 0 & 0 & 0 \end{bmatrix}\quad \sigma_2 = 3 \quad u_2 = \begin{bmatrix} 0 \\ 0 \\ 0 \\ 1 \end{bmatrix} \quad v_2^T = \begin{bmatrix} 0 & 1 & 0 & 0 & 0 \end{bmatrix}$$
 
+\begin{flushleft}
+  Now, calculate $M_2$:
+\end{flushleft}
+ 
+\begin{align*}
+  M_2 &= \sigma_1 u_1 v_1^T + \sigma_2 u_2 v_2^T \\
+  &= 4 \left( \begin{bmatrix} 1 \\ 0 \\ 0 \\ 0 \end{bmatrix} \begin{bmatrix} 1 & 0 & 0 & 0 & 0 \end{bmatrix} \right) + 3 \left( \begin{bmatrix} 0 \\ 0 \\ 0 \\ 1 \end{bmatrix} \begin{bmatrix} 0 & 1 & 0 & 0 & 0 \end{bmatrix} \right) \\
+    &= 4 \begin{bmatrix}
+        1 & 0 & 0 & 0 & 0 \\
+        0 & 0 & 0 & 0 & 0 \\
+        0 & 0 & 0 & 0 & 0 \\
+        0 & 0 & 0 & 0 & 0
+        \end{bmatrix} + 3 \begin{bmatrix}
+        0 & 0 & 0 & 0 & 0 \\
+        0 & 0 & 0 & 0 & 0 \\
+        0 & 0 & 0 & 0 & 0 \\
+        0 & 1 & 0 & 0 & 0
+        \end{bmatrix} 
+    = \begin{bmatrix}
+        4 & 0 & 0 & 0 & 0 \\
+        0 & 0 & 0 & 0 & 0 \\
+        0 & 0 & 0 & 0 & 0 \\
+        0 & 3 & 0 & 0 & 0
+        \end{bmatrix}
+\end{align*}
+
+\subsubsection*{\normalfont}{$\therefore$ The best rank-2 approximation to $M$ is:}
+\[
+M_2 = \begin{bmatrix}
+    4 & 0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 & 0 \\
+    0 & 3 & 0 & 0 & 0
+    \end{bmatrix}
+\]
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
-
 %------------------
 % Solution for 9 (a)
 %------------------
 \subsubsection*{Solution 9}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 9 (a)}
-\subsubsection*{SVN}
+\subsubsection*{SVD}
 
 \[
 M =
@@ -628,8 +892,105 @@ M =
     4 & 5 & 6 
 \end{bmatrix}
 \]
+The best rank-1 approximation $M_1$ is given by $M_1 = \sigma_1 u_1 v_1^T$, where $\sigma_1$ is the largest singular value, $u_1$ is the first left singular vector, and $v_1$ is the first right singular vector. We find these components using Python.
 
-\subsubsection*{\normalfont}{$\therefore$ The algorithm terminates at the centers $\{-10, -8, 6\}$ with a cost of $J^F=56$.}
+\subsubsection*{Code: Singular Value Decomposition}
+\begin{lstlisting}
+import numpy as np
+
+# set print sig figs
+np.set_printoptions(precision=4, suppress=True)
+
+# define matrix M
+M = np.array([
+    [1, 2, 3],
+    [4, 5, 6]
+])
+
+# calc "thin" SVD
+# U will be (2, 2), s will be (2,), Vt will be (2, 3)
+U, s, Vt = np.linalg.svd(M, full_matrices=False)
+
+# get the first singular value (sigma_1)
+sigma_1 = s[0]
+
+# get the first left singular vector (u_1)
+# U is (2, 2), so u_1 is the first column
+u_1 = U[:, 0:1]  # Shape (2, 1)
+
+# get the first right singular vector (v_1^T)
+# Vt is (2, 3), so v_1^T is the first row
+v_1_T = Vt[0:1, :]  # Shape (1, 3)
+
+# calc rank-1 approximation
+M_1 = sigma_1 * (u_1 @ v_1_T)
+
+# print results
+print(f"matrix M:\n{M}\n")
+print("-" * 30)
+print(f"sigma_1 (s[0]): {sigma_1:.4f}\n")
+print(f"u_1 (U[:, 0]):\n{u_1}\n")
+print(f"v_1^T (Vt[0, :]):\n{v_1_T}\n")
+print("-" * 30)
+print(f"best rank-1 approximation (M_1):\n{M_1}")
+
+#  results
+"""
+matrix M:
+[[1 2 3]
+ [4 5 6]]
+
+------------------------------
+sigma_1 (s[0]): 9.5080
+
+u_1 (U[:, 0]):
+[[-0.3863]
+ [-0.9224]]
+
+v_1^T (Vt[0, :]):
+[[-0.4287 -0.5663 -0.7039]]
+
+------------------------------
+Best Rank-1 Approximation (M_1):
+[[1.5745 2.0801 2.5857]
+ [3.7594 4.9664 6.1735]]
+"""
+# sigma_1 * u_1 * v_1_T
+# 8.7950 * [[-0.4042]  * [[-0.4287, -0.5663, -0.7038]]
+#          [-0.9147]]
+\end{lstlisting}
+
+\subsubsection*{Calculation}
+From the Python output, we have:
+\begin{itemize}
+    \item $\sigma_1 \approx 8.7950$
+    \item $u_1 \approx \begin{bmatrix} -0.4042 \\ -0.9147 \end{bmatrix}$
+    \item $v_1^T \approx \begin{bmatrix} -0.4287 & -0.5663 & -0.7038 \end{bmatrix}$
+\end{itemize}
+We calculate $M_1 = \sigma_1 (u_1 v_1^T)$:
+\begin{align*}
+    M_1 &\approx 8.7950 \left( \begin{bmatrix} -0.4042 \\ -0.9147 \end{bmatrix} \begin{bmatrix} -0.4287 & -0.5663 & -0.7038 \end{bmatrix} \right) \\
+    &\approx 8.7950 \begin{bmatrix}
+        (-0.4042)(-0.4287) & (-0.4042)(-0.5663) & (-0.4042)(-0.7038) \\
+        (-0.9147)(-0.4287) & (-0.9147)(-0.5663) & (-0.9147)(-0.7038)
+        \end{bmatrix} \\
+    &\approx 8.7950 \begin{bmatrix}
+        0.1733 & 0.2289 & 0.2845 \\
+        0.3921 & 0.5179 & 0.6438
+        \end{bmatrix} \\
+    &\approx \begin{bmatrix}
+        1.5242 & 2.0131 & 2.5024 \\
+        3.4485 & 4.5552 & 5.6621
+        \end{bmatrix}
+\end{align*}
+
+\subsubsection*{\normalfont}{$\therefore$ The best rank-1 approximation to $M$ is:}
+\[
+M_1 \approx \begin{bmatrix}
+    1.524 & 2.013 & 2.502 \\
+    3.449 & 4.555 & 5.662
+    \end{bmatrix}
+\]
 
 
 \noindent\rule{\textwidth}{0.4pt}\\
@@ -642,9 +1003,30 @@ M =
 \subsubsection*{Solution 9}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 9 (b)}
-\subsubsection*{idk proof: $uv^{T}=ab^T$}
+\subsubsection*{Uniqueness}
+The decomposition $M = u v^T$ for a rank-1 matrix is \textbf{not unique}.
 
-\subsubsection*{\normalfont}{$\therefore$ The algorithm terminates at the centers $\{-10, -8, 6\}$ with a cost of $J^F=56$.}
+\subsubsection*{Proof}
+Let $M = u v^T$, where $u \in \mathbb{R}^{p}$ and $v \in \mathbb{R}^{q}$.
+Let $c$ be any non-zero scalar (i.e., $c \in \mathbb{R}, c \neq 0$).
+Now, define two new vectors:
+\begin{itemize}
+    \item $a = c u \in \mathbb{R}^{p}$
+    \item $b = \left(\frac{1}{c}\right) v \in \mathbb{R}^{q}$
+\end{itemize}
+If $c \neq 1$, then $a \neq u$ and $b \neq v$. Thus, $(a, b)$ is a different pair of vectors from $(u, v)$.
+Now, let's compute the rank-1 matrix $a b^T$:
+\begin{align*}
+    a b^T &= (c u) \left( \frac{1}{c} v \right)^T \\
+    &= (c u) \left( \frac{1}{c} v^T \right) \quad \text{(since } (k v)^T = k v^T \text{ for a scalar } k \text{)} \\
+    &= c \left( \frac{1}{c} \right) (u v^T) \quad \text{(by associativity of scalar multiplication)} \\
+    &= 1 \cdot (u v^T) \\
+    &= u v^T \\
+    &= M
+\end{align*}
+We have shown that $a b^T = u v^T = M$ even though $a \neq u$ and $b \neq v$.
+
+\subsubsection*{\normalfont}{$\therefore$ The decomposition is not unique. For any non-zero scalar $c$, the pair $(cu, \frac{1}{c}v)$ will produce the same rank-1 matrix.}
 
 
 \noindent\rule{\textwidth}{0.4pt}\\
