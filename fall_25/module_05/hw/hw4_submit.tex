@@ -104,7 +104,7 @@ The unit vector $u$ is $u = \frac{x}{\|x\|_2}$.
 
 \subsubsection*{\normalfont}{$\therefore$ the unit vector $u$ is the following:}
 \begin{align*}
-    u = \frac{1}{13} \begin{bmatrix}-4 \\ 12 \\ 3\end{bmatrix} = \begin{bmatrix} -4/13 \\ 12/13 \\ 3/13 \end{bmatrix}
+    u = \frac{1}{13} \begin{bmatrix}-4 \\ 12 \\ 3\end{bmatrix} = \begin{bmatrix} \frac{-4}{13}  \\\\ \frac{12}{13} \\\\ \frac{3}{13} \end{bmatrix}
 \end{align*}
 
 \noindent\rule{\textwidth}{0.4pt}\\
@@ -117,7 +117,6 @@ The unit vector $u$ is $u = \frac{x}{\|x\|_2}$.
 \subsection*{Solution 1}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 1 (c)}
-\subsubsection*{Plot}
 Let $x = \begin{bmatrix}1 \\ 1 \\ \vdots \\ 1\end{bmatrix}$ such that $|x| = d$.
 This vector consists of $d$ entries, each equal to 1. We find its $L_2$-norm:
 \begin{align*}
@@ -129,7 +128,7 @@ The unit vector $u$ is $u = \frac{x}{\|x\|_2}$.
 
 \subsubsection*{\normalfont}{$\therefore$ the unit vector $u$ is the following:}
 \begin{align*}
-    u = \frac{1}{\sqrt{d}} \begin{bmatrix}1 \\ 1 \\ \vdots \\ 1\end{bmatrix} = \begin{bmatrix} 1/\sqrt{d} \\ 1/\sqrt{d} \\ \vdots \\ 1/\sqrt{d} \end{bmatrix}
+    u = \frac{1}{\sqrt{d}} \begin{bmatrix}1 \\ 1 \\ \vdots \\ 1\end{bmatrix} = \begin{bmatrix} \frac{1}{\sqrt{d}} \\ \frac{1}{\sqrt{d}} \\ \vdots \\ \frac{1}{\sqrt{d}} \end{bmatrix}
 \end{align*}
 
 \noindent\rule{\textwidth}{0.4pt}\\
@@ -145,9 +144,11 @@ The unit vector $u$ is $u = \frac{x}{\|x\|_2}$.
 
 Given point $x = \begin{bmatrix}-2 \\ 4\end{bmatrix}$ and direction $u = \begin{bmatrix}1 \\ 2\end{bmatrix}$.
 The projection of vector $x$ onto vector $u$ is given by the formula:
-$\text{proj}_u x = \frac{x \cdot u}{\|u\|^2} u$.
+$$\text{proj}_u x = \frac{x \cdot u}{\|u\|^2} u$$
+\begin{flushleft}
+  First, calculate the dot product $x \cdot u$:
+\end{flushleft}
 
-First, calculate the dot product $x \cdot u$:
 \begin{align*}
     x \cdot u &= (-2)(1) + (4)(2) \\
               &= -2 + 8 \\
@@ -166,7 +167,7 @@ Now, substitute these values into the projection formula:
 
 \subsubsection*{\normalfont}{$\therefore$ the projection of point $x \in \mathbb{R}^2$ onto the direction of $u$ is: }
 \begin{align*}
-    \text{proj}_u x &= \begin{bmatrix} 6/5 \\ 12/5 \end{bmatrix} = \begin{bmatrix} 1.2 \\ 2.4 \end{bmatrix}
+    \text{proj}_u x &= \begin{bmatrix} \frac{6}{5} \\\\ \frac{12}{5} \end{bmatrix} = \begin{bmatrix} 1.2 \\ 2.4 \end{bmatrix}
 \end{align*}
 
 \noindent\rule{\textwidth}{0.4pt}\\
@@ -255,7 +256,7 @@ It follows that:
 
 \subsubsection*{\normalfont}{$\therefore$ the unit vector $u$ is the following:}
 
-$$u = \begin{bmatrix} -\frac{4}{5} \\[2pt] \frac{3}{5} \end{bmatrix}$$
+$$u = \begin{bmatrix} -\frac{4}{5} \\[4pt] \frac{3}{5} \end{bmatrix}$$
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -315,9 +316,9 @@ A direction orthogonal to $x$ is $v=\begin{bmatrix}3 \\ 4\end{bmatrix}$ since $x
 
 \subsubsection*{\normalfont}{$\therefore$ the unit vector(s) $u$ are the following:}
 
-$$u^{(1)} = \begin{bmatrix}\frac{3}{5} \\[2pt] \frac{4}{5}\end{bmatrix}
+$$u^{(1)} = \begin{bmatrix}\frac{3}{5} \\[4pt] \frac{4}{5}\end{bmatrix}
 \quad \text{and} \quad
-u^{(2)} = \begin{bmatrix}-\frac{3}{5} \\[2pt] -\frac{4}{5}\end{bmatrix}$$
+u^{(2)} = \begin{bmatrix}-\frac{3}{5} \\[4pt] -\frac{4}{5}\end{bmatrix}$$
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -504,7 +505,8 @@ For any unit direction $u=\begin{bmatrix}u_1\\u_2\\u_3\\u_4\\u_5\end{bmatrix}\in
 &= 5u_1^2 + 10u_2^2 + 20u_3^2 + u_4^2 + 4u_5^2
 \end{align*}
 
-\subsubsection*{\normalfont}{$\therefore$ the direction of maximum variance is $u=\begin{bmatrix}0\\0\\1\\0\\0\end{bmatrix}$ (the third standard basis vector).} \\
+\subsubsection*{\normalfont}{$\therefore$ the direction of maximum variance is: 
+$$u=\begin{bmatrix}0\\0\\1\\0\\0\end{bmatrix}$$ 
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -663,7 +665,7 @@ $$x=\begin{bmatrix}4 \\ 0 \\ 2\end{bmatrix} \quad \mu = \begin{bmatrix}1 \\ 2 \\
   \end{align*}
 \end{enumerate}
 
-\subsubsection*{\normalfont}{$\therefore$ The 2D PCA coordinates are $\begin{bmatrix}\dfrac{5}{\sqrt{2}} \\[2pt] -1\end{bmatrix}$}
+\subsubsection*{\normalfont}{$\therefore$ The 2D PCA coordinates are $\begin{bmatrix}\dfrac{5}{\sqrt{2}} \\[10pt] -1\end{bmatrix}$}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -686,13 +688,13 @@ x &= \mu + y_1 v_1 + y_2 v_2\\
 + (-1)\begin{bmatrix}0 \\ 0 \\ 1\end{bmatrix} \\
 &= \begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix}
 + \frac{5}{2}\begin{bmatrix}1 \\ -1 \\ 0\end{bmatrix}
-+ \begin{bmatrix}0 \\ 0 \\ -1\end{bmatrix}
++ \begin{bmatrix}0 \\ 0 \\ -1\end{bmatrix}\\
 &= \begin{bmatrix}1+\frac{5}{2} \\ 2-\frac{5}{2} \\ 3-1\end{bmatrix}\\
 &= \begin{bmatrix}\frac{7}{2} \\-\frac{1}{2} \\ 2\end{bmatrix}
 \end{align*}
 \subsubsection*{\normalfont}{$\therefore$ The 3D reconstruction is:}
 
-$$x=\begin{bmatrix}\tfrac{7}{2} \\[2pt] -\tfrac{1}{2} \\ 2\end{bmatrix}$$
+$$x=\begin{bmatrix}\tfrac{7}{2} \\[6pt] -\tfrac{1}{2} \\[6pt] 2\end{bmatrix}$$
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -1211,15 +1213,18 @@ M_1 \approx \begin{bmatrix}
 \subsubsection*{Solution 9 (b)}
 \subsubsection*{Uniqueness}
 Show the decomposition $M = u v^T$ for a rank-1 matrix is not unique.
-
+\begin{flushleft}
 Assume $M = u v^T$, where $u \in \mathbb{R}^{p}$ and $v \in \mathbb{R}^{q}$.
 Let $c$ be any non-zero scalar (i.e., $c \in \mathbb{R}, c \neq 0$).
 Let $a$ and $b$ be vectors such that:
+\end{flushleft}
 
 $$a = c u \in \mathbb{R}^{p} \text{ and }b = \left(\frac{1}{c}\right) v \in \mathbb{R}^{q}$$
-
+\begin{flushleft}
 If $c \neq 1$, then $a \neq u$ and $b \neq v$. It follows that $(a, b)$ is a different pair of vectors from $(u, v)$.
-Noext, compute the rank-1 matrix $a b^T$:
+Next, compute the rank-1 matrix $a b^T$:
+\end{flushleft}
+
 \begin{align*}
     a b^T &= (c u) \left( \frac{1}{c} v \right)^T \\
     &= (c u) \left( \frac{1}{c} v^T \right) \\
@@ -1407,119 +1412,6 @@ print(f"best rank-1 approximation (M_1):\n{M_1}")
 \noindent\rule{\textwidth}{0.4pt}
 
 \end{document}
-%------------------
-% Solution for 7 (a)
-%------------------
-\subsubsection*{Solution 7}
-\noindent\rule{\textwidth}{0.4pt}
-\subsubsection*{Solution 7 (a)}
-\subsubsection*{Code}
-\begin{lstlisting}
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.cluster import hierarchy
-from sklearn.cluster import KMeans
-from collections import defaultdict
-
-# set plot figure size for better readability of the dendrogram
-plt.rcParams['figure.figsize'] = (8, 10)
-\end{lstlisting}
-
-\subsubsection*{Plot: PCA projection $\mathbb{R}^{85}$ to $\mathbb{R}^{2}$}
-
-\begin{figure}[h]
-  \includegraphics[height=0.75\textheight,width=\textwidth]{pca_projection.png}
-  \caption{PCA projection $\mathbb{R}^{85}$ to $\mathbb{R}^{2}$}
-\end{figure}
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\newpage
-
-\begin{table}[h]
-\centering
-\caption{Visualization Results and Distortion Analysis}
-\label{tab:distortion_analysis}
-
-\begin{tabular}{llr}
-\toprule
-\textbf{Plot} & \textbf{Description} & \textbf{Average Distortion} \\
-\midrule
-\texttt{pca\_projection.png} & PCA Projection & 1.8313 \\
-\texttt{t\_sne\_perplexity5.png} & t-SNE (Perplexity=5) & 1.8602 \\
-\texttt{t\_sne\_perplexity10.png} & t-SNE (Perplexity=10) & 1.7101 \\
-\texttt{t\_sne\_perplexity25.png} & t-SNE (Perplexity=25) & 1.5683 \\
-\texttt{t\_sne\_perplexity49.png} & t-SNE (Perplexity=49) & 1.7370 \\
-\bottomrule
-\end{tabular}
-
-\vspace{1em}
-
-\begin{tabular}{p{\textwidth}}
-\textbf{Summary:} The embedding with the lowest average distortion is t-SNE (Perplexity=25) with a minimum distortion of 1.5683.
-\end{tabular}
-\end{table}
-
-
-%------------------
-% Solution for 7 (b)
-%------------------
-\subsubsection*{Solution 7}
-\noindent\rule{\textwidth}{0.4pt}
-\subsubsection*{Solution 7 (b)}
-\subsubsection*{Code: t-SNE algorithm}
-\begin{lstlisting}
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.cluster import hierarchy
-from sklearn.cluster import KMeans
-from collections import defaultdict
-from sklearn.manifold import TSNE
-## note set seed so perplexity results don't vary
-Z = TSNE(n components=2, perplexity=10.0).fit transform(X)
-\end{lstlisting}
-
-\begin{enumerate}
-  \item t-SNE algorithm: Perplexity = 5
-  \item t-SNE algorithm: Perplexity = 10
-  \item t-SNE algorithm: Perplexity = 25
-  \item t-SNE algorithm: Perplexity = 50
-\end{enumerate}
-
-%------------------
-% Solution for 7 (c)
-%------------------
-\subsubsection*{Solution 7}
-\noindent\rule{\textwidth}{0.4pt}
-\subsubsection*{Solution 7 (c)}
-\subsubsection*{Evaluate t-SNE algorithm}
-\subsubsection*{Code: t-SNE algorithm}
-\begin{lstlisting}
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.cluster import hierarchy
-from sklearn.cluster import KMeans
-from collections import defaultdict
-from sklearn.manifold import TSNE
-## note set seed so perplexity results don't vary
-Z = TSNE(n components=2, perplexity=10.0).fit transform(X)
-\end{lstlisting}
-
-\begin{enumerate}
-  \item define $D_{ij} = ||x_i - x_j||$ \quad $\hat{D}_{ij} = ||z_i - z_j||$
-  \item define scaling factor: $c = np.mean(D)/np.mean(\hat{D})$ where np.mean is the average over all $n^2$ of the matrix
-  \item define multiplicative factor by which the distance between $x_i$ and $x_j$ is distorted
-  $$\Delta_{xj} = \text{max}\frac{D_{ij}}{c\hat{D_{ij}}},\frac{c\hat{D_{ij}}}{{D_{ij}}}\quad \test{this ratio is always \geq 1 and avgerage distortion is mean}\Delta$$
-  \item compute averge distortion for PCA
-  \item compute average distortion t-SNE for Perplexity = 5
-  \item compute average distortion t-SNE for Perplexity = 10
-  \item compute average distortion t-SNE for Perplexity = 25
-  \item compute average distortion t-SNE for Perplexity = 50
-  \item comment on which model preforms the best
-\end{enumerate}
-
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\newpage
 
 \begin{comment}
 %------------------
