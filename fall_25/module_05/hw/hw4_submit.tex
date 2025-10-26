@@ -25,6 +25,9 @@
 \usepackage{caption}
 \usepackage{graphicx}
 \usepackage{siunitx}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage{array}
 
 
 % Set page geometry
@@ -695,82 +698,299 @@ $$x=\begin{bmatrix}\tfrac{7}{2} \\[2pt] -\tfrac{1}{2} \\ 2\end{bmatrix}$$
 
 \newpage
 
-%------------------
-% Solution for 7 (a)
-%------------------
 \subsubsection*{Solution 7}
 \noindent\rule{\textwidth}{0.4pt}
 \subsubsection*{Solution 7 (a)}
-\subsubsection*{Code}
-\begin{lstlisting}
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.cluster import hierarchy
-from sklearn.cluster import KMeans
-from collections import defaultdict
+\subsubsection*{PCA 2D Projection}
 
-# set plot figure size for better readability of the dendrogram
-plt.rcParams['figure.figsize'] = (8, 10)
-\end{lstlisting}
-
-\subsubsection*{Plot: position of each animal(each label with name)}
-
-\subsubsection*{\normalfont}{$\therefore$ The algorithm terminates at the centers $\{-10, -8, 6\}$ with a cost of $J^F=56$.}
-
+\begin{figure}[h]
+  \includegraphics[height=0.75\textheight,width=\textwidth]{pca_projection.png}
+  \caption{PCA projection $\mathbb{R}^{85}$ to $\mathbb{R}^{2}$}
+\end{figure}
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
 
-%------------------
-% Solution for 7 (b)
-%------------------
+\subsubsection*{Solution 7}
+\noindent\rule{\textwidth}{0.4pt}
+\subsubsection*{Solution 7 (a)}
+\subsubsection*{PCA Code}
+\begin{lstlisting}
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
+from scipy.spatial.distance import pdist, squareform
+import re 
+
+# set plot figure size for better readability 
+plt.rcParams['figure.figsize'] = (6, 8)
+
+def load_animal_names(filepath='classes.txt'):
+    with open(filepath, 'r') as f:
+        names = [line.strip() for line in f.readlines()]
+        names = [name.split('.')[-1].replace('+', ' ') for name in names]
+    return(names)
+
+def main():
+    # read predicate-matrix-continuous.txt
+    X = np.loadtxt('predicate-matrix-continuous.txt')
+    # read classes.txt
+    animal_names = load_animal_names('classes.txt')
+    
+    # initalize list to hold embeddings and their titles
+    embeddings_to_plot = []
+    # pca model
+    pca = PCA(n_components=2, random_state=42)
+    Z_pca = pca.fit_transform(X)
+    embeddings_to_plot.append(('PCA Projection', Z_pca))
+\end{lstlisting}
+
+\newpage
+
 \subsubsection*{Solution 7}
 \noindent\rule{\textwidth}{0.4pt}
 \subsubsection*{Solution 7 (b)}
-\subsubsection*{Code: t-SNE algorithm}
+\subsubsection*{t-SNE Code}
 \begin{lstlisting}
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.cluster import hierarchy
-from sklearn.cluster import KMeans
-from collections import defaultdict
+from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
-## note set seed so perplexity results don't vary
-Z = TSNE(n components=2, perplexity=10.0).fit transform(X)
+from scipy.spatial.distance import pdist, squareform
+import re 
+
+# set plot figure size for better readability 
+plt.rcParams['figure.figsize'] = (6, 8)
+
+def load_animal_names(filepath='classes.txt'):
+    with open(filepath, 'r') as f:
+        names = [line.strip() for line in f.readlines()]
+        names = [name.split('.')[-1].replace('+', ' ') for name in names]
+    return(names)
+
+def main():
+    # read predicate-matrix-continuous.txt
+    X = np.loadtxt('predicate-matrix-continuous.txt')
+    # read classes.txt
+    animal_names = load_animal_names('classes.txt')
+    
+    # initalize list to hold embeddings and their titles
+    embeddings_to_plot = []
+    
+    # note: 49 ~ 50 its just python indexing
+    perplexities = [5, 10, 25, 49]
+    for p in perplexities:
+        print(f"Running t-SNE with perplexity={p}...")
+        tsne = TSNE(n_components=2, perplexity=p, random_state=42, 
+                    init='pca', learning_rate='auto')
+        Z_tsne = tsne.fit_transform(X)
+        embeddings_to_plot.append((f't-SNE (Perplexity={p})', Z_tsne))
 \end{lstlisting}
 
-\subsubsection*{t-SNE algorithm: Perplexity = 5}
-\subsubsection*{t-SNE algorithm: Perplexity = 10}
-\subsubsection*{t-SNE algorithm: Perplexity = 25}
-\subsubsection*{t-SNE algorithm: Perplexity = 50}
+\newpage
 
-\subsubsection*{Plot: position of each animal(each label with name)}
-
-\subsubsection*{\normalfont}{$\therefore$ The algorithm terminates at the centers $\{-10, -8, 6\}$ with a cost of $J^F=56$.}
-
-%------------------
-% Solution for 7 (c)
-%------------------
 \subsubsection*{Solution 7}
 \noindent\rule{\textwidth}{0.4pt}
 \subsubsection*{Solution 7 (c)}
-\subsubsection*{Code: t-SNE algorithm}
+\subsubsection*{Evaluate Models}
+
+\noindent\rule{\textwidth}{0.4pt}
+\begin{table}[h]
+\centering
+
+%\label{tab:distortion_analysis}
+
+\begin{tabular}{llr}
+\toprule
+\textbf{Plot} & \textbf{Description} & \textbf{Average Distortion} \\
+\midrule
+\texttt{pca\_projection.png} & PCA Projection & 1.8313 \\
+\texttt{t\_sne\_perplexity5.png} & t-SNE (Perplexity=5) & 1.8602 \\
+\texttt{t\_sne\_perplexity10.png} & t-SNE (Perplexity=10) & 1.7101 \\
+\texttt{t\_sne\_perplexity25.png} & t-SNE (Perplexity=25) & 1.5683 \\
+\texttt{t\_sne\_perplexity49.png} & t-SNE (Perplexity=49) & 1.7370 \\
+\bottomrule
+\end{tabular}
+
+\vspace{1em}
+\caption[Distortion Analysis]{The embedding with the lowest average distortion is t-SNE (Perplexity=25) with a minimum distortion of 1.5683.}
+\label{tab:distortion_analysis}
+
+\end{table}
+
+\newpage
+
+\subsubsection*{Solution 7}
+\noindent\rule{\textwidth}{0.4pt}
+\subsubsection*{Solution 7 (c)}
+\subsubsection*{Distortion and Plot Code}
 \begin{lstlisting}
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.cluster import hierarchy
-from sklearn.cluster import KMeans
-from collections import defaultdict
+from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
-## note set seed so perplexity results don't vary
-Z = TSNE(n components=2, perplexity=10.0).fit transform(X)
+from scipy.spatial.distance import pdist, squareform
+import re 
+
+# set plot figure size for better readability 
+plt.rcParams['figure.figsize'] = (6, 8)
+
+def load_animal_names(filepath='classes.txt'):
+    with open(filepath, 'r') as f:
+        names = [line.strip() for line in f.readlines()]
+        names = [name.split('.')[-1].replace('+', ' ') for name in names]
+    return(names)
+
+def compute_distortion(X_original, Z_embedded):
+    # calc pairwise distances for original space (n*(n-1)/2 vector)
+    D = pdist(X_original, metric='euclidean')
+
+    # calc pairwise distances for embedded space (n*(n-1)/2 vector)
+    D_hat = pdist(Z_embedded, metric='euclidean')
+    
+    # add a small epsilon to avoid division by zero
+    epsilon = 1e-12
+    D[D == 0] = epsilon
+    D_hat[D_hat == 0] = epsilon
+    
+    # calc scaling factor c (sum of all pairwise distances)
+    c = np.sum(D) / np.sum(D_hat)
+    
+    # calc scaled embedded distances
+    scaled_D_hat = c * D_hat
+    
+    # calculate distortion for each pair (i, j) with i < j
+    Delta_values = np.maximum(D / scaled_D_hat, scaled_D_hat / D)
+    
+    return(np.mean(Delta_values))
+
+def main():
+    # read predicate-matrix-continuous.txt
+    X = np.loadtxt('predicate-matrix-continuous.txt')
+    # read classes.txt
+    animal_names = load_animal_names('classes.txt')
+    
+    # initalize list to hold embeddings and their titles
+    embeddings_to_plot = []
+    
+    for title, Z in embeddings_to_plot:
+        # set plt configs
+        fig = plt.figure(figsize=(7.5, 9))
+        grid_shape = (3, 3)
+        ax_plot = plt.subplot2grid(grid_shape, (0, 0), rowspan=2, colspan=3)
+        ax_legend = plt.subplot2grid(grid_shape, (2, 0), rowspan=1, colspan=3)
+        
+        # plot data
+        for j, name in enumerate(animal_names):
+            color = colors[j]
+            marker = markers[j % len(markers)]
+            
+            ax_plot.scatter(Z[j, 0], Z[j, 1], 
+                            color=color, 
+                            marker=marker, 
+                            label=name, 
+                            s=40) # s=40 is a reasonable marker size
+        
+        ax_plot.set_title(title, fontsize=16)
+        ax_plot.set_xlabel('Component 1')
+        ax_plot.set_ylabel('Component 2')
+        ax_plot.grid(True)
+        
+        # set legend settings
+        handles, labels = ax_plot.get_legend_handles_labels()
+        ax_legend.axis('off')
+        ax_legend.legend(handles, labels, loc='center', ncol=4, fontsize=9)
+        
+        # save plot
+        # Use tight_layout to ensure no overlap
+        plt.tight_layout()
+        clean_title = title.lower()
+        clean_title = re.sub(r'[^\w\s-]', '', clean_title) 
+        clean_title = re.sub(r'[\s-]+', '_', clean_title).strip('_')
+        filename = f"{clean_title}.png"
+        
+        plt.savefig(filename, dpi=150) # 150 dpi is good for print
+        plt.close(fig) # Close the figure to free memory
+
+    # calc distortion
+    distortions = {}
+    
+    # store all embeddings in a dict for distortion calculation
+    all_embeddings_dict = {title: Z for title, Z in embeddings_to_plot}
+        
+    for key, Z in all_embeddings_dict.items():
+        distortion = compute_distortion(X, Z)
+        distortions[key] = distortion
+        print(f"{key} average distortion: {distortion:.4f}")
+        
+    best_embedding = min(distortions, key=distortions.get)
+    min_distortion = distortions[best_embedding]
+    
+    print(f"lowest average distortion is: {best_embedding}")
+    print(f"minimum distortion: {min_distortion:.4f}")
+
 \end{lstlisting}
 
-\subsubsection*{idk wtf do, so much in this part}
-\subsubsection*{Plot 1}
-\subsubsection*{Plot 2}
+\newpage
 
+
+\subsubsection*{Solution 7}
+\noindent\rule{\textwidth}{0.4pt}
+\subsubsection*{Solution 7 (c)}
+\subsubsection*{PCA 2D Projection}
+
+\begin{figure}[h]
+  \includegraphics[height=0.75\textheight,width=\textwidth]{pca_projection.png}
+  \caption{PCA projection $\mathbb{R}^{85}$ to $\mathbb{R}^{2}$}
+\end{figure}
 \noindent\rule{\textwidth}{0.4pt}\\
+
+\subsubsection*{Solution 7}
+\noindent\rule{\textwidth}{0.4pt}
+\subsubsection*{Solution 7 (c)}
+\subsubsection*{t-SNE: Perplexity 5}
+
+\begin{figure}[h]
+  \includegraphics[height=0.75\textheight,width=\textwidth]{t_sne_perplexity5.png}
+  \caption{t-SNE plot with perplexity=5}
+\end{figure}
+
+\newpage
+
+\subsubsection*{Solution 7}
+\noindent\rule{\textwidth}{0.4pt}
+\subsubsection*{Solution 7 (c)}
+\subsubsection*{t-SNE: Perplexity 10}
+
+\begin{figure}[h]
+  \includegraphics[height=0.75\textheight,width=\textwidth]{t_sne_perplexity10.png}
+  \caption{t-SNE plot with perplexity=10}
+\end{figure}
+
+\newpage
+
+\subsubsection*{Solution 7}
+\noindent\rule{\textwidth}{0.4pt}
+\subsubsection*{Solution 7 (c)}
+\subsubsection*{t-SNE: Perplexity 25}
+
+\begin{figure}[h]
+  \includegraphics[height=0.75\textheight,width=\textwidth]{t_sne_perplexity25.png}
+  \caption{t-SNE plot with perplexity=25}
+\end{figure}
+
+\newpage
+
+\subsubsection*{Solution 7}
+\noindent\rule{\textwidth}{0.4pt}
+\subsubsection*{Solution 7 (c)}
+\subsubsection*{t-SNE: Perplexity 49}
+
+\begin{figure}[h]
+  \includegraphics[height=0.75\textheight,width=\textwidth]{t_sne_perplexity49.png}
+  \caption{t-SNE plot with perplexity=49. Note: 49 and not 50 because of python indexing starts at 0}
+\end{figure}
 
 \newpage
 
@@ -877,6 +1097,7 @@ M_2 = \begin{bmatrix}
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
+
 %------------------
 % Solution for 9 (a)
 %------------------
@@ -885,16 +1106,7 @@ M_2 = \begin{bmatrix}
 \subsubsection*{Solution 9 (a)}
 \subsubsection*{SVD}
 
-\[
-M =
-\begin{bmatrix}
-    1 & 2 & 3 \\
-    4 & 5 & 6 
-\end{bmatrix}
-\]
-The best rank-1 approximation $M_1$ is given by $M_1 = \sigma_1 u_1 v_1^T$, where $\sigma_1$ is the largest singular value, $u_1$ is the first left singular vector, and $v_1$ is the first right singular vector. We find these components using Python.
-
-\subsubsection*{Code: Singular Value Decomposition}
+\subsubsection*{Python Code}
 \begin{lstlisting}
 import numpy as np
 
@@ -908,19 +1120,17 @@ M = np.array([
 ])
 
 # calc "thin" SVD
-# U will be (2, 2), s will be (2,), Vt will be (2, 3)
 U, s, Vt = np.linalg.svd(M, full_matrices=False)
 
 # get the first singular value (sigma_1)
 sigma_1 = s[0]
 
 # get the first left singular vector (u_1)
-# U is (2, 2), so u_1 is the first column
-u_1 = U[:, 0:1]  # Shape (2, 1)
+u_1 = U[:, 0:1]  
 
 # get the first right singular vector (v_1^T)
-# Vt is (2, 3), so v_1^T is the first row
-v_1_T = Vt[0:1, :]  # Shape (1, 3)
+
+v_1_T = Vt[0:1, :] 
 
 # calc rank-1 approximation
 M_1 = sigma_1 * (u_1 @ v_1_T)
@@ -933,41 +1143,37 @@ print(f"u_1 (U[:, 0]):\n{u_1}\n")
 print(f"v_1^T (Vt[0, :]):\n{v_1_T}\n")
 print("-" * 30)
 print(f"best rank-1 approximation (M_1):\n{M_1}")
-
-#  results
-"""
-matrix M:
-[[1 2 3]
- [4 5 6]]
-
-------------------------------
-sigma_1 (s[0]): 9.5080
-
-u_1 (U[:, 0]):
-[[-0.3863]
- [-0.9224]]
-
-v_1^T (Vt[0, :]):
-[[-0.4287 -0.5663 -0.7039]]
-
-------------------------------
-Best Rank-1 Approximation (M_1):
-[[1.5745 2.0801 2.5857]
- [3.7594 4.9664 6.1735]]
-"""
-# sigma_1 * u_1 * v_1_T
-# 8.7950 * [[-0.4042]  * [[-0.4287, -0.5663, -0.7038]]
-#          [-0.9147]]
 \end{lstlisting}
 
-\subsubsection*{Calculation}
-From the Python output, we have:
-\begin{itemize}
-    \item $\sigma_1 \approx 8.7950$
-    \item $u_1 \approx \begin{bmatrix} -0.4042 \\ -0.9147 \end{bmatrix}$
-    \item $v_1^T \approx \begin{bmatrix} -0.4287 & -0.5663 & -0.7038 \end{bmatrix}$
-\end{itemize}
-We calculate $M_1 = \sigma_1 (u_1 v_1^T)$:
+\newpage
+
+%------------------
+% Solution for 9 (a)
+%------------------
+\subsubsection*{Solution 9}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 9 (a)}
+
+\subsubsection*{Compute $M_1$}
+\[
+M =
+\begin{bmatrix}
+    1 & 2 & 3 \\
+    4 & 5 & 6 
+\end{bmatrix}
+\]
+The best rank-1 approximation $M_1$ is: 
+$$M_1 = \sigma_1 u_1 v_1^T$$
+\begin{flushleft}
+  From the Python output, we have:
+\end{flushleft}
+
+$$\sigma_1 \approx 8.7950 \quad u_1 \approx \begin{bmatrix} -0.4042 \\ -0.9147 \end{bmatrix} \quad v_1^T \approx \begin{bmatrix} -0.4287 & -0.5663 & -0.7038 \end{bmatrix}$$
+
+\begin{flushleft}
+  Now, calculate $M_1 = \sigma_1 (u_1 v_1^T)$:
+\end{flushleft}
+
 \begin{align*}
     M_1 &\approx 8.7950 \left( \begin{bmatrix} -0.4042 \\ -0.9147 \end{bmatrix} \begin{bmatrix} -0.4287 & -0.5663 & -0.7038 \end{bmatrix} \right) \\
     &\approx 8.7950 \begin{bmatrix}
@@ -1004,30 +1210,312 @@ M_1 \approx \begin{bmatrix}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 9 (b)}
 \subsubsection*{Uniqueness}
-The decomposition $M = u v^T$ for a rank-1 matrix is \textbf{not unique}.
+Show the decomposition $M = u v^T$ for a rank-1 matrix is not unique.
 
-\subsubsection*{Proof}
-Let $M = u v^T$, where $u \in \mathbb{R}^{p}$ and $v \in \mathbb{R}^{q}$.
+Assume $M = u v^T$, where $u \in \mathbb{R}^{p}$ and $v \in \mathbb{R}^{q}$.
 Let $c$ be any non-zero scalar (i.e., $c \in \mathbb{R}, c \neq 0$).
-Now, define two new vectors:
-\begin{itemize}
-    \item $a = c u \in \mathbb{R}^{p}$
-    \item $b = \left(\frac{1}{c}\right) v \in \mathbb{R}^{q}$
-\end{itemize}
-If $c \neq 1$, then $a \neq u$ and $b \neq v$. Thus, $(a, b)$ is a different pair of vectors from $(u, v)$.
-Now, let's compute the rank-1 matrix $a b^T$:
+Let $a$ and $b$ be vectors such that:
+
+$$a = c u \in \mathbb{R}^{p} \text{ and }b = \left(\frac{1}{c}\right) v \in \mathbb{R}^{q}$$
+
+If $c \neq 1$, then $a \neq u$ and $b \neq v$. It follows that $(a, b)$ is a different pair of vectors from $(u, v)$.
+Noext, compute the rank-1 matrix $a b^T$:
 \begin{align*}
     a b^T &= (c u) \left( \frac{1}{c} v \right)^T \\
-    &= (c u) \left( \frac{1}{c} v^T \right) \quad \text{(since } (k v)^T = k v^T \text{ for a scalar } k \text{)} \\
-    &= c \left( \frac{1}{c} \right) (u v^T) \quad \text{(by associativity of scalar multiplication)} \\
+    &= (c u) \left( \frac{1}{c} v^T \right) \\
+    &= c \left( \frac{1}{c} \right) (u v^T) \\
     &= 1 \cdot (u v^T) \\
     &= u v^T \\
     &= M
 \end{align*}
-We have shown that $a b^T = u v^T = M$ even though $a \neq u$ and $b \neq v$.
+
+Hence, $a b^T = u v^T = M$ and $a \neq u$ and $b \neq v$.
 
 \subsubsection*{\normalfont}{$\therefore$ The decomposition is not unique. For any non-zero scalar $c$, the pair $(cu, \frac{1}{c}v)$ will produce the same rank-1 matrix.}
 
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+\subsubsection*{Code}
+\noindent\rule{\textwidth}{0.4pt}
+\subsubsection*{Solution 7 Code}
+\begin{lstlisting}
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
+from scipy.spatial.distance import pdist, squareform
+import re 
+
+# set plot figure size for better readability 
+plt.rcParams['figure.figsize'] = (6, 8)
+
+def load_animal_names(filepath='classes.txt'):
+    with open(filepath, 'r') as f:
+        names = [line.strip() for line in f.readlines()]
+        names = [name.split('.')[-1].replace('+', ' ') for name in names]
+    return(names)
+
+def compute_distortion(X_original, Z_embedded):
+    # calc pairwise distances for original space (n*(n-1)/2 vector)
+    D = pdist(X_original, metric='euclidean')
+
+    # calc pairwise distances for embedded space (n*(n-1)/2 vector)
+    D_hat = pdist(Z_embedded, metric='euclidean')
+    
+    # add a small epsilon to avoid division by zero
+    epsilon = 1e-12
+    D[D == 0] = epsilon
+    D_hat[D_hat == 0] = epsilon
+    
+    # calc scaling factor c (sum of all pairwise distances)
+    c = np.sum(D) / np.sum(D_hat)
+    
+    # calc scaled embedded distances
+    scaled_D_hat = c * D_hat
+    
+    # calculate distortion for each pair (i, j) with i < j
+    Delta_values = np.maximum(D / scaled_D_hat, scaled_D_hat / D)
+    
+    return(np.mean(Delta_values))
+
+def main():
+    # read predicate-matrix-continuous.txt
+    X = np.loadtxt('predicate-matrix-continuous.txt')
+    # read classes.txt
+    animal_names = load_animal_names('classes.txt')
+    
+    # initalize list to hold embeddings and their titles
+    embeddings_to_plot = []
+
+    # pca model
+    pca = PCA(n_components=2, random_state=42)
+    Z_pca = pca.fit_transform(X)
+    embeddings_to_plot.append(('PCA Projection', Z_pca))
+
+    # note: 49 ~ 50 its just python indexing
+    perplexities = [5, 10, 25, 49]
+    for p in perplexities:
+        print(f"Running t-SNE with perplexity={p}...")
+        tsne = TSNE(n_components=2, perplexity=p, random_state=42, 
+                    init='pca', learning_rate='auto')
+        Z_tsne = tsne.fit_transform(X)
+        embeddings_to_plot.append((f't-SNE (Perplexity={p})', Z_tsne))
+    
+    for title, Z in embeddings_to_plot:
+        # set plt configs
+        fig = plt.figure(figsize=(7.5, 9))
+        grid_shape = (3, 3)
+        ax_plot = plt.subplot2grid(grid_shape, (0, 0), rowspan=2, colspan=3)
+        ax_legend = plt.subplot2grid(grid_shape, (2, 0), rowspan=1, colspan=3)
+        
+        # plot data
+        for j, name in enumerate(animal_names):
+            color = colors[j]
+            marker = markers[j % len(markers)]
+            
+            ax_plot.scatter(Z[j, 0], Z[j, 1], 
+                            color=color, 
+                            marker=marker, 
+                            label=name, 
+                            s=40) # s=40 is a reasonable marker size
+        
+        ax_plot.set_title(title, fontsize=16)
+        ax_plot.set_xlabel('Component 1')
+        ax_plot.set_ylabel('Component 2')
+        ax_plot.grid(True)
+        
+        # set legend settings
+        handles, labels = ax_plot.get_legend_handles_labels()
+        ax_legend.axis('off')
+        ax_legend.legend(handles, labels, loc='center', ncol=4, fontsize=9)
+        
+        # save plot
+        # Use tight_layout to ensure no overlap
+        plt.tight_layout()
+        clean_title = title.lower()
+        clean_title = re.sub(r'[^\w\s-]', '', clean_title) 
+        clean_title = re.sub(r'[\s-]+', '_', clean_title).strip('_')
+        filename = f"{clean_title}.png"
+        
+        plt.savefig(filename, dpi=150) # 150 dpi is good for print
+        plt.close(fig) # Close the figure to free memory
+
+    # calc distortion
+    distortions = {}
+    
+    # store all embeddings in a dict for distortion calculation
+    all_embeddings_dict = {title: Z for title, Z in embeddings_to_plot}
+        
+    for key, Z in all_embeddings_dict.items():
+        distortion = compute_distortion(X, Z)
+        distortions[key] = distortion
+        print(f"{key} average distortion: {distortion:.4f}")
+        
+    best_embedding = min(distortions, key=distortions.get)
+    min_distortion = distortions[best_embedding]
+    
+    print(f"lowest average distortion is: {best_embedding}")
+    print(f"minimum distortion: {min_distortion:.4f}")
+
+\end{lstlisting}
+
+\newpage
+
+\subsubsection*{Code}
+\noindent\rule{\textwidth}{0.4pt}
+\subsubsection*{Solution 9 Code}
+\begin{lstlisting}
+import numpy as np
+
+# set print sig figs
+np.set_printoptions(precision=4, suppress=True)
+
+# define matrix M
+M = np.array([
+    [1, 2, 3],
+    [4, 5, 6]
+])
+
+# calc "thin" SVD
+U, s, Vt = np.linalg.svd(M, full_matrices=False)
+
+# get the first singular value (sigma_1)
+sigma_1 = s[0]
+
+# get the first left singular vector (u_1)
+u_1 = U[:, 0:1]  
+
+# get the first right singular vector (v_1^T)
+
+v_1_T = Vt[0:1, :] 
+
+# calc rank-1 approximation
+M_1 = sigma_1 * (u_1 @ v_1_T)
+
+# print results
+print(f"matrix M:\n{M}\n")
+print("-" * 30)
+print(f"sigma_1 (s[0]): {sigma_1:.4f}\n")
+print(f"u_1 (U[:, 0]):\n{u_1}\n")
+print(f"v_1^T (Vt[0, :]):\n{v_1_T}\n")
+print("-" * 30)
+print(f"best rank-1 approximation (M_1):\n{M_1}")
+\end{lstlisting}
+
+\noindent\rule{\textwidth}{0.4pt}
+
+\end{document}
+%------------------
+% Solution for 7 (a)
+%------------------
+\subsubsection*{Solution 7}
+\noindent\rule{\textwidth}{0.4pt}
+\subsubsection*{Solution 7 (a)}
+\subsubsection*{Code}
+\begin{lstlisting}
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.cluster import hierarchy
+from sklearn.cluster import KMeans
+from collections import defaultdict
+
+# set plot figure size for better readability of the dendrogram
+plt.rcParams['figure.figsize'] = (8, 10)
+\end{lstlisting}
+
+\subsubsection*{Plot: PCA projection $\mathbb{R}^{85}$ to $\mathbb{R}^{2}$}
+
+\begin{figure}[h]
+  \includegraphics[height=0.75\textheight,width=\textwidth]{pca_projection.png}
+  \caption{PCA projection $\mathbb{R}^{85}$ to $\mathbb{R}^{2}$}
+\end{figure}
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+\begin{table}[h]
+\centering
+\caption{Visualization Results and Distortion Analysis}
+\label{tab:distortion_analysis}
+
+\begin{tabular}{llr}
+\toprule
+\textbf{Plot} & \textbf{Description} & \textbf{Average Distortion} \\
+\midrule
+\texttt{pca\_projection.png} & PCA Projection & 1.8313 \\
+\texttt{t\_sne\_perplexity5.png} & t-SNE (Perplexity=5) & 1.8602 \\
+\texttt{t\_sne\_perplexity10.png} & t-SNE (Perplexity=10) & 1.7101 \\
+\texttt{t\_sne\_perplexity25.png} & t-SNE (Perplexity=25) & 1.5683 \\
+\texttt{t\_sne\_perplexity49.png} & t-SNE (Perplexity=49) & 1.7370 \\
+\bottomrule
+\end{tabular}
+
+\vspace{1em}
+
+\begin{tabular}{p{\textwidth}}
+\textbf{Summary:} The embedding with the lowest average distortion is t-SNE (Perplexity=25) with a minimum distortion of 1.5683.
+\end{tabular}
+\end{table}
+
+
+%------------------
+% Solution for 7 (b)
+%------------------
+\subsubsection*{Solution 7}
+\noindent\rule{\textwidth}{0.4pt}
+\subsubsection*{Solution 7 (b)}
+\subsubsection*{Code: t-SNE algorithm}
+\begin{lstlisting}
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.cluster import hierarchy
+from sklearn.cluster import KMeans
+from collections import defaultdict
+from sklearn.manifold import TSNE
+## note set seed so perplexity results don't vary
+Z = TSNE(n components=2, perplexity=10.0).fit transform(X)
+\end{lstlisting}
+
+\begin{enumerate}
+  \item t-SNE algorithm: Perplexity = 5
+  \item t-SNE algorithm: Perplexity = 10
+  \item t-SNE algorithm: Perplexity = 25
+  \item t-SNE algorithm: Perplexity = 50
+\end{enumerate}
+
+%------------------
+% Solution for 7 (c)
+%------------------
+\subsubsection*{Solution 7}
+\noindent\rule{\textwidth}{0.4pt}
+\subsubsection*{Solution 7 (c)}
+\subsubsection*{Evaluate t-SNE algorithm}
+\subsubsection*{Code: t-SNE algorithm}
+\begin{lstlisting}
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.cluster import hierarchy
+from sklearn.cluster import KMeans
+from collections import defaultdict
+from sklearn.manifold import TSNE
+## note set seed so perplexity results don't vary
+Z = TSNE(n components=2, perplexity=10.0).fit transform(X)
+\end{lstlisting}
+
+\begin{enumerate}
+  \item define $D_{ij} = ||x_i - x_j||$ \quad $\hat{D}_{ij} = ||z_i - z_j||$
+  \item define scaling factor: $c = np.mean(D)/np.mean(\hat{D})$ where np.mean is the average over all $n^2$ of the matrix
+  \item define multiplicative factor by which the distance between $x_i$ and $x_j$ is distorted
+  $$\Delta_{xj} = \text{max}\frac{D_{ij}}{c\hat{D_{ij}}},\frac{c\hat{D_{ij}}}{{D_{ij}}}\quad \test{this ratio is always \geq 1 and avgerage distortion is mean}\Delta$$
+  \item compute averge distortion for PCA
+  \item compute average distortion t-SNE for Perplexity = 5
+  \item compute average distortion t-SNE for Perplexity = 10
+  \item compute average distortion t-SNE for Perplexity = 25
+  \item compute average distortion t-SNE for Perplexity = 50
+  \item comment on which model preforms the best
+\end{enumerate}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
