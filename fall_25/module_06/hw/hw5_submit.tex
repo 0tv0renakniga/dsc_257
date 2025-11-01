@@ -64,15 +64,16 @@
 %------------------
 \subsection*{Solution 1}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 1 (a)}
-\begin{flushleft}
-    Given: $X \in \mathbb{R}$ and is drawn from the Gausian distribution $N(10,16)$\\
-    What is $P(X \geq 10)$
-\end{flushleft}
-
 \subsubsection*{Solution 1 (a)}
+The Gaussian (Normal) distribution $N(\mu, \sigma^2)$ is symmetric about its mean $\mu$. \\
+Given $X \sim N(10, 16)$, it follows that the mean is $\mu = 10$.
 
-\subsubsection*{\normalfont}{$\therefore$ probability $X \geq 10 is$}
+\begin{align*}
+    P(X \geq \mu) = 0.5
+\end{align*}
+Hence, the probability of the random variable $X$ being greater than or equal to the mean is exactly $0.5$, since the Gaussian distribution is symetric about its mean.
+
+\subsubsection*{\normalfont}{$\therefore$ $P(X \geq 10)$ is $0.5$} \\
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -83,16 +84,10 @@
 %------------------
 \subsection*{Solution 1}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 1 (b)}
-\begin{flushleft}
-    Given: $X \in \mathbb{R}$ and is drawn from the Gausian distribution $N(10,16)$\\
-    What is $P(X = 10)$
-\end{flushleft}
-
 \subsubsection*{Solution 1 (b)}
+The Gaussian distribution is a continuous probability distribution. For any continuous random variable, the probability of it taking a single, exact value is zero.
 
-
-\subsubsection*{\normalfont}{$\therefore$ probability $X = 10 $}\\
+\subsubsection*{\normalfont}{$\therefore$ $P(X = 10)$ is $0$}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -103,16 +98,29 @@
 %------------------
 \subsection*{Solution 1}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 1 (c)}
-\begin{flushleft}
-    Given: $X \in \mathbb{R}$ and is drawn from the Gausian distribution $N(10,16)$\\
-    What is $P(X \geq 14)$
-\end{flushleft}
-
 \subsubsection*{Solution 1 (c)}
+We can solve this using the Empirical Rule (68-95-99.7 rule).
+Given $X \sim N(10, 16)$, we have $\mu = 10$ and $\sigma = \sqrt{16} = 4$.
+We want to find $P(X \geq 14)$, which is $P(X \geq \mu + \sigma)$.
 
 
-\subsubsection*{\normalfont}{$\therefore$ probability $X \geq 14 $ is}\\
+\begin{flushleft}
+    The Empirical Rule states that approximately 68\% of the data lies within one standard deviation of the mean.
+\end{flushleft}
+\begin{align*}
+    P(\mu - \sigma \leq X \leq \mu + \sigma) &\approx 0.68 \\
+    P(6 \leq X \leq 14) &\approx 0.68
+\end{align*}
+The total probability outside this range is $1 - 0.68 = 0.32$.
+\begin{align*}
+    P(X < 6) + P(X > 14) \approx 0.32
+\end{align*}
+By the symmetry of the Gaussian distribution, the two tail probabilities are equal.
+\begin{align*}
+    P(X \geq 14) = P(X > 14) \approx \frac{0.32}{2} = 0.16
+\end{align*}
+
+\subsubsection*{\normalfont}{$\therefore$ $P(X \geq 14) \approx 0.16$}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -123,16 +131,28 @@
 %------------------
 \subsection*{Solution 1}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 1 (d)}
-\begin{flushleft}
-    Given: $X \in \mathbb{R}$ and is drawn from the Gausian distribution $N(10,16)$\\
-    What is $P(X \leq 2)$
-\end{flushleft}
-
 \subsubsection*{Solution 1 (d)}
+We use the Empirical Rule. Given $X \sim N(10, 16)$, we have $\mu = 10$ and $\sigma = 4$.
+We want to find $P(X \leq 2)$, which is $P(X \leq 10 - 8)$ or $P(X \leq \mu - 2\sigma)$.
 
 
-\subsubsection*{\normalfont}{$\therefore$ probability $X \leq 2$ is} \\
+\begin{flushleft}
+    The Empirical Rule states that approximately 95\% of the data lies within two standard deviations of the mean.
+\end{flushleft}
+\begin{align*}
+    P(\mu - 2\sigma \leq X \leq \mu + 2\sigma) &\approx 0.95 \\
+    P(2 \leq X \leq 18) &\approx 0.95
+\end{align*}
+The total probability outside this range is $1 - 0.95 = 0.05$.
+\begin{align*}
+    P(X < 2) + P(X > 18) \approx 0.05
+\end{align*}
+By symmetry, the two tail probabilities are equal. We are interested in the left tail.
+\begin{align*}
+    P(X \leq 2) = P(X < 2) \approx \frac{0.05}{2} = 0.025
+\end{align*}
+
+\subsubsection*{\normalfont}{$\therefore$ $P(X \leq 2) \approx 0.025$}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
