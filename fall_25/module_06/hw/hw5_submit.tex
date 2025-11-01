@@ -163,26 +163,16 @@ By symmetry, the two tail probabilities are equal. We are interested in the left
 %------------------
 \subsubsection*{Solution 2}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 2 (a)}
-\begin{flushleft}
-    A call center keeps track of the number of phone calls they receive: over a period of 500 hours, they record the number of calls received during every one-hour interval (the number of calls during the first hour, during the second hour, and so on). Let $N_{k}$ be the number of one-hour intervals during which $k$ calls were received, for $k=0,1,2, \ldots$ Here is their data:
-\end{flushleft}
-\begin{table}[h]
-\centering
-\begin{tabular}{r|rrrrrrrrrr}
-$k$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & $\geq 9$ \\
-\midrule
-$N_{k}$ & 22 & 66 & 106 & 115 & 85 & 55 & 28 & 13 & 10 & 0 \\
-\end{tabular}
-\end{table}
-
-\begin{flushleft}
-    Notice that $N_{0}+N_{1}+\cdots=500$.\\
-    You decide to model the number of calls received in an hour by a Poisson($\lambda$) distribution. What value of $\lambda$ should you choose?
-\end{flushleft}
 \subsubsection*{Solution 2 (a)}
+\begin{align*}
+    \lambda &= \frac{\sum_{k=0}^{n\geq 9} k \cdot N_k}{\sum_{k=0}^{n\geq 9} N_k} \\
+    &= \frac{22 \cdot 0 + 66 \cdot 1 + 106 \cdot 2 + 115 \cdot 3 + 85 \cdot 4 + 55 \cdot 5 + 28 \cdot 6 + 13 \cdot 7 + 10 \cdot 8 + 9 \cdot 0 + \dots}{500} \\
+    &= \frac{0 + 66 + 212 + 345 + 340 + 275 + 168 + 91 + 80 + 0}{500} \\
+    &= \frac{1577}{500} \\
+    &= 3.154
+\end{align*}
 
-\subsubsection*{\normalfont}{$\therefore$ the value of $\lambda$ you choose is}\\
+\subsubsection*{\normalfont}{$\therefore$ the value of $\lambda$ you choose is $3.154$}\\
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -193,38 +183,72 @@ $N_{k}$ & 22 & 66 & 106 & 115 & 85 & 55 & 28 & 13 & 10 & 0 \\
 %------------------
 \subsubsection*{Solution 2}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 2 (b)}
-\begin{flushleft}
-    A call center keeps track of the number of phone calls they receive: over a period of 500 hours, they record the number of calls received during every one-hour interval (the number of calls during the first hour, during the second hour, and so on). Let $N_{k}$ be the number of one-hour intervals during which $k$ calls were received, for $k=0,1,2, \ldots$ Here is their data:
-\end{flushleft}
-\begin{table}[h]
-\centering
-\begin{tabular}{r|rrrrrrrrrr}
-$k$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & $\geq 9$ \\
-\midrule
-$N_{k}$ & 22 & 66 & 106 & 115 & 85 & 55 & 28 & 13 & 10 & 0 \\
-\end{tabular}
-\end{table}
-
-\begin{flushleft}
-    Notice that $N_{0}+N_{1}+\cdots=500$.\\
-    Plot this distribution, showing the probabilities it assigns to outcomes $k=0,1, \ldots, 10$. One way to do this is using \texttt{scipy.stats.poisson.pmf} to generate the probabilities and \texttt{matplotlib.pyplot.bar} to display them.
-\end{flushleft}
 \subsubsection*{Solution 2 (b)}
+Let $\lambda = 3.154$ as found in \textit{part (a)}.
+
 \subsubsection*{Poisson pmf Code}
 \begin{lstlisting}
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.stats import poisson.pmf
+from scipy.stats import poisson
+
+# Parameter from part (a)
+lambda_val = 3.154
+
+# k values from 0 to 10
+k_values = np.arange(0, 11)
+
+# Calculate Poisson PMF probabilities for each k
+probabilities = poisson.pmf(k_values, lambda_val)
+
+# Create the bar plot
+plt.figure(figsize=(10, 6))
+plt.bar(k_values, probabilities, color='skyblue', edgecolor='black')
+
+# Add labels and title
+plt.xlabel('k (Number of Calls in one hour)', fontsize=12)
+plt.ylabel('Probability P(X=k)', fontsize=12)
+plt.title(f'Poisson PMF for $\lambda = {lambda_val}$', fontsize=14)
+plt.xticks(k_values) # Ensure integer ticks on x-axis
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+# Save the figure
+plt.savefig('poisson_pmf.png', dpi=150, bbox_inches='tight')
+
+print("Poisson PMF plot saved as 'poisson_pmf.png'")
+# Print probabilities for reference
+for k, prob in zip(k_values, probabilities):
+    print(f"P(X={k}) = {prob:.5f}")
+
+"""
+# output from for loop
+P(X=0) = 0.04268
+P(X=1) = 0.13462
+P(X=2) = 0.21229
+P(X=3) = 0.22319
+P(X=4) = 0.17598
+P(X=5) = 0.11101
+P(X=6) = 0.05835
+P(X=7) = 0.02629
+P(X=8) = 0.01037
+P(X=9) = 0.00363
+P(X=10) = 0.00115
+"""
 \end{lstlisting}
 
-\begin{comment}
-\begin{figure}[h]
-  \includegraphics[height=0.75\textheight,width=\textwidth]{poision_pmf.png}
-  \caption{Poision pmf distribution}
-\end{figure}
-\end{comment}
+\newpage
+%------------------
+% Solution for 2(b)
+%------------------
+\subsubsection*{Solution 2}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 2 (b)}
 
+\begin{figure}[h]
+  \includegraphics[width=\textwidth]{poisson_pmf.png}
+  \caption{Poisson PMF distribution for $\lambda = 3.154$, showing $P(X=k)$ for $k=0...10$.}
+  \label{fig:poisson_pmf}
+\end{figure}
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
@@ -234,34 +258,45 @@ from scipy.stats import poisson.pmf
 %------------------
 \subsubsection*{Solution 2}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 2 (c)}
-\begin{flushleft}
-    A call center keeps track of the number of phone calls they receive: over a period of 500 hours, they record the number of calls received during every one-hour interval (the number of calls during the first hour, during the second hour, and so on). Let $N_{k}$ be the number of one-hour intervals during which $k$ calls were received, for $k=0,1,2, \ldots$ Here is their data:
-\end{flushleft}
-\begin{table}[h]
-\centering
-\begin{tabular}{r|rrrrrrrrrr}
-$k$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & $\geq 9$ \\
-\midrule
-$N_{k}$ & 22 & 66 & 106 & 115 & 85 & 55 & 28 & 13 & 10 & 0 \\
-\end{tabular}
-\end{table}
 
-\begin{flushleft}
-    Notice that $N_{0}+N_{1}+\cdots=500$.\\
-    Under this choice of $\lambda$, what are the expected entries in the table above, i.e., the expected number of one-hour intervals (out of 500) during which $k$ calls are received, for $k=0,1, \ldots$? (The expected value for $N_{k}$ is 500 times the probability of outcome $k$ under $\operatorname{Poisson}(\lambda)$.)
-\end{flushleft}
 \subsubsection*{Solution 2 (c)}
+\begin{flushleft}
+    Use the probabilities $P(X=k)$ from \textit{part (b)}and multiply by 500 to find the expected number of one hour intervals during which $k$ calls are recived
+\end{flushleft}
 
-\subsubsection*{\normalfont}{$\therefore$ the expected entries are for $\lambda =$:}
+\begin{align*}
+    P(X=0) &= 0.04268 &\implies E[N_0] = 500 \times 0.04268 &= 21.34 \\
+    P(X=1) &= 0.13460 &\implies E[N_1] = 500 \times 0.13460 &= 67.30 \\
+    P(X=2) &= 0.21230 &\implies E[N_2] = 500 \times 0.21230 &= 106.15 \\
+    P(X=3) &= 0.22310 &\implies E[N_3] = 500 \times 0.22310 &= 111.55 \\
+    P(X=4) &= 0.17590 &\implies E[N_4] = 500 \times 0.17590 &= 87.95 \\
+    P(X=5) &= 0.11094 &\implies E[N_5] = 500 \times 0.11094 &= 55.47 \\
+    P(X=6) &= 0.05830 &\implies E[N_6] = 500 \times 0.05830 &= 29.15 \\
+    P(X=7) &= 0.02628 &\implies E[N_7] = 500 \times 0.02628 &= 13.14 \\
+    P(X=8) &= 0.01036 &\implies E[N_8] = 500 \times 0.01036 &= 5.18 \\
+    P(X \geq 9) &= 1 - P(X \leq 8) = 1 - 0.99448 = 0.00552 &\implies E[N_{\geq 9}] = 500 \times 0.00552 &= 2.76
+\end{align*}
 
+\subsubsection*{\normalfont}{$\therefore$ the expected entries are for $\lambda = 3.154$:}
 \begin{table}[h]
 \centering
-\begin{tabular}{r|rrrrrrrrrr}
-$k$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & $\geq 9$ \\
+\caption{Poisson Distribution and Expected Counts}
+\label{tab:poisson_distribution}
+\begin{tabular}{c c S[table-format=4.5] S[table-format=3.2]}
+\toprule
+{$k$} & {$P(X=k)$} & {$E[N_k]$} \\
 \midrule
-$N_{k}$ & 22 & 66 & 106 & 115 & 85 & 55 & 28 & 13 & 10 & 0 \\
-$E[X=k]$ & $E[X=k_0]$ & $E[X=k_1]$ & $E[X=k_2]$ & $E[X=k_3]$ & $E[X=k_4]$ & $E[X=k_5]$ & $E[X=k_6]$ & $E[X=k_7]$ & $E[X=k_8]$ & $E[X\geq k_9]$ \\
+0 & 0.04268 & 21.34 \\
+1 & 0.13460 & 67.30 \\
+2 & 0.21230 & 106.15 \\
+3 & 0.22310 & 111.55 \\
+4 & 0.17590 & 87.95 \\
+5 & 0.11094 & 55.47 \\
+6 & 0.05830 & 29.15 \\
+7 & 0.02628 & 13.14 \\
+8 & 0.01036 & 5.18 \\
+$\geq 9$ & 0.00552 & 2.76 \\
+\bottomrule
 \end{tabular}
 \end{table}
 
@@ -275,17 +310,34 @@ $E[X=k]$ & $E[X=k_0]$ & $E[X=k_1]$ & $E[X=k_2]$ & $E[X=k_3]$ & $E[X=k_4]$ & $E[X
 %------------------
 \subsubsection*{Solution 3}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 3 (a)}
+\subsubsection*{Solution 3 (a)}
 \begin{flushleft}
-    \textbf{Fitting a uniform distribution.} For any real number $\lambda > 0$, let $U_{\lambda}$ denote the uniform distribution over $[0, \lambda]$. \\
-    Write down the density of $U_{\lambda}$, i.e., give a formula for the density at any point $x$.
+    For any probability density function (PDF), the total area under the curve must integrate to 1.
 \end{flushleft}
 
-\subsubsection*{Solution 3 (a)}
+$$\int_{-\infty}^{\infty} f(x) \,dx = 1$$
 
-\subsubsection*{\normalfont}{$\therefore$ the density $U_{\lambda}$ can be written as:}
+\begin{flushleft}
+    We are given the bounds of the probability density function $[0, \lambda]$, so the equation becomes:
+\end{flushleft}
 
-$$U_{\lambda} = $$
+\begin{align*}
+    \int_{0}^{\lambda} c \,dx &= 1 \\
+    c \cdot [x]_{0}^{\lambda} &= 1 \\
+    c \cdot (\lambda - 0) &= 1 \\
+    c \cdot \lambda &= 1 \\
+    c &= \frac{1}{\lambda}
+\end{align*}
+
+\subsubsection*{\normalfont}{$\therefore$ the density of $U_{\lambda}$ is $\frac{1}{\lambda}$ and we can express it as $f(x \mid \lambda)$:}
+
+$$
+f(x \mid \lambda) = 
+\begin{cases} 
+      \frac{1}{\lambda} & \text{if } 0 \leq x \leq \lambda \\
+      0 & \text{otherwise} 
+\end{cases}
+$$
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -296,14 +348,30 @@ $$U_{\lambda} = $$
 %------------------
 \subsubsection*{Solution 3}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 3 (b)}
-\begin{flushleft}
-    \textbf{Fitting a uniform distribution.} For any real number $\lambda > 0$, let $U_{\lambda}$ denote the uniform distribution over $[0, \lambda]$. \\
-    Given a set of observations $x_{1}, x_{2}, \ldots, x_{n} > 0$, we decide to fit a $U_{\lambda}$ distribution to them. What is the maximum-likelihood choice of $\lambda$? Just give the answer that seems intuitively correct to you; there is no calculus required.
-\end{flushleft}
 \subsubsection*{Solution 3 (b)}
 
-\subsubsection*{\normalfont}{$\therefore$ the max likelihood choice of ${\lambda}$ is:}
+We are looking for the value of $\lambda$ that maximizes the likelihood of observing our data $x_{1}, \ldots, x_{n}$.
+The likelihood function $L(\lambda)$ is the product of the densities for each observation:
+\begin{align*}
+    L(\lambda \mid x_1, \ldots, x_n) = \prod_{i=1}^{n} f(x_i \mid \lambda)
+\end{align*}
+From part (a), we know that the density $f(x_i \mid \lambda)$ is $0$ if any $x_i > \lambda$.
+This means that if we choose a $\lambda$ that is *smaller* than even one of our observations, the likelihood $L(\lambda)$ will be 0. This is the minimum possible likelihood, not the maximum.
+\begin{flushleft}
+    Hence, to have a non-zero likelihood, $\lambda$ must be greater than or equal to *all* observations.
+\end{flushleft}
+
+\begin{align*}
+    \lambda \geq x_i \quad \text{for all } i=1, \ldots, n
+\end{align*}
+This is equivalent to saying $\lambda$ must be greater than or equal to the maximum observation:
+\begin{align*}
+    \lambda \geq \max(x_1, \ldots, x_n)
+\end{align*}
+
+\subsubsection*{\normalfont}{$\therefore$ the max likelihood choice of ${\lambda}$ is: }
+
+$$\max(x_1, x_2, \ldots, x_n)$$
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -314,26 +382,57 @@ $$U_{\lambda} = $$
 %------------------
 \subsubsection*{Solution 4}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 4 (a)}
-\begin{flushleft}
-    \textbf{Chi-squared distribution.} Suppose $Z_{1}, \ldots, Z_{k}$ are independent $N(0,1)$ random variables. Define $X = Z_{1}^{2} + \cdots + Z_{k}^{2}$. The distribution of $X$ is called the chi-squared distribution with $k$ degrees of freedom.\\
-    Plot the density of the chi-squared distribution with 10 degrees of freedom using \texttt{scipy.stats.chi2.pdf}.
-\end{flushleft}
-
 \subsubsection*{Solution 4 (a)}
+We set $k=10$ degrees of freedom. To plot the PDF, we generate a range of $x$ values and use \texttt{scipy.stats.chi2.pdf(x, df=k)} to find the corresponding probability density for each $x$.
+
 \subsubsection*{Chi Squared Code}
 \begin{lstlisting}
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.stats import chi2.pdf
+from scipy.stats import chi2
+
+# Set degrees of freedom
+k = 10
+
+# Create a range of x values
+# A chi-squared(k) has mean k and variance 2k.
+# So mean=10, std=sqrt(20) approx 4.5.
+# We plot from 0 to mean + 4 std (0 to 10 + 18 = 28)
+x = np.linspace(0, 30, 400)
+
+# Calculate the PDF values
+y_pdf = chi2.pdf(x, df=k)
+
+# Create the plot
+plt.figure(figsize=(10, 6))
+plt.plot(x, y_pdf, 'r-', lw=2, label=f'Chi-squared PDF (k={k})')
+
+# Add labels, title, and grid
+plt.xlabel('X', fontsize=12)
+plt.ylabel('Probability Density', fontsize=12)
+plt.title(f'Chi-squared Distribution PDF (k={k} degrees of freedom)', fontsize=14)
+plt.legend()
+plt.grid(True, linestyle='--', alpha=0.7)
+
+# Save the figure
+plt.savefig('chi_squared_pdf.png', dpi=150, bbox_inches='tight')
+
+print(f"Chi-squared PDF plot with k={k} saved as 'chi_squared_pdf.png'")
 \end{lstlisting}
 
-\begin{comment}
+\newpage
+
+\subsubsection*{Solution 4}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 4 (a)}
+
+\subsubsection*{Plot}
+
 \begin{figure}[h]
-  \includegraphics[height=0.75\textheight,width=\textwidth]{chi_sqared_pdf.png}
-  \caption{chi squared distribution}
+  \includegraphics[width=\textwidth]{chi_squared_pdf.png}
+  \caption{Chi-squared probability density function (PDF) with $k=10$ degrees of freedom.}
+  \label{fig:chi_squared_pdf}
 \end{figure}
-\end{comment}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -344,28 +443,66 @@ from scipy.stats import chi2.pdf
 %------------------
 \subsubsection*{Solution 4}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 4 (b)}
-\begin{flushleft}
-    \textbf{Chi-squared distribution.} Suppose $Z_{1}, \ldots, Z_{k}$ are independent $N(0,1)$ random variables. Define $X = Z_{1}^{2} + \cdots + Z_{k}^{2}$. The distribution of $X$ is called the chi-squared distribution with $k$ degrees of freedom.\\
-    By generating 10,000 random samples from this distribution (using \texttt{numpy.random.chisquare}), estimate its median.
-\end{flushleft}
-
 \subsubsection*{Solution 4 (b)}
+We use the \texttt{numpy.random.chisquare} function to generate 10,000 samples with $k=10$ degrees of freedom. The median of this sample set is our estimate for the true median of the distribution. We set a random seed for reproducibility. The median is the 50th percentile of the data.
 \subsubsection*{Chi Squared Median Code}
 \begin{lstlisting}
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.stats import chi2.pdf
+
+# Set parameters
+k = 10
+num_samples = 10000
+random_seed = 42 # For reproducibility
+
+# Set the random seed
+np.random.seed(random_seed)
+
+# Generate 10,000 samples from chi-squared(10)
+samples = np.random.chisquare(df=k, size=num_samples)
+
+# Estimate the median by finding the median of the samples
+median_estimate = np.median(samples)
+
+print(f"Degrees of freedom (k): {k}")
+print(f"Number of samples: {num_samples}")
+print(f"Estimated Median: {median_estimate:.4f}")
+
+# --- Plotting the histogram and median ---
+
+plt.figure(figsize=(10, 6))
+# Plot histogram of the samples
+plt.hist(samples, bins=50, density=True, alpha=0.7, 
+         label=f'Histogram of {num_samples} samples')
+
+# Plot a vertical line at the estimated median
+plt.axvline(median_estimate, color='red', linestyle='--', linewidth=2, 
+            label=f'Estimated Median: {median_estimate:.4f}')
+
+plt.xlabel('X', fontsize=12)
+plt.ylabel('Density', fontsize=12)
+plt.title(f'Median Estimation from $\chi^2(k={k})$ Samples', fontsize=14)
+plt.legend()
+plt.grid(True, linestyle='--', alpha=0.6)
+
+# Save the figure
+plt.savefig('estimate_median.png', dpi=150, bbox_inches='tight')
+print("Histogram with median estimate saved as 'estimate_median.png'")
 \end{lstlisting}
 
-\begin{comment}
-\begin{figure}[h]
-  \includegraphics[height=0.75\textheight,width=\textwidth]{estimate_median.png}
-  \caption{estimate of median for chi squared distribution}
-\end{figure}
-\end{comment}
+\newpage
 
-\subsubsection*{\normalfont}{$\therefore$ the median is:} \\
+\subsubsection*{Solution 4}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 4 (b)}
+\subsubsection*{Plot}
+\begin{figure}[h]
+  \includegraphics[width=\textwidth]{estimate_median.png}
+  \caption{Histogram of 10,000 samples from a $\chi^2(10)$ distribution. The red dashed line shows the estimated median of the samples.}
+  \label{fig:estimate_median}
+\end{figure}
+
+\subsubsection*{\normalfont}{$\therefore$ The estimated median from 10,000 samples (with seed 42) is $9.4013$.} \\
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
