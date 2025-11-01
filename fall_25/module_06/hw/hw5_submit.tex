@@ -73,6 +73,7 @@
 \subsubsection*{Solution 1 (a)}
 
 \subsubsection*{\normalfont}{$\therefore$ probability $X \geq 10 is$}
+
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
@@ -91,7 +92,8 @@
 \subsubsection*{Solution 1 (b)}
 
 
-\subsubsection*{\normalfont}{$\therefore$ probability $X = 10 is$}
+\subsubsection*{\normalfont}{$\therefore$ probability $X = 10 $}\\
+
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
@@ -110,7 +112,8 @@
 \subsubsection*{Solution 1 (c)}
 
 
-\subsubsection*{\normalfont}{$\therefore$ probability $X \geq 14 is$}
+\subsubsection*{\normalfont}{$\therefore$ probability $X \geq 14 $ is}\\
+
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
@@ -129,7 +132,8 @@
 \subsubsection*{Solution 1 (d)}
 
 
-\subsubsection*{\normalfont}{$\therefore$ probability $X \leq 2 is$}
+\subsubsection*{\normalfont}{$\therefore$ probability $X \leq 2$ is} \\
+
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
@@ -158,7 +162,8 @@ $N_{k}$ & 22 & 66 & 106 & 115 & 85 & 55 & 28 & 13 & 10 & 0 \\
 \end{flushleft}
 \subsubsection*{Solution 2 (a)}
 
-\subsubsection*{\normalfont}{$\therefore$ the value of $\lambda$ you choose is}
+\subsubsection*{\normalfont}{$\therefore$ the value of $\lambda$ you choose is}\\
+
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
@@ -228,7 +233,7 @@ $N_{k}$ & 22 & 66 & 106 & 115 & 85 & 55 & 28 & 13 & 10 & 0 \\
 \end{flushleft}
 \subsubsection*{Solution 2 (c)}
 
-\subsubsection*{\normalfont}{$\therefore$ the expected entries are for $\lamba =$:}
+\subsubsection*{\normalfont}{$\therefore$ the expected entries are for $\lambda =$:}
 
 \begin{table}[h]
 \centering
@@ -498,14 +503,16 @@ Show just output from code
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Question 7 (b)}
 \begin{flushleft}
- \textbf{Text generation using $n$-grams.} In this question, we will try to emulate the language of Shakespeare using an $n$-gram language model. We will base the model on a collection of Shakespeare's sonnets and plays: the text and an accompanying Jupyter notebook are provided on the course webpage, in \texttt{text-gen.zip}.
+Text generation using $n$-grams In this question, we will try to emulate the language of Shakespeare using an $n$-gram language model. We will base the model on a collection of Shakespeare's sonnets and plays: the text and an accompanying Jupyter notebook are provided on the course webpage, in \texttt{text-gen.zip}.
 
 Take a careful look through the Jupyter notebook. In the implementation, \texttt{<START>} tokens are appended at the beginning of each sentence as indicators. A fullstop (period) token is used to indicate the end of a sentence.\\
 Complete the function \texttt{model\_ll}, which takes a sentence and an $n$-gram model, and returns the log likelihood of the sentence under that model. Use this function to get the log-likelihood of the provided sentence under unigram and bigram models.\\
 \end{flushleft}
 
 \subsubsection*{Solution 7 (b)}
-\subsubsection*{\texttt{model_ll} Python Implementation}
+
+\subsubsection*{\texttt{model\_ll} Python Implementation}
+
 \begin{lstlisting}
 def model_ll(model, text):
     """
@@ -779,1004 +786,46 @@ Continuing from part (b), plot both the prior and posterior densities.
 
 \newpage
 
-
 %------------------
-% Solution for 4 (c)
+% Solution for 10 (a)
 %------------------
-\subsubsection*{Solution 4}
+\subsubsection*{Solution 10}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 4 (c)}
-Let $\Sigma$ be as above and $u=\begin{bmatrix}u_1 \\ u_2 \\ u_3\end{bmatrix}\in\mathbb{R}^3$.
-\begin{align*}
-u^\top \Sigma u
-&= \begin{bmatrix}u_1 & u_2 & u_3\end{bmatrix}
-\begin{bmatrix}
-1 & 2 & 0 \\
-2 & 9 & 0 \\
-0 & 0 & 4
-\end{bmatrix}
-\begin{bmatrix}u_1 \\ u_2 \\ u_3\end{bmatrix} \\
-&= \begin{bmatrix}u_1 & u_2 & u_3\end{bmatrix}
-\begin{bmatrix}u_1 + 2u_2 \\ 2u_1 + 9u_2 \\ 4u_3\end{bmatrix} \\
-&= u_1(u_1 + 2u_2) + u_2(2u_1 + 9u_2) + u_3(4u_3) \\
-&= u_1^2 + 4u_1u_2 + 9u_2^2 + 4u_3^2.
-\end{align*}
-Hence, we the form $a u_1^2 + b u_2^2 + c u_3^2 + d u_1 u_2$, and $a$,$b$,$c$,$d$ are:
-\[
-a = 1,\quad b = 9,\quad c = 4,\quad d = 4
-\]
-\subsubsection*{\normalfont}{$\therefore$ the variance function is:} 
-$$u^\top\Sigma u = u_1^2 + 4u_1u_2 + 9u_2^2 + 4u_3^2$$
-
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\newpage
-
-%------------------
-% Solution for 5
-%------------------
-\subsubsection*{Solution 5}
-\noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 5}
-Let $\Sigma$,
-\[
-\Sigma =
-\begin{bmatrix}
-    5 & 0 & 0 & 0 & 0 \\
-    0 & 10 & 0 & 0 & 0 \\
-    0 & 0 & 20 & 0 & 0 \\
-    0 & 0 & 0 & 1 & 0 \\
-    0 & 0 & 0 & 0 & 4 \\
-\end{bmatrix}
-\]
-For any unit direction $u=\begin{bmatrix}u_1\\u_2\\u_3\\u_4\\u_5\end{bmatrix}\in\mathbb{R}^5$ with $\|u\|_2=1$, the variance in direction $u$ is
-\begin{align*}
-\mathrm{Var}(u) &= u^\top \Sigma u \\
-&=
-\begin{bmatrix}
-  u_1 & u_2 & u_3 & u_4 & u_5 
-\end{bmatrix}
-\begin{bmatrix}
-    5 & 0 & 0 & 0 & 0 \\
-    0 & 10 & 0 & 0 & 0 \\
-    0 & 0 & 20 & 0 & 0 \\
-    0 & 0 & 0 & 1 & 0 \\
-    0 & 0 & 0 & 0 & 4 
-\end{bmatrix}
-\begin{bmatrix}u_1\\u_2\\u_3\\u_4\\u_5\end{bmatrix}\\
-% First, multiply the matrix \Sigma by the vector u
-&=
-\begin{bmatrix}
-  u_1 & u_2 & u_3 & u_4 & u_5 
-\end{bmatrix}
-\begin{bmatrix}
-    (5u_1 + 0u_2 + 0u_3 + 0u_4 + 0u_5) \\
-    (0u_1 + 10u_2 + 0u_3 + 0u_4 + 0u_5) \\
-    (0u_1 + 0u_2 + 20u_3 + 0u_4 + 0u_5) \\
-    (0u_1 + 0u_2 + 0u_3 + 1u_4 + 0u_5) \\
-    (0u_1 + 0u_2 + 0u_3 + 0u_4 + 4u_5)
-\end{bmatrix} \\
-&=
-\begin{bmatrix}
-  u_1 & u_2 & u_3 & u_4 & u_5 
-\end{bmatrix}
-\begin{bmatrix}
-    5u_1 \\
-    10u_2 \\
-    20u_3 \\
-    1u_4 \\
-    4u_5
-\end{bmatrix}\\
-% Now, perform the final dot product
-&= u_1(5u_1) + u_2(10u_2) + u_3(20u_3) + u_4(1u_4) + u_5(4u_5) \\
-&= 5u_1^2 + 10u_2^2 + 20u_3^2 + u_4^2 + 4u_5^2
-\end{align*}
-
-\subsubsection*{\normalfont}{$\therefore$ the direction of maximum variance is: 
-$$u=\begin{bmatrix}0\\0\\1\\0\\0\end{bmatrix}$$ 
-
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\newpage
-
-%------------------
-% Solution for 6 (a)
-%------------------
-\subsubsection*{Solution 6}
-\noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 6 (a)}
-\subsubsection*{Mean and Variance of $X\cdot u$}
-Let,
- $$\mu = \mathbb{E}[X] = \begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix} \text{  and   } \Sigma=\operatorname{cov}(X)=
-\begin{bmatrix}
-5 & -3 & 0 \\
--3 & 5 & 0 \\
-0 & 0 & 4
-\end{bmatrix} \text{  and   } u=\dfrac{1}{\sqrt{3}}\begin{bmatrix}1 \\ 1 \\ 1\end{bmatrix}$$
-\begin{align*}
-\mathbb{E}[X\cdot u] &= u^\top \mu \\
-&= \frac{1}{\sqrt{3}}\begin{bmatrix}1 & 1 & 1\end{bmatrix}\begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix} \\
-&= \frac{1}{\sqrt{3}}(1+2+3) \\
-&= \frac{6}{\sqrt{3}}\\\\
-\operatorname{Var}(X\cdot u) &= u^\top \Sigma u \\
-&= \left(\frac{1}{\sqrt{3}}\begin{bmatrix}1 & 1 & 1\end{bmatrix}\right)
-\begin{bmatrix}
-5 & -3 & 0 \\
--3 & 5 & 0 \\
-0 & 0 & 4
-\end{bmatrix}
-\left(\frac{1}{\sqrt{3}}\begin{bmatrix}1 \\ 1 \\ 1\end{bmatrix}\right) \\
-&= \frac{1}{3}\begin{bmatrix}1 & 1 & 1\end{bmatrix}\begin{bmatrix}2 \\ 2 \\ 4\end{bmatrix} \\
-&= \frac{1}{3}(2+2+4) \\
-&= \frac{8}{3}
-\end{align*}
-\subsubsection*{\normalfont}{$\therefore$ $\mathbb{E}[X\cdot u]=\frac{6}{\sqrt{3}}$ and $\operatorname{Var}(X\cdot u)=\dfrac{8}{3}$.}
-
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\newpage
-
-%------------------
-% Solution for 6 (b)
-%------------------
-\subsubsection*{Solution 6}
-\noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 6 (b)}
-Let
-\[
-\Sigma=\begin{bmatrix}
-5 & -3 & 0\\
--3 & 5 & 0\\
-0 & 0 & 4
-\end{bmatrix},
-\quad
-v_1=\begin{bmatrix}1\\0\\0\end{bmatrix},\;
-v_2=\begin{bmatrix}0\\1\\0\end{bmatrix},\;
-v_3=\begin{bmatrix}0\\0\\1\end{bmatrix},
-\]
-\[
-v_4=\frac{1}{\sqrt{2}}\begin{bmatrix}1\\1\\0\end{bmatrix},\;
-v_5=\frac{1}{\sqrt{2}}\begin{bmatrix}0\\1\\1\end{bmatrix},\;
-v_6=\frac{1}{\sqrt{2}}\begin{bmatrix}1\\-1\\0\end{bmatrix}
-\]
-Check each candidate via $\Sigma v=\lambda v$:
-
-\begin{align*}
-\Sigma v_1 &= \begin{bmatrix}5\\-3\\0\end{bmatrix}&
-&\neq \lambda \begin{bmatrix}1\\0\\0\end{bmatrix}\;\text{for any }\lambda
-&\quad \Longrightarrow\quad v_1\ \text{is not an eigenvector}.\\[6pt]
-\Sigma v_2 &= \begin{bmatrix}-3\\5\\0\end{bmatrix}&
-&\neq \lambda \begin{bmatrix}0\\1\\0\end{bmatrix}\;\text{for any }\lambda
-&\quad\Longrightarrow\quad v_2\ \text{is not an eigenvector}.\\[6pt]
-\Sigma v_3 &= \begin{bmatrix}0\\0\\4\end{bmatrix}&
-&= 4\begin{bmatrix}0\\0\\1\end{bmatrix}
-&\quad\Longrightarrow\quad v_3\ \text{is an eigenvector with }\lambda=4.\\[6pt]
-\Sigma v_4 &= \frac{1}{\sqrt{2}}\begin{bmatrix}2\\2\\0\end{bmatrix}&
-&= 2\left(\frac{1}{\sqrt{2}}\begin{bmatrix}1\\1\\0\end{bmatrix}\right)
-&\quad\Longrightarrow\quad v_4\ \text{is an eigenvector with }\lambda=2.\\[6pt]
-\Sigma v_5 &= \frac{1}{\sqrt{2}}\begin{bmatrix}-3\\5\\4\end{bmatrix}&
-&\neq \lambda \left(\frac{1}{\sqrt{2}}\begin{bmatrix}0\\1\\1\end{bmatrix}\right)\ \text{for any }\lambda
-&\quad\Longrightarrow\quad v_5\ \text{is not an eigenvector}.\\[6pt]
-\Sigma v_6 &= \frac{1}{\sqrt{2}}\begin{bmatrix}8\\-8\\0\end{bmatrix}&
-&= 8\left(\frac{1}{\sqrt{2}}\begin{bmatrix}1\\-1\\0\end{bmatrix}\right)
-&\quad\Longrightarrow\quad v_6\ \text{is an eigenvector with }\lambda=8.
-\end{align*}
-
-\subsubsection*{\normalfont}{$\therefore$ From the provided list, the eigenvectors are:}
-$$\dfrac{1}{\sqrt{2}}\begin{bmatrix}1\\1\\0\end{bmatrix}\text{ with eigenvalue } 2\text{, } \dfrac{1}{\sqrt{2}}\begin{bmatrix}1\\-1\\0\end{bmatrix}\text{ with eigenvalue }8\text{, and }\begin{bmatrix}0\\0\\1\end{bmatrix} \text{ with eigenvalue } 4$$
-
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\newpage
-
-%------------------
-% Solution for 6 (c)
-%------------------
-\subsubsection*{Solution 6}
-\noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 6 (c)}
-\subsubsection*{Eigenvalues for the eigenvectors from (b)}
-From the computations in (b),
-
-$$\lambda\!\left(\tfrac{1}{\sqrt{2}}\begin{bmatrix}1 \\ 1 \\ 0\end{bmatrix}\right)=2,\quad \text{eigenvalue: } 2$$\\
-$$\lambda\!\left(\tfrac{1}{\sqrt{2}}\begin{bmatrix}1 \\ -1 \\ 0\end{bmatrix}\right)=8,\quad \text{eigenvalue: } 8$$ \\
-$$\lambda\!\left(\begin{bmatrix}0 \\ 0 \\ 1\end{bmatrix}\right)=4, \quad \text{eigenvalue: } 4$$ \\
-
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\newpage
-
-%------------------
-% Solution for 6 (d)
-%------------------
-\subsubsection*{Solution 6}
-\noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 6 (d)}
-\subsubsection*{PCA: 2D projection directions}
-Eigenvalues (descending) are $8,4,2$. Thus the top two principal directions are the eigenvectors for $8$ and $4$:
-\[
-v_1=\frac{1}{\sqrt{2}}\begin{bmatrix}1 \\ -1 \\ 0\end{bmatrix},\qquad
-v_2=\begin{bmatrix}0 \\ 0 \\ 1\end{bmatrix}.
-\]
-\subsubsection*{\normalfont}{$\therefore$ PCA projects onto $\left\{\tfrac{1}{\sqrt{2}}\begin{bmatrix}1 \\ -1 \\ 0\end{bmatrix},\;\begin{bmatrix}0 \\ 0 \\ 1\end{bmatrix}\right\}$}\\
-
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\newpage
-
-%------------------
-% Solution for 6 (e)
-%------------------
-\subsubsection*{Solution 6}
-\noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 6 (e)}
-\subsubsection*{2D PCA projection}
-Let, \\
-$$x=\begin{bmatrix}4 \\ 0 \\ 2\end{bmatrix} \quad \mu = \begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix} \quad v_1=\tfrac{1}{\sqrt{2}}\begin{bmatrix}1 \\ -1 \\ 0\end{bmatrix} \quad v_2=\begin{bmatrix}0 \\ 0 \\ 1\end{bmatrix}$$ \\
-
-\begin{enumerate}
-  \item Center $x$ by $\mu$
-  $$x-\mu=\begin{bmatrix}4-1 \\ 0-2 \\ 2-3\end{bmatrix}=\begin{bmatrix}3 \\ -2 \\ -1\end{bmatrix}$$
-  \item Find $y_1$
-  \begin{align*}
-    y_1 &= v_1^\top (x-\mu) \\
-    &= \frac{1}{\sqrt{2}}\begin{bmatrix}1 & -1 & 0\end{bmatrix}\begin{bmatrix}3 \\ -2 \\ -1\end{bmatrix} \\
-    &= \frac{1}{\sqrt{2}}(3+2) \\
-    &= \frac{5}{\sqrt{2}} \\
-  \end{align*}
-  \item Find $y_2$
-  \begin{align*}
-    y_2 &= v_2^\top (x-\mu) \\
-    &= \begin{bmatrix}0 & 0 & 1\end{bmatrix}\begin{bmatrix}3 \\ -2 \\ -1\end{bmatrix} \\
-    &= -1
-  \end{align*}
-\end{enumerate}
-
-\subsubsection*{\normalfont}{$\therefore$ The 2D PCA coordinates are $\begin{bmatrix}\dfrac{5}{\sqrt{2}} \\[10pt] -1\end{bmatrix}$}
-
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\newpage
-
-%------------------
-% Solution for 6 (f)
-%------------------
-\subsubsection*{Solution 6}
-\noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 6 (f)}
-\subsubsection*{Reconstruction from 2D PCA}
-Let, \\
-$$\mu = \begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix} \quad y_1 = \frac{5}{\sqrt{2}} \quad y_2 = -1 \quad v_1=\tfrac{1}{\sqrt{2}}\begin{bmatrix}1 \\ -1 \\ 0\end{bmatrix} \quad v_2=\begin{bmatrix}0 \\ 0 \\ 1\end{bmatrix}$$ \\
-
-\begin{align*}
-x &= \mu + y_1 v_1 + y_2 v_2\\
-&= \begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix}
-+ \frac{5}{\sqrt{2}}\left(\frac{1}{\sqrt{2}}\begin{bmatrix}1 \\ -1 \\ 0\end{bmatrix}\right)
-+ (-1)\begin{bmatrix}0 \\ 0 \\ 1\end{bmatrix} \\
-&= \begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix}
-+ \frac{5}{2}\begin{bmatrix}1 \\ -1 \\ 0\end{bmatrix}
-+ \begin{bmatrix}0 \\ 0 \\ -1\end{bmatrix}\\
-&= \begin{bmatrix}1+\frac{5}{2} \\ 2-\frac{5}{2} \\ 3-1\end{bmatrix}\\
-&= \begin{bmatrix}\frac{7}{2} \\-\frac{1}{2} \\ 2\end{bmatrix}
-\end{align*}
-\subsubsection*{\normalfont}{$\therefore$ The 3D reconstruction is:}
-
-$$x=\begin{bmatrix}\tfrac{7}{2} \\[6pt] -\tfrac{1}{2} \\[6pt] 2\end{bmatrix}$$
-
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\newpage
-
-\subsubsection*{Solution 7}
-\noindent\rule{\textwidth}{0.4pt}
-\subsubsection*{Solution 7 (a)}
-\subsubsection*{PCA 2D Projection}
-
-\begin{figure}[h]
-  \includegraphics[height=0.75\textheight,width=\textwidth]{pca_projection.png}
-  \caption{PCA projection $\mathbb{R}^{85}$ to $\mathbb{R}^{2}$}
-\end{figure}
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\newpage
-
-\subsubsection*{Solution 7}
-\noindent\rule{\textwidth}{0.4pt}
-\subsubsection*{Solution 7 (a)}
-\subsubsection*{PCA Code}
-\begin{lstlisting}
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.decomposition import PCA
-from sklearn.manifold import TSNE
-from scipy.spatial.distance import pdist, squareform
-import re 
-
-# set plot figure size for better readability 
-plt.rcParams['figure.figsize'] = (6, 8)
-
-def load_animal_names(filepath='classes.txt'):
-    with open(filepath, 'r') as f:
-        names = [line.strip() for line in f.readlines()]
-        names = [name.split('.')[-1].replace('+', ' ') for name in names]
-    return(names)
-
-def main():
-    # read predicate-matrix-continuous.txt
-    X = np.loadtxt('predicate-matrix-continuous.txt')
-    # read classes.txt
-    animal_names = load_animal_names('classes.txt')
-    
-    # initalize list to hold embeddings and their titles
-    embeddings_to_plot = []
-    # pca model
-    pca = PCA(n_components=2, random_state=42)
-    Z_pca = pca.fit_transform(X)
-    embeddings_to_plot.append(('PCA Projection', Z_pca))
-\end{lstlisting}
-
-\newpage
-
-\subsubsection*{Solution 7}
-\noindent\rule{\textwidth}{0.4pt}
-\subsubsection*{Solution 7 (b)}
-\subsubsection*{t-SNE Code}
-\begin{lstlisting}
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.decomposition import PCA
-from sklearn.manifold import TSNE
-from scipy.spatial.distance import pdist, squareform
-import re 
-
-# set plot figure size for better readability 
-plt.rcParams['figure.figsize'] = (6, 8)
-
-def load_animal_names(filepath='classes.txt'):
-    with open(filepath, 'r') as f:
-        names = [line.strip() for line in f.readlines()]
-        names = [name.split('.')[-1].replace('+', ' ') for name in names]
-    return(names)
-
-def main():
-    # read predicate-matrix-continuous.txt
-    X = np.loadtxt('predicate-matrix-continuous.txt')
-    # read classes.txt
-    animal_names = load_animal_names('classes.txt')
-    
-    # initalize list to hold embeddings and their titles
-    embeddings_to_plot = []
-    
-    # note: 49 ~ 50 its just python indexing
-    perplexities = [5, 10, 25, 49]
-    for p in perplexities:
-        print(f"Running t-SNE with perplexity={p}...")
-        tsne = TSNE(n_components=2, perplexity=p, random_state=42, 
-                    init='pca', learning_rate='auto')
-        Z_tsne = tsne.fit_transform(X)
-        embeddings_to_plot.append((f't-SNE (Perplexity={p})', Z_tsne))
-\end{lstlisting}
-
-\newpage
-
-\subsubsection*{Solution 7}
-\noindent\rule{\textwidth}{0.4pt}
-\subsubsection*{Solution 7 (c)}
-\subsubsection*{Evaluate Models}
-
-\noindent\rule{\textwidth}{0.4pt}
-\begin{table}[h]
-\centering
-
-%\label{tab:distortion_analysis}
-
-\begin{tabular}{llr}
-\toprule
-\textbf{Plot} & \textbf{Description} & \textbf{Average Distortion} \\
-\midrule
-\texttt{pca\_projection.png} & PCA Projection & 1.8313 \\
-\texttt{t\_sne\_perplexity5.png} & t-SNE (Perplexity=5) & 1.8602 \\
-\texttt{t\_sne\_perplexity10.png} & t-SNE (Perplexity=10) & 1.7101 \\
-\texttt{t\_sne\_perplexity25.png} & t-SNE (Perplexity=25) & 1.5683 \\
-\texttt{t\_sne\_perplexity49.png} & t-SNE (Perplexity=49) & 1.7370 \\
-\bottomrule
-\end{tabular}
-
-\vspace{1em}
-\caption[Distortion Analysis]{The embedding with the lowest average distortion is t-SNE (Perplexity=25) with a minimum distortion of 1.5683.}
-\label{tab:distortion_analysis}
-
-\end{table}
-
-\newpage
-
-\subsubsection*{Solution 7}
-\noindent\rule{\textwidth}{0.4pt}
-\subsubsection*{Solution 7 (c)}
-\subsubsection*{Distortion and Plot Code}
-\begin{lstlisting}
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.decomposition import PCA
-from sklearn.manifold import TSNE
-from scipy.spatial.distance import pdist, squareform
-import re 
-
-# set plot figure size for better readability 
-plt.rcParams['figure.figsize'] = (6, 8)
-
-def load_animal_names(filepath='classes.txt'):
-    with open(filepath, 'r') as f:
-        names = [line.strip() for line in f.readlines()]
-        names = [name.split('.')[-1].replace('+', ' ') for name in names]
-    return(names)
-
-def compute_distortion(X_original, Z_embedded):
-    # calc pairwise distances for original space (n*(n-1)/2 vector)
-    D = pdist(X_original, metric='euclidean')
-
-    # calc pairwise distances for embedded space (n*(n-1)/2 vector)
-    D_hat = pdist(Z_embedded, metric='euclidean')
-    
-    # add a small epsilon to avoid division by zero
-    epsilon = 1e-12
-    D[D == 0] = epsilon
-    D_hat[D_hat == 0] = epsilon
-    
-    # calc scaling factor c (sum of all pairwise distances)
-    c = np.sum(D) / np.sum(D_hat)
-    
-    # calc scaled embedded distances
-    scaled_D_hat = c * D_hat
-    
-    # calculate distortion for each pair (i, j) with i < j
-    Delta_values = np.maximum(D / scaled_D_hat, scaled_D_hat / D)
-    
-    return(np.mean(Delta_values))
-
-def main():
-    # read predicate-matrix-continuous.txt
-    X = np.loadtxt('predicate-matrix-continuous.txt')
-    # read classes.txt
-    animal_names = load_animal_names('classes.txt')
-    
-    # initalize list to hold embeddings and their titles
-    embeddings_to_plot = []
-    
-    for title, Z in embeddings_to_plot:
-        # set plt configs
-        fig = plt.figure(figsize=(7.5, 9))
-        grid_shape = (3, 3)
-        ax_plot = plt.subplot2grid(grid_shape, (0, 0), rowspan=2, colspan=3)
-        ax_legend = plt.subplot2grid(grid_shape, (2, 0), rowspan=1, colspan=3)
-        
-        # plot data
-        for j, name in enumerate(animal_names):
-            color = colors[j]
-            marker = markers[j % len(markers)]
-            
-            ax_plot.scatter(Z[j, 0], Z[j, 1], 
-                            color=color, 
-                            marker=marker, 
-                            label=name, 
-                            s=40) # s=40 is a reasonable marker size
-        
-        ax_plot.set_title(title, fontsize=16)
-        ax_plot.set_xlabel('Component 1')
-        ax_plot.set_ylabel('Component 2')
-        ax_plot.grid(True)
-        
-        # set legend settings
-        handles, labels = ax_plot.get_legend_handles_labels()
-        ax_legend.axis('off')
-        ax_legend.legend(handles, labels, loc='center', ncol=4, fontsize=9)
-        
-        # save plot
-        # Use tight_layout to ensure no overlap
-        plt.tight_layout()
-        clean_title = title.lower()
-        clean_title = re.sub(r'[^\w\s-]', '', clean_title) 
-        clean_title = re.sub(r'[\s-]+', '_', clean_title).strip('_')
-        filename = f"{clean_title}.png"
-        
-        plt.savefig(filename, dpi=150) # 150 dpi is good for print
-        plt.close(fig) # Close the figure to free memory
-
-    # calc distortion
-    distortions = {}
-    
-    # store all embeddings in a dict for distortion calculation
-    all_embeddings_dict = {title: Z for title, Z in embeddings_to_plot}
-        
-    for key, Z in all_embeddings_dict.items():
-        distortion = compute_distortion(X, Z)
-        distortions[key] = distortion
-        print(f"{key} average distortion: {distortion:.4f}")
-        
-    best_embedding = min(distortions, key=distortions.get)
-    min_distortion = distortions[best_embedding]
-    
-    print(f"lowest average distortion is: {best_embedding}")
-    print(f"minimum distortion: {min_distortion:.4f}")
-
-\end{lstlisting}
-
-\newpage
-
-
-\subsubsection*{Solution 7}
-\noindent\rule{\textwidth}{0.4pt}
-\subsubsection*{Solution 7 (c)}
-\subsubsection*{PCA 2D Projection}
-
-\begin{figure}[h]
-  \includegraphics[height=0.75\textheight,width=\textwidth]{pca_projection.png}
-  \caption{PCA projection $\mathbb{R}^{85}$ to $\mathbb{R}^{2}$}
-\end{figure}
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\subsubsection*{Solution 7}
-\noindent\rule{\textwidth}{0.4pt}
-\subsubsection*{Solution 7 (c)}
-\subsubsection*{t-SNE: Perplexity 5}
-
-\begin{figure}[h]
-  \includegraphics[height=0.75\textheight,width=\textwidth]{t_sne_perplexity5.png}
-  \caption{t-SNE plot with perplexity=5}
-\end{figure}
-
-\newpage
-
-\subsubsection*{Solution 7}
-\noindent\rule{\textwidth}{0.4pt}
-\subsubsection*{Solution 7 (c)}
-\subsubsection*{t-SNE: Perplexity 10}
-
-\begin{figure}[h]
-  \includegraphics[height=0.75\textheight,width=\textwidth]{t_sne_perplexity10.png}
-  \caption{t-SNE plot with perplexity=10}
-\end{figure}
-
-\newpage
-
-\subsubsection*{Solution 7}
-\noindent\rule{\textwidth}{0.4pt}
-\subsubsection*{Solution 7 (c)}
-\subsubsection*{t-SNE: Perplexity 25}
-
-\begin{figure}[h]
-  \includegraphics[height=0.75\textheight,width=\textwidth]{t_sne_perplexity25.png}
-  \caption{t-SNE plot with perplexity=25}
-\end{figure}
-
-\newpage
-
-\subsubsection*{Solution 7}
-\noindent\rule{\textwidth}{0.4pt}
-\subsubsection*{Solution 7 (c)}
-\subsubsection*{t-SNE: Perplexity 49}
-
-\begin{figure}[h]
-  \includegraphics[height=0.75\textheight,width=\textwidth]{t_sne_perplexity49.png}
-  \caption{t-SNE plot with perplexity=49. Note: 49 and not 50 because of python indexing starts at 0}
-\end{figure}
-
-\newpage
-
-%------------------
-% Solution for 8
-%------------------
-\subsubsection*{Solution 8}
-\noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Best rank-2 approx to $M$}
-Let, \\
-\[
-M =
-\begin{bmatrix}
-    1 & 0 & 0 & 0\\
-    0 & 0 & 0 & 1\\
-    0 & 0 & 1 & 0\\
-    0 & 1 & 0 & 0
-\end{bmatrix}
-\begin{bmatrix}
-    4 & 0 & 0 & 0\\
-    0 & 3 & 0 & 0\\
-    0 & 0 & 2 & 0\\
-    0 & 0 & 0 & 1
-\end{bmatrix}\begin{bmatrix}
-    1 & 0 & 0 & 0 & 0\\
-    0 & 1 & 0 & 0 & 0\\
-    0 & 0 & 1 & 0 & 0\\
-    0 & 0 & 0 & 1 & 0
-\end{bmatrix}
-\]\\
-
+\subsubsection*{Question 10 (a)}
 \begin{flushleft}
-The SVD of $M$ is given in the form $M = U \Sigma V^T = \sum_{i=1}^4 \sigma_i u_i v_i^T$.
-The best rank-2 approximation, $M_2$, is found by taking the first two terms of the SVD sum, corresponding to the two largest singular values:
+In an election, there are three candidates, $A, B$, and $C$. Of the voting population, $\theta_{A}$ fraction will vote for $A$, while $\theta_{B}$ fraction will vote for $B$ and $\theta_{C}$ fraction will vote for $C$; thus $\theta_{A}+\theta_{B}+\theta_{C}=1$.\\
+
+John wishes to infer the distribution $\left(\theta_{A}, \theta_{B}, \theta_{C}\right)$. He starts by putting a uniform prior on it; that is, he considers all distributions to be equally likely. He then picks four people at random to poll, and finds that they intend to vote for $A, B, B, A$, respectively. Given this information, what is John's posterior distribution?
 \end{flushleft}
 
-$$M_2 = \sigma_1 u_1 v_1^T + \sigma_2 u_2 v_2^T$$
+\subsubsection*{Solution 10 (a)}
 
-\begin{flushleft}
-  From the matrices $U$ (columns $u_i$) and $V^T$ (rows $v_i^T$), we identify the required components:
-\end{flushleft}
-
-\[
-M =
-\underbrace{\begin{bmatrix}
-    1 & 0 & 0 & 0\\
-    0 & 0 & 0 & 1\\
-    0 & 0 & 1 & 0\\
-    0 & 1 & 0 & 0
-\end{bmatrix}}_{U}
-\underbrace{\begin{bmatrix}
-    4 & 0 & 0 & 0\\
-    0 & 3 & 0 & 0\\
-    0 & 0 & 2 & 0\\
-    0 & 0 & 0 & 1
-\end{bmatrix}}_{\Sigma_{4\times4}}
-\underbrace{\begin{bmatrix}
-    1 & 0 & 0 & 0 & 0\\
-    0 & 1 & 0 & 0 & 0\\
-    0 & 0 & 1 & 0 & 0\\
-    0 & 0 & 0 & 1 & 0
-\end{bmatrix}}_{V^\top}
-\]
-It follows that:
-
-$$\sigma_1 = 4 \quad u_1 = \begin{bmatrix} 1 \\ 0 \\ 0 \\ 0 \end{bmatrix} \quad v_1^T = \begin{bmatrix} 1 & 0 & 0 & 0 & 0 \end{bmatrix}\quad \sigma_2 = 3 \quad u_2 = \begin{bmatrix} 0 \\ 0 \\ 0 \\ 1 \end{bmatrix} \quad v_2^T = \begin{bmatrix} 0 & 1 & 0 & 0 & 0 \end{bmatrix}$$
-
-\begin{flushleft}
-  Now, calculate $M_2$:
-\end{flushleft}
- 
-\begin{align*}
-  M_2 &= \sigma_1 u_1 v_1^T + \sigma_2 u_2 v_2^T \\
-  &= 4 \left( \begin{bmatrix} 1 \\ 0 \\ 0 \\ 0 \end{bmatrix} \begin{bmatrix} 1 & 0 & 0 & 0 & 0 \end{bmatrix} \right) + 3 \left( \begin{bmatrix} 0 \\ 0 \\ 0 \\ 1 \end{bmatrix} \begin{bmatrix} 0 & 1 & 0 & 0 & 0 \end{bmatrix} \right) \\
-    &= 4 \begin{bmatrix}
-        1 & 0 & 0 & 0 & 0 \\
-        0 & 0 & 0 & 0 & 0 \\
-        0 & 0 & 0 & 0 & 0 \\
-        0 & 0 & 0 & 0 & 0
-        \end{bmatrix} + 3 \begin{bmatrix}
-        0 & 0 & 0 & 0 & 0 \\
-        0 & 0 & 0 & 0 & 0 \\
-        0 & 0 & 0 & 0 & 0 \\
-        0 & 1 & 0 & 0 & 0
-        \end{bmatrix} 
-    = \begin{bmatrix}
-        4 & 0 & 0 & 0 & 0 \\
-        0 & 0 & 0 & 0 & 0 \\
-        0 & 0 & 0 & 0 & 0 \\
-        0 & 3 & 0 & 0 & 0
-        \end{bmatrix}
-\end{align*}
-
-\subsubsection*{\normalfont}{$\therefore$ The best rank-2 approximation to $M$ is:}
-\[
-M_2 = \begin{bmatrix}
-    4 & 0 & 0 & 0 & 0 \\
-    0 & 0 & 0 & 0 & 0 \\
-    0 & 0 & 0 & 0 & 0 \\
-    0 & 3 & 0 & 0 & 0
-    \end{bmatrix}
-\]
+\subsubsection*{\normalfont}{$\therefore$ } \\
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
 
 %------------------
-% Solution for 9 (a)
+% Solution for 10 (b)
 %------------------
-\subsubsection*{Solution 9}
+\subsubsection*{Solution 10}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 9 (a)}
-\subsubsection*{SVD}
-
-\subsubsection*{Python Code}
-\begin{lstlisting}
-import numpy as np
-
-# set print sig figs
-np.set_printoptions(precision=4, suppress=True)
-
-# define matrix M
-M = np.array([
-    [1, 2, 3],
-    [4, 5, 6]
-])
-
-# calc "thin" SVD
-U, s, Vt = np.linalg.svd(M, full_matrices=False)
-
-# get the first singular value (sigma_1)
-sigma_1 = s[0]
-
-# get the first left singular vector (u_1)
-u_1 = U[:, 0:1]  
-
-# get the first right singular vector (v_1^T)
-
-v_1_T = Vt[0:1, :] 
-
-# calc rank-1 approximation
-M_1 = sigma_1 * (u_1 @ v_1_T)
-
-# print results
-print(f"matrix M:\n{M}\n")
-print("-" * 30)
-print(f"sigma_1 (s[0]): {sigma_1:.4f}\n")
-print(f"u_1 (U[:, 0]):\n{u_1}\n")
-print(f"v_1^T (Vt[0, :]):\n{v_1_T}\n")
-print("-" * 30)
-print(f"best rank-1 approximation (M_1):\n{M_1}")
-\end{lstlisting}
-
-\newpage
-
-%------------------
-% Solution for 9 (a)
-%------------------
-\subsubsection*{Solution 9}
-\noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 9 (a)}
-
-\subsubsection*{Compute $M_1$}
-\[
-M =
-\begin{bmatrix}
-    1 & 2 & 3 \\
-    4 & 5 & 6 
-\end{bmatrix}
-\]
-The best rank-1 approximation $M_1$ is: 
-$$M_1 = \sigma_1 u_1 v_1^T$$
+\subsubsection*{Question 10 (b)}
 \begin{flushleft}
-  From the Python output, we have:
+In an election, there are three candidates, $A, B$, and $C$. Of the voting population, $\theta_{A}$ fraction will vote for $A$, while $\theta_{B}$ fraction will vote for $B$ and $\theta_{C}$ fraction will vote for $C$; thus $\theta_{A}+\theta_{B}+\theta_{C}=1$.\\
+
+Under this posterior distribution, what is the expected value of $\left(\theta_{A}, \theta_{B}, \theta_{C}\right)$?
 \end{flushleft}
 
-$$\sigma_1 \approx 8.7950 \quad u_1 \approx \begin{bmatrix} -0.4042 \\ -0.9147 \end{bmatrix} \quad v_1^T \approx \begin{bmatrix} -0.4287 & -0.5663 & -0.7038 \end{bmatrix}$$
 
-\begin{flushleft}
-  Now, calculate $M_1 = \sigma_1 (u_1 v_1^T)$:
-\end{flushleft}
+\subsubsection*{Solution 10 (b)}
 
-\begin{align*}
-    M_1 &\approx 8.7950 \left( \begin{bmatrix} -0.4042 \\ -0.9147 \end{bmatrix} \begin{bmatrix} -0.4287 & -0.5663 & -0.7038 \end{bmatrix} \right) \\
-    &\approx 8.7950 \begin{bmatrix}
-        (-0.4042)(-0.4287) & (-0.4042)(-0.5663) & (-0.4042)(-0.7038) \\
-        (-0.9147)(-0.4287) & (-0.9147)(-0.5663) & (-0.9147)(-0.7038)
-        \end{bmatrix} \\
-    &\approx 8.7950 \begin{bmatrix}
-        0.1733 & 0.2289 & 0.2845 \\
-        0.3921 & 0.5179 & 0.6438
-        \end{bmatrix} \\
-    &\approx \begin{bmatrix}
-        1.5242 & 2.0131 & 2.5024 \\
-        3.4485 & 4.5552 & 5.6621
-        \end{bmatrix}
-\end{align*}
-
-\subsubsection*{\normalfont}{$\therefore$ The best rank-1 approximation to $M$ is:}
-\[
-M_1 \approx \begin{bmatrix}
-    1.524 & 2.013 & 2.502 \\
-    3.449 & 4.555 & 5.662
-    \end{bmatrix}
-\]
-
+\subsubsection*{\normalfont}{$\therefore$ } \\
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
-
-%------------------
-% Solution for 9 (b)
-%------------------
-\subsubsection*{Solution 9}
-\noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 9 (b)}
-\subsubsection*{Uniqueness}
-Show the decomposition $M = u v^T$ for a rank-1 matrix is not unique.
-\begin{flushleft}
-Assume $M = u v^T$, where $u \in \mathbb{R}^{p}$ and $v \in \mathbb{R}^{q}$.
-Let $c$ be any non-zero scalar (i.e., $c \in \mathbb{R}, c \neq 0$).
-Let $a$ and $b$ be vectors such that:
-\end{flushleft}
-
-$$a = c u \in \mathbb{R}^{p} \text{ and }b = \left(\frac{1}{c}\right) v \in \mathbb{R}^{q}$$
-\begin{flushleft}
-If $c \neq 1$, then $a \neq u$ and $b \neq v$. It follows that $(a, b)$ is a different pair of vectors from $(u, v)$.
-Next, compute the rank-1 matrix $a b^T$:
-\end{flushleft}
-
-\begin{align*}
-    a b^T &= (c u) \left( \frac{1}{c} v \right)^T \\
-    &= (c u) \left( \frac{1}{c} v^T \right) \\
-    &= c \left( \frac{1}{c} \right) (u v^T) \\
-    &= 1 \cdot (u v^T) \\
-    &= u v^T \\
-    &= M
-\end{align*}
-
-Hence, $a b^T = u v^T = M$ and $a \neq u$ and $b \neq v$.
-
-\subsubsection*{\normalfont}{$\therefore$ The decomposition is not unique. For any non-zero scalar $c$, the pair $(cu, \frac{1}{c}v)$ will produce the same rank-1 matrix.}
-
-\noindent\rule{\textwidth}{0.4pt}\\
-
-\newpage
-
-\subsubsection*{Code}
-\noindent\rule{\textwidth}{0.4pt}
-\subsubsection*{Solution 7 Code}
-\begin{lstlisting}
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.decomposition import PCA
-from sklearn.manifold import TSNE
-from scipy.spatial.distance import pdist, squareform
-import re 
-
-# set plot figure size for better readability 
-plt.rcParams['figure.figsize'] = (6, 8)
-
-def load_animal_names(filepath='classes.txt'):
-    with open(filepath, 'r') as f:
-        names = [line.strip() for line in f.readlines()]
-        names = [name.split('.')[-1].replace('+', ' ') for name in names]
-    return(names)
-
-def compute_distortion(X_original, Z_embedded):
-    # calc pairwise distances for original space (n*(n-1)/2 vector)
-    D = pdist(X_original, metric='euclidean')
-
-    # calc pairwise distances for embedded space (n*(n-1)/2 vector)
-    D_hat = pdist(Z_embedded, metric='euclidean')
-    
-    # add a small epsilon to avoid division by zero
-    epsilon = 1e-12
-    D[D == 0] = epsilon
-    D_hat[D_hat == 0] = epsilon
-    
-    # calc scaling factor c (sum of all pairwise distances)
-    c = np.sum(D) / np.sum(D_hat)
-    
-    # calc scaled embedded distances
-    scaled_D_hat = c * D_hat
-    
-    # calculate distortion for each pair (i, j) with i < j
-    Delta_values = np.maximum(D / scaled_D_hat, scaled_D_hat / D)
-    
-    return(np.mean(Delta_values))
-
-def main():
-    # read predicate-matrix-continuous.txt
-    X = np.loadtxt('predicate-matrix-continuous.txt')
-    # read classes.txt
-    animal_names = load_animal_names('classes.txt')
-    
-    # initalize list to hold embeddings and their titles
-    embeddings_to_plot = []
-
-    # pca model
-    pca = PCA(n_components=2, random_state=42)
-    Z_pca = pca.fit_transform(X)
-    embeddings_to_plot.append(('PCA Projection', Z_pca))
-
-    # note: 49 ~ 50 its just python indexing
-    perplexities = [5, 10, 25, 49]
-    for p in perplexities:
-        print(f"Running t-SNE with perplexity={p}...")
-        tsne = TSNE(n_components=2, perplexity=p, random_state=42, 
-                    init='pca', learning_rate='auto')
-        Z_tsne = tsne.fit_transform(X)
-        embeddings_to_plot.append((f't-SNE (Perplexity={p})', Z_tsne))
-    
-    for title, Z in embeddings_to_plot:
-        # set plt configs
-        fig = plt.figure(figsize=(7.5, 9))
-        grid_shape = (3, 3)
-        ax_plot = plt.subplot2grid(grid_shape, (0, 0), rowspan=2, colspan=3)
-        ax_legend = plt.subplot2grid(grid_shape, (2, 0), rowspan=1, colspan=3)
-        
-        # plot data
-        for j, name in enumerate(animal_names):
-            color = colors[j]
-            marker = markers[j % len(markers)]
-            
-            ax_plot.scatter(Z[j, 0], Z[j, 1], 
-                            color=color, 
-                            marker=marker, 
-                            label=name, 
-                            s=40) # s=40 is a reasonable marker size
-        
-        ax_plot.set_title(title, fontsize=16)
-        ax_plot.set_xlabel('Component 1')
-        ax_plot.set_ylabel('Component 2')
-        ax_plot.grid(True)
-        
-        # set legend settings
-        handles, labels = ax_plot.get_legend_handles_labels()
-        ax_legend.axis('off')
-        ax_legend.legend(handles, labels, loc='center', ncol=4, fontsize=9)
-        
-        # save plot
-        # Use tight_layout to ensure no overlap
-        plt.tight_layout()
-        clean_title = title.lower()
-        clean_title = re.sub(r'[^\w\s-]', '', clean_title) 
-        clean_title = re.sub(r'[\s-]+', '_', clean_title).strip('_')
-        filename = f"{clean_title}.png"
-        
-        plt.savefig(filename, dpi=150) # 150 dpi is good for print
-        plt.close(fig) # Close the figure to free memory
-
-    # calc distortion
-    distortions = {}
-    
-    # store all embeddings in a dict for distortion calculation
-    all_embeddings_dict = {title: Z for title, Z in embeddings_to_plot}
-        
-    for key, Z in all_embeddings_dict.items():
-        distortion = compute_distortion(X, Z)
-        distortions[key] = distortion
-        print(f"{key} average distortion: {distortion:.4f}")
-        
-    best_embedding = min(distortions, key=distortions.get)
-    min_distortion = distortions[best_embedding]
-    
-    print(f"lowest average distortion is: {best_embedding}")
-    print(f"minimum distortion: {min_distortion:.4f}")
-
-\end{lstlisting}
-
-\newpage
-
-\subsubsection*{Code}
-\noindent\rule{\textwidth}{0.4pt}
-\subsubsection*{Solution 9 Code}
-\begin{lstlisting}
-import numpy as np
-
-# set print sig figs
-np.set_printoptions(precision=4, suppress=True)
-
-# define matrix M
-M = np.array([
-    [1, 2, 3],
-    [4, 5, 6]
-])
-
-# calc "thin" SVD
-U, s, Vt = np.linalg.svd(M, full_matrices=False)
-
-# get the first singular value (sigma_1)
-sigma_1 = s[0]
-
-# get the first left singular vector (u_1)
-u_1 = U[:, 0:1]  
-
-# get the first right singular vector (v_1^T)
-
-v_1_T = Vt[0:1, :] 
-
-# calc rank-1 approximation
-M_1 = sigma_1 * (u_1 @ v_1_T)
-
-# print results
-print(f"matrix M:\n{M}\n")
-print("-" * 30)
-print(f"sigma_1 (s[0]): {sigma_1:.4f}\n")
-print(f"u_1 (U[:, 0]):\n{u_1}\n")
-print(f"v_1^T (Vt[0, :]):\n{v_1_T}\n")
-print("-" * 30)
-print(f"best rank-1 approximation (M_1):\n{M_1}")
-\end{lstlisting}
-
-\noindent\rule{\textwidth}{0.4pt}
 
 \end{document}
 
