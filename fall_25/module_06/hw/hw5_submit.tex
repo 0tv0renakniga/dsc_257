@@ -469,55 +469,316 @@ from scipy.stats import chi2.pdf
 
 \newpage
 
-
-
-
-
-
 %------------------
-% Solution for 4 (b)
+% Solution for 7(a)
 %------------------
-\subsubsection*{Solution 4}
+\subsubsection*{Solution 7}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 4 (b)}
-Let $\Sigma$ and unit direction $x$,
-\[
-\Sigma = \begin{bmatrix}
-1 & 2 & 0 \\
-2 & 9 & 0 \\
-0 & 0 & 4
-\end{bmatrix}
-\qquad\text{and}\qquad
-x = \frac{1}{\sqrt{3}}\begin{bmatrix}1 \\ 1 \\ 1\end{bmatrix}
-\]
-\begin{align*}
-\mathrm{Var}(x)
-&= x^\top \Sigma x \\
-&= \left(\frac{1}{\sqrt{3}}\begin{bmatrix}1 & 1 & 1\end{bmatrix}\right)
-\begin{bmatrix}
-1 & 2 & 0 \\
-2 & 9 & 0 \\
-0 & 0 & 4
-\end{bmatrix}
-\left(\frac{1}{\sqrt{3}}\begin{bmatrix}1 \\ 1 \\ 1\end{bmatrix}\right) \\
-&= \left(\frac{1}{\sqrt{3}} \cdot \frac{1}{\sqrt{3}}\right)
-\begin{bmatrix}
-(1\cdot1) + (2\cdot1) + (0\cdot1) \\
-(2\cdot1) + (9\cdot1) + (0\cdot1) \\
-(0\cdot1) + (0\cdot1) + (4\cdot1)
-\end{bmatrix} \\
-&= \frac{1}{3}\begin{bmatrix}1 & 1 & 1\end{bmatrix}
-\begin{bmatrix}3 \\ 11 \\ 4\end{bmatrix}\\
-&= \frac{1}{3}(3 + 11 + 4) \\
-&= \frac{18}{3} \\
-&= 6
-\end{align*}
+\subsubsection*{Question 7 (a)}
+\begin{flushleft}
+ \textbf{Text generation using $n$-grams.} In this question, we will try to emulate the language of Shakespeare using an $n$-gram language model. We will base the model on a collection of Shakespeare's sonnets and plays: the text and an accompanying Jupyter notebook are provided on the course webpage, in \texttt{text-gen.zip}.
 
-\subsubsection*{\normalfont}{$\therefore$ the variance in the direction $\frac{1}{\sqrt{3}}\begin{bmatrix}1 \\ 1 \\ 1\end{bmatrix}$ is $6$.} \\
+Take a careful look through the Jupyter notebook. In the implementation, \texttt{<START>} tokens are appended at the beginning of each sentence as indicators. A fullstop (period) token is used to indicate the end of a sentence.\\
+Create $n$-gram models for $n=2, 3$ and, for each of these values of $n$, generate a 100-word text using the trained model. \\
+Show just output from code
+\end{flushleft}
+
+\subsubsection*{Solution 7 (a)}
+\subsubsection*{Code Output}
+
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
+
+%------------------
+% Solution for 7(b)
+%------------------
+\subsubsection*{Solution 7}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 7 (b)}
+\begin{flushleft}
+ \textbf{Text generation using $n$-grams.} In this question, we will try to emulate the language of Shakespeare using an $n$-gram language model. We will base the model on a collection of Shakespeare's sonnets and plays: the text and an accompanying Jupyter notebook are provided on the course webpage, in \texttt{text-gen.zip}.
+
+Take a careful look through the Jupyter notebook. In the implementation, \texttt{<START>} tokens are appended at the beginning of each sentence as indicators. A fullstop (period) token is used to indicate the end of a sentence.\\
+Complete the function \texttt{model\_ll}, which takes a sentence and an $n$-gram model, and returns the log likelihood of the sentence under that model. Use this function to get the log-likelihood of the provided sentence under unigram and bigram models.\\
+\end{flushleft}
+
+\subsubsection*{Solution 7 (b)}
+\subsubsection*{\texttt{model_ll} Python Implementation}
+\begin{lstlisting}
+def model_ll(model, text):
+    """
+    Takes in an n-gram model and a sample text.
+    Returns the log-likelihood of the text under the given model.
+    """
+    import math
+    ll = 0
+    # raise NotImplementedError
+    ## SOLUTION:
+    # 1. Tokenize the text.
+
+    # 2. Generate ngrams for the tokens.
+
+    # 3. Loop through the ngrams, calculate log prob for each ngram and update ll.
+    
+    return ll
+
+\end{lstlisting}
+
+\subsubsection*{log likelihood for unigram and bigram model}
+
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 7(c)
+%------------------
+\subsubsection*{Solution 7}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 7 (c)}
+\begin{flushleft}
+ \textbf{Text generation using $n$-grams.} In this question, we will try to emulate the language of Shakespeare using an $n$-gram language model. We will base the model on a collection of Shakespeare's sonnets and plays: the text and an accompanying Jupyter notebook are provided on the course webpage, in \texttt{text-gen.zip}.
+
+Take a careful look through the Jupyter notebook. In the implementation, \texttt{<START>} tokens are appended at the beginning of each sentence as indicators. A fullstop (period) token is used to indicate the end of a sentence.\\
+Given a prompt from one of Shakespeare's sonnets, generate the next 20 words using the bigram and trigram models, and report the two texts.\\
+Show just output from code
+\end{flushleft}
+
+\subsubsection*{Solution 7 (c)}
+\subsubsection*{Code Output}
+
+
+
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 8 (a)
+%------------------
+\subsubsection*{Solution 8}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 8 (a)}
+\begin{flushleft}
+Let $\theta$ denote the probability that you win when playing tennis with your friend. You want to estimate this probability, and you decide to try both frequentist and Bayesian approaches.
+
+You play ten matches with your friend. The outcomes are:
+\end{flushleft}
+$$X = (W, W, L, L, L, L, L, W, W, W)$$
+
+\begin{flushleft}
+where $W$ means that you win and $L$ means that you lose.\\
+Let's begin with the frequentist approach, in which you estimate the maximum-likelihood value of $\theta$. What is this value, given the observations above?
+
+\end{flushleft}
+
+\subsubsection*{Solution 8 (a)}
+
+\subsubsection*{\normalfont}{$\therefore$ maximum likelihood value of $\theta$ is} \\
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 8 (b)
+%------------------
+\subsubsection*{Solution 8}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 8 (b)}
+\begin{flushleft}
+Let $\theta$ denote the probability that you win when playing tennis with your friend. You want to estimate this probability, and you decide to try both frequentist and Bayesian approaches.
+
+You play ten matches with your friend. The outcomes are:
+\end{flushleft}
+$$X = (W, W, L, L, L, L, L, W, W, W)$$
+
+\begin{flushleft}
+where $W$ means that you win and $L$ means that you lose.\\
+
+Now let's follow a Bayesian approach. This time, we need to begin with a prior distribution on the quantity of interest, $\theta$. Based on your prior knowledge about your relative tennis abilities, you put a $\operatorname{Beta}(6,4)$ prior distribution on $\theta$.
+
+What is $\mathbb{E}[\theta]$, the mean of the prior distribution? What is its standard deviation, $\operatorname{std}(\theta)$?
+
+\end{flushleft}
+
+\subsubsection*{Solution 8 (b)}
+
+\subsubsection*{Mean}
+
+
+\subsubsection*{Standard Deviation}
+
+
+\subsubsection*{\normalfont}{$\therefore$ } \\
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 8 (c)
+%------------------
+\subsubsection*{Solution 8}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 8 (c)}
+\begin{flushleft}
+Let $\theta$ denote the probability that you win when playing tennis with your friend. You want to estimate this probability, and you decide to try both frequentist and Bayesian approaches.
+
+You play ten matches with your friend. The outcomes are:
+\end{flushleft}
+$$X = (W, W, L, L, L, L, L, W, W, W)$$
+
+\begin{flushleft}
+where $W$ means that you win and $L$ means that you lose.\\
+
+Now let's continue with the Bayesian approach by figuring out the posterior distribution of $\theta$ given observations $X$. What is this posterior distribution? What is $\mathbb{E}[\theta \mid X]$, the mean of the posterior given $X$? What is the standard deviation of the posterior?
+\end{flushleft}
+
+\subsubsection*{Solution 8 (c)}
+
+
+\subsubsection*{posterior distribution}
+
+
+\subsubsection*{Mean of posterior distribution}
+
+
+\subsubsection*{Standard Deviation posterior distribution}
+
+
+\subsubsection*{\normalfont}{$\therefore$ } \\
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 8 (d)
+%------------------
+\subsubsection*{Solution 8}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 8 (d)}
+\begin{flushleft}
+Let $\theta$ denote the probability that you win when playing tennis with your friend. You want to estimate this probability, and you decide to try both frequentist and Bayesian approaches.
+
+You play ten matches with your friend. The outcomes are:
+\end{flushleft}
+$$X = (W, W, L, L, L, L, L, W, W, W)$$
+
+\begin{flushleft}
+where $W$ means that you win and $L$ means that you lose.\\
+
+ Notice how the Bayesian approach gives us a distribution over possible values of $\theta$, rather than a single choice of $\theta$. Plot the density of this posterior distribution.
+\end{flushleft}
+
+\subsubsection*{Solution 8 (d)}
+
+
+\subsubsection*{density plot posterior distribution}
+
+\begin{comment}
+\begin{figure}[h]
+  \includegraphics[height=0.75\textheight,width=\textwidth]{q8_d.png}
+  \caption{density plot posterior distribution}
+\end{figure}
+\end{comment}
+
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+
+%------------------
+% Solution for 9 (a)
+%------------------
+\subsubsection*{Solution 9}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 9 (a)}
+\begin{flushleft}
+\textbf{Accidents per day.} The number of car accidents per day in a big city follows a Poisson($\theta$) distribution. Suppose that we decide to do a Bayesian analysis in which we treat $\theta$ as a random variable whose prior distribution is $\operatorname{Gamma}(1,1)$.\\
+Under this prior what is the expected value of $\theta$
+\end{flushleft}
+
+\subsubsection*{Solution 9 (a)}
+
+\subsubsection*{\normalfont}{$\therefore$ } \\
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 9 (b)
+%------------------
+\subsubsection*{Solution 9}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 9 (b)}
+\begin{flushleft}
+\textbf{Accidents per day.} The number of car accidents per day in a big city follows a Poisson($\theta$) distribution. Suppose that we decide to do a Bayesian analysis in which we treat $\theta$ as a random variable whose prior distribution is $\operatorname{Gamma}(1,1)$.\\
+Now we get some data. We count the number of car accidents for ten days, and get the following values:
+\end{flushleft}
+
+$$13, 2, 4, 20, 10, 9, 4, 5, 12, 15$$
+\begin{flushleft}
+Based on these observations, what is the posterior distribution of $\theta$?
+\end{flushleft}
+
+\subsubsection*{Solution 9 (b)}
+
+\subsubsection*{\normalfont}{$\therefore$ } \\
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 9 (c)
+%------------------
+\subsubsection*{Solution 9}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 9 (c)}
+\begin{flushleft}
+\textbf{Accidents per day.} The number of car accidents per day in a big city follows a Poisson($\theta$) distribution. Suppose that we decide to do a Bayesian analysis in which we treat $\theta$ as a random variable whose prior distribution is $\operatorname{Gamma}(1,1)$.\\
+Now we get some data. We count the number of car accidents for ten days, and get the following values:
+\end{flushleft}
+
+$$13, 2, 4, 20, 10, 9, 4, 5, 12, 15$$
+\begin{flushleft}
+Continuing from part (b), plot both the prior and posterior densities.
+\end{flushleft}
+
+\subsubsection*{Solution 9 (c)}
+
+\subsubsection*{density plot prior distribution}
+
+\begin{comment}
+\begin{figure}[h]
+  \includegraphics[height=0.75\textheight,width=\textwidth]{q9_c_prior.png}
+  \caption{density plot prior distribution}
+\end{figure}
+\end{comment}
+
+\subsubsection*{density plot posterior distribution}
+
+\begin{comment}
+\begin{figure}[h]
+  \includegraphics[height=0.75\textheight,width=\textwidth]{q9_c_posterior.png}
+  \caption{density plot posterior distribution}
+\end{figure}
+\end{comment}
+
+\subsubsection*{\normalfont}{$\therefore$ } \\
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
 
 %------------------
 % Solution for 4 (c)
