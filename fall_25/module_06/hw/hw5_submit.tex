@@ -703,17 +703,38 @@ $$n_{\mathrm{a}}=3 \quad n_{\mathrm{rose}}=3 \quad n_{\mathrm{is}}=2 \quad n_{\m
 %------------------
 \subsection*{Solution 7}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 7 (a)}
-\begin{flushleft}
- \textbf{Text generation using $n$-grams.} In this question, we will try to emulate the language of Shakespeare using an $n$-gram language model. We will base the model on a collection of Shakespeare's sonnets and plays: the text and an accompanying Jupyter notebook are provided on the course webpage, in \texttt{text-gen.zip}.
-
-Take a careful look through the Jupyter notebook. In the implementation, \texttt{<START>} tokens are appended at the beginning of each sentence as indicators. A fullstop (period) token is used to indicate the end of a sentence.\\
-Create $n$-gram models for $n=2, 3$ and, for each of these values of $n$, generate a 100-word text using the trained model. \\
-Show just output from code
-\end{flushleft}
-
 \subsubsection*{Solution 7 (a)}
-\subsubsection*{Code Output}
+\subsubsection*{Code}
+\begin{lstlisting}
+## SOLUTION:
+print("training bigram...")
+bigram_model = create_and_fit_model(n=2,sentences=sentences)
+print(f"print_generated_text(bigram): \n {print_generated_text(bigram_model)}")
+print("training trigram...")
+trigram_model = create_and_fit_model(n=3,sentences=sentences)
+print(f"print_generated_text(bigram): \n {print_generated_text(trigram_model)}")
+
+#====================== OUTPUT ===================# 
+training bigram...
+==================================================
+Generated text:
+
+
+CLEOPATRA . De sin , to detain , so . My dear , Be patient ? BOY . Here she to fight . Thou shalt have been more above me ere Rome commanding Warwick rages , that love , would it see . LUCENTIO with suitors , seeking that be now ? But to infringe our intent to go , by the while you , he inform 'd shall her modern friends ! GUIDERIUS . ARMADO . I should die is a prey of Saxony 's hare -finder and he would be good office from his looks . FORD and
+==================================================
+print_generated_text(bigram): 
+ None
+training trigram...
+==================================================
+Generated text:
+
+
+Well , what , ho ! They vex me past care . I will watch to -night , Which on thy pale cold lips . Something sure of this child , Why then tomorrow night , waking and in such a face of her soilure , With ourselves . At my nativity to this princely presence To doom th ' hill . O Jupiter , I 'll give her patent to offend , either with ay or no . No blame belongs to a bowl of wine , and set Quarrelling upon the father 's moods . 'Tis dangerous to
+==================================================
+print_generated_text(bigram): 
+ None
+#==================== END OUTPUT =================#
+\end{lstlisting}
 
 
 \noindent\rule{\textwidth}{0.4pt}\\
@@ -725,17 +746,9 @@ Show just output from code
 %------------------
 \subsection*{Solution 7}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 7 (b)}
-\begin{flushleft}
-Text generation using $n$-grams In this question, we will try to emulate the language of Shakespeare using an $n$-gram language model. We will base the model on a collection of Shakespeare's sonnets and plays: the text and an accompanying Jupyter notebook are provided on the course webpage, in \texttt{text-gen.zip}.
-
-Take a careful look through the Jupyter notebook. In the implementation, \texttt{<START>} tokens are appended at the beginning of each sentence as indicators. A fullstop (period) token is used to indicate the end of a sentence.\\
-Complete the function \texttt{model\_ll}, which takes a sentence and an $n$-gram model, and returns the log likelihood of the sentence under that model. Use this function to get the log-likelihood of the provided sentence under unigram and bigram models.\\
-\end{flushleft}
-
 \subsubsection*{Solution 7 (b)}
 
-\subsubsection*{\texttt{model\_ll} Python Implementation}
+\subsubsection*{Python Implementation and Ouput}
 
 \begin{lstlisting}
 def model_ll(model, text):
@@ -748,17 +761,31 @@ def model_ll(model, text):
     # raise NotImplementedError
     ## SOLUTION:
     # 1. Tokenize the text.
+    tokens = model.tokenize(text)
 
     # 2. Generate ngrams for the tokens.
+    ngrams = model.generate_n_grams(tokens)
 
     # 3. Loop through the ngrams, calculate log prob for each ngram and update ll.
+    for n_gram in ngrams:
+        ll += math.log(model.get_prob(context=n_gram[0], target=n_gram[1]))
     
     return ll
 
+text = "And on a love-book pray for my success?"
+## SOLUTION:
+# train and fit unigram_model
+unigram_model = create_and_fit_model(n=1,sentences=sentences)
+ll = model_ll(unigram_model, text)
+print(f"unigram log-likelihood: {ll:.3f}")
+ll = model_ll(bigram_model, text)
+print(f"bigram log-likelihood: {ll:.3f}")
+
+#====================== OUTPUT ===================# 
+unigram log-likelihood: -65.861
+bigram log-likelihood: -45.879
+#==================== END OUTPUT =================#
 \end{lstlisting}
-
-\subsubsection*{log likelihood for unigram and bigram model}
-
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -769,17 +796,43 @@ def model_ll(model, text):
 %------------------
 \subsection*{Solution 7}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 7 (c)}
-\begin{flushleft}
- \textbf{Text generation using $n$-grams.} In this question, we will try to emulate the language of Shakespeare using an $n$-gram language model. We will base the model on a collection of Shakespeare's sonnets and plays: the text and an accompanying Jupyter notebook are provided on the course webpage, in \texttt{text-gen.zip}.
-
-Take a careful look through the Jupyter notebook. In the implementation, \texttt{<START>} tokens are appended at the beginning of each sentence as indicators. A fullstop (period) token is used to indicate the end of a sentence.\\
-Given a prompt from one of Shakespeare's sonnets, generate the next 20 words using the bigram and trigram models, and report the two texts.\\
-Show just output from code
-\end{flushleft}
-
 \subsubsection*{Solution 7 (c)}
 \subsubsection*{Code Output}
+\begin{lstlisting}
+# QUESTION
+print(test_play)
+prompt = "From fairest creatures we desire increase"
+bigram_20 = generate_text(model=bigram_model, n_outs=20, prompt=prompt) 
+print(f"bigram 20 generated words: {bigram_20}")
+trigram_20 = generate_text(model=trigram_model, n_outs=20, prompt=prompt) 
+print(f"trigram 20 generated words: {trigram_20}")
+
+#====================== OUTPUT ===================# 
+THE SONNETS
+
+by William Shakespeare
+
+
+
+                     1
+  From fairest creatures we desire increase,
+  That thereby beauty's rose might never die,
+  But as the riper should by time decease,
+  His tender heir might bear his memory:
+  But thou contracted to thine own bright eyes,
+  Feed'st thy light's flame with self-substantial fuel,
+  Making a famine where abundance lies,
+  Thy self thy foe, to thy sweet self too cruel:
+  Thou that art now the world's fresh ornament,
+  And only herald to the gaudy spring,
+  Within thine own bud buriest thy content,
+  And tender churl mak'st waste in niggarding:
+    Pity the world, or else this glutton be,
+    To eat the world's due, by the grave and thee.
+bigram 20 generated words: . I take away for the PRINCE OF EPHESUS . POLIXENES . How was my mistress , And y 'are
+trigram 20 generated words: reconciled commenced Lo! burneth heraldry. augmentation 'England Rais'd Mirth intemperance lo, persuasion. Man-ent'red his) French woman? dishonours black-nay, begot. LODOVICO,
+#==================== END OUTPUT =================#
+\end{lstlisting}
 
 
 
