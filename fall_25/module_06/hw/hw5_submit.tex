@@ -260,42 +260,45 @@ P(X=10) = 0.00115
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \subsubsection*{Solution 2 (c)}
+\subsubsection*{Solution 2 (c)}
 \begin{flushleft}
-    Use the probabilities $P(X=k)$ from \textit{part (b)}and multiply by 500 to find the expected number of one hour intervals during which $k$ calls are recived
+    Use the probabilities $P(X=k)$ from part (b) and multiply by 500 to get expected one-hour intervals with $k$ calls.
 \end{flushleft}
 
+% Numbers align with the printed PMF in part (b)
 \begin{align*}
-    P(X=0) &= 0.04268 &\implies E[N_0] = 500 \times 0.04268 &= 21.34 \\
-    P(X=1) &= 0.13460 &\implies E[N_1] = 500 \times 0.13460 &= 67.30 \\
-    P(X=2) &= 0.21230 &\implies E[N_2] = 500 \times 0.21230 &= 106.15 \\
-    P(X=3) &= 0.22310 &\implies E[N_3] = 500 \times 0.22310 &= 111.55 \\
-    P(X=4) &= 0.17590 &\implies E[N_4] = 500 \times 0.17590 &= 87.95 \\
-    P(X=5) &= 0.11094 &\implies E[N_5] = 500 \times 0.11094 &= 55.47 \\
-    P(X=6) &= 0.05830 &\implies E[N_6] = 500 \times 0.05830 &= 29.15 \\
-    P(X=7) &= 0.02628 &\implies E[N_7] = 500 \times 0.02628 &= 13.14 \\
-    P(X=8) &= 0.01036 &\implies E[N_8] = 500 \times 0.01036 &= 5.18 \\
-    P(X \geq 9) &= 1 - P(X \leq 8) = 1 - 0.99448 = 0.00552 &\implies E[N_{\geq 9}] = 500 \times 0.00552 &= 2.76
+    P(X=0) &= 0.04268 &\implies E[N_0] &= 500 \times 0.04268 = 21.34 \\
+    P(X=1) &= 0.13462 &\implies E[N_1] &= 500 \times 0.13462 = 67.31 \\
+    P(X=2) &= 0.21229 &\implies E[N_2] &= 500 \times 0.21229 = 106.15 \\
+    P(X=3) &= 0.22319 &\implies E[N_3] &= 500 \times 0.22319 = 111.60 \\
+    P(X=4) &= 0.17598 &\implies E[N_4] &= 500 \times 0.17598 = 87.99 \\
+    P(X=5) &= 0.11101 &\implies E[N_5] &= 500 \times 0.11101 = 55.50 \\
+    P(X=6) &= 0.05835 &\implies E[N_6] &= 500 \times 0.05835 = 29.18 \\
+    P(X=7) &= 0.02629 &\implies E[N_7] &= 500 \times 0.02629 = 13.15 \\
+    P(X=8) &= 0.01037 &\implies E[N_8] &= 500 \times 0.01037 = 5.19 \\
+    P(X \geq 9) &= 1 - \sum_{k=0}^{8} P(X=k) = 1 - 0.99478 = 0.00522 &\implies E[N_{\geq 9}] &= 500 \times 0.00522 = 2.61
 \end{align*}
 
-\subsubsection*{\normalfont}{$\therefore$ the expected entries are for $\lambda = 3.154$:}
+\subsubsection*{\normalfont}{Expected counts table}
+
 \begin{table}[h]
 \centering
-\caption{Poisson Distribution and Expected Counts}
-\label{tab:poisson_distribution}
-\begin{tabular}{c c S[table-format=4.5] S[table-format=3.2]}
+\caption{Poisson($\lambda{=}3.154$) probabilities and expected counts for 500 intervals}
+\label{tab:poisson_distribution_fixed}
+\begin{tabular}{c S[table-format=1.5] S[table-format=3.2]}
 \toprule
 {$k$} & {$P(X=k)$} & {$E[N_k]$} \\
 \midrule
 0 & 0.04268 & 21.34 \\
-1 & 0.13460 & 67.30 \\
-2 & 0.21230 & 106.15 \\
-3 & 0.22310 & 111.55 \\
-4 & 0.17590 & 87.95 \\
-5 & 0.11094 & 55.47 \\
-6 & 0.05830 & 29.15 \\
-7 & 0.02628 & 13.14 \\
-8 & 0.01036 & 5.18 \\
-$\geq 9$ & 0.00552 & 2.76 \\
+1 & 0.13462 & 67.31 \\
+2 & 0.21229 & 106.15 \\
+3 & 0.22319 & 111.60 \\
+4 & 0.17598 & 87.99 \\
+5 & 0.11101 & 55.50 \\
+6 & 0.05835 & 29.18 \\
+7 & 0.02629 & 13.15 \\
+8 & 0.01037 & 5.19 \\
+$\geq 9$ & 0.00522 & 2.61 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -350,28 +353,35 @@ $$
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 3 (b)}
 
-We are looking for the value of $\lambda$ that maximizes the likelihood of observing our data $x_{1}, \ldots, x_{n}$.
-The likelihood function $L(\lambda)$ is the product of the densities for each observation:
+From \textit{part (a) } $U_{\lambda}$ on $[0,\lambda]$, the density is
+$$
+f(x \mid \lambda) = 
+\begin{cases} 
+      \frac{1}{\lambda} & \text{if } 0 \leq x \leq \lambda \\
+      0 & \text{otherwise} 
+\end{cases}
+$$
+The likelihood function $L(\lambda)$ for a set of $n$ independent observations $X = \{x_1, \ldots, x_n\}$ is the product of the individual densities:
 \begin{align*}
-    L(\lambda \mid x_1, \ldots, x_n) = \prod_{i=1}^{n} f(x_i \mid \lambda)
+    L(\lambda \mid X) = \prod_{i=1}^n f(x_i \mid \lambda)
 \end{align*}
-From part (a), we know that the density $f(x_i \mid \lambda)$ is $0$ if any $x_i > \lambda$.
-This means that if we choose a $\lambda$ that is *smaller* than even one of our observations, the likelihood $L(\lambda)$ will be 0. This is the minimum possible likelihood, not the maximum.
 \begin{flushleft}
-    Hence, to have a non-zero likelihood, $\lambda$ must be greater than or equal to *all* observations.
+    For this likelihood to be non-zero, every single term $f(x_i \mid \lambda)$ must be non-zero. Based on the PDF definition, this means we must have $0 \leq x_i \leq \lambda$ for all $i = 1, \ldots, n$.
 \end{flushleft}
 
-\begin{align*}
-    \lambda \geq x_i \quad \text{for all } i=1, \ldots, n
-\end{align*}
-This is equivalent to saying $\lambda$ must be greater than or equal to the maximum observation:
-\begin{align*}
-    \lambda \geq \max(x_1, \ldots, x_n)
-\end{align*}
+\begin{flushleft}
+    If we choose a $\lambda$ that is smaller than even one observation, say $x_j$, then $f(x_j \mid \lambda) = 0$, and the entire likelihood $L(\lambda) = 0$. This is the minimum possible likelihood, not the maximum.
+\end{flushleft}
 
-\subsubsection*{\normalfont}{$\therefore$ the max likelihood choice of ${\lambda}$ is: }
+\begin{flushleft}
+    It follows that, to have a non-zero likelihood, the choice of $\lambda$ must be greater than or equal to all observations or:
+\end{flushleft}
 
-$$\max(x_1, x_2, \ldots, x_n)$$
+$$
+\lambda \geq \max(x_1, \ldots, x_n)
+$$
+
+\subsubsection*{\normalfont}{$\therefore$ the max likelihood choice of ${\lambda}$ is $\max(x_1, x_2, \ldots, x_n)$}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -383,49 +393,31 @@ $$\max(x_1, x_2, \ldots, x_n)$$
 \subsubsection*{Solution 4}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 4 (a)}
-We set $k=10$ degrees of freedom. To plot the PDF, we generate a range of $x$ values and use \texttt{scipy.stats.chi2.pdf(x, df=k)} to find the corresponding probability density for each $x$.
-
 \subsubsection*{Chi Squared Code}
 \begin{lstlisting}
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import chi2
 
-# Set degrees of freedom
+# degrees of freedom
 k = 10
 
-# Create a range of x values
-# A chi-squared(k) has mean k and variance 2k.
-# So mean=10, std=sqrt(20) approx 4.5.
-# We plot from 0 to mean + 4 std (0 to 10 + 18 = 28)
+# range of x values
 x = np.linspace(0, 30, 400)
 
-# Calculate the PDF values
+# chi squared PDF values
 y_pdf = chi2.pdf(x, df=k)
 
-# Create the plot
+# make the plot and save
 plt.figure(figsize=(10, 6))
 plt.plot(x, y_pdf, 'r-', lw=2, label=f'Chi-squared PDF (k={k})')
-
-# Add labels, title, and grid
 plt.xlabel('X', fontsize=12)
 plt.ylabel('Probability Density', fontsize=12)
 plt.title(f'Chi-squared Distribution PDF (k={k} degrees of freedom)', fontsize=14)
 plt.legend()
 plt.grid(True, linestyle='--', alpha=0.7)
-
-# Save the figure
 plt.savefig('chi_squared_pdf.png', dpi=150, bbox_inches='tight')
-
-print(f"Chi-squared PDF plot with k={k} saved as 'chi_squared_pdf.png'")
 \end{lstlisting}
-
-\newpage
-
-\subsubsection*{Solution 4}
-\noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 4 (a)}
-
 \subsubsection*{Plot}
 
 \begin{figure}[h]
@@ -433,9 +425,7 @@ print(f"Chi-squared PDF plot with k={k} saved as 'chi_squared_pdf.png'")
   \caption{Chi-squared probability density function (PDF) with $k=10$ degrees of freedom.}
   \label{fig:chi_squared_pdf}
 \end{figure}
-
 \noindent\rule{\textwidth}{0.4pt}\\
-
 \newpage
 
 %------------------
@@ -444,18 +434,18 @@ print(f"Chi-squared PDF plot with k={k} saved as 'chi_squared_pdf.png'")
 \subsubsection*{Solution 4}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 4 (b)}
-We use the \texttt{numpy.random.chisquare} function to generate 10,000 samples with $k=10$ degrees of freedom. The median of this sample set is our estimate for the true median of the distribution. We set a random seed for reproducibility. The median is the 50th percentile of the data.
+
 \subsubsection*{Chi Squared Median Code}
 \begin{lstlisting}
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Set parameters
+# 10000 samples from chi-squared(10) -> degrees of freedom is 10
 k = 10
 num_samples = 10000
 random_seed = 42 # For reproducibility
 
-# Set the random seed
+# set the random seed
 np.random.seed(random_seed)
 
 # Generate 10,000 samples from chi-squared(10)
@@ -468,26 +458,22 @@ print(f"Degrees of freedom (k): {k}")
 print(f"Number of samples: {num_samples}")
 print(f"Estimated Median: {median_estimate:.4f}")
 
-# --- Plotting the histogram and median ---
-
+# make plot
 plt.figure(figsize=(10, 6))
-# Plot histogram of the samples
-plt.hist(samples, bins=50, density=True, alpha=0.7, 
-         label=f'Histogram of {num_samples} samples')
+hist_label = f'Histogram of {num_samples} samples'
+plt.hist(samples, bins=50, density=True, alpha=0.7, label=hist_label)
 
-# Plot a vertical line at the estimated median
-plt.axvline(median_estimate, color='red', linestyle='--', linewidth=2, 
-            label=f'Estimated Median: {median_estimate:.4f}')
+# add vertical line at the estimated median to plot
+median_label = f'Estimated Median: {median_estimate:.4f}'
+plt.axvline(median_estimate, color='red', linestyle='--', linewidth=2, label=median_label)
 
+# set args for plot and save
 plt.xlabel('X', fontsize=12)
 plt.ylabel('Density', fontsize=12)
 plt.title(f'Median Estimation from $\chi^2(k={k})$ Samples', fontsize=14)
 plt.legend()
 plt.grid(True, linestyle='--', alpha=0.6)
-
-# Save the figure
 plt.savefig('estimate_median.png', dpi=150, bbox_inches='tight')
-print("Histogram with median estimate saved as 'estimate_median.png'")
 \end{lstlisting}
 
 \newpage
@@ -513,16 +499,26 @@ print("Histogram with median estimate saved as 'estimate_median.png'")
 %------------------
 \subsubsection*{Solution 5}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 5 (a)}
+\subsubsection*{Solution 5 (a)}
+The Maximum Likelihood (ML) estimate for the bias $\theta$ (probability of heads) of a coin is:
+\begin{align*}
+    \theta_{\text{ML}} = \frac{n_H}{n} = \frac{n_H}{n_H + n_T}
+\end{align*}
+Let,
+
+$$n = 20 \quad n_H = 20 \quad n_T = 0$$
+
 \begin{flushleft}
-    \textbf{Maximum likelihood and smoothing.} Upon tossing a coin 20 times, you get heads every time.\\
-    How would you estimate the bias (that is, the heads probability) of the coin, using maximum likelihood?
+    Substituting the values into the formula:
 \end{flushleft}
 
-\subsubsection*{Solution 5 (a)}
+\begin{align*}
+    \theta_{\text{ML}} &= \frac{n_H}{n_H + n_T} \\
+    &= \frac{20}{20} \\
+    &= 1
+\end{align*}
 
-
-\subsubsection*{\normalfont}{$\therefore$ the bias of the coin using maximum likelihood is:} \\
+\subsubsection*{\normalfont}{$\therefore$ the bias of the coin using maximum likelihood is: $1$}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -533,16 +529,32 @@ print("Histogram with median estimate saved as 'estimate_median.png'")
 %------------------
 \subsubsection*{Solution 5}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 5 (b)}
-\begin{flushleft}
-    \textbf{Maximum likelihood and smoothing.} Upon tossing a coin 20 times, you get heads every time.\\
-    How would you estimate the bias of the coin, using maximum likelihood with Laplace smoothing?
-\end{flushleft}
 
 \subsubsection*{Solution 5 (b)}
+For a coin (which has $k=2$ outcomes: heads, tails), we add 1 to the count of heads and 1 to the count of tails to estimate the bias of a coin using the maximum likelihood with Laplace smoothing.
 
+\begin{flushleft}
+    The formula becomes:
+\end{flushleft}
 
-\subsubsection*{\normalfont}{$\therefore$ the bias of the coin using maximum likelihood with Laplace smoothing is:} \\
+\begin{align*}
+    \theta_{\text{Laplace}} = \frac{n_H + 1}{n_H + n_T + 2} 
+\end{align*}
+Let,
+
+$$n = 20 \quad n_H = 20 \quad n_T = 0$$
+
+\begin{flushleft}
+    Substituting the values into the formula:
+\end{flushleft}
+
+\begin{align*}
+    \theta_{\text{Laplace}} &= \frac{n_H + 1}{n_H + n_T + 2} \\
+    &= \frac{20 + 1}{20 + 0 + 2} \\
+    &= \frac{21}{22}
+\end{align*}
+
+\subsubsection*{\normalfont}{$\therefore$ the bias of the coin using maximum likelihood with Laplace smoothing is: $\frac{21}{22}$} \\
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -554,38 +566,53 @@ print("Histogram with median estimate saved as 'estimate_median.png'")
 \subsubsection*{Solution 5}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Question 5 (c)}
-\begin{flushleft}
-    \textbf{Maximum likelihood and smoothing.} Upon tossing a coin 20 times, you get heads every time.\\
-    Under your estimate from part (b), what is the probability of seeing the sequence of tosses $HHTTHH$? You don't need to simplify the numeric expression.
-\end{flushleft}
+From \textit{part (b)}, our estimated bias (probability of heads) is:
+\begin{align*}
+    \theta = P(H) = \frac{21}{22}
+\end{align*}
+It follows that, the probability of tails is:
+\begin{align*}
+    P(T) = 1 - \theta = 1 - \frac{21}{22} = \frac{1}{22}
+\end{align*}
+The sequence of tosses is $HHTTHH$. Now, calculate the probability:
+\begin{align*}
+    P(HHTTHH) &= P(H) \cdot P(H) \cdot P(T) \cdot P(T) \cdot P(H) \cdot P(H) \\
+              &= P(H)^4 \cdot P(T)^2 \\
+              &= (\theta)^4 \cdot (1-\theta)^2 \\
+              &= \left(\frac{21}{22}\right)^4 \left(\frac{1}{22}\right)^2
+\end{align*}
 
-\subsubsection*{Solution 5 (c)}
-
-
-\subsubsection*{\normalfont}{$\therefore$ the probability of seeing the sequence of tosses $HHTTHH$is:} \\
+\subsubsection*{\normalfont}{$\therefore$ the probability of seeing the sequence of tosses $HHTTHH$ is: $\left(\frac{21}{22}\right)^4 \left(\frac{1}{22}\right)^2$} \\
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
-
-
-%%%
 
 %------------------
 % Solution for 6(a)
 %------------------
 \subsubsection*{Solution 6}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 6 (a)}
-\begin{flushleft}
-    \textbf{Fitting a multinomial.} Fix the following vocabulary: $V=\{\mathrm{a}, \mathrm{rose}, \mathrm{is}, \mathrm{flower}\}$.\\
-    In a bag-of-words representation, what is the vector form of the document "A rose is a rose is a rose"?
-\end{flushleft}
 
 \subsubsection*{Solution 6 (a)}
+\begin{flushleft}
+    Let,
+\end{flushleft}
 
+$$D = \{a,rose,is,a,rose,is,a,rose\} \quad V=\{a,rose,is,flower\}$$
 
-\subsubsection*{\normalfont}{$\therefore$ } \\
+\begin{flushleft}
+    Now, count the occurrences of each vocabulary word in $D$:
+\end{flushleft}
+\begin{align*}
+    |D_{a}| &= 3 \\
+    |D_{rose} &= 3\\
+    |D_{is}| &= 2 \\
+    |D_{flower}| &= 0
+\end{align*}
+The vector form is an ordered vector of these counts, corresponding to the order of the vocabulary $V$.
+
+\subsubsection*{\normalfont}{$\therefore$ The vector form is $\begin{bmatrix} 3 \\ 3 \\ 2 \\ 0 \end{bmatrix}$, corresponding to the counts for $(\mathrm{a}, \mathrm{rose}, \mathrm{is}, \mathrm{flower})$.} \\
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -596,16 +623,38 @@ print("Histogram with median estimate saved as 'estimate_median.png'")
 %------------------
 \subsubsection*{Solution 6}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 6 (b)}
+\subsubsection*{Solution 6 (b)}
+The Maximum Likelihood (ML) estimate for the probability of a word $w$, $\theta_w$, is the count of that word $n_w$ divided by the total number of words in the document, $N$.
+\begin{align*}
+    \theta_w = P_{\text{ML}}(w) = \frac{n_w}{N}
+\end{align*}
 \begin{flushleft}
-    \textbf{Fitting a multinomial.} Fix the following vocabulary: $V=\{\mathrm{a}, \mathrm{rose}, \mathrm{is}, \mathrm{flower}\}$.\\
-    Fit a multinomial model to this document using maximum likelihood but not Laplace smoothing. What is the resulting distribution (give the probability of each word in $V$)?
+    From \textit{part (a)}, our counts are:
 \end{flushleft}
 
-\subsubsection*{Solution 6 (b)}
+\begin{align*}
+    |D_{a}| = n_{\mathrm{a}} &= 3 \\
+    |D_{rose} = n_{\mathrm{rose}} &= 3\\
+    |D_{is}| = n_{\mathrm{is}} &= 2 \\
+    |D_{flower}| = n_{\mathrm{flower}} &= 0
+\end{align*}
+\begin{flushleft}
+    The total number of words $N$ is:
+\end{flushleft}
 
+$$N = 3 + 3 + 2 + 0 = 8$$
+\begin{flushleft}
+    We can now calculate the ML probabilities:
+\end{flushleft}
 
-\subsubsection*{\normalfont}{$\therefore$ } \\
+\begin{align*}
+    P_{\text{ML}}(\mathrm{a}) &= \frac{n_{\mathrm{a}}}{N} = \frac{3}{8} \\
+    P_{\text{ML}}(\mathrm{rose}) &= \frac{n_{\mathrm{rose}}}{N} = \frac{3}{8} \\
+    P_{\text{ML}}(\mathrm{is}) &= \frac{n_{\mathrm{is}}}{N} = \frac{2}{8} = \frac{1}{4} \\
+    P_{\text{ML}}(\mathrm{flower}) &= \frac{n_{\mathrm{flower}}}{N} = \frac{0}{8} = 0
+\end{align*}
+
+\subsubsection*{\normalfont}{$\therefore$ The resulting distribution is: $P(\mathrm{a}) = \frac{3}{8}$, $P(\mathrm{rose}) = \frac{3}{8}$, $P(\mathrm{is}) = \frac{1}{4}$, $P(\mathrm{flower}) = 0$} \\
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -616,16 +665,37 @@ print("Histogram with median estimate saved as 'estimate_median.png'")
 %------------------
 \subsubsection*{Solution 6}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 6 (c)}
+\subsubsection*{Solution 6 (c)}
+The formula for the smoothed probability of a word $w$ is:
+
+$$\theta_w = P_{\text{Laplace}}(w) = \frac{n_w + \alpha}{N + k\alpha}$$
+
 \begin{flushleft}
-    \textbf{Fitting a multinomial.} Fix the following vocabulary: $V=\{\mathrm{a}, \mathrm{rose}, \mathrm{is}, \mathrm{flower}\}$.\\
-    Same as part (b), but with Laplace smoothing.
+    With $\alpha=1$, this simplifies to:
 \end{flushleft}
 
-\subsubsection*{Solution 6 (c)}
+\begin{align*}
+    P_{\text{Laplace}}(w) = \frac{n_w + 1}{N + k}
+\end{align*}
 
+\begin{flushleft}
+    Let,
+\end{flushleft}
+$$n_{\mathrm{a}}=3 \quad n_{\mathrm{rose}}=3 \quad n_{\mathrm{is}}=2 \quad n_{\mathrm{flower}}=0 \quad N = 8 \quad k = |V| = 4$$
 
-\subsubsection*{\normalfont}{$\therefore$ } \\
+\begin{flushleft}
+    Now calculate the smoothed probabilities:
+\end{flushleft}
+
+\begin{align*}
+    P_{\text{Laplace}}(\mathrm{a}) &= \frac{n_{\mathrm{a}} + 1}{N + k} = \frac{3 + 1}{12} = \frac{4}{12} = \frac{1}{3} \\
+    P_{\text{Laplace}}(\mathrm{rose}) &= \frac{n_{\mathrm{rose}} + 1}{N + k} = \frac{3 + 1}{12} = \frac{4}{12} = \frac{1}{3} \\
+    P_{\text{Laplace}}(\mathrm{is}) &= \frac{n_{\mathrm{is}} + 1}{N + k} = \frac{2 + 1}{12} = \frac{3}{12} = \frac{1}{4} \\
+    P_{\text{Laplace}}(\mathrm{flower}) &= \frac{n_{\mathrm{flower}} + 1}{N + k} = \frac{0 + 1}{12} = \frac{1}{12}
+\end{align*}
+This smoothing ensures that no word is assigned a zero probability.
+
+\subsubsection*{\normalfont}{$\therefore$ The resulting distribution is: $P(\mathrm{a}) = \frac{1}{3}$, $P(\mathrm{rose}) = \frac{1}{3}$, $P(\mathrm{is}) = \frac{1}{4}$, $P(\mathrm{flower}) = \frac{1}{12}$} \\
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -741,8 +811,23 @@ Let's begin with the frequentist approach, in which you estimate the maximum-lik
 \end{flushleft}
 
 \subsubsection*{Solution 8 (a)}
+The Maximum Likelihood Estimate (MLE) for a Bernoulli or Binomial process (which this is) is the observed frequency of the event in question.
+Let $n_W$ be the number of wins and $n_L$ be the number of losses.
+From the data $X$:
+\begin{itemize}
+    \item $n_W = 5$ (count of 'W')
+    \item $n_L = 5$ (count of 'L')
+    \item $n = n_W + n_L = 10$ (total matches)
+\end{itemize}
+The MLE for $\theta$, the probability of a win, is:
+\begin{align*}
+    \theta_{\text{ML}} = \frac{\text{Number of Wins}}{\text{Total Matches}} = \frac{n_W}{n}
+\end{align*}
+\begin{align*}
+    \theta_{\text{ML}} = \frac{5}{10} = 0.5
+\end{align*}
 
-\subsubsection*{\normalfont}{$\therefore$ maximum likelihood value of $\theta$ is} \\
+\subsubsection*{\normalfont}{$\therefore$ maximum likelihood value of $\theta$ is $0.5$} \\
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -771,14 +856,36 @@ What is $\mathbb{E}[\theta]$, the mean of the prior distribution? What is its st
 \end{flushleft}
 
 \subsubsection*{Solution 8 (b)}
+Given the prior distribution $\theta \sim \operatorname{Beta}(\alpha, \beta)$, with $\alpha = 6$ and $\beta = 4$.
 
 \subsubsection*{Mean}
-
+The mean of a Beta distribution is given by the formula:
+\begin{align*}
+    \mathbb{E}[\theta] = \frac{\alpha}{\alpha + \beta}
+\end{align*}
+Substituting our values:
+\begin{align*}
+    \mathbb{E}[\theta] = \frac{6}{6 + 4} = \frac{6}{10} = 0.6
+\end{align*}
+This prior suggests a belief that you are more likely to win than to lose (mean = 0.6).
 
 \subsubsection*{Standard Deviation}
+The variance of a Beta distribution is given by:
+\begin{align*}
+    \operatorname{Var}(\theta) = \frac{\alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)}
+\end{align*}
+Substituting our values:
+\begin{align*}
+    \operatorname{Var}(\theta) &= \frac{6 \times 4}{(6 + 4)^2 (6 + 4 + 1)} \\
+                         &= \frac{24}{(10)^2 (11)} \\
+                         &= \frac{24}{100 \times 11} = \frac{24}{1100} \approx 0.0218
+\end{align*}
+The standard deviation is the square root of the variance:
+\begin{align*}
+    \operatorname{std}(\theta) = \sqrt{\operatorname{Var}(\theta)} = \sqrt{\frac{24}{1100}} \approx 0.1477
+\end{align*}
 
-
-\subsubsection*{\normalfont}{$\therefore$ } \\
+\subsubsection*{\normalfont}{$\therefore$ The prior mean is $\mathbb{E}[\theta] = 0.6$ and the prior standard deviation is $\operatorname{std}(\theta) = \sqrt{\frac{24}{1100}} \approx 0.1477$.} \\
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -789,33 +896,50 @@ What is $\mathbb{E}[\theta]$, the mean of the prior distribution? What is its st
 %------------------
 \subsubsection*{Solution 8}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 8 (c)}
-\begin{flushleft}
-Let $\theta$ denote the probability that you win when playing tennis with your friend. You want to estimate this probability, and you decide to try both frequentist and Bayesian approaches.
-
-You play ten matches with your friend. The outcomes are:
-\end{flushleft}
-$$X = (W, W, L, L, L, L, L, W, W, W)$$
-
-\begin{flushleft}
-where $W$ means that you win and $L$ means that you lose.\\
-
-Now let's continue with the Bayesian approach by figuring out the posterior distribution of $\theta$ given observations $X$. What is this posterior distribution? What is $\mathbb{E}[\theta \mid X]$, the mean of the posterior given $X$? What is the standard deviation of the posterior?
-\end{flushleft}
-
 \subsubsection*{Solution 8 (c)}
+This problem uses the Beta-Binomial conjugate model.
 
+\begin{itemize}
+    \item \textbf{Prior:} The prior distribution for $\theta$ is $P(\theta) \sim \operatorname{Beta}(\alpha, \beta)$, with $\alpha = 6$ and $\beta = 4$.
+    \item \textbf{Likelihood:} The data $X$ consists of $n_W = 5$ wins and $n_L = 5$ losses. The likelihood of this data given $\theta$ is proportional to a Binomial, $P(X \mid \theta) \propto \theta^{n_W} (1-\theta)^{n_L} = \theta^5 (1-\theta)^5$.
+    \item \textbf{Posterior:} The posterior $P(\theta \mid X)$ is proportional to the prior times the likelihood.
+    \begin{align*}
+        P(\theta \mid X) &\propto P(X \mid \theta) \times P(\theta) \\
+                       &\propto [\theta^{n_W} (1-\theta)^{n_L}] \times [\theta^{\alpha-1} (1-\theta)^{\beta-1}] \\
+                       &\propto \theta^{\alpha + n_W - 1} (1-\theta)^{\beta + n_L - 1}
+    \end{align*}
+    This has the form of a Beta distribution with updated parameters $\alpha' = \alpha + n_W$ and $\beta' = \beta + n_L$.
+\end{itemize}
 
 \subsubsection*{posterior distribution}
-
+We update the parameters with our prior ($\alpha=6, \beta=4$) and data ($n_W=5, n_L=5$):
+\begin{align*}
+    \alpha' &= \alpha + n_W = 6 + 5 = 11 \\
+    \beta' &= \beta + n_L = 4 + 5 = 9
+\end{align*}
+The posterior distribution is $\operatorname{Beta}(11, 9)$.
 
 \subsubsection*{Mean of posterior distribution}
-
+We use the mean formula for a Beta distribution with our posterior parameters $\alpha' = 11$ and $\beta' = 9$:
+\begin{align*}
+    \mathbb{E}[\theta \mid X] = \frac{\alpha'}{\alpha' + \beta'} = \frac{11}{11 + 9} = \frac{11}{20} = 0.55
+\end{align*}
 
 \subsubsection*{Standard Deviation posterior distribution}
+We use the variance formula with posterior parameters:
+\begin{align*}
+    \operatorname{Var}(\theta \mid X) &= \frac{\alpha' \beta'}{(\alpha' + \beta')^2 (\alpha' + \beta' + 1)} \\
+                               &= \frac{11 \times 9}{(11 + 9)^2 (11 + 9 + 1)} \\
+                               &= \frac{99}{(20)^2 (21)} \\
+                               &= \frac{99}{400 \times 21} = \frac{99}{8400}
+\end{align*}
+The standard deviation is the square root of the variance:
+\begin{align*}
+    \operatorname{std}(\theta \mid X) = \sqrt{\frac{99}{8400}} \approx 0.1085
+\end{align*}
+Notice that the posterior standard deviation (0.1085) is smaller than the prior standard deviation (0.1477), which shows that observing data has reduced our uncertainty about $\theta$.
 
-
-\subsubsection*{\normalfont}{$\therefore$ } \\
+\subsubsection*{\normalfont}{$\therefore$ The posterior distribution is $\operatorname{Beta}(11, 9)$, the posterior mean is $0.55$, and the posterior standard deviation is $\sqrt{\frac{99}{8400}} \approx 0.1085$.} \\
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -826,37 +950,83 @@ Now let's continue with the Bayesian approach by figuring out the posterior dist
 %------------------
 \subsubsection*{Solution 8}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 8 (d)}
-\begin{flushleft}
-Let $\theta$ denote the probability that you win when playing tennis with your friend. You want to estimate this probability, and you decide to try both frequentist and Bayesian approaches.
-
-You play ten matches with your friend. The outcomes are:
-\end{flushleft}
-$$X = (W, W, L, L, L, L, L, W, W, W)$$
-
-\begin{flushleft}
-where $W$ means that you win and $L$ means that you lose.\\
-
- Notice how the Bayesian approach gives us a distribution over possible values of $\theta$, rather than a single choice of $\theta$. Plot the density of this posterior distribution.
-\end{flushleft}
-
 \subsubsection*{Solution 8 (d)}
-
+We will plot the posterior distribution, $\operatorname{Beta}(11, 9)$. For educational purposes, we will also plot the $\operatorname{Beta}(6, 4)$ prior and the (scaled) $\theta^5 (1-\theta)^5$ likelihood to show how the data updated our beliefs.
 
 \subsubsection*{density plot posterior distribution}
+\begin{lstlisting}
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import beta
 
-\begin{comment}
+# Parameters for the distributions
+alpha_prior = 6
+beta_prior = 4
+
+n_W = 5
+n_L = 5
+
+alpha_post = alpha_prior + n_W  # 11
+beta_post = beta_prior + n_L   # 9
+
+# Create the x-axis (values of theta)
+x = np.linspace(0, 1, 400)
+
+# Calculate the PDF for prior and posterior
+prior_pdf = beta.pdf(x, alpha_prior, beta_prior)
+post_pdf = beta.pdf(x, alpha_post, beta_post)
+
+# Calculate the likelihood (scaled to plot nicely)
+# The shape is a Beta(n_W+1, n_L+1) PDF
+likelihood_pdf = beta.pdf(x, n_W + 1, n_L + 1)
+
+# Create the plot
+plt.figure(figsize=(10, 6))
+plt.plot(x, prior_pdf, 'b--', lw=2, 
+         label=f'Prior: Beta({alpha_prior}, {beta_prior})')
+plt.plot(x, post_pdf, 'r-', lw=3, 
+         label=f'Posterior: Beta({alpha_post}, {beta_post})')
+plt.plot(x, likelihood_pdf, 'g:', lw=2, 
+         label=f'Likelihood (scaled): $\propto \\theta^{n_W}(1-\\theta)^{n_L}$')
+
+# Add vertical lines for means
+plt.axvline(alpha_prior / (alpha_prior + beta_prior), 
+            color='b', linestyle='--', lw=1, 
+            label=f'Prior Mean: {0.6:.2f}')
+plt.axvline(alpha_post / (alpha_post + beta_post), 
+            color='r', linestyle='-', lw=1, 
+            label=f'Posterior Mean: {0.55:.2f}')
+plt.axvline(n_W / (n_W + n_L), color='g', linestyle=':', 
+            lw=1, label=f'MLE (Likelihood Peak): {0.5:.2f}')
+
+# Add labels, title, and legend
+plt.xlabel('$\\theta$ (Probability of Win)', fontsize=12)
+plt.ylabel('Density', fontsize=12)
+plt.title('Bayesian Update: Prior, Likelihood, and Posterior', fontsize=14)
+plt.legend(fontsize=11)
+plt.grid(True, linestyle='--', alpha=0.6)
+plt.xlim(0, 1)
+
+# Save the figure
+plt.savefig('q8_d.png', dpi=150, bbox_inches='tight')
+print("Posterior density plot saved as 'q8_d.png'")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection*{Solution 8}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 8 (d)}
+
 \begin{figure}[h]
-  \includegraphics[height=0.75\textheight,width=\textwidth]{q8_d.png}
-  \caption{density plot posterior distribution}
+  \includegraphics[width=\textwidth]{q8_d.png}
+  \caption{Density plot of the $\operatorname{Beta}(6,4)$ prior (blue, dashed), the $\operatorname{Beta}(11,9)$ posterior (red, solid), and the (scaled) likelihood (green, dotted).}
+  \label{fig:q8_d}
 \end{figure}
-\end{comment}
-
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
-
 
 %------------------
 % Solution for 9 (a)
@@ -870,8 +1040,19 @@ Under this prior what is the expected value of $\theta$
 \end{flushleft}
 
 \subsubsection*{Solution 9 (a)}
+We are given the prior distribution $\theta \sim \operatorname{Gamma}(\alpha, \beta)$, with shape $\alpha = 1$ and rate $\beta = 1$.
 
-\subsubsection*{\normalfont}{$\therefore$ } \\
+The expected value (mean) of a Gamma distribution with shape $\alpha$ and rate $\beta$ is given by the formula:
+\begin{align*}
+    \mathbb{E}[\theta] = \frac{\alpha}{\beta}
+\end{align*}
+Substituting our prior parameters:
+\begin{align*}
+    \mathbb{E}[\theta] = \frac{1}{1} = 1
+\end{align*}
+(Note: The $\operatorname{Gamma}(1, \beta)$ distribution is equivalent to the $\operatorname{Exponential}(\beta)$ distribution. So, our prior $\operatorname{Gamma}(1, 1)$ is an $\operatorname{Exponential}(1)$ distribution, which has a mean of $1/\beta = 1/1 = 1$.)
+
+\subsubsection*{\normalfont}{$\therefore$ The expected value of $\theta$ under the prior is $1$.} \\
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -894,8 +1075,29 @@ Based on these observations, what is the posterior distribution of $\theta$?
 \end{flushleft}
 
 \subsubsection*{Solution 9 (b)}
+This problem uses the Gamma-Poisson conjugate model.
 
-\subsubsection*{\normalfont}{$\therefore$ } \\
+\begin{itemize}
+    \item \textbf{Prior:} The prior distribution for $\theta$ is $P(\theta) \sim \operatorname{Gamma}(\alpha, \beta)$, with $\alpha = 1$ and $\beta = 1$.
+    \item \textbf{Likelihood:} The data $X = (x_1, \ldots, x_n)$ comes from a Poisson likelihood, $P(X \mid \theta) \sim \operatorname{Poisson}(\theta)$.
+    \item \textbf{Posterior:} The posterior distribution $P(\theta \mid X)$ is a new Gamma distribution, $\operatorname{Gamma}(\alpha', \beta')$, with updated parameters:
+    \begin{align*}
+        \alpha' &= \alpha + \sum_{i=1}^n x_i \\
+        \beta' &= \beta + n
+    \end{align*}
+\end{itemize}
+We first gather the statistics from our data:
+\begin{itemize}
+    \item $n = 10$ (number of days)
+    \item $\sum_{i=1}^n x_i = 13 + 2 + 4 + 20 + 10 + 9 + 4 + 5 + 12 + 15 = 94$ (total number of accidents)
+\end{itemize}
+Now we calculate the posterior parameters $\alpha'$ and $\beta'$:
+\begin{align*}
+    \alpha' &= \alpha + \sum x_i = 1 + 94 = 95 \\
+    \beta' &= \beta + n = 1 + 10 = 11
+\end{align*}
+
+\subsubsection*{\normalfont}{$\therefore$ The posterior distribution of $\theta$ is $\operatorname{Gamma}(95, 11)$.} \\
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -918,26 +1120,74 @@ Continuing from part (b), plot both the prior and posterior densities.
 \end{flushleft}
 
 \subsubsection*{Solution 9 (c)}
+We plot the prior $\operatorname{Gamma}(1, 1)$ and the posterior $\operatorname{Gamma}(95, 11)$ on the same axes to visualize how our belief about $\theta$ (the mean accident rate) has been updated by the data.
 
-\subsubsection*{density plot prior distribution}
+\subsubsection*{Prior and Posterior Density Plot Code}
+\begin{lstlisting}
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import gamma
 
-\begin{comment}
+# Prior parameters
+alpha_prior = 1
+beta_prior = 1  # This is the 'rate'
+
+# Posterior parameters
+alpha_post = 95
+beta_post = 11  # This is the 'rate'
+
+# Note: scipy.stats.gamma uses 'scale' = 1 / 'rate'
+# So, scale_prior = 1 / beta_prior
+# and scale_post = 1 / beta_post
+
+# Create the x-axis (values of theta)
+# The posterior mean is 95/11 ~ 8.64.
+# We plot from 0 to 15 to show both distributions.
+x = np.linspace(0, 15, 500)
+
+# Calculate the PDF for prior and posterior
+prior_pdf = gamma.pdf(x, a=alpha_prior, scale=1/beta_prior)
+post_pdf = gamma.pdf(x, a=alpha_post, scale=1/beta_post)
+
+# Create the plot
+plt.figure(figsize=(10, 6))
+plt.plot(x, prior_pdf, 'b--', lw=2, 
+         label=f'Prior: Gamma({alpha_prior}, {beta_prior})')
+plt.plot(x, post_pdf, 'r-', lw=3, 
+         label=f'Posterior: Gamma({alpha_post}, {beta_post})')
+
+# Add vertical lines for the means
+prior_mean = alpha_prior / beta_prior
+post_mean = alpha_post / beta_post
+plt.axvline(prior_mean, color='b', linestyle='--', lw=1, 
+            label=f'Prior Mean: {prior_mean:.2f}')
+plt.axvline(post_mean, color='r', linestyle='-', lw=1, 
+            label=f'Posterior Mean: {post_mean:.2f}')
+
+# Add labels, title, and legend
+plt.xlabel('$\\theta$ (Mean Accidents per Day)', fontsize=12)
+plt.ylabel('Density', fontsize=12)
+plt.title('Bayesian Update: Prior and Posterior Densities for Accident Rate', fontsize=14)
+plt.legend(fontsize=11)
+plt.grid(True, linestyle='--', alpha=0.6)
+plt.xlim(0, 15)
+plt.ylim(bottom=0)
+
+# Save the figure
+plt.savefig('q9_c_plot.png', dpi=150, bbox_inches='tight')
+print("Prior and posterior density plot saved as 'q9_c_plot.png'")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection*{Solution 9}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 9 (c)}
 \begin{figure}[h]
-  \includegraphics[height=0.75\textheight,width=\textwidth]{q9_c_prior.png}
-  \caption{density plot prior distribution}
+  \includegraphics[width=\textwidth]{q9_c_plot.png}
+  \caption{Density plot of the $\operatorname{Gamma}(1,1)$ prior (blue, dashed) and the $\operatorname{Gamma}(95,11)$ posterior (red, solid). The data has shifted our belief from a prior mean of $1.0$ to a posterior mean of $\approx 8.64$, and significantly reduced our uncertainty.}
+  \label{fig:q9_c_plot}
 \end{figure}
-\end{comment}
-
-\subsubsection*{density plot posterior distribution}
-
-\begin{comment}
-\begin{figure}[h]
-  \includegraphics[height=0.75\textheight,width=\textwidth]{q9_c_posterior.png}
-  \caption{density plot posterior distribution}
-\end{figure}
-\end{comment}
-
-\subsubsection*{\normalfont}{$\therefore$ } \\
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -956,8 +1206,30 @@ John wishes to infer the distribution $\left(\theta_{A}, \theta_{B}, \theta_{C}\
 \end{flushleft}
 
 \subsubsection*{Solution 10 (a)}
+This is a Bayesian inference problem for a Multinomial distribution. The vector $\vec{\theta} = (\theta_A, \theta_B, \theta_C)$ represents the parameters of the multinomial likelihood.
 
-\subsubsection*{\normalfont}{$\therefore$ } \\
+\begin{itemize}
+    \item \textbf{Likelihood:} The likelihood of the data $X = (A, B, B, A)$ given the parameters $\vec{\theta}$ is $P(X \mid \vec{\theta}) \propto \theta_A^{n_A} \theta_B^{n_B} \theta_C^{n_C}$, where $n_i$ is the count for candidate $i$.
+    \item \textbf{Prior:} The conjugate prior for a Multinomial likelihood is the Dirichlet distribution, $P(\vec{\theta}) \sim \operatorname{Dirichlet}(\vec{\alpha})$. A "uniform prior" over the simplex (where $\sum \theta_i = 1$) is a special case of the Dirichlet distribution where all concentration parameters are 1.
+    \begin{align*}
+        P(\vec{\theta}) \sim \operatorname{Dirichlet}(\alpha_A, \alpha_B, \alpha_C) = \operatorname{Dirichlet}(1, 1, 1)
+    \end{align*}
+    \item \textbf{Data:} We observe the data $X = (A, B, B, A)$. We extract the counts:
+    \begin{itemize}
+        \item $n_A = 2$
+        \item $n_B = 2$
+        \item $n_C = 0$
+    \end{itemize}
+    \item \textbf{Posterior:} The posterior distribution is also a Dirichlet distribution. We update the parameters by adding the observed counts to the prior parameters.
+    \begin{align*}
+        P(\vec{\theta} \mid X) &\sim \operatorname{Dirichlet}(\alpha_A + n_A, \alpha_B + n_B, \alpha_C + n_C) \\
+                              &\sim \operatorname{Dirichlet}(1 + 2, 1 + 2, 1 + 0) \\
+                              &\sim \operatorname{Dirichlet}(3, 3, 1)
+    \end{align*}
+\end{itemize}
+This result is equivalent to performing Maximum Likelihood with Laplace (add-one) smoothing, which is a common property when using a uniform Dirichlet prior.
+
+\subsubsection*{\normalfont}{$\therefore$ John's posterior distribution is $\operatorname{Dirichlet}(3, 3, 1)$.} \\
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -977,8 +1249,25 @@ Under this posterior distribution, what is the expected value of $\left(\theta_{
 
 
 \subsubsection*{Solution 10 (b)}
+From part (a), our posterior distribution is $\vec{\theta} \mid X \sim \operatorname{Dirichlet}(\vec{\alpha}')$, where $\vec{\alpha}' = (\alpha'_A, \alpha'_B, \alpha'_C) = (3, 3, 1)$.
 
-\subsubsection*{\normalfont}{$\therefore$ } \\
+The formula for the expected value of a component $\theta_i$ from a Dirichlet distribution is:
+\begin{align*}
+    \mathbb{E}[\theta_i \mid X] = \frac{\alpha'_i}{\sum_{j} \alpha'_j}
+\end{align*}
+First, we compute the sum of the posterior parameters, $\alpha_0 = \sum_{j} \alpha'_j$:
+\begin{align*}
+    \alpha_0 = \alpha'_A + \alpha'_B + \alpha'_C = 3 + 3 + 1 = 7
+\end{align*}
+Now, we can find the expected value for each candidate's vote share:
+\begin{align*}
+    \mathbb{E}[\theta_A \mid X] &= \frac{\alpha'_A}{\alpha_0} = \frac{3}{7} \\
+    \mathbb{E}[\theta_B \mid X] &= \frac{\alpha'_B}{\alpha_0} = \frac{3}{7} \\
+    \mathbb{E}[\theta_C \mid X] &= \frac{\alpha'_C}{\alpha_0} = \frac{1}{7}
+\end{align*}
+The expected value of the vector $\left(\theta_{A}, \theta_{B}, \theta_{C}\right)$ is the vector of these expected values.
+
+\subsubsection*{\normalfont}{$\therefore$ The expected value is $\mathbb{E}[\left(\theta_{A}, \theta_{B}, \theta_{C}\right) \mid X] = \left(\frac{3}{7}, \frac{3}{7}, \frac{1}{7}\right)$.} \\
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
