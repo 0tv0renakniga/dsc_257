@@ -919,9 +919,7 @@ The standard deviation is the square root of the variance:
 \subsection*{Solution 8}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Solution 8 (d)}
-We will plot the posterior distribution, $\operatorname{Beta}(11, 9)$. For educational purposes, we will also plot the $\operatorname{Beta}(6, 4)$ prior and the (scaled) $\theta^5 (1-\theta)^5$ likelihood to show how the data updated our beliefs.
-
-\subsubsection*{density plot posterior distribution}
+\subsubsection*{Code: density plot posterior distribution}
 \begin{lstlisting}
 import numpy as np
 import matplotlib.pyplot as plt
@@ -1088,7 +1086,7 @@ beta_prior = 1
 alpha_post = 95
 beta_post = 11  
 
-# note: scipy.stats.gamma uses 'scale' = 1 / 'rate'
+# note: scipy.stats.gamma uses scale = 1/rate
 # create np.array of x values (theta)
 x = np.linspace(0, 15, 500)
 
