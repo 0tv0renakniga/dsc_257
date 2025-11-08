@@ -56,6 +56,12 @@
 %------------------
 \subsection*{Solution 1}
 \noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 1 (a)}
+\begin{flushleft}
+    Consider the spherical Gaussian $N(0, I_d)$ in $d$-dimensional space. 
+    What is the maximum density achieved by this distribution? At what point is it achieved? 
+\end{flushleft}
+
 \subsubsection*{Solution 1 (a)}
 The probability density function (PDF) for a $d$-dimensional multivariate Gaussian distribution $N(\mu, \Sigma)$ is:
 $$ f(x) = \frac{1}{(2\pi)^{d/2} |\Sigma|^{1/2}} \exp\left( -\frac{1}{2} (x - \mu)^\top \Sigma^{-1} (x - \mu) \right) $$
@@ -82,6 +88,12 @@ $$(2\pi)^{-d/2}$$
 
 \subsubsection*{\normalfont}{$\therefore$ The maximum density for a spherical Gaussian $N(0, I_d)$ is $(2\pi)^{-d/2}$, and the point is achieved at $x = 0$}
 
+\subsubsection*{Graduate Level Explanation}
+The maximum of any multivariate Gaussian PDF $N(\mu, \Sigma)$ occurs at its mean $\mu$. This is because the exponent is governed by the negative Mahalanobis distance, $-(x-\mu)^\top \Sigma^{-1} (x-\mu)$, which is a positive semi-definite quadratic form. This form is uniquely minimized (at a value of 0) when $x=\mu$. For the standard normal $N(0, I_d)$, the Mahalanobis distance simplifies to the squared Euclidean norm $\|x\|^2$, and the normalization constant $(2\pi)^{-d/2} |\Sigma|^{-1/2}$ simplifies to $(2\pi)^{-d/2}$, which is the value of the density at the mode.
+
+\subsubsection*{Learn Fast Explanation}
+Think of a bell curve. It's always tallest at its center (the mean). For the $N(0, I_d)$ distribution, the center is just the origin (the zero vector). The density formula is essentially $\text{Constant} \times \exp(-\text{distance from center})$. To get the biggest value, you want the $\exp(\cdot)$ part to be as large as possible. Since the exponent is negative, you make it largest (it becomes $\exp(0)=1$) by making the "distance from center" zero. This leaves just the constant part, $(2\pi)^{-d/2}$, as the peak height.
+
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
@@ -99,12 +111,34 @@ $$(2\pi)^{-d/2}$$
 \end{flushleft}
 
 \subsubsection*{Solution 1 (b)}
-From \textit{part (a)}, the maximum density is:
-$$f_{\text{max}} = (2\pi)^{-d/2}$$
-Consider the limit of the density as $d$ approaches infinity:
-$$ \lim_{d \to \infty} (2\pi)^{-d/2} = 0 $$
+From part (a), the maximum density is $f_{\text{max}} = (2\pi)^{-d/2}$, which we can rewrite as:
+$$ f_{\text{max}} = \frac{1}{(2\pi)^{d/2}} = \left( \frac{1}{\sqrt{2\pi}} \right)^d $$
+The base of this exponent, $\sqrt{2\pi}$, is approximately $\sqrt{6.28} \approx 2.5$, which is a number greater than 1.
+\begin{itemize}
+    \item When $d=1$, $f_{\text{max}} \approx \frac{1}{2.5} \approx 0.4$
+    \item When $d=2$, $f_{\text{max}} \approx \frac{1}{6.28} \approx 0.16$
+    \item When $d=10$, $f_{\text{max}} \approx (0.4)^{10} \approx 0.0001$
+\end{itemize}
+As $d$ (the dimension) grows, the exponent $d$ increases, causing the denominator $(2\pi)^{d/2}$ to grow exponentially.
+Consequently, the maximum density $f_{\text{max}}$ approaches $0$ exponentially fast.
 
-\subsubsection*{\normalfont}{$\therefore$ The maximum density approaches $0$ as $d$ grows.}
+This is precisely why we work with log-density. The maximum log-density is:
+$$ \log(f_{\text{max}}) = \log\left( (2\pi)^{-d/2} \right) = -\frac{d}{2} \log(2\pi) $$
+This value decreases linearly as $d$ grows (e.g., becomes a large negative number) and is numerically stable, whereas the raw density $f_{\text{max}}$ becomes so small it is rounded to $0$ by standard floating-point arithmetic (an underflow error).
+
+\subsubsection*{\normalfont}{$\therefore$ As $d$ grows, the maximum density approaches $0$ exponentially fast. This causes numerical underflow, forcing the use of log-density.}
+
+\subsubsection*{Graduate Level Explanation}
+The max density $f_{\text{max}} = (2\pi)^{-d/2}$ decays exponentially as $d$ increases. This phenomenon is a component of the "curse of dimensionality," where the high-dimensional space becomes so vast that the probability mass becomes vanishingly sparse, even at the mode of the distribution. The log-density, $\log(f_{\text{max}}) = -\frac{d}{2}\log(2\pi)$, decreases linearly, which is why all practical high-dimensional probabilistic models perform calculations in log-space to maintain numerical stability and avoid underflow.
+
+\subsubsection*{Learn Fast Explanation}
+Imagine you have one pound of butter (your total probability, which is 1) and you have to spread it evenly on a piece of bread.
+\begin{itemize}
+    \item In 1D, you spread it on a line. The "peak" thickness is $0.4$.
+    \item In 2D, you spread it on a square. The peak thickness is already down to $0.16$.
+    \item In 100D, you are spreading that same pound of butter over an impossibly huge 100-dimensional space.
+\end{itemize}
+The butter (probability) gets spread so thin that even the thickest point (the mean) has a density that is basically zero. This number becomes too small for a computer to store, so we use logarithms to work with it instead.
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
