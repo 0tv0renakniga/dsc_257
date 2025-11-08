@@ -478,58 +478,68 @@ from scipy.spatial.distance import cdist
 %------------------
 \subsection*{Solution 6}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 6 (a)}
-\begin{flushleft}
-    \textbf{Four friends} $F_1, F_2, F_3, F_4$ like going to the movies. 
-    When a new movie comes out, they behave according to the following scheme: 
-    \begin{itemize}
-    \item $F_1$ sees the movie with probability 0.5. 
-    \item $F_2$ sees the movie with probability 0.7, independently. 
-    \item If either of $F_1$ or $F_2$ (or both) see the movie, $F_3$ goes to see it with probability 0.8; 
-    if neither $F_1$ nor $F_2$ sees the movie, $F_3$ sees it with probability 0.3. 
-    \item If $F_3$ sees the movie, then $F_4$ goes to see it with probability 0.9. 
-    If $F_3$ doesn't see the movie, then $F_4$ sees it with probability 0.5. 
-    \end{itemize}
-
-    Let $F_1, F_2, F_3, F_4 \in \{0,1\}$ denote who sees the movie. 
-    The dependencies between these four random variables can be captured by the following directed graph: 
-
-    \begin{center}
-    \begin{tikzpicture}[node distance=1.5cm]
-        \node[circle, draw] (F1) {$F_1$}; 
-        \node[circle, draw, below=of F1] (F2) {$F_2$}; 
-        \node[circle, draw, right=of F1] (F3) {$F_3$};
-        \node[circle, draw, below=of F3] (F4) {$F_4$};
-        \draw[-Stealth] (F1) -- (F3); 
-        \draw[-Stealth] (F2) -- (F3); 
-        \draw[-Stealth] (F3) -- (F4); 
-    \end{tikzpicture}
-    \end{center}
-
-    Give the conditional probability tables for this Bayes net. 
-\end{flushleft}
-
 \subsubsection*{Solution 6 (a)}
-Let,
-$$P(F1)=0.5, \quad P(F2)=0.7, \quad P(F3)=0.8, P(F4)=0.9 \quad \text{ and } \quad F1,F2,F3,F4 \in \{0,1\}$$
+\subsubsection*{Construct Conditional Probability Tables (CPTs)}
+\begin{enumerate}
+    \item CPT for $F_1$: $P(F_1)$
+    \begin{center}
+    \begin{tabular}{c c}
+    \toprule
+    $P(F_1=1)$ & $P(F_1=0)$ \\
+    \midrule
+    0.5 & 0.5 \\
+    \bottomrule
+    \end{tabular}
+    \end{center}
+    \item CPT for $F_2$: $P(F_2)$
+    \begin{center}
+    \begin{tabular}{c c}
+    \toprule
+    $P(F_2=1)$ & $P(F_2=0)$ \\
+    \midrule
+    0.7 & 0.3 \\
+    \bottomrule
+    \end{tabular}
+    \end{center}
+    \item CPT for $F_3$: $P(F_3 \mid F_1, F_2)$
+    \begin{center}
+    \begin{tabular}{c c | c c}
+    \toprule
+    $F_1$ & $F_2$ & $P(F_3=1)$ & $P(F_3=0)$ \\
+    \midrule
+    0 & 0 & 0.3 & 0.7 \\
+    0 & 1 & 0.8 & 0.2 \\
+    1 & 0 & 0.8 & 0.2 \\
+    1 & 1 & 0.8 & 0.2 \\
+    \bottomrule
+    \end{tabular}
+    \end{center}
+    \item CPT for $F_4$: $P(F_4 \mid F_3)$
+    \begin{center}
+    \begin{tabular}{c | c c}
+    \toprule
+    $F_3$ & $P(F_4=1)$ & $P(F_4=0)$ \\
+    \midrule
+    0 & 0.5 & 0.5 \\
+    1 & 0.9 & 0.1 \\
+    \bottomrule
+    \end{tabular}
+    \end{center}
+\end{enumerate}
 
-
-\subsubsection*{\normalfont}{$\therefore$ }
+\subsubsection*{\normalfont}{$\therefore$ The Conditional Probability Tables (CPTs) for the model can be seen above}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
-
 %------------------
 % Solution for 6(b)
 %------------------
 \subsection*{Solution 6}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 6 (b)}
-\begin{flushleft}
-    \textbf{Four friends} ... [Intro text from 6(a)  
-
-    \begin{center}
+\subsubsection*{Solution 6 (b)}
+Given:
+\begin{center}
     \begin{tikzpicture}[node distance=1.5cm]
         \node[circle, draw] (F1) {$F_1$}; 
         \node[circle, draw, below=of F1] (F2) {$F_2$}; 
@@ -539,15 +549,20 @@ $$P(F1)=0.5, \quad P(F2)=0.7, \quad P(F3)=0.8, P(F4)=0.9 \quad \text{ and } \qua
         \draw[-Stealth] (F2) -- (F3); 
         \draw[-Stealth] (F3) -- (F4); 
     \end{tikzpicture}
-    \end{center}
+\end{center}
+The joint probability distribution specified by this Bayesian Network is:
+$$ P(F_1, F_2, F_3, F_4) = P(F_1) \cdot P(F_2) \cdot P(F_3 \mid F_1, F_2) \cdot P(F_4 \mid F_3) $$
+From the tables in \textit{part(a)}:
+$$P(F_1=1) = 0.5 \quad P(F_2=1) = 0.7 \quad P(F_3=1 \mid F_1=1, F_2=1) = 0.8 \quad P(F_4=0 \mid F_3=1) = 0.1$$
+Now, substitute the values into the equation above for $P(F_1, F_2, F_3, F_4)$:
+\begin{align*}
+    P(F_1=1, F_2=1, F_3=1, F_4=0) &= P(F_1=1) \times P(F_2=1) \times P(F_3=1 \mid F_1=1, F_2=1) \times P(F_4=0 \mid F_3=1) \\
+                                 &= (0.5) \times (0.7) \times (0.8) \times (0.1) \\
+                                 &= (0.35) \times (0.08) \\
+                                 &= 0.028
+\end{align*}
 
-    What is the probability of the configuration $F_1 = F_2 = F_3 = 1, F_4 = 0$? 
-\end{flushleft}
-
-\subsubsection*{Solution 6 (b)}
-
-
-\subsubsection*{\normalfont}{$\therefore$ }
+\subsubsection*{\normalfont}{$\therefore$ The probability of the configuration $F_1 = F_2 = F_3 = 1, F_4 = 0$ is $0.028$}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 

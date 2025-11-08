@@ -674,9 +674,78 @@ from scipy.spatial.distance import cdist
 \end{flushleft}
 
 \subsubsection*{Solution 6 (a)}
+We translate the problem description into four Conditional Probability Tables (CPTs), one for each node in the graph. $F_1$ and $F_2$ are root nodes, so their tables define their marginal (prior) probabilities. $F_3$ and $F_4$ are conditionally dependent on their parents.
 
+\textbf{CPT for $F_1$:} $P(F_1)$
+\begin{center}
+\begin{tabular}{c c}
+\toprule
+$P(F_1=1)$ & $P(F_1=0)$ \\
+\midrule
+0.5 & 0.5 \\
+\bottomrule
+\end{tabular}
+\end{center}
 
-\subsubsection*{\normalfont}{$\therefore$ }
+\textbf{CPT for $F_2$:} $P(F_2)$
+\begin{center}
+\begin{tabular}{c c}
+\toprule
+$P(F_2=1)$ & $P(F_2=0)$ \\
+\midrule
+0.7 & 0.3 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{CPT for $F_3$:} $P(F_3 \mid F_1, F_2)$
+\begin{center}
+\begin{tabular}{c c | c c}
+\toprule
+$F_1$ & $F_2$ & $P(F_3=1)$ & $P(F_3=0)$ \\
+\midrule
+0 & 0 & 0.3 & 0.7 \\
+0 & 1 & 0.8 & 0.2 \\
+1 & 0 & 0.8 & 0.2 \\
+1 & 1 & 0.8 & 0.2 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{CPT for $F_4$:} $P(F_4 \mid F_3)$
+\begin{center}
+\begin{tabular}{c | c c}
+\toprule
+$F_3$ & $P(F_4=1)$ & $P(F_4=0)$ \\
+\midrule
+0 & 0.5 & 0.5 \\
+1 & 0.9 & 0.1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsubsection*{Verification}
+All CPTs are complete and normalized.
+\begin{itemize}
+    \item $P(F_1)$ sums to $0.5 + 0.5 = 1$.
+    \item $P(F_2)$ sums to $0.7 + 0.3 = 1$.
+    \item $P(F_3 \mid \cdot)$ sums to 1 for all 4 parent configurations (e.g., $0.3+0.7=1$, $0.8+0.2=1$).
+    \item $P(F_4 \mid \cdot)$ sums to 1 for both 2 parent configurations (e.g., $0.5+0.5=1$, $0.9+0.1=1$).
+\end{itemize}
+
+\subsubsection*{\normalfont}{$\therefore$ The four Conditional Probability Tables (CPTs) defining the model are provided above.}
+
+\subsubsection*{Graduate Level Explanation}
+The Bayesian network factorizes the joint distribution $P(F_1, F_2, F_3, F_4)$ according to the specified Directed Acyclic Graph (DAG). Based on the d-separation properties of the graph, the joint probability is $P(F_1, F_2, F_3, F_4) = P(F_1)P(F_2)P(F_3 \mid F_1, F_2)P(F_4 \mid F_3)$. The CPTs above provide the explicit definitions for each of these factors. Note the parameter sharing in $P(F_3 \mid F_1, F_2)$, where the conditional probability is $0.8$ for any case where the condition $F_1 \lor F_2$ (F1 OR F2) is true.
+
+\subsubsection*{Learn Fast Explanation}
+Think of the CPTs as "if-then" rulebooks for each person.
+\begin{itemize}
+    \item \textbf{$F_1$ \& $F_2$:} Have no parents, so their tables are simple: "What's the chance $F_1$ goes?" (50/50). "What's the chance $F_2$ goes?" (70/30).
+    \item \textbf{$F_3$:} Looks at $F_1$ and $F_2$. His rulebook has 4 lines: "IF $F_1$=no AND $F_2$=no, THEN I go (30%)." "IF $F_1$=yes AND $F_2$=no, THEN I go (80%)." ...and so on.
+    \item \textbf{$F_4$:} Only looks at $F_3$. Her rulebook is simple: "IF $F_3$=no, THEN I go (50%)." "IF $F_3$=yes, THEN I go (90%)."
+\end{itemize}
+These tables store all the logic of the system.
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -689,7 +758,19 @@ from scipy.spatial.distance import cdist
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Question 6 (b)}
 \begin{flushleft}
-    \textbf{Four friends} ... [Intro text from 6(a)  
+    \textbf{Four friends} $F_1, F_2, F_3, F_4$ like going to the movies. 
+    When a new movie comes out, they behave according to the following scheme: 
+    \begin{itemize}
+    \item $F_1$ sees the movie with probability 0.5. 
+    \item $F_2$ sees the movie with probability 0.7, independently. 
+    \item If either of $F_1$ or $F_2$ (or both) see the movie, $F_3$ goes to see it with probability 0.8; 
+    if neither $F_1$ nor $F_2$ sees the movie, $F_3$ sees it with probability 0.3. 
+    \item If $F_3$ sees the movie, then $F_4$ goes to see it with probability 0.9. 
+    If $F_3$ doesn't see the movie, then $F_4$ sees it with probability 0.5. 
+    \end{itemize}
+
+    Let $F_1, F_2, F_3, F_4 \in \{0,1\}$ denote who sees the movie. 
+    The dependencies between these four random variables can be captured by the following directed graph: 
 
     \begin{center}
     \begin{tikzpicture}[node distance=1.5cm]
@@ -705,16 +786,45 @@ from scipy.spatial.distance import cdist
 
     What is the probability of the configuration $F_1 = F_2 = F_3 = 1, F_4 = 0$? 
 \end{flushleft}
-
 \subsubsection*{Solution 6 (b)}
+The joint probability distribution specified by this Bayesian Network factorizes according to the graph structure:
+$$ P(F_1, F_2, F_3, F_4) = P(F_1) \cdot P(F_2) \cdot P(F_3 \mid F_1, F_2) \cdot P(F_4 \mid F_3) $$
+To find the probability of the specific configuration $F_1=1, F_2=1, F_3=1, F_4=0$, we plug these values into the formula and look up the corresponding probabilities from our CPTs in part (a).
+\begin{align*}
+    P(F_1=1, F_2=1, F_3=1, F_4=0) &= P(F_1=1) \times P(F_2=1) \times P(F_3=1 \mid F_1=1, F_2=1) \times P(F_4=0 \mid F_3=1) \\
+                                 &= (0.5) \times (0.7) \times (0.8) \times (0.1) \\
+                                 &= (0.35) \times (0.08) \\
+                                 &= 0.028
+\end{align*}
 
+\subsubsection*{Verification}
+The joint probability formula correctly applies the chain rule of probability as defined by the graph's topology (parents of $F_3$ are $F_1, F_2$; parent of $F_4$ is $F_3$). The values are correctly sourced from the CPTs:
+\begin{itemize}
+    \item $P(F_1=1) = 0.5$ (from CPT for $F_1$)
+    \item $P(F_2=1) = 0.7$ (from CPT for $F_2$)
+    \item $P(F_3=1 \mid F_1=1, F_2=1) = 0.8$ (from row 4 of CPT for $F_3$)
+    \item $P(F_4=0 \mid F_3=1) = 0.1$ (from row 2 of CPT for $F_4$)
+\end{itemize}
+The multiplication $0.5 \times 0.7 \times 0.8 \times 0.1 = 0.028$ is correct.
 
-\subsubsection*{\normalfont}{$\therefore$ }
+\subsubsection*{\normalfont}{$\therefore$ The probability of the configuration $F_1 = F_2 = F_3 = 1, F_4 = 0$ is $0.028$.}
+
+\subsubsection*{Graduate Level Explanation}
+This calculation is a fundamental example of exact inference in a Bayesian network. By leveraging the conditional independencies encoded in the graph, we compute the joint probability using the "chain rule for Bayesian networks." This avoids the need to construct the full joint probability table (which would have $2^4 = 16$ entries), instead only requiring the storage of $2 + 2 + 8 + 4 = 16$ parameters in the CPTs. The query is a simple lookup in the factored representation.
+
+\subsubsection*{Learn Fast Explanation}
+To find the probability of this specific story, you just "chain" the events together, multiplying their probabilities.
+\begin{enumerate}
+    \item What's the chance $F_1$ goes? **0.5**
+    \item ...AND what's the chance $F_2$ goes? **0.7**
+    \item ...AND, *given that both went*, what's the chance $F_3$ goes? (Look at $F_3$'s rulebook, row 4): **0.8**
+    \item ...AND, *given that $F_3$ went*, what's the chance $F_4$ does *not* go? (Look at $F_4$'s rulebook, row 2): **0.1**
+\end{enumerate}
+Just multiply those numbers together: $0.5 \times 0.7 \times 0.8 \times 0.1 = 0.028$, or 2.8%.
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
-
 %------------------
 % Solution for 7
 %------------------
