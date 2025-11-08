@@ -915,27 +915,103 @@ Both of these "stories" ($P(X)P(Y \mid X)$ and $P(Y)P(X \mid Y)$) are perfectly 
     Let $D=1$ if the disease is present and $D=0$ if it isn't; likewise with paralysis. 
 \end{flushleft}
 
+%------------------
+% Solution for 8(a)
+%------------------
+\subsection*{Solution 8}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 8 (a)}
+\begin{flushleft}
+    \textbf{Genes, diseases, and outcomes.} ... [Intro text from 8(a) omitted for brevity] ...
+    Draw a suitable Bayes net over the variables $G_1, G_2, D, P$, and give all relevant conditional probability tables. 
+    Let $D=1$ if the disease is present and $D=0$ if it isn't; likewise with paralysis. 
+\end{flushleft}
+
 \subsubsection*{Solution 8 (a)}
+Based on the problem description:
+\begin{itemize}
+    \item $G_1$ and $G_2$ are independent.
+    \item $D$ depends on $G_1$ and $G_2$.
+    \item $P$ depends on $D$.
+\end{itemize}
+This implies the Directed Acyclic Graph (DAG) $G_1 \to D \leftarrow G_2$ and $D \to P$.
 
 \subsubsection*{Bayes Net Diagram}
-\begin{comment}
+
     \begin{center}
     \begin{tikzpicture}[node distance=1.5cm]
         \node[circle, draw] (G1) {$G_1$};
-        \node[circle, draw, below=of G1] (G2) {$G_2$};
-        \node[circle, draw, right=of G1] (D) {$D$};
+        \node[circle, draw, right=of G1] (G2) {$G_2$};
+        \node[circle, draw, below=of G1, xshift=1.5cm] (D) {$D$};
         \node[circle, draw, below=of D] (P) {$P$};
         \draw[-Stealth] (G1) -- (D);
         \draw[-Stealth] (G2) -- (D);
         \draw[-Stealth] (D) -- (P);
     \end{tikzpicture}
     \end{center}
-\end{comment}
 
 \subsubsection*{Conditional Probability Tables}
+\textbf{CPT for $G_1$:} $P(G_1)$
+\begin{center}
+\begin{tabular}{c c}
+\toprule
+$P(G_1=1)$ & $P(G_1=0)$ \\
+\midrule
+0.1 & 0.9 \\
+\bottomrule
+\end{tabular}
+\end{center}
 
+\textbf{CPT for $G_2$:} $P(G_2)$
+\begin{center}
+\begin{tabular}{c c}
+\toprule
+$P(G_2=1)$ & $P(G_2=0)$ \\
+\midrule
+0.2 & 0.8 \\
+\bottomrule
+\end{tabular}
+\end{center}
 
-\subsubsection*{\normalfont}{$\therefore$ }
+\textbf{CPT for $D$:} $P(D \mid G_1, G_2)$
+\begin{center}
+\begin{tabular}{c c | c c}
+\toprule
+$G_1$ & $G_2$ & $P(D=1)$ & $P(D=0)$ \\
+\midrule
+0 & 0 & 0.0 & 1.0 \\
+0 & 1 & 0.1 & 0.9 \\
+1 & 0 & 0.2 & 0.8 \\
+1 & 1 & 0.5 & 0.5 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{CPT for $P$:} $P(P \mid D)$
+\begin{center}
+\begin{tabular}{c | c c}
+\toprule
+$D$ & $P(P=1)$ & $P(P=0)$ \\
+\midrule
+0 & 0.01 & 0.99 \\
+1 & 0.50 & 0.50 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsubsection*{\normalfont}{$\therefore$ The Bayes Net diagram and the four required CPTs are provided above.}
+
+\subsubsection*{Graduate Level Explanation}
+The problem describes a causal structure that is perfectly represented by a Bayesian network. The independence of $G_1$ and $G_2$ makes them root nodes. The disease $D$ is a "collider" node, as its probability is conditionally dependent on *both* $G_1$ and $G_2$. The paralysis $P$ is a leaf node whose probability is conditionally independent of $G_1$ and $G_2$ *given* $D$, a manifestation of the Markov property. The CPTs fully parameterize this joint distribution.
+
+\subsubsection*{Learn Fast Explanation}
+Think of this as a set of "if-then" rules. The diagram shows who influences whom: the two genes ($G_1, G_2$) can influence the disease ($D$), and the disease ($D$) can influence paralysis ($P$). The CPTs are just rulebooks:
+\begin{itemize}
+    \item $G_1$'s rulebook: "10% chance I'm mutant."
+    \item $G_2$'s rulebook: "20% chance I'm mutant."
+    \item $D$'s rulebook: "My chance of happening depends on my two parent genes. (e.g., If $G_1$ is mutant and $G_2$ is normal, there's a 20% chance I happen)."
+    \item $P$'s rulebook: "My chance of happening depends only on $D$. (e.g., If the disease is present, there's a 50% chance I happen)."
+\end{itemize}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -948,15 +1024,42 @@ Both of these "stories" ($P(X)P(Y \mid X)$ and $P(Y)P(X \mid Y)$) are perfectly 
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Question 8 (b)}
 \begin{flushleft}
-    \textbf{Genes, diseases, and outcomes.} ... [Intro text from 8(a)  
+    \textbf{Genes, diseases, and outcomes.} ... [Intro text from 8(a) omitted for brevity] ...
 
     What is the probability of disease $(D=1)$? 
 \end{flushleft}
 
 \subsubsection*{Solution 8 (b)}
+To find the marginal probability $P(D=1)$, we must sum over all possible states of its parents, $G_1$ and $G_2$. This is an application of the Law of Total Probability.
+$$ P(D=1) = \sum_{g_1 \in \{0,1\}} \sum_{g_2 \in \{0,1\}} P(G_1=g_1, G_2=g_2, D=1) $$
+Using the network's factorization, $P(G_1, G_2, D) = P(G_1)P(G_2)P(D \mid G_1, G_2)$:
+\begin{align*}
+    P(D=1) &= P(G_1=0)P(G_2=0)P(D=1 \mid G_1=0, G_2=0) \\
+           &+ P(G_1=0)P(G_2=1)P(D=1 \mid G_1=0, G_2=1) \\
+           &+ P(G_1=1)P(G_2=0)P(D=1 \mid G_1=1, G_2=0) \\
+           &+ P(G_1=1)P(G_2=1)P(D=1 \mid G_1=1, G_2=1)
+\end{align*}
+Now, we plug in the values from our CPTs:
+\begin{align*}
+    P(D=1) &= (0.9)(0.8)(0.0) + (0.9)(0.2)(0.1) + (0.1)(0.8)(0.2) + (0.1)(0.2)(0.5) \\
+           &= 0.0 + 0.018 + 0.016 + 0.010 \\
+           &= 0.044
+\end{align*}
 
+\subsubsection*{\normalfont}{$\therefore$ The probability of disease $(D=1)$ is $0.044$, or 4.4%.}
 
-\subsubsection*{\normalfont}{$\therefore$ }
+\subsubsection*{Graduate Level Explanation}
+The calculation of $P(D=1)$ is a standard "sum-product" operation for marginal inference. We compute the marginal probability of a node by summing its joint probability with its parents over all possible states of the parents. This operation, $\sum_{G_1, G_2} P(G_1)P(G_2)P(D=1 \mid G_1, G_2)$, is a form of "belief propagation" from the root nodes $G_1$ and $G_2$ to the child node $D$.
+
+\subsubsection*{Learn Fast Explanation}
+To find the total chance of getting the disease, we have to find the chance of *each way* it can happen, and then add those chances up. There are 4 "scenarios" for the genes:
+\begin{enumerate}
+    \item (Gene 1 normal) AND (Gene 2 normal) AND (Disease): $(0.9 \times 0.8 \times 0.0) = 0.0$
+    \item (Gene 1 normal) AND (Gene 2 mutant) AND (Disease): $(0.9 \times 0.2 \times 0.1) = 0.018$
+    \item (Gene 1 mutant) AND (Gene 2 normal) AND (Disease): $(0.1 \times 0.8 \times 0.2) = 0.016$
+    \item (Gene 1 mutant) AND (Gene 2 mutant) AND (Disease): $(0.1 \times 0.2 \times 0.5) = 0.010$
+\end{enumerate}
+Add up all these scenarios: $0.0 + 0.018 + 0.016 + 0.010 = 0.044$.
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -969,15 +1072,37 @@ Both of these "stories" ($P(X)P(Y \mid X)$ and $P(Y)P(X \mid Y)$) are perfectly 
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Question 8 (c)}
 \begin{flushleft}
-    \textbf{Genes, diseases, and outcomes.} ... [Intro text from 8(a)  
+    \textbf{Genes, diseases, and outcomes.} ... [Intro text from 8(a) omitted for brevity] ...
 
     What is the probability of paralysis $(P=1)$? 
 \end{flushleft}
 
 \subsubsection*{Solution 8 (c)}
+We find the marginal probability $P(P=1)$ by marginalizing over its parent, $D$.
+$$ P(P=1) = \sum_{d \in \{0,1\}} P(D=d, P=1) $$
+Using the Law of Total Probability and the network factorization:
+$$ P(P=1) = P(P=1 \mid D=0)P(D=0) + P(P=1 \mid D=1)P(D=1) $$
+From part (b), we know $P(D=1) = 0.044$.
+Therefore, $P(D=0) = 1 - P(D=1) = 1 - 0.044 = 0.956$.
+Now, we plug in all values from our CPTs and previous calculations:
+\begin{align*}
+    P(P=1) &= (0.01) \cdot (0.956) + (0.5) \cdot (0.044) \\
+           &= 0.00956 + 0.022 \\
+           &= 0.03156
+\end{align*}
 
+\subsubsection*{\normalfont}{$\therefore$ The probability of paralysis $(P=1)$ is $0.03156$, or $\approx 3.16\%$.}
 
-\subsubsection*{\normalfont}{$\therefore$ }
+\subsubsection*{Graduate Level Explanation}
+This is another marginal inference computation. The probability $P(D)$ computed in 8(b) acts as the prior belief (or "message") for the node $D$. We then use this belief to compute the marginal for $P$ by applying the chain rule, $P(P) = \sum_D P(P \mid D)P(D)$. This two-step process demonstrates how belief propagates sequentially through the network.
+
+\subsubsection*{Learn Fast Explanation}
+What's the total chance of paralysis? Again, we find the chance of *each way* it can happen and add them up.
+\begin{enumerate}
+    \item (No disease) AND (Paralysis): $P(D=0) \times P(P=1 \mid D=0) = (0.956) \times (0.01) = 0.00956$
+    \item (Have disease) AND (Paralysis): $P(D=1) \times P(P=1 \mid D=1) = (0.044) \times (0.5) = 0.022$
+\end{enumerate}
+Add those two scenarios: $0.00956 + 0.022 = 0.03156$.
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -990,15 +1115,40 @@ Both of these "stories" ($P(X)P(Y \mid X)$ and $P(Y)P(X \mid Y)$) are perfectly 
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Question 8 (d)}
 \begin{flushleft}
-    \textbf{Genes, diseases, and outcomes.} ... [Intro text from 8(a)  
+    \textbf{Genes, diseases, and outcomes.} ... [Intro text from 8(a) omitted for brevity] ...
 
     We observe that a person has paralysis. What is the probability that they have the disease? 
 \end{flushleft}
 
 \subsubsection*{Solution 8 (d)}
+We need to calculate the conditional probability $P(D=1 \mid P=1)$. We use Bayes' rule:
+$$ P(D=1 \mid P=1) = \frac{P(P=1 \mid D=1) P(D=1)}{P(P=1)} $$
+We have all three components from our previous calculations:
+\begin{itemize}
+    \item $P(P=1 \mid D=1) = 0.5$ (from the CPT for $P$)
+    \item $P(D=1) = 0.044$ (from part 8b)
+    \item $P(P=1) = 0.03156$ (from part 8c)
+\end{itemize}
+Now, plug them in:
+\begin{align*}
+    P(D=1 \mid P=1) &= \frac{0.5 \times 0.044}{0.03156} \\
+                   &= \frac{0.022}{0.03156} \\
+                   &\approx 0.69708
+\end{align*}
 
+\subsubsection*{\normalfont}{$\therefore$ The probability that a person with paralysis has the disease is $\approx 0.697$ (or 69.7%).}
 
-\subsubsection*{\normalfont}{$\therefore$ }
+\subsubsection*{Graduate Level Explanation}
+This is a classic example of diagnostic reasoning (abductive inference) in a Bayesian network. We are calculating a posterior probability $P(\text{Cause} \mid \text{Effect})$. The prior probability of disease $P(D=1)$ was only 4.4%, but after observing the "paralysis" evidence, our belief in the "disease" state is significantly updated to 69.7%. The term $P(P=1)$ acts as the marginal likelihood of the evidence.
+
+\subsubsection*{Learn Fast Explanation}
+This is Bayes' rule in action. We want $P(\text{Disease} \mid \text{Paralysis})$.
+\begin{itemize}
+    \item **Numerator:** What's the chance of (Have disease) AND (Paralysis)? We found this in 8(c): $0.022$.
+    \item **Denominator:** What's the *total* chance of (Paralysis)? We found this in 8(c): $0.03156$.
+\end{itemize}
+So, the probability is just $\frac{0.022}{0.03156} \approx 0.697$.
+In plain English: "Of all the ways a person could be paralyzed (which is 3.16% of people), what fraction of them got it from the disease (which is 2.2% of people)?" The answer is $\frac{2.2}{3.16}$, which is $\approx 69.7\%$.
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -1011,19 +1161,54 @@ Both of these "stories" ($P(X)P(Y \mid X)$ and $P(Y)P(X \mid Y)$) are perfectly 
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Question 8 (e)}
 \begin{flushleft}
-    \textbf{Genes, diseases, and outcomes.} ... [Intro text from 8(a)  
+    \textbf{Genes, diseases, and outcomes.} ... [Intro text from 8(a) omitted for brevity] ...
 
     We observe that a person has the disease $(D=1)$. 
     What is the probability that they have the mutant form of gene $G_1$? 
 \end{flushleft}
 
 \subsubsection*{Solution 8 (e)}
+We need to calculate $P(G_1=1 \mid D=1)$. We use Bayes' rule:
+$$ P(G_1=1 \mid D=1) = \frac{P(D=1, G_1=1)}{P(D=1)} $$
+We have the denominator $P(D=1) = 0.044$ from part (8b).
+We must calculate the numerator, which is the joint probability $P(D=1, G_1=1)$. To do this, we marginalize over $G_2$:
+\begin{align*}
+    P(D=1, G_1=1) &= \sum_{g_2 \in \{0,1\}} P(G_1=1, G_2=g_2, D=1) \\
+                 &= P(G_1=1)P(G_2=0)P(D=1 \mid G_1=1, G_2=0) \\
+                 &+ P(G_1=1)P(G_2=1)P(D=1 \mid G_1=1, G_2=1)
+\end{align*}
+Using values from the CPTs:
+\begin{align*}
+    P(D=1, G_1=1) &= (0.1)(0.8)(0.2) + (0.1)(0.2)(0.5) \\
+                 &= 0.016 + 0.010 \\
+                 &= 0.026
+\end{align*}
+Now we can solve Bayes' rule:
+\begin{align*}
+    P(G_1=1 \mid D=1) &= \frac{0.026}{0.044} = \frac{26}{44} = \frac{13}{22} \\
+                   &\approx 0.5909
+\end{align*}
 
+\subsubsection*{\normalfont}{$\therefore$ The probability that a person with the disease has the mutant $G_1$ gene is $\frac{13}{22} \approx 0.591$ (or 59.1%).}
 
-\subsubsection*{\normalfont}{$\therefore$ }
+\subsubsection*{Graduate Level Explanation}
+This is another diagnostic inference, $P(G_1=1 \mid D=1)$. We cannot use the simpler form $P(D=1 \mid G_1=1)P(G_1=1)$ because $P(D=1 \mid G_1=1)$ is not a value in our CPTs, as $D$ also depends on $G_2$. We must first compute the joint $P(D=1, G_1=1)$ by marginalizing out $G_2$. This demonstrates an inference query that "skips" a node in the graph, as we are reasoning from $D$ back to its parent $G_1$.
+
+\subsubsection*{Learn Fast Explanation}
+We want $P(\text{Mutant } G_1 \mid \text{Disease})$.
+\begin{itemize}
+    \item **Denominator:** What's the total chance of having the disease? From 8(b), it's $0.044$.
+    \item **Numerator:** What's the chance of (Mutant $G_1$) AND (Disease)? We find this by adding the two ways it can happen:
+        1. (Mutant $G_1$) AND (Normal $G_2$) AND (Disease): $(0.1 \times 0.8 \times 0.2) = 0.016$
+        2. (Mutant $G_1$) AND (Mutant $G_2$) AND (Disease): $(0.1 \times 0.2 \times 0.5) = 0.010$
+        Total for numerator = $0.016 + 0.010 = 0.026$.
+\end{itemize}
+The answer is $\frac{0.026}{0.044} \approx 0.591$.
+The chance of having the mutant gene $G_1$ was only 10%. But *given* you have the disease, that chance jumps to 59.1%.
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
+\newpage
 \newpage
 
 %------------------
