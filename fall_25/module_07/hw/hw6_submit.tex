@@ -91,13 +91,6 @@ $$(2\pi)^{-d/2}$$
 %------------------
 \subsection*{Solution 1}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 1 (b)}
-\begin{flushleft}
-    Consider the spherical Gaussian $N(0, I_d)$ in $d$-dimensional space. 
-    In very rough terms, what happens to the maximum density as $d$ grows? 
-    (This helps explain why for high-dimensional data we typically work with the logarithm of the density, in order to avoid numerical underflow errors.) 
-\end{flushleft}
-
 \subsubsection*{Solution 1 (b)}
 From \textit{part (a)}, the maximum density is:
 $$f_{\text{max}} = (2\pi)^{-d/2}$$
@@ -115,28 +108,58 @@ $$ \lim_{d \to \infty} (2\pi)^{-d/2} = 0 $$
 %------------------
 \subsection*{Solution 2}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 2 (a)}
-\begin{flushleft}
-    \textbf{Length concentration.} Write a procedure that draws 10000 points $X_1, \ldots, X_{10000}$ from the spherical Gaussian $N(0, I_d)$ and plots a histogram of their (squared) lengths $\|X_i\|^2$. 
-    Do this for $d=10$. What seems to be the typical (squared) length? 
-\end{flushleft}
-
 \subsubsection*{Solution 2 (a)}
-
-\subsubsection*{Python Code for d=10}
+\subsubsection*{Python Code: d=10}
 \begin{lstlisting}
 import numpy as np
 import matplotlib.pyplot as plt
+
+# set dimension and number of samples
+d = 10
+num_samples = 10000
+np.random.seed(42) 
+
+# get 10000 points from N(0, I_d)
+samples = np.random.normal(0, 1, size=(num_samples, d))
+
+# calc the squared L2 norm for each point
+squared_lengths_d10 = np.sum(samples**2, axis=1)
+
+# calculate mean
+sample_mean_d10 = np.mean(squared_lengths_d10)
+print(f"Dimension (d): {d}")
+print(f"Sample Mean of ||X||^2: {sample_mean_d10:.4f}")
+
+# plot the histogram
+plt.figure(figsize=(10, 6))
+plt.hist(squared_lengths_d10, bins=50, color='skyblue', edgecolor='black', alpha=0.7, density=True,label=f'Histogram of {num_samples} samples')
+plt.axvline(d, color='red', linestyle='--', linewidth=2, 
+            label=f'Theoretical Mean (d = {d}): $E[||X||^2]$')
+plt.axvline(sample_mean_d10, color='blue', linestyle=':', linewidth=2, 
+            label=f'Sample Mean = {sample_mean_d10:.4f}')
+# set plot args and save
+plt.title('Histogram of Squared Lengths for $N(0, I_{10})$', fontsize=14)
+plt.xlabel('Squared Length $||X||^2$', fontsize=12)
+plt.ylabel('Density', fontsize=12)
+plt.legend()
+plt.grid(True, linestyle='--', alpha=0.5)
+plt.savefig('histogram_d10.png', dpi=150, bbox_inches='tight')
 \end{lstlisting}
 
-\begin{comment}
+\newpage
+%------------------
+% Solution for 2(a)
+%------------------
+\subsection*{Solution 2}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 2 (a)}
+\subsubsection*{Plot}
 \begin{figure}[h]
   \includegraphics[width=\textwidth]{histogram_d10.png}
-  \caption{Histogram of squared lengths for d=10}
+  \caption{Histogram of squared lengths for d=10.}
 \end{figure}
-\end{comment}
 
-\subsubsection*{\normalfont}{$\therefore$ }
+\subsubsection*{\normalfont}{$\therefore$ The typical (squared) length is approximately 10}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -147,28 +170,62 @@ import matplotlib.pyplot as plt
 %------------------
 \subsection*{Solution 2}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 2 (b)}
-\begin{flushleft}
-    \textbf{Length concentration.} Write a procedure that draws 10000 points $X_1, \ldots, X_{10000}$ from the spherical Gaussian $N(0, I_d)$ and plots a histogram of their (squared) lengths $\|X_i\|^2$. 
-    Repeat for $d=100$. Is the histogram more concentrated than in (a), or is it less concentrated? 
-\end{flushleft}
-
 \subsubsection*{Solution 2 (b)}
-
-\subsubsection*{Python Code for d=100}
+\subsubsection*{Python Code: d=100}
 \begin{lstlisting}
 import numpy as np
 import matplotlib.pyplot as plt
+
+# set dimension and number of samples
+d = 100
+num_samples = 10000
+np.random.seed(42) 
+
+# get 10000 points from N(0, I_d)
+samples = np.random.normal(0, 1, size=(num_samples, d))
+
+# calc the squared L2 norm for each point
+squared_lengths_d100 = np.sum(samples**2, axis=1)
+
+# calculate mean
+sample_mean_d100 = np.mean(squared_lengths_d100)
+print(f"Dimension (d): {d}")
+print(f"Sample Mean of ||X||^2: {sample_mean_d100:.4f}")
+
+# plot the histogram
+plt.figure(figsize=(10, 6))
+plt.hist(squared_lengths_d100, bins=50, color='skyblue', edgecolor='black', alpha=0.7, density=True,label=f'Histogram of {num_samples} samples')
+plt.axvline(d, color='red', linestyle='--', linewidth=2, 
+            label=f'Theoretical Mean (d = {d}): $E[||X||^2]$')
+plt.axvline(sample_mean_d100, color='blue', linestyle=':', linewidth=2, 
+            label=f'Sample Mean = {sample_mean_d100:.4f}')
+# set plot args and save
+plt.title('Histogram of Squared Lengths for $N(0, I_{100})$', fontsize=14)
+plt.xlabel('Squared Length $||X||^2$', fontsize=12)
+plt.ylabel('Density', fontsize=12)
+plt.legend()
+plt.grid(True, linestyle='--', alpha=0.5)
+plt.savefig('histogram_d100.png', dpi=150, bbox_inches='tight')
 \end{lstlisting}
 
-\begin{comment}
+\newpage
+\subsection*{Solution 2}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 2 (b)}
+\subsubsection*{Plot}
 \begin{figure}[h]
   \includegraphics[width=\textwidth]{histogram_d100.png}
-  \caption{Histogram of squared lengths for d=100}
+  \caption{Histogram of squared lengths for d=100.}
 \end{figure}
-\end{comment}
 
-\subsubsection*{\normalfont}{$\therefore$ }
+\subsubsection*{Calculate Concentration}
+To determine if the distribution is more concentrated, we must compare its relative spread. This is measured using the coefficient of variation or $CV$, which is defined as:
+$$CV = \frac{\sigma}{\mu} \quad \text{ where } \quad \mu=d \text{ ,  } \sigma = \sqrt{2d}$$
+For, $d=10$ and $d=100$, the coefficient of variation is:
+$$CV_{10} = \frac{\sqrt{20}}{10} \approx 0.447\quad \text{ and }\quad CV_{100} = \frac{\sqrt{200}}{100} \approx 0.141$$
+Hence, $CV_{100} < CV_{10}$ 
+
+\subsubsection*{\normalfont}{$\therefore$ the distribution for $d=100$ is more concentrated than the distribution for $d=10$}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -179,16 +236,32 @@ import matplotlib.pyplot as plt
 %------------------
 \subsection*{Solution 3}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 3}
-\begin{flushleft}
-    Suppose $X \in \mathbb{R}^2$ has a Gaussian distribution with mean $\begin{bmatrix}1 \\ 2\end{bmatrix}$ and covariance matrix $\begin{bmatrix}2 & 0 \\ 0 & 4\end{bmatrix}$. 
-    What is the distribution of the projection of $X$ onto direction $\frac{1}{\sqrt{2}}\begin{bmatrix}1 \\ 1\end{bmatrix}$? 
-\end{flushleft}
 
-\subsubsection*{Solution 3}
+Let $X \sim N(\mu, \Sigma)$ where:
+$$ \mu = \begin{bmatrix}1 \\ 2\end{bmatrix} \quad \quad \Sigma = \begin{bmatrix}2 & 0 \\ 0 & 4\end{bmatrix} \quad \quad v = \frac{1}{\sqrt{2}}\begin{bmatrix}1 \\ 1\end{bmatrix}$$
 
+\begin{enumerate}
+    \item Calculate the mean $\mu_Y$:
+    \begin{align*}
+    \mu_Y &= v^\top\mu \\
+          &= \begin{bmatrix}1/\sqrt{2} & 1/\sqrt{2}\end{bmatrix} \begin{bmatrix}1 \\ 2\end{bmatrix} \\
+          &= \left(\frac{1}{\sqrt{2}} \cdot 1\right) + \left(\frac{1}{\sqrt{2}} \cdot 2\right) \\
+          &= \frac{1}{\sqrt{2}} + \frac{2}{\sqrt{2}} \\
+          &= \frac{3}{\sqrt{2}}
+    \end{align*}
+    \item Calculate the variance $\sigma_Y^2$:
+    \begin{align*}
+        \sigma_Y^2 &= v^\top\Sigma v \\
+        &= \begin{bmatrix}1/\sqrt{2} & 1/\sqrt{2}\end{bmatrix} \begin{bmatrix}2 & 0 \\ 0 & 4\end{bmatrix} \begin{bmatrix}1/\sqrt{2} \\ 1/\sqrt{2}\end{bmatrix} \\
+        &= \begin{bmatrix}1/\sqrt{2} & 1/\sqrt{2}\end{bmatrix} \begin{bmatrix} 2 \cdot (1/\sqrt{2}) + 0 \\ 0 + 4 \cdot (1/\sqrt{2}) \end{bmatrix} \\
+        &= \begin{bmatrix}1/\sqrt{2} & 1/\sqrt{2}\end{bmatrix} \begin{bmatrix} 2/\sqrt{2} \\ 4/\sqrt{2} \end{bmatrix} \\
+        &= \left(\frac{1}{\sqrt{2}} \cdot \frac{2}{\sqrt{2}}\right) + \left(\frac{1}{\sqrt{2}} \cdot \frac{4}{\sqrt{2}}\right) \\
+        &= \frac{2}{2} + \frac{4}{2} \\
+        &= 1 + 2 = 3
+    \end{align*}
+\end{enumerate}
 
-\subsubsection*{\normalfont}{$\therefore$ }
+\subsubsection*{\normalfont}{$\therefore$ The distribution of the projection is $N\left(\frac{3}{\sqrt{2}}, 3\right)$}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 

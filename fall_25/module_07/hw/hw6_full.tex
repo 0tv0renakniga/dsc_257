@@ -157,20 +157,63 @@ The butter (probability) gets spread so thin that even the thickest point (the m
 
 \subsubsection*{Solution 2 (a)}
 
-\subsubsection*{Python Code for d=10}
+\subsubsection*{Python Code: d=10}
 \begin{lstlisting}
 import numpy as np
 import matplotlib.pyplot as plt
+
+# set dimension and number of samples
+d = 10
+num_samples = 10000
+np.random.seed(42) 
+
+# get 10000 points from N(0, I_d)
+samples = np.random.normal(0, 1, size=(num_samples, d))
+
+# calc the squared L2 norm for each point
+squared_lengths_d10 = np.sum(samples**2, axis=1)
+
+# calculate mean
+sample_mean_d10 = np.mean(squared_lengths_d10)
+print(f"Dimension (d): {d}")
+print(f"Sample Mean of ||X||^2: {sample_mean_d10:.4f}")
+
+# plot the histogram
+plt.figure(figsize=(10, 6))
+plt.hist(squared_lengths_d10, bins=50, color='skyblue', edgecolor='black', alpha=0.7, density=True,label=f'Histogram of {num_samples} samples')
+plt.axvline(d, color='red', linestyle='--', linewidth=2, 
+            label=f'Theoretical Mean (d = {d}): $E[||X||^2]$')
+plt.axvline(sample_mean_d10, color='blue', linestyle=':', linewidth=2, 
+            label=f'Sample Mean = {sample_mean_d10:.4f}')
+# set plot args and save
+plt.title('Histogram of Squared Lengths for $N(0, I_{10})$', fontsize=14)
+plt.xlabel('Squared Length $||X||^2$', fontsize=12)
+plt.ylabel('Density', fontsize=12)
+plt.legend()
+plt.grid(True, linestyle='--', alpha=0.5)
+plt.savefig('histogram_d10.png', dpi=150, bbox_inches='tight')
 \end{lstlisting}
 
-\begin{comment}
+\newpage
+%------------------
+% Solution for 2(a)
+%------------------
+\subsection*{Solution 2}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 2 (a)}
+\subsubsection*{Plot}
 \begin{figure}[h]
   \includegraphics[width=\textwidth]{histogram_d10.png}
-  \caption{Histogram of squared lengths for d=10}
+  \caption{Histogram of squared lengths for d=10. The distribution is centered near the theoretical mean of 10.}
 \end{figure}
-\end{comment}
 
-\subsubsection*{\normalfont}{$\therefore$ }
+\subsubsection*{\normalfont}{$\therefore$ The typical (squared) length is approximately 10}
+
+\subsubsection*{Graduate Level Explanation}
+The random variable $Y = \|X\|^2$ for $X \sim N(0, I_d)$ follows a Chi-squared distribution, $Y \sim \chi^2(d)$. The expected value and variance are $\mathbb{E}[Y] = d$ and $\operatorname{Var}(Y) = 2d$. For $d=10$, this gives $\mathbb{E}[Y] = 10$ and $\operatorname{Var}(Y) = 20$. The histogram is a visualization of this $\chi^2(10)$ distribution, and its mode and mean are clearly clustered around the expected value of 10.
+
+\subsubsection*{Learn Fast Explanation}
+Imagine throwing darts at a 10-dimensional dartboard. The "squared length" is just the squared distance from the bullseye (the origin). While you might expect most darts to land near the center, in 10 dimensions they actually pile up around a specific distance. The "typical" squared distance isn't 0; it's 10. Our histogram shows this "pile-up" of squared distances, which is clearly centered at 10.
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -188,21 +231,68 @@ import matplotlib.pyplot as plt
 \end{flushleft}
 
 \subsubsection*{Solution 2 (b)}
-
-\subsubsection*{Python Code for d=100}
+\subsubsection*{Python Code: d=100}
 \begin{lstlisting}
 import numpy as np
 import matplotlib.pyplot as plt
+
+# set dimension and number of samples
+d = 100
+num_samples = 10000
+np.random.seed(42) 
+
+# get 10000 points from N(0, I_d)
+samples = np.random.normal(0, 1, size=(num_samples, d))
+
+# calc the squared L2 norm for each point
+squared_lengths_d100 = np.sum(samples**2, axis=1)
+
+# calculate mean
+sample_mean_d100 = np.mean(squared_lengths_d100)
+print(f"Dimension (d): {d}")
+print(f"Sample Mean of ||X||^2: {sample_mean_d100:.4f}")
+
+# plot the histogram
+plt.figure(figsize=(10, 6))
+plt.hist(squared_lengths_d100, bins=50, color='skyblue', edgecolor='black', alpha=0.7, density=True,label=f'Histogram of {num_samples} samples')
+plt.axvline(d, color='red', linestyle='--', linewidth=2, 
+            label=f'Theoretical Mean (d = {d}): $E[||X||^2]$')
+plt.axvline(sample_mean_d100, color='blue', linestyle=':', linewidth=2, 
+            label=f'Sample Mean = {sample_mean_d100:.4f}')
+# set plot args and save
+plt.title('Histogram of Squared Lengths for $N(0, I_{100})$', fontsize=14)
+plt.xlabel('Squared Length $||X||^2$', fontsize=12)
+plt.ylabel('Density', fontsize=12)
+plt.legend()
+plt.grid(True, linestyle='--', alpha=0.5)
+plt.savefig('histogram_d100.png', dpi=150, bbox_inches='tight')
 \end{lstlisting}
 
-\begin{comment}
+\newpage
+\subsection*{Solution 2}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 2 (b)}
+\subsubsection*{Plot}
 \begin{figure}[h]
   \includegraphics[width=\textwidth]{histogram_d100.png}
-  \caption{Histogram of squared lengths for d=100}
+  \caption{Histogram of squared lengths for d=100. The distribution is much more sharply concentrated around its mean of 100.}
 \end{figure}
-\end{comment}
 
-\subsubsection*{\normalfont}{$\therefore$ }
+
+\subsubsection*{Calculate Concentration}
+To determine if the distribution is more concentrated, we must compare its relative spread. This is measured using the coefficient of variation or $CV$, which is defined as:
+$$CV = \frac{\sigma}{\mu} \quad \text{ where } \quad \mu=d \text{ ,  } \sigma = \sqrt{2d}$$
+For, $d=10$ and $d=100$, the coefficient of variation is:
+$$CV_{10} = \frac{\sqrt{20}}{10} \approx 0.447\quad \text{ and }\quad CV_{100} = \frac{\sqrt{200}}{100} \approx 0.141$$
+Hence, $CV_{100} < CV_{10}$ 
+
+\subsubsection*{\normalfont}{$\therefore$ the distribution for $d=100$ is more concentrated than the distribution for $d=10$}
+
+\subsubsection*{Graduate Level Explanation}
+This demonstrates the phenomenon of **length concentration** in high dimensions. The coefficient of variation (CV) for the $\chi^2(d)$ distribution is $\text{CV} = \frac{\sqrt{\operatorname{Var}(Y)}}{\mathbb{E}[Y]} = \frac{\sqrt{2d}}{d} = \sqrt{\frac{2}{d}}$. This value scales as $O(1/\sqrt{d})$, meaning it approaches 0 as $d \to \infty$. Consequently, in high-dimensional spaces, the squared lengths of $N(0, I_d)$ vectors are not broadly distributed but instead concentrate in a "thin shell" very close to the expected value $d$.
+
+\subsubsection*{Learn Fast Explanation}
+Welcome to the "curse of dimensionality." On our 10-D dartboard, the squared distances were spread out (from $\approx 0$ to $25$). On the 100-D dartboard, the squared distances are centered at 100, but they are *packed* in a much tighter band (e.g., almost all are between 80 and 120). Relative to its mean of 100, this band is very narrow. This means in high dimensions, *all* "typical" points are about the same distance from the center—a very counter-intuitive but fundamental concept.
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -220,13 +310,38 @@ import matplotlib.pyplot as plt
 \end{flushleft}
 
 \subsubsection*{Solution 3}
+Let $X \sim N(\mu, \Sigma)$ where:
+$$ \mu = \begin{bmatrix}1 \\ 2\end{bmatrix} \quad \quad \Sigma = \begin{bmatrix}2 & 0 \\ 0 & 4\end{bmatrix} \quad \quad v = \frac{1}{\sqrt{2}}\begin{bmatrix}1 \\ 1\end{bmatrix}$$
 
+\begin{enumerate}
+    \item Calculate the mean $\mu_Y$:
+    \begin{align*}
+    \mu_Y &= v^\top\mu \\
+          &= \begin{bmatrix}1/\sqrt{2} & 1/\sqrt{2}\end{bmatrix} \begin{bmatrix}1 \\ 2\end{bmatrix} \\
+          &= \left(\frac{1}{\sqrt{2}} \cdot 1\right) + \left(\frac{1}{\sqrt{2}} \cdot 2\right) \\
+          &= \frac{1}{\sqrt{2}} + \frac{2}{\sqrt{2}} \\
+          &= \frac{3}{\sqrt{2}}
+    \end{align*}
+    \item Calculate the variance $\sigma_Y^2$:
+    \begin{align*}
+        \sigma_Y^2 &= v^\top\Sigma v \\
+        &= \begin{bmatrix}1/\sqrt{2} & 1/\sqrt{2}\end{bmatrix} \begin{bmatrix}2 & 0 \\ 0 & 4\end{bmatrix} \begin{bmatrix}1/\sqrt{2} \\ 1/\sqrt{2}\end{bmatrix} \\
+        &= \begin{bmatrix}1/\sqrt{2} & 1/\sqrt{2}\end{bmatrix} \begin{bmatrix} 2 \cdot (1/\sqrt{2}) + 0 \\ 0 + 4 \cdot (1/\sqrt{2}) \end{bmatrix} \\
+        &= \begin{bmatrix}1/\sqrt{2} & 1/\sqrt{2}\end{bmatrix} \begin{bmatrix} 2/\sqrt{2} \\ 4/\sqrt{2} \end{bmatrix} \\
+        &= \left(\frac{1}{\sqrt{2}} \cdot \frac{2}{\sqrt{2}}\right) + \left(\frac{1}{\sqrt{2}} \cdot \frac{4}{\sqrt{2}}\right) \\
+        &= \frac{2}{2} + \frac{4}{2} \\
+        &= 1 + 2 = 3
+    \end{align*}
+\end{enumerate}
 
-\subsubsection*{\normalfont}{$\therefore$ }
+\subsubsection*{\normalfont}{$\therefore$ The distribution of the projection is $N\left(\frac{3}{\sqrt{2}}, 3\right)$.}
+\subsubsection*{Graduate Level Explanation}
+This result is a direct consequence of the affine transformation property of Gaussian vectors. If $X \sim N(\mu, \Sigma)$ and $Y = AX + b$, then $Y \sim N(A\mu + b, A\Sigma A^\top)$. In this problem, $A = v^\top$ and $b = 0$. This operation finds the 1-dimensional marginal distribution of the random vector $X$ along the axis defined by the vector $v$. Since the original covariance $\Sigma$ is diagonal, $X_1$ and $X_2$ are independent, but the projection $Y = \frac{1}{\sqrt{2}}(X_1 + X_2)$ is a sum of these independent variables, and its variance is the sum of their scaled variances.
+
+\subsubsection*{Learn Fast Explanation}
+Think of your 2D Gaussian $X$ as an oval-shaped cloud of 1,000s of data points, centered at $(1, 2)$. The oval is twice as wide in the $y$-direction (variance 4) as it is in the $x$-direction (variance 2). The "direction $v$" is just the 45-degree line $y=x$. Projecting the cloud onto this line is like shining a flashlight from behind the cloud and casting a shadow onto that 45-degree line. That shadow will also be a "cloud" of points, but it's 1-dimensional, so it's just a simple bell curve. Our calculation found the properties of that shadow-cloud: its center (mean) is at $3/\sqrt{2}$ ($\approx 2.12$) and its "spread" (variance) is $3$.
 
 \noindent\rule{\textwidth}{0.4pt}\\
-
-\newpage
 
 %------------------
 % Solution for 4(a)
