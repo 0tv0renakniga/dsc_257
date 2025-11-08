@@ -362,9 +362,23 @@ Think of your 2D Gaussian $X$ as an oval-shaped cloud of 1,000s of data points, 
 \end{flushleft}
 
 \subsubsection*{Solution 4 (a)}
+A key property of the multivariate Gaussian distribution is that any marginal distribution is also Gaussian. To find the distribution of a subset of variables, we simply extract the corresponding entries from the mean vector and the covariance matrix.
 
+Let $X = \begin{bmatrix} X_1 \\ X_2 \\ X_3 \end{bmatrix} \sim N(\mu, \Sigma)$, where:
+$$ \mu = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix} \quad \text{and} \quad \Sigma = \begin{bmatrix} 6 & 3 & 1 \\ 3 & 9 & 0 \\ 1 & 0 & 2 \end{bmatrix} $$
+The distribution for $X_3$ is a 1D Gaussian $N(\mu_3, \sigma_3^2)$.
+\begin{itemize}
+    \item The mean $\mu_3$ is the 3rd element of the mean vector $\mu$, which is $0$.
+    \item The variance $\sigma_3^2$ is the (3, 3) element of the covariance matrix $\Sigma$, which is $2$.
+\end{itemize}
 
-\subsubsection*{\normalfont}{$\therefore$ }
+\subsubsection*{\normalfont}{$\therefore$ The distribution of sensor $X_3$ is $N(0, 2)$.}
+
+\subsubsection*{Graduate Level Explanation}
+Multivariate Gaussian distributions are closed under marginalization. For a jointly Gaussian vector $X \sim N(\mu, \Sigma)$, the marginal distribution of any sub-vector $X_a$ is $N(\mu_a, \Sigma_{aa})$, where $\mu_a$ and $\Sigma_{aa}$ are the sub-vector and sub-matrix of $\mu$ and $\Sigma$ corresponding to the variables in $X_a$. Here, $a=\{3\}$, $\mu_a = \mu_3 = 0$, and $\Sigma_{aa} = \Sigma_{33} = 2$.
+
+\subsubsection*{Learn Fast Explanation}
+Think of the big covariance matrix as a "lookup table" for the properties of all sensors. If you only want to know about $X_3$, you just look up its personal info. The mean for $X_3$ is the 3rd number in the mean vector (which is 0). The variance for $X_3$ is the 3rd-row, 3rd-column entry in the covariance matrix (which is 2). Therefore, $X_3$ is just a simple bell curve centered at 0 with a variance of 2.
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -389,9 +403,23 @@ Think of your 2D Gaussian $X$ as an oval-shaped cloud of 1,000s of data points, 
 \end{flushleft}
 
 \subsubsection*{Solution 4 (b)}
+As in part (a), we find the marginal distribution by extracting the relevant sub-vector from the mean and sub-matrix from the covariance.
+We are interested in the joint distribution of $X_a = \begin{bmatrix} X_1 \\ X_2 \end{bmatrix}$.
+\begin{itemize}
+    \item The mean vector $\mu_a$ corresponds to the 1st and 2nd elements of $\mu$:
+    $$ \mu_a = \begin{bmatrix} 0 \\ 0 \end{bmatrix} $$
+    \item The covariance matrix $\Sigma_{aa}$ corresponds to the 1st and 2nd rows and columns of $\Sigma$:
+    $$ \Sigma_{aa} = \begin{bmatrix} 6 & 3 \\ 3 & 9 \end{bmatrix} $$
+\end{itemize}
+The resulting distribution is a 2-dimensional Gaussian.
 
+\subsubsection*{\normalfont}{$\therefore$ The joint distribution of $X_1, X_2$ is $N\left(\begin{bmatrix} 0 \\ 0 \end{bmatrix}, \begin{bmatrix} 6 & 3 \\ 3 & 9 \end{bmatrix}\right)$.}
 
-\subsubsection*{\normalfont}{$\therefore$ }
+\subsubsection*{Graduate Level Explanation}
+This again uses the closure-under-marginalization property. The $2 \times 2$ principal sub-matrix $\Sigma_{aa}$ is itself a valid covariance matrix (symmetric and positive definite), and the corresponding sub-vector $\mu_a$ is the mean. This property is what allows us to analyze subsets of variables from a large joint model without re-deriving their distributions.
+
+\subsubsection*{Learn Fast Explanation}
+Just like in part (a), we're using the big matrix as a "lookup table." This time, we want to know about the *team* $(X_1, X_2)$. So, we grab their team info: their means (the 1st and 2nd entries of $\mu$) and their covariance block (the $2 \times 2$ block in the top-left corner of $\Sigma$). This block tells us $X_1$'s variance (6), $X_2$'s variance (9), and how they vary together (their covariance, 3).
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -417,14 +445,64 @@ Think of your 2D Gaussian $X$ as an oval-shaped cloud of 1,000s of data points, 
 \end{flushleft}
 
 \subsubsection*{Solution 4 (c)}
+We need to find the conditional distribution of $X_1 \mid (X_2, X_3)$.
+Let $X_a = X_1$ and $X_b = \begin{bmatrix} X_2 \\ X_3 \end{bmatrix}$. We observe $x_b = \begin{bmatrix} 2 \\ 1 \end{bmatrix}$.
+We partition the mean vector $\mu$ and covariance matrix $\Sigma$:
+$$ \mu = \begin{bmatrix} \mu_a \\ \mu_b \end{bmatrix} = \begin{bmatrix} 0 \\ \hline 0 \\ 0 \end{bmatrix} $$
+$$ \Sigma = \begin{bmatrix} \Sigma_{aa} & \Sigma_{ab} \\ \Sigma_{ba} & \Sigma_{bb} \end{bmatrix} = \left[ \begin{array}{c|cc} 6 & 3 & 1 \\ \hline 3 & 9 & 0 \\ 1 & 0 & 2 \end{array} \right] $$
+From this, we identify the blocks:
+\begin{itemize}
+    \item $\mu_a = 0$
+    \item $\mu_b = \begin{bmatrix} 0 \\ 0 \end{bmatrix}$
+    \item $\Sigma_{aa} = 6$
+    \item $\Sigma_{ab} = \begin{bmatrix} 3 & 1 \end{bmatrix}$
+    \item $\Sigma_{ba} = \begin{bmatrix} 3 \\ 1 \end{bmatrix}$
+    \item $\Sigma_{bb} = \begin{bmatrix} 9 & 0 \\ 0 & 2 \end{bmatrix}$
+\end{itemize}
+The conditional distribution $X_a \mid X_b = x_b$ is also Gaussian, $N(\mu_{a|b}, \Sigma_{a|b})$, with:
+\begin{align*}
+    \mu_{a|b} &= \mu_a + \Sigma_{ab} \Sigma_{bb}^{-1} (x_b - \mu_b) \\
+    \Sigma_{a|b} &= \Sigma_{aa} - \Sigma_{ab} \Sigma_{bb}^{-1} \Sigma_{ba}
+\end{align*}
+**1. Compute $\Sigma_{bb}^{-1}$:**
+Since $\Sigma_{bb}$ is diagonal, its inverse is the inverse of its diagonal elements:
+$$ \Sigma_{bb}^{-1} = \begin{bmatrix} 9 & 0 \\ 0 & 2 \end{bmatrix}^{-1} = \begin{bmatrix} 1/9 & 0 \\ 0 & 1/2 \end{bmatrix} $$
+**2. Compute the conditional mean $\mu_{a|b}$:**
+\begin{align*}
+    \mu_{a|b} &= 0 + \begin{bmatrix} 3 & 1 \end{bmatrix} \begin{bmatrix} 1/9 & 0 \\ 0 & 1/2 \end{bmatrix} \left( \begin{bmatrix} 2 \\ 1 \end{bmatrix} - \begin{bmatrix} 0 \\ 0 \end{bmatrix} \right) \\
+              &= \begin{bmatrix} 3 \cdot \frac{1}{9} & 1 \cdot \frac{1}{2} \end{bmatrix} \begin{bmatrix} 2 \\ 1 \end{bmatrix} \\
+              &= \begin{bmatrix} 1/3 & 1/2 \end{bmatrix} \begin{bmatrix} 2 \\ 1 \end{bmatrix} \\
+              &= \left(\frac{1}{3} \cdot 2\right) + \left(\frac{1}{2} \cdot 1\right) = \frac{2}{3} + \frac{1}{2} \\
+              &= \frac{4}{6} + \frac{3}{6} = \frac{7}{6}
+\end{align*}
+**3. Compute the conditional variance $\Sigma_{a|b}$:**
+\begin{align*}
+    \Sigma_{a|b} &= 6 - \begin{bmatrix} 3 & 1 \end{bmatrix} \begin{bmatrix} 1/9 & 0 \\ 0 & 1/2 \end{bmatrix} \begin{bmatrix} 3 \\ 1 \end{bmatrix} \\
+              &= 6 - \begin{bmatrix} 1/3 & 1/2 \end{bmatrix} \begin{bmatrix} 3 \\ 1 \end{bmatrix} \\
+              &= 6 - \left( \left(\frac{1}{3} \cdot 3\right) + \left(\frac{1}{2} \cdot 1\right) \right) \\
+              &= 6 - (1 + 0.5) = 6 - 1.5 = 4.5
+\end{align*}
+The conditional variance is $4.5$, or $9/2$.
 
+\subsubsection*{\normalfont}{$\therefore$ The resulting conditional distribution of $X_1$ is $N\left(\frac{7}{6}, \frac{9}{2}\right)$ (or $N(1.167, 4.5)$).}
 
-\subsubsection*{\normalfont}{$\therefore$ }
+\subsubsection*{Graduate Level Explanation}
+The formulas for the conditional mean and covariance are known as the Schur complement of the block $\Sigma_{aa}$. The conditional covariance $\Sigma_{a|b} = \Sigma_{aa} - \Sigma_{ab} \Sigma_{bb}^{-1} \Sigma_{ba}$ represents the reduction in uncertainty (variance) of $X_a$ after observing $X_b$. It is crucially independent of the observed value $x_b$. The conditional mean $\mu_{a|b}$ is the prior mean $\mu_a$ adjusted by a linear correction term, $\Sigma_{ab} \Sigma_{bb}^{-1} (x_b - \mu_b)$, which accounts for the observed "residual" $(x_b - \mu_b)$ propagated through the covariance structure.
+
+\subsubsection*{Learn Fast Explanation}
+Before we knew anything, our best guess for $X_1$ was its mean, 0.
+Then, we got data: $X_2=2$ and $X_3=1$.
+\begin{itemize}
+    \item The matrix shows $X_1$ is positively correlated with $X_2$ (covariance=3) and $X_3$ (covariance=1).
+    \item Since both $X_2$ and $X_3$ came in "hot" (they were positive, not 0), we should update our guess for $X_1$ to also be positive. The calculation $\mu_{a|b} = 7/6$ is the precise, weighted update.
+    \item Our original uncertainty (variance) about $X_1$ was 6. By getting data from two related sensors, we've *learned* something and become *less uncertain*.
+    \item The calculation $\Sigma_{a|b} = 6 - 1.5 = 4.5$ shows our new variance is 4.5, which is smaller than 6, reflecting our gain in knowledge.
+\end{itemize}
+
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
-
 %------------------
 % Solution for 5(a)
 %------------------

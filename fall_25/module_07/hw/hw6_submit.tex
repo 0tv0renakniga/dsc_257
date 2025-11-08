@@ -272,23 +272,16 @@ $$ \mu = \begin{bmatrix}1 \\ 2\end{bmatrix} \quad \quad \Sigma = \begin{bmatrix}
 %------------------
 \subsection*{Solution 4}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 4 (a)}
-\begin{flushleft}
-    We have three sensors $(X_1, X_2, X_3)$ whose joint distribution is Gaussian with mean zero and covariance matrix 
-    \[
-    \begin{bmatrix}
-    6 & 3 & 1 \\
-    3 & 9 & 0 \\
-    1 & 0 & 2
-    \end{bmatrix}
-    \]
-    What is the distribution of sensor $X_3$? 
-\end{flushleft}
-
 \subsubsection*{Solution 4 (a)}
+Let, $X = \begin{bmatrix} X_1 \\ X_2 \\ X_3 \end{bmatrix} \sim N(\mu, \Sigma)$, where:
+$$ \mu = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix} \quad \text{and} \quad \Sigma = \begin{bmatrix} 6 & 3 & 1 \\ 3 & 9 & 0 \\ 1 & 0 & 2 \end{bmatrix} $$
+Since the distribution for $X_3$ is a 1D Gaussian $N(\mu_3, \sigma_{3}^2)$, we can just lookup the mean and variance of $X_3$ from the given covariance matrix. Note, $\sigma_{3}^2 = \sigma_{(3,3)}^2$
+$$\mu = \begin{bmatrix} \mu_1 \\ \mu_2 \\ \mu_3 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix} \rightarrow \mu_3 = 0 $$
+$$\Sigma = \begin{bmatrix} \sigma_{(1,1)}^2 & \sigma_{(1,2)}^2 & \sigma_{(1,3)}^2 \\ \sigma_{(2,1)}^2 & \sigma_{(2,2)}^2 & \sigma_{(2,3)}^2 \\ \sigma_{(3,1)}^2 & \sigma_{(3,2)}^2 & \sigma_{(3,3)}^2 \end{bmatrix} = \begin{bmatrix} 6 & 3 & 1 \\ 3 & 9 & 0 \\ 1 & 0 & 2 \end{bmatrix} \rightarrow \sigma_{(3,3)}^2 = 2$$ 
 
+\subsubsection*{\normalfont}{$\therefore$ The distribution of $X_3$ is:} 
+$$N(0, 2)$$
 
-\subsubsection*{\normalfont}{$\therefore$ }
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -299,23 +292,17 @@ $$ \mu = \begin{bmatrix}1 \\ 2\end{bmatrix} \quad \quad \Sigma = \begin{bmatrix}
 %------------------
 \subsection*{Solution 4}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 4 (b)}
-\begin{flushleft}
-    We have three sensors $(X_1, X_2, X_3)$ whose joint distribution is Gaussian with mean zero and covariance matrix 
-    \[
-    \begin{bmatrix}
-    6 & 3 & 1 \\
-    3 & 9 & 0 \\
-    1 & 0 & 2
-    \end{bmatrix}
-    \]
-    What is the joint distribution of sensors $X_1, X_2$? 
-\end{flushleft}
-
 \subsubsection*{Solution 4 (b)}
+Let, $X = \begin{bmatrix} X_1 \\ X_2 \\ X_3 \end{bmatrix} \sim N(\mu, \Sigma)$, where:
+$$ \mu = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix} \quad \text{and} \quad \Sigma = \begin{bmatrix} 6 & 3 & 1 \\ 3 & 9 & 0 \\ 1 & 0 & 2 \end{bmatrix} $$
+Since we want the joint distribution for $X_1$ and $X_2$, it follows that it is a 2D Gaussian $N(\mu_{1,2}, \Sigma_{1,2})$ or:
+$$N\left(\begin{bmatrix} \mu_1 \\ \mu_2 \end{bmatrix}\text{ ,  }\begin{bmatrix} \sigma_{1,1}^2 & \sigma_{1,2}^2 \\ \sigma_{2,1}^2 & \sigma_{2,2}^2 \end{bmatrix}\right)$$
+It follows that,
+$$\mu = \begin{bmatrix} \mu_1 \\ \mu_2 \\ \mu_3 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix} \rightarrow \mu_{1,2} = \mu_{1,2} = \begin{bmatrix} \mu_1 \\ \mu_2 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \end{bmatrix}$$
+$$\Sigma = \begin{bmatrix} \sigma_{(1,1)}^2 & \sigma_{(1,2)}^2 & \sigma_{(1,3)}^2 \\ \sigma_{(2,1)}^2 & \sigma_{(2,2)}^2 & \sigma_{(2,3)}^2 \\ \sigma_{(3,1)}^2 & \sigma_{(3,2)}^2 & \sigma_{(3,3)}^2 \end{bmatrix} = \begin{bmatrix} 6 & 3 & 1 \\ 3 & 9 & 0 \\ 1 & 0 & 2 \end{bmatrix} \rightarrow \Sigma_{1,2} = \begin{bmatrix} \sigma_{1,1}^2 & \sigma_{1,2}^2 \\ \sigma_{2,1}^2 & \sigma_{2,2}^2 \end{bmatrix} = \begin{bmatrix} 6 & 3 \\ 3 & 9 \end{bmatrix}$$ 
 
-
-\subsubsection*{\normalfont}{$\therefore$ }
+\subsubsection*{\normalfont}{$\therefore$ The joint distribution of $X_1$, $X_2$ is:
+$$N\left(\begin{bmatrix} 0 \\ 0 \end{bmatrix}, \begin{bmatrix} 6 & 3 \\ 3 & 9 \end{bmatrix}\right)$$}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -326,24 +313,27 @@ $$ \mu = \begin{bmatrix}1 \\ 2\end{bmatrix} \quad \quad \Sigma = \begin{bmatrix}
 %------------------
 \subsection*{Solution 4}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 4 (c)}
-\begin{flushleft}
-    We have three sensors $(X_1, X_2, X_3)$ whose joint distribution is Gaussian with mean zero and covariance matrix 
-    \[
-    \begin{bmatrix}
-    6 & 3 & 1 \\
-    3 & 9 & 0 \\
-    1 & 0 & 2
-    \end{bmatrix}
-    \]
-    Suppose we observe $X_2=2$ and $X_3=1$. 
-    What is the resulting conditional distribution of $X_1$? 
-\end{flushleft}
-
 \subsubsection*{Solution 4 (c)}
-
-
-\subsubsection*{\normalfont}{$\therefore$ }
+Let, $X = \begin{bmatrix} X_1 \\ X_2 \\ X_3 \end{bmatrix} \sim N(\mu, \Sigma)$, where:
+$$ \mu = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix} \quad \text{and} \quad \Sigma = \begin{bmatrix} 6 & 3 & 1 \\ 3 & 9 & 0 \\ 1 & 0 & 2 \end{bmatrix} $$
+We need to find the conditional distribution of $X_1 \mid (X_2, X_3)$.
+Let $X_a = X_1$ and $X_b = \begin{bmatrix} X_2 \\ X_3 \end{bmatrix}$. We observe $x_b = \begin{bmatrix} 2 \\ 1 \end{bmatrix}$.
+Now, partition the mean vector $\mu$ and covariance matrix $\Sigma$:
+$$ \mu = \begin{bmatrix} \mu_a \\ \mu_b \end{bmatrix} = \begin{bmatrix} 0 \\ \hline 0 \\ 0 \end{bmatrix} \quad \text{ and }\quad \Sigma = \begin{bmatrix} \Sigma_{aa} & \Sigma_{ab} \\ \Sigma_{ba} & \Sigma_{bb} \end{bmatrix} = \left[ \begin{array}{c|cc} 6 & 3 & 1 \\ \hline 3 & 9 & 0 \\ 1 & 0 & 2 \end{array} \right] $$
+From this, we identify the blocks:
+$$\mu_a = 0 \qquad \mu_b = \begin{bmatrix} 0 \\ 0 \end{bmatrix} \qquad \Sigma_{aa} = 6 \qquad \Sigma_{ab} = \begin{bmatrix} 3 & 1 \end{bmatrix} \qquad \Sigma_{ba} = \begin{bmatrix} 3 \\ 1 \end{bmatrix} \qquad \Sigma_{bb} = \begin{bmatrix} 9 & 0 \\ 0 & 2 \end{bmatrix}$$
+The conditional distribution $X_a \mid X_b = x_b$ is also Gaussian, $N(\mu_{a|b}, \Sigma_{a|b})$, where:
+$$\mu_{a|b} = \mu_a + \Sigma_{ab} \Sigma_{bb}^{-1} (x_b - \mu_b) \quad \text{ and } \quad \Sigma_{a|b} = \Sigma_{aa} - \Sigma_{ab} \Sigma_{bb}^{-1} \Sigma_{ba}$$
+\begin{enumerate}
+    \item Compute $\Sigma_{bb}^{-1}$: \textit{Since $\Sigma_{bb}$ is diagonal, its inverse is the inverse of its diagonal elements:}
+    $$ \Sigma_{bb}^{-1} = \begin{bmatrix} 9 & 0 \\ 0 & 2 \end{bmatrix}^{-1} = \begin{bmatrix} 1/9 & 0 \\ 0 & 1/2 \end{bmatrix} $$
+    \item Compute the conditional mean $\mu_{a|b}$:
+    $$\mu_{a|b} = \mu_a + \Sigma_{ab} \Sigma_{bb}^{-1} (x_b - \mu_b) = 0 + \begin{bmatrix} 3 & 1 \end{bmatrix} \begin{bmatrix} 1/9 & 0 \\ 0 & 1/2 \end{bmatrix} \left( \begin{bmatrix} 2 \\ 1 \end{bmatrix} - \begin{bmatrix} 0 \\ 0 \end{bmatrix} \right) = \begin{bmatrix} 1/3 & 1/2 \end{bmatrix} \begin{bmatrix} 2 \\ 1 \end{bmatrix} = \frac{7}{6}$$
+    \item Compute the conditional variance $\Sigma_{a|b}$:
+    $$\Sigma_{a|b} = 6 - \begin{bmatrix} 3 & 1 \end{bmatrix} \begin{bmatrix} 1/9 & 0 \\ 0 & 1/2 \end{bmatrix} \begin{bmatrix} 3 \\ 1 \end{bmatrix} = 6 - \begin{bmatrix} 1/3 & 1/2 \end{bmatrix} \begin{bmatrix} 3 \\ 1 \end{bmatrix} = 6 - \left( \left(\frac{1}{3} \cdot 3\right) + \left(\frac{1}{2} \cdot 1\right) \right) = \frac{9}{2}$$
+\end{enumerate}
+\subsubsection*{\normalfont}{$\therefore$ The resulting conditional distribution of $X_1$ is:}
+$$N\left(\frac{7}{6}, \frac{9}{2}\right)$$
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -520,6 +510,8 @@ from scipy.spatial.distance import cdist
 \end{flushleft}
 
 \subsubsection*{Solution 6 (a)}
+Let,
+$$P(F1)=0.5, \quad P(F2)=0.7, \quad P(F3)=0.8, P(F4)=0.9 \quad \text{ and } \quad F1,F2,F3,F4 \in \{0,1\}$$
 
 
 \subsubsection*{\normalfont}{$\therefore$ }
