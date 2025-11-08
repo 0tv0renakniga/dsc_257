@@ -626,48 +626,77 @@ Consider the DAG on the right now, which is illustrated below:
 %------------------
 \subsection*{Solution 8}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 8 (a)}
-\begin{flushleft}
-    \textbf{Genes, diseases, and outcomes.} There is a fictitious disease $(D)$ that can cause paralysis $(P)$. 
-    Whether or not an individual gets this disease depends in large part on two genes, $G_1$ and $G_2$. 
-    Here is a summary: 
-
-    \begin{itemize}
-    \item Each of these genes $G_1, G_2$ can either be normal (also known as wild-type), represented by $G_i=0$, or mutant, represented by $G_i=1$. 
-    \item For a person with $G_1=G_2=0$ (both genes wild-type) the probability of acquiring the disease is zero. 
-    If $G_1$ is mutant and $G_2$ is wild-type, the probability is 0.2. 
-    If $G_1$ is wild-type and $G_2$ is mutant, it is 0.1. 
-    And if both genes are mutant, then the disease probability is 0.5. 
-    \item For an individual with the disease, the probability of paralysis is 0.5. 
-    Without the disease, there is still a small probability of paralysis (from other causes): 0.01. 
-    \item $G_1$ is mutant with probability 0.1 and $G_2$ is mutant with probability 0.2; these are independent. 
-    \end{itemize}
-
-    Draw a suitable Bayes net over the variables $G_1, G_2, D, P$, and give all relevant conditional probability tables. 
-    Let $D=1$ if the disease is present and $D=0$ if it isn't; likewise with paralysis. 
-\end{flushleft}
-
 \subsubsection*{Solution 8 (a)}
 
 \subsubsection*{Bayes Net Diagram}
-\begin{comment}
-    \begin{center}
+Given:
+\begin{itemize}
+    \item $G_1$ and $G_2$ are independent.
+    \item $D$ depends on $G_1$ and $G_2$.
+    \item $P$ depends on $D$.
+\end{itemize}
+
+\begin{center}
     \begin{tikzpicture}[node distance=1.5cm]
         \node[circle, draw] (G1) {$G_1$};
-        \node[circle, draw, below=of G1] (G2) {$G_2$};
-        \node[circle, draw, right=of G1] (D) {$D$};
+        \node[circle, draw, right=of G1] (G2) {$G_2$};
+        \node[circle, draw, below=of G1, xshift=1.5cm] (D) {$D$};
         \node[circle, draw, below=of D] (P) {$P$};
         \draw[-Stealth] (G1) -- (D);
         \draw[-Stealth] (G2) -- (D);
         \draw[-Stealth] (D) -- (P);
     \end{tikzpicture}
+\end{center}
+
+\subsubsection*{Construct Conditional Probability Tables (CPTs)}
+\begin{enumerate}
+    \item CPT for $G_1$: $P(G_1)$
+    \begin{center}
+    \begin{tabular}{c c}
+    \toprule
+    $P(G_1=1)$ & $P(G_1=0)$ \\
+    \midrule
+    0.1 & 0.9 \\
+    \bottomrule
+    \end{tabular}
     \end{center}
-\end{comment}
+    \item CPT for $G_2$: $P(G_2)$
+    \begin{center}
+    \begin{tabular}{c c}
+    \toprule
+    $P(G_2=1)$ & $P(G_2=0)$ \\
+    \midrule
+    0.2 & 0.8 \\
+    \bottomrule
+    \end{tabular}
+    \end{center}
+    \item CPT for $D$: $P(D \mid G_1, G_2)$
+    \begin{center}
+    \begin{tabular}{c c | c c}
+    \toprule
+    $G_1$ & $G_2$ & $P(D=1)$ & $P(D=0)$ \\
+    \midrule
+    0 & 0 & 0.0 & 1.0 \\
+    0 & 1 & 0.1 & 0.9 \\
+    1 & 0 & 0.2 & 0.8 \\
+    1 & 1 & 0.5 & 0.5 \\
+    \bottomrule
+    \end{tabular}
+    \end{center}
+    \item CPT for $P$: $P(P \mid D)$
+    \begin{center}
+    \begin{tabular}{c | c c}
+    \toprule
+    $D$ & $P(P=1)$ & $P(P=0)$ \\
+    \midrule
+    0 & 0.01 & 0.99 \\
+    1 & 0.50 & 0.50 \\
+    \bottomrule
+    \end{tabular}
+    \end{center}
+\end{enumerate}
 
-\subsubsection*{Conditional Probability Tables}
-
-
-\subsubsection*{\normalfont}{$\therefore$ }
+\subsubsection*{\normalfont}{$\therefore$ The Bayes Net diagram and the conditional probability tables are seen above}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -678,17 +707,40 @@ Consider the DAG on the right now, which is illustrated below:
 %------------------
 \subsection*{Solution 8}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 8 (b)}
-\begin{flushleft}
-    \textbf{Genes, diseases, and outcomes.} ... [Intro text from 8(a)  
-
-    What is the probability of disease $(D=1)$? 
-\end{flushleft}
-
 \subsubsection*{Solution 8 (b)}
+From the conditional probability tables  in \textit{part (a)}:
+\begin{align*}
+    P(G_1=0) &= 0.9 \qquad P(D=1 \mid G_1=0, G_2=0) = 0.0 \\
+    P(G_2=0) &= 0.8 \qquad P(D=1 \mid G_1=0, G_2=1) = 0.1 \\
+    P(G_1=1) &= 0.1 \qquad P(D=1 \mid G_1=1, G_2=0) = 0.2 \\
+    P(G_2=1) &= 0.2 \qquad P(D=1 \mid G_1=1, G_2=1) = 0.5 \\
+\end{align*}
+To find the marginal probability $P(D=1)$, we have the equation below:
+$$ P(D=1) = \sum_{g_1 \in \{0,1\}} \sum_{g_2 \in \{0,1\}} P(G_1=g_1, G_2=g_2, D=1) $$
+Expanding the summations the equation becomes:
+\begin{align*}
+    P(D=1) &= \sum_{g_1 \in \{0,1\}} \sum_{g_2 \in \{0,1\}} P(G_1=g_1, G_2=g_2, D=1) \\
+    &=  P(G_1=0, G_2=0, D=1) \\
+    &+ P(G_1=0, G_2=1, D=1) \\
+    &+ P(G_1=1, G_2=0, D=1) \\
+    &+ P(G_1=1, G_2=1, D=1) \\ \\
+    &\text{expand using: }P(G_1, G_2, D) = P(G_1)P(G_2)P(D \mid G_1, G_2) \\ \\
+    &= P(G_1=0)P(G_2=0)P(D=1 \mid G_1=0, G_2=0) \\
+           &+ P(G_1=0)P(G_2=1)P(D=1 \mid G_1=0, G_2=1) \\
+           &+ P(G_1=1)P(G_2=0)P(D=1 \mid G_1=1, G_2=0) \\
+           &+ P(G_1=1)P(G_2=1)P(D=1 \mid G_1=1, G_2=1)
+\end{align*}
+Now, substitute the values from the condition probability tables in \textit{part (a)}:
+\begin{align*}
+    P(D=1) &= (0.9)(0.8)(0.0) \\
+    &+ (0.9)(0.2)(0.1) \\
+    &+ (0.1)(0.8)(0.2) \\
+    &+ (0.1)(0.2)(0.5) \\
+    &= 0.0 + 0.018 + 0.016 + 0.010 \\
+    &= 0.044
+\end{align*}
 
-
-\subsubsection*{\normalfont}{$\therefore$ }
+\subsubsection*{\normalfont}{$\therefore$ The probability of disease $(D=1)$ is $0.044$, or 4.4\%}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -699,17 +751,23 @@ Consider the DAG on the right now, which is illustrated below:
 %------------------
 \subsection*{Solution 8}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 8 (c)}
-\begin{flushleft}
-    \textbf{Genes, diseases, and outcomes.} ... [Intro text from 8(a)  
-
-    What is the probability of paralysis $(P=1)$? 
-\end{flushleft}
-
 \subsubsection*{Solution 8 (c)}
-
-
-\subsubsection*{\normalfont}{$\therefore$ }
+From \textit{part (a)}:
+$$P(P=1 \mid D=0) = 0.01 \quad \text{ and } \quad P(P=1 \mid D=1) = 0.5$$
+From \textit{part (b)}:
+$$P(D=1) = 0.044\rightarrow P(D=0) = 1 - 0.044 = 0.956$$
+To find the marginal probability $P(P=1)$, we have the equation below:
+$$P(P=1) = \sum_{d \in \{0,1\}} P(D=d, P=1)$$
+We can rewrite this as:
+$$P(P=1) = P(P=1 \mid D=0)P(D=0) + P(P=1 \mid D=1)P(D=1)$$
+Now, substitute the values from \textit{part(a)} and \textit{part(b)}:
+\begin{align*}
+    P(P=1) &= P(P=1 \mid D=0)P(D=0) + P(P=1 \mid D=1)P(D=1) \\
+    &= (0.01 \cdot 0.956) + (0.5 \cdot 0.044) \\
+    &= 0.03156
+\end{align*}
+\subsubsection*{\normalfont}{$\therefore$ The probability of paralysis $(P=1)$ is $0.03156$, or approximately:}
+$$3.16\%$$
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -720,17 +778,23 @@ Consider the DAG on the right now, which is illustrated below:
 %------------------
 \subsection*{Solution 8}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 8 (d)}
-\begin{flushleft}
-    \textbf{Genes, diseases, and outcomes.} ... [Intro text from 8(a)  
-
-    We observe that a person has paralysis. What is the probability that they have the disease? 
-\end{flushleft}
-
 \subsubsection*{Solution 8 (d)}
-
-
-\subsubsection*{\normalfont}{$\therefore$ }
+From \textit{part (a)}:
+$$P(P=1 \mid D=1) = 0.5$$
+From \textit{part (b)}:
+$$P(D=1) = 0.044$$
+From \textit{part (c)}:
+$$P(P=1) = 0.03156$$
+Apply Bayes' Theorem to find the probability $P(D=1 \mid P=1)$:
+$$P(D=1 \mid P=1) = \frac{P(P=1 \mid D=1) P(D=1)}{P(P=1)}$$
+Now, substitute values from \textit{part(a)}, \textit{part(b)}, and \textit{part(c)}
+\begin{align*}
+    P(D=1 \mid P=1) &= \frac{P(D=1 \mid P=1, D=1)P(D=1)}{P(D=1)} \\
+    &= \frac{0.5 \cdot 0.044}{0.03156} \\
+    &\approx 0.69708 \\
+\end{align*}
+\subsubsection*{\normalfont}{$\therefore$ the approximate probability that a person with paralysis has the disease is:}
+$$P(D=1 \mid P=1) \approx 0.69708$$
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -741,18 +805,29 @@ Consider the DAG on the right now, which is illustrated below:
 %------------------
 \subsection*{Solution 8}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 8 (e)}
+\subsubsection*{Solution 8 (e)}
+From the conditional probability tables  in \textit{part (a)} and results from \textit{part (b)}:
+$$P(D=1) = 0.044 \qquad P(G_2=0) = 0.8 $$
+$$P(G_1=1) = 0.1 \qquad P(D=1 \mid G_1=1, G_2=0) = 0.2 $$
+$$P(G_2=1) = 0.2 \qquad P(D=1 \mid G_1=1, G_2=1) = 0.5 $$
+Apply Bayes' Theorem to find the probability to calculate $P(G_1=1 \mid D=1)$
+$$ P(G_1=1 \mid D=1) = \frac{P(D=1, G_1=1)}{P(D=1)} $$
+We can rewrite the numerator as the following:
 \begin{flushleft}
-    \textbf{Genes, diseases, and outcomes.} ... [Intro text from 8(a)  
-
-    We observe that a person has the disease $(D=1)$. 
-    What is the probability that they have the mutant form of gene $G_1$? 
+    $P(G_1=1 \mid D=1) = $
 \end{flushleft}
 
-\subsubsection*{Solution 8 (e)}
+$$\frac{P(G_1=1)P(G_2=0)P(D=1 \mid G_1=1, G_2=0)+P(G_1=1)P(G_2=1)P(D=1 \mid G_1=1, G_2=1)}{P(D=1)}$$
+Now substitute the values from \textit{part (a)} and \textit{part (b)}:
+\begin{align*}
+    P(G_1=1 \mid D=1) &= \frac{(0.1)(0.8)(0.2) + (0.1)(0.2)(0.5)}{0.044} \\
+                 &= \frac{0.016 + 0.010}{0.044} \\
+                 &= \frac{0.026}{0.044} \\
+                 &\approx 0.5909
+\end{align*}
+\subsubsection*{\normalfont}{$\therefore$ The probability that a person with the disease has the mutant $G_1$ gene is approximately:}
 
-
-\subsubsection*{\normalfont}{$\therefore$ }
+$$P(G_1=1 \mid D=1) \approx 0.591$$
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
