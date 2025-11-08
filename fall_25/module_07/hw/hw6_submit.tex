@@ -592,6 +592,27 @@ Now, substitute the values into the equation above for $P(F_1, F_2, F_3, F_4)$:
 \end{flushleft}
 
 \subsubsection*{Solution 7}
+For any joint distribution $P(X, Y)$ can be factored in two ways (via chain rule):
+\begin{enumerate}
+    \item $P(X, Y) = P(X) \cdot P(Y \mid X)$
+    \item $P(X, Y) = P(Y) \cdot P(X \mid Y)$
+\end{enumerate}
+Consider the DAG on the left which is illustrated below:
+\begin{center}
+    \begin{tikzpicture}[node distance=1.5cm]
+        \node[circle, draw] (F1) {$X$}; 
+        \node[circle, draw, right=of F1] (F3) {$Y$}; 
+        \draw[-Stealth] (F1) -- (F3); 
+    \end{tikzpicture}
+\end{center}
+Consider the DAG on the right now, which is illustrated below:
+\begin{center}
+    \begin{tikzpicture}[node distance=1.5cm]
+        \node[circle, draw] (F1) {$X$}; 
+        \node[circle, draw, right=of F1] (F3) {$Y$}; 
+        \draw[-Stealth] (F3) -- (F1); 
+    \end{tikzpicture}
+\end{center}
 
 
 \subsubsection*{\normalfont}{$\therefore$ }

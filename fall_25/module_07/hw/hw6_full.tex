@@ -849,12 +849,44 @@ Just multiply those numbers together: $0.5 \times 0.7 \times 0.8 \times 0.1 = 0.
 \end{flushleft}
 
 \subsubsection*{Solution 7}
+By the fundamental **chain rule of probability**, any joint distribution $P(X, Y)$ can be factored in two ways, without making any assumptions at all:
+\begin{enumerate}
+    \item $P(X, Y) = P(X) P(Y \mid X)$
+    \item $P(X, Y) = P(Y) P(X \mid Y)$
+\end{enumerate}
+Now let's look at the factorizations implied by the two DAGs:
 
+\begin{itemize}
+    \item \textbf{DAG on the left ($X \to Y$):} The Bayesian network factorization rule states that the joint probability is the product of each variable's probability conditioned on its parents.
+        \begin{itemize}
+            \item Parents of $X$: None
+            \item Parents of $Y$: $X$
+        \end{itemize}
+        This implies the factorization $P(X, Y) = P(X) P(Y \mid X)$. As shown in (1), this is always true by the chain rule.
+        
+    \item \textbf{DAG on the right ($Y \to X$):}
+        \begin{itemize}
+            \item Parents of $X$: $Y$
+            \item Parents of $Y$: None
+        \end{itemize}
+        This implies the factorization $P(X, Y) = P(Y) P(X \mid Y)$. As shown in (2), this is also always true by the chain rule.
+\end{itemize}
+Since both factorizations are universally true for any joint distribution $P(X, Y)$, the distribution necessarily factors over both DAGs.
 
-\subsubsection*{\normalfont}{$\therefore$ }
+\subsubsection*{\normalfont}{$\therefore$ Yes, any joint distribution $P(X, Y)$ necessarily factors over both the DAG on the left ($X \to Y$) and the DAG on the right ($Y \to X$). Both are simply applications of the chain rule of probability ($P(X,Y) = P(X)P(Y \mid X)$ and $P(X,Y) = P(Y)P(X \mid Y)$, respectively)}
+
+\subsubsection*{Graduate Level Explanation}
+The two DAGs, $X \to Y$ and $Y \to X$, are **Markov equivalent**.  They belong to the same equivalence class because they imply the exact same set of conditional independencies (specifically, none, as both graphs are fully connected). Since the chain rule $P(X,Y) = P(X)P(Y \mid X)$ and $P(X,Y) = P(Y)P(X \mid Y)$ are universally true, any joint distribution $P(X,Y)$ can be parameterized by either model. This illustrates that without interventional data (e.g., $do(X)$) or strong prior assumptions, observational data alone is insufficient to distinguish causal direction (i.e., whether $X$ causes $Y$ or $Y$ causes $X$).
+
+\subsubsection*{Learn Fast Explanation}
+Think of the chain rule as two ways to tell a story about $X$ and $Y$ happening together.
+\begin{enumerate}
+    \item You can say: "First, $X$ happened (with probability $P(X)$), and *then* $Y$ happened given $X$ (with probability $P(Y \mid X)$)."
+    \item Or you can say: "First, $Y$ happened (with probability $P(Y)$), and *then* $X$ happened given $Y$ (with probability $P(X \mid Y)$)."
+\end{enumerate}
+Both of these "stories" ($P(X)P(Y \mid X)$ and $P(Y)P(X \mid Y)$) are perfectly valid mathematical ways to describe the *same* final outcome, $P(X, Y)$. The two graphs in the question just represent these two different-but-equal ways of telling the story. Since you can *always* tell the story both ways, *any* joint probability $P(X, Y)$ will fit *both* graphs.
 
 \noindent\rule{\textwidth}{0.4pt}\\
-
 \newpage
 
 %------------------
