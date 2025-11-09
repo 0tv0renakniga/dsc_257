@@ -894,42 +894,13 @@ $$P(G_1=1 \mid D=1) \approx 0.591$$
 %------------------
 \subsection*{Solution 9}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 9 (a)}
-\begin{flushleft}
-    \textbf{A character-level RNN for text generation.} Download the file \texttt{rnn-gen.zip} from the course webpage; 
-    it contains a Jupyter notebook, \texttt{text-gen-rnn.ipynb}, as well as data and helper files. 
-    The notebook is adapted from an excellent blog post by Andrej Karpathy, \textit{The unreasonable effectiveness of recurrent neural networks}. 
-    It fits an RNN (more precisely, an LSTM) to the text of Shakespeare's plays and then uses this to generate more text, one character at a time. 
-    Work through the notebook and try to understand what is going on. There are just three small questions to answer. 
-    
-    How many characters are we considering, and what is the integer code for 'A'? 
-\end{flushleft}
-
 \subsubsection*{Solution 9 (a)}
-These answers are found by running the notebook cells and inspecting the \texttt{char\_to\_index} dictionary created from the \texttt{chars.npy} file.
-\begin{enumerate}
-    \item \textbf{Number of characters:} This is the length of the \texttt{chars} array or the \texttt{char\_to\_index} dictionary. The question for part (c) and the code in cell 29 (setting \texttt{input\_size = 66}) confirm that the total number of unique characters in the vocabulary is $66$.
-
-    \item \textbf{Integer code for 'A':} This depends on the exact contents and order of the \texttt{chars.npy} file, which is not provided in the script. To find this, one would run the cell that defines \texttt{char\_to\_index} and then execute:
-\end{enumerate}
+\subsubsection*{Python Code}
 \begin{lstlisting}[language=Python]
-# This cell must be run after the cell defining char_to_index
 print(f"Total characters in vocabulary: {len(char_to_index)}")
 print(f"Integer code for 'A': {char_to_index['A']}")
 \end{lstlisting}
-\subsubsection*{Verification}
-The number of characters ($66$) is confirmed by cross-referencing part (c) of the question. The method to find the code for 'A' \texttt{char\_to\_index['A']} is correct. The exact value for 'A' cannot be determined from the provided script alone, as it depends on an external data file (\texttt{chars.npy}).
-\subsubsection*{\normalfont}{$\therefore$ There are \textbf{66} unique characters in the vocabulary. The integer code for 'A' is found by running \texttt{print(char\_to\_index['A'])} after loading the \texttt{chars.npy} file, as its specific value depends on the order of characters in that file.}
-
-\subsubsection*{Graduate Level Explanation}
-The 66 characters form the vocabulary of this language model. This process, known as tokenization, maps discrete symbols (characters) to numerical representations (integers). These integers serve as indices for an embedding layer, which translates the sparse, 66-dimensional one-hot representation of a character into a dense, lower-dimensional vector. The size of this vocabulary dictates the dimensionality of the model's input embedding table and its final output (softmax) layer.
-
-\subsubsection*{Learn Fast Explanation}
-Think of the 66 characters as the total number of "keys" on the model's typewriter (e.g., 'a', 'b', 'c', 'A', 'B', '!', ' ', '\textbackslash n').
-\begin{itemize}
-    \item \textbf{Number of characters:} 66 is just the total count of these unique keys.
-    \item \textbf{Integer code for 'A':} This is like the ID number for the 'A' key. The computer can't read 'A', but it can read the ID number (like 11, or 34, or whatever it is in the file). We just need to run the code to see what ID number was assigned to 'A'.
-\end{itemize}
+\subsubsection*{\normalfont}{$\therefore$ There are 66 unique characters in the vocabulary. The integer code for 'A' is 12}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -940,35 +911,12 @@ Think of the 66 characters as the total number of "keys" on the model's typewrit
 %------------------
 \subsection*{Solution 9}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 9 (b)}
-\begin{flushleft}
-    \textbf{A character-level RNN for text generation.} ... [Intro text from 9(a)  
-
-    What is the length of the corpus in characters? 
-\end{flushleft}
-
 \subsubsection*{Solution 9 (b)}
-The length of the corpus is the total number of characters in the \texttt{shakespeare\_plays.txt} file. This value is obtained by loading the file and checking the length of the resulting string variable \texttt{text}.
-
-The exact number is not printed in the provided notebook. To find it, one would add a print statement after loading the text:
-
+\subsubsection*{Python Code}
 \begin{lstlisting}[language=Python]
-# In the cell after "Now let's read in Shakespeare's plays..."
-text = open('shakespeare_plays.txt', 'r').read()
-print(f"The corpus is {len(text)} characters long.")
+print(f"Number of characters in shakespeare_plays.txt: {len(data)}")
 \end{lstlisting}
-
-\subsubsection*{Verification}
-The method (\texttt{len(text)}) is the correct way to determine the corpus length in characters. The exact value is dependent on the external file \texttt{shakespeare\_plays.txt} and cannot be determined from the provided script alone.
-
-\subsubsection*{Conclusion}
-$\therefore$ The length of the corpus is the total number of characters in the \texttt{shakespeare\_plays.txt} file. It can be found by running \texttt{text = open('shakespeare\_plays.txt', 'r').read(); print(len(text))}.
-
-\subsubsection*{Graduate Level Explanation}
-The corpus size (total character length) is a critical hyperparameter in sequence modeling. It determines the total amount of available training data. This size, in conjunction with the chosen \texttt{seq\_length}, dictates the number of possible training examples (input/target pairs) that can be generated. A larger corpus generally leads to better model generalization by exposing the RNN to a wider range of $n$-gram sequences, but it also increases training time.
-
-\subsubsection*{Learn Fast Explanation}
-The "length of the corpus" is just the total character count of the entire book of Shakespeare's plays, including all letters, spaces, and punctuation. It's like a "word count," but for individual characters. We need to know this number to understand how much data we have to train our model. More data (a longer corpus) usually means the model can learn more complex patterns.
+\subsubsection*{\normalfont}{$\therefore$ There are 3801088 characters in \texttt{shakespeare\_plays.txt}}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -978,43 +926,8 @@ The "length of the corpus" is just the total character count of the entire book 
 %------------------
 \subsection*{Solution 9}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 9 (c)}
-\begin{flushleft}
-    \textbf{A character-level RNN for text generation.} ... [Intro text from 9(a)  
-
-    The input and output size for the RNN are set to 66. Why is this? 
-\end{flushleft}
-
 \subsubsection*{Solution 9 (c)}
-The size 66 is used for both the input and output layers because it corresponds to the \textbf{vocabulary size} (as determined in part 9a).
-\begin{enumerate}
-    \item \textbf{Input Size (66):} The RNN is a character-level model, meaning it reads one character at a time. To feed a character (like 'A') into the network, it must be represented numerically. This is done by mapping the character to its integer code (e.g., 'A' $\rightarrow$ 11). This integer is then used as an index to look up a vector in an \textbf{Embedding layer} (\texttt{nn.Embedding(input\_size, input\_size)}). This embedding layer has 66 rows—one for each character—so its \texttt{input\_size} must be 66.
-
-    \item \textbf{Output Size (66):} The model's task is to predict the \textit{next} character in the sequence. To do this, it must produce a probability distribution over the entire vocabulary. The RNN's hidden state is passed through a final linear layer (the \texttt{decoder}) that projects the hidden state into a 66-dimensional vector. This vector (called "logits") contains a score for each of the 66 possible next characters. These scores are then passed through a \texttt{softmax} function to get probabilities, and a new character is sampled from this distribution.
-\end{enumerate}
-
-\subsubsection*{Verification}
-The notebook code in cell [24] (\texttt{class CharRNN}) defines the model.
-\begin{itemize}
-    \item \texttt{self.embedding = nn.Embedding(input\_size, input\_size)}: The embedding layer is initialized with \texttt{input\_size} (66), confirming it's the vocabulary size.
-    \item \texttt{self.decoder = nn.Linear(hidden\_size, output\_size)}: The final layer maps the hidden state to \texttt{output\_size} (66), confirming the output is a score for each character in the vocabulary.
-\end{itemize}
-This confirms the explanation.
-
-\subsubsection*{Conclusion}
-$\therefore$ The input and output size of 66 is used because it is the \textbf{vocabulary size} (the total number of unique characters). The \textbf{input layer} must be able to represent any of the 66 possible input characters, and the \textbf{output layer} must produce a probability distribution over all 66 possible next characters.
-
-\subsubsection*{Graduate Level Explanation}
-The model architecture employs an embedding layer, which is a lookup table mapping sparse, one-hot encoded character indices (of dimension 66) to dense vector representations. The final linear \texttt{decoder} layer projects the RNN's hidden state from the hidden dimension (\texttt{hidden\_size=512}) back to the vocabulary dimension (\texttt{output\_size=66}). This 66-dimensional logit vector is then passed through a softmax function to produce a categorical probability distribution over the vocabulary. The \texttt{CrossEntropyLoss} function efficiently combines this softmax with a negative log-likelihood calculation, comparing the predicted distribution to the one-hot target vector (i.e., the actual next character).
-
-\subsubsection*{Learn Fast Explanation}
-Think of the RNN as a musician playing a 66-key piano.
-\begin{itemize}
-    \item \textbf{Vocabulary (66):} The 66 keys on the piano are the only characters the model knows.
-    \item \textbf{Input Size (66):} The \textbf{input} is the model \textit{seeing} which of the 66 keys was just played.
-    \item \textbf{Output Size (66):} The \textbf{output} is the model \textit{predicting} which of the 66 keys is most likely to be played next. It gives a probability score for every single key.
-\end{itemize}
-The input and output layers \textit{must} be 66 to match the total number of keys (characters) the model can see or predict.
+The size 66 is used for both the input and output layers because it corresponds to the total number of unique characters in the vocabulary as found in \textit{part (a)}.
 
 \noindent\rule{\textwidth}{0.4pt}
 
