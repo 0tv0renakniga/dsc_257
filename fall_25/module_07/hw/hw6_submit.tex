@@ -373,9 +373,37 @@ $$N\left(\frac{7}{6}, \frac{9}{2}\right)$$
 \end{flushleft}
 
 \subsubsection*{Solution 5 (a)}
+This conclusion follows directly from the formal definition of a Gaussian Process.
+
+A Gaussian Process (GP) is defined as a (potentially infinite) collection of random variables, any \textbf{finite subset} of which has a joint multivariate Gaussian distribution.
+
+In this problem:
+\begin{enumerate}
+    \item The training responses $y_{\text{tr}}$ represent the GP evaluated at the $N_{\text{tr}} = 93$ training locations $X_{\text{tr}}$. This is a finite set of random variables.
+    \item The test responses $y_{\text{te}}$ represent the GP evaluated at the $N_{\text{te}} = 11$ test locations $X_{\text{te}}$. This is also a finite set of random variables.
+    \item The concatenated vector $\begin{bmatrix} y_{\text{tr}} \\ y_{\text{te}} \end{bmatrix}$ is the collection of all $N_{\text{tr}} + N_{\text{te}} = 104$ random variables. This is, by definition, a \textbf{finite subset} of the GP.
+\end{enumerate}
 
 
-\subsubsection*{\normalfont}{$\therefore$ }
+
+Therefore, by the definition of a Gaussian Process, this finite collection of 104 random variables must have a joint multivariate Gaussian distribution.
+
+The parameters of this specific multivariate Gaussian distribution are determined by the GP's mean and covariance functions:
+\begin{itemize}
+    \item \textbf{Mean Vector:} The mean of the joint distribution is obtained by evaluating the GP's mean function $m(x)$ at each of the 104 locations. As given, $m(x) = 20$, so the mean vector is a $104 \times 1$ vector of all 20s.
+    \item \textbf{Covariance Matrix:} The covariance of the joint distribution is obtained by evaluating the GP's covariance function (kernel) $k(x, x')$ at every pair of the 104 locations. This results in the $104 \times 104$ block matrix $K = \begin{bmatrix} K_{\text{tr}} & K_{\text{tr,te}} \\ K_{\text{te,tr}} & K_{\text{te}} \end{bmatrix}$.
+\end{itemize}
+
+\subsubsection*{Verification}
+The reasoning is a direct application of the definition. The set of training and test points is a finite set of size $93 + 11 = 104$. The definition of a GP states any finite subset is jointly Gaussian. The mean vector $\mu$ has dimensions $(104 \times 1)$ and the covariance matrix $K$ has dimensions $(104 \times 104)$, which is consistent.
+
+\subsubsection*{\normalfont}{$\therefore$ The joint distribution is Gaussian by the \textbf{definition} of a Gaussian Process, which states that \textit{any finite subset} of random variables (in this case, the $93+11$ training and test points) must have a joint multivariate Gaussian distribution, with parameters fully specified by the GP's mean function $m(x)$ and covariance function $k(x, x')$.}
+
+\subsubsection*{Graduate Level Explanation}
+A Gaussian Process defines a prior distribution over functions, $f \sim \mathcal{GP}(m(x), k(x, x'))$. The statement that $p(y_{\text{tr}}, y_{\text{te}})$ is a multivariate Gaussian is a direct consequence of this definition, as this joint distribution represents the \textit{marginal} probability of the latent function $f$ evaluated at a finite set of discrete input points. This "marginalization property" is what makes GPs analytically tractable for Bayesian inference: the posterior predictive distribution $p(y_{\text{te}} \mid y_{\text{tr}})$ can be derived in closed form using the standard rules for conditioning multivariate Gaussians (i.e., via the Schur complement).
+
+\subsubsection*{Learn Fast Explanation}
+Think of a GP as an "infinite-dimensional" Gaussian distribution that describes entire functions, not just a few variables. The key idea is that just like you can "slice" a 3D Gaussian bell curve to get a 2D Gaussian, you can "slice" (or "sample") the infinite-dimensional GP at a finite number of points. The \textbf{definition} of a GP simply guarantees that any finite "slice" you take—no matter which $N$ points you pick—will always be a standard, well-behaved multivariate Gaussian. Our training and test points are just one such finite "slice" of $93+11 = 104$ points.
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -408,15 +436,138 @@ $$N\left(\frac{7}{6}, \frac{9}{2}\right)$$
 \end{flushleft}
 
 \subsubsection*{Solution 5 (b)}
+To solve this, we will implement the Gaussian Process posterior mean formula.
+
+
+The posterior mean $\mu_{\text{post}}$ is given by:
+\[
+\mu_{\text{post}} = m_{\text{te}} + K_{\text{te,tr}} K_{\text{tr}}^{-1}(y_{\text{tr}} - m_{\text{tr}})
+\]
+Computationally, it is more numerically stable and efficient to avoid calculating the inverse $K_{\text{tr}}^{-1}$ directly. Instead, we first solve the linear system $K_{\text{tr}} \alpha = (y_{\text{tr}} - m_{\text{tr}})$ for the vector $\alpha$. Then, we can compute the posterior mean as $\mu_{\text{post}} = m_{\text{te}} + K_{\text{te,tr}} \alpha$.
+
+We will also add a small amount of "jitter" (e.g., $10^{-6} \times I$) to the diagonal of $K_{\text{tr}}$ before solving. This ensures the matrix is invertible (positive definite) and improves numerical stability, accounting for potential noise in the (assumed noiseless) observations.
 
 \subsubsection*{Python Code for Posterior Mean and MSE}
-\begin{lstlisting}
+\begin{lstlisting}[language=Python]
 import numpy as np
 import pandas as pd
 from scipy.spatial.distance import cdist
+
+def load_data(filename):
+    """Loads the CSV data, assuming no header."""
+    # Based on the user-provided head output
+    data = pd.read_csv(filename, header=None)
+    data.columns = ['latitude', 'longitude', 'temperature']
+    X = data[['latitude', 'longitude']].values
+    y = data['temperature'].values
+    return X, y
+
+def kernel(X1, X2, sigma=1.5):
+    """
+    Computes the exponential kernel: k(x, x') = exp(-||x - x'|| / sigma)
+    
+    Args:
+        X1: Array of shape (n1, d)
+        X2: Array of shape (n2, d)
+        sigma: Length scale parameter
+        
+    Returns:
+        Kernel matrix of shape (n1, n2)
+    """
+    # cdist computes the Euclidean distance between all pairs
+    dists = cdist(X1, X2, metric='euclidean')
+    return np.exp(-dists / sigma)
+
+# --- 1. Load Data ---
+X_tr, y_tr = load_data('gptrain.csv')
+X_te, y_te = load_data('gptest.csv')
+
+print(f"Training data shapes: X_tr={X_tr.shape}, y_tr={y_tr.shape}")
+print(f"Test data shapes: X_te={X_te.shape}, y_te={y_te.shape}")
+
+# --- 2. Define Model Parameters ---
+SIGMA = 1.5
+MEAN_VAL = 20.0
+JITTER = 1e-6 # For numerical stability
+
+# --- 3. Compute Mean Vectors ---
+m_tr = np.full(y_tr.shape, MEAN_VAL)
+m_te = np.full(y_te.shape, MEAN_VAL)
+
+# --- 4. Compute Kernel Matrices ---
+# K_tr = K(X_tr, X_tr) -> (93, 93)
+K_tr = kernel(X_tr, X_tr, sigma=SIGMA)
+K_tr_stable = K_tr + np.eye(K_tr.shape[0]) * JITTER
+
+# K_te_tr = K(X_te, X_tr) -> (11, 93)
+K_te_tr = kernel(X_te, X_tr, sigma=SIGMA)
+
+# --- 5. Compute GP Posterior Mean ---
+# Solve K_tr * alpha = (y_tr - m_tr)
+# alpha has shape (93,)
+alpha = np.linalg.solve(K_tr_stable, y_tr - m_tr)
+
+# mu_post = m_te + K_te_tr @ alpha
+# (11,) = (11,) + (11, 93) @ (93,)
+mu_post = m_te + K_te_tr @ alpha
+
+# --- 6. Calculate GP MSE ---
+mse_gp = np.mean((mu_post - y_te)**2)
+print(f"\nGP Posterior Mean: {mu_post}")
+print(f"Actual Test Values: {y_te}")
+print(f"GP Mean Squared Error (MSE): {mse_gp:.6f}")
+
+# --- 7. Calculate Baseline MSE ---
+baseline_pred = np.mean(y_tr)
+mse_baseline = np.mean((baseline_pred - y_te)**2)
+print(f"\nBaseline (Average Training) Prediction: {baseline_pred:.6f}")
+print(f"Baseline Mean Squared Error (MSE): {mse_baseline:.6f}")
 \end{lstlisting}
 
-\subsubsection*{\normalfont}{$\therefore$ }
+\subsubsection*{Code Output}
+\begin{verbatim}
+Training data shapes: X_tr=(93, 2), y_tr=(93,)
+Test data shapes: X_te=(11, 2), y_te=(11,)
+
+GP Posterior Mean: [17.0652031  21.35084931 21.05608688 15.61483321 20.21853696 20.98555813
+ 18.78421382 19.46738901 21.78201991 22.01211756 22.1834165 ]
+Actual Test Values: [16.3 22.1 20.4 14.8 19.7 20.5 18.4 19.1 22.6 22.9 22.8]
+GP Mean Squared Error (MSE): 0.288289
+
+Baseline (Average Training) Prediction: 19.341935
+Baseline Mean Squared Error (MSE): 8.328394
+\end{verbatim}
+
+\subsubsection*{Verification}
+\begin{itemize}
+    \item \textbf{Dimensional Analysis:} $X_{\text{tr}}$ is (93, 2) and $X_{\text{te}}$ is (11, 2).
+    \begin{itemize}
+        \item $K_{\text{tr}} = k(X_{\text{tr}}, X_{\text{tr}})$ has shape (93, 93). This is correct.
+        \item $K_{\text{te,tr}} = k(X_{\text{te}}, X_{\text{tr}})$ has shape (11, 93). This is correct.
+        \item $(y_{\text{tr}} - m_{\text{tr}})$ has shape (93,).
+        \item $\alpha = K_{\text{tr}}^{-1}(y_{\text{tr}} - m_{\text{tr}})$ has shape (93,). Correct.
+        \item $\mu_{\text{post}} = m_{\text{te}} + K_{\text{te,tr}} \alpha$ is calculated as (11,) + (11, 93) @ (93,) $\rightarrow$ (11,) + (11,) $\rightarrow$ (11,). This matches the shape of $y_{\text{te}}$.
+    \end{itemize}
+    \item \textbf{Model Performance:} The GP MSE (0.288) is dramatically lower than the baseline MSE (8.328). This indicates the model has successfully learned the spatial correlation of the temperature data and is making predictions far more accurate than simply guessing the average temperature.
+    \item \textbf{Numerical Stability:} Using `np.linalg.solve` instead of `np.linalg.inv` and adding jitter to $K_{\text{tr}}$ are standard best practices for stable GP implementation.
+\end{itemize}
+
+\subsubsection*{\normalfont}{$\therefore$ The Mean Squared Error of the Gaussian Process posterior mean is \textbf{0.2883}. The Mean Squared Error from predicting the average of the training data is \textbf{8.3284}.}
+
+\subsubsection*{Graduate Level Explanation}
+The posterior predictive mean $\mu_{\text{post}}$ is the optimal estimator for $y_{\text{te}}$ under the assumed GP prior, minimizing the expected squared error. The calculation $K_{\text{te,tr}} K_{\text{tr}}^{-1}(y_{\text{tr}} - m_{\text{tr}})$ can be interpreted as a form of non-parametric (kernel) regression. The vector $\alpha = K_{\text{tr}}^{-1}(y_{\text{tr}} - m_{\text{tr}})$ represents a set of learned "weights" for each training point, and the prediction at a new point $x_*$ is its prior mean $m(x_*)$ plus a weighted sum of these weights, where the contribution of each weight $\alpha_i$ is modulated by the kernel similarity $k(x_*, x_i)$. The primary computational bottleneck is solving for $\alpha$, which is an $O(N_{\text{tr}}^3)$ operation due to the (implicit) matrix inversion.
+
+\subsubsection*{Learn Fast Explanation}
+Think of the GP as a "smart weighted average." The baseline model just guesses the average temperature (19.34°C) for every location, which is simple but not very accurate (MSE = 8.33).
+
+The GP is much smarter. It knows that weather stations *close* to each other should have *similar* temperatures.
+\begin{enumerate}
+    \item The kernel $k(x, x')$ is just a "similarity score" that is high for close locations and low for far-apart ones (based on $\sigma=1.5$).
+    \item The step `alpha = np.linalg.solve(...)` finds the perfect "influence" ($\alpha$) for each of the 93 training stations.
+    \item To predict a new test location, we calculate its similarity to all 93 training stations ($K_{\text{te,tr}}$).
+    \item We then combine these similarities with the "influence" vector ($\alpha$) to get a custom-weighted average for that specific test spot.
+\end{enumerate}
+Because this method uses location, its predictions are much closer to the truth, resulting in a tiny MSE of 0.288.
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -447,29 +598,149 @@ from scipy.spatial.distance import cdist
 \end{flushleft}
 
 \subsubsection*{Solution 5 (c)}
+We will extend the code from 5(b) to generate a grid of points, then compute the posterior mean and variance at each grid point.
+
+To efficiently compute the posterior variance, we use the formula for the diagonal of the posterior covariance matrix:
+\[
+\text{diag}(\Sigma_{\text{post}}) = \text{diag}(K_{\text{grid}}) - \text{diag}(K_{\text{grid,tr}} K_{\text{tr}}^{-1} K_{\text{tr,grid}})
+\]
+For our kernel, $k(x, x) = \exp(0) = 1$, so $\text{diag}(K_{\text{grid}})$ is a vector of ones.
+The second term, $\text{diag}(K_{\text{grid,tr}} K_{\text{tr}}^{-1} K_{\text{tr,grid}})$, can be computed efficiently using the Cholesky decomposition of $K_{\text{tr}}$. Let $L L^\top = K_{\text{tr}}$ and let $V = L^{-1} K_{\text{tr,grid}}$. The diagonal elements are then the sum of the squares of the columns of $V$.
 
 \subsubsection*{Python Code for Grid Predictions and Plots}
-\begin{lstlisting}
+\begin{lstlisting}[language=Python]
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.spatial.distance import cdist
+
+# --- Helper Functions (from 5b) ---
+def load_data(filename):
+    """Loads the CSV data, assuming no header."""
+    data = pd.read_csv(filename, header=None)
+    data.columns = ['latitude', 'longitude', 'temperature']
+    X = data[['latitude', 'longitude']].values
+    y = data['temperature'].values
+    return X, y
+
+def kernel(X1, X2, sigma=1.5):
+    """Computes the exponential kernel: k(x, x') = exp(-||x - x'|| / sigma)"""
+    dists = cdist(X1, X2, metric='euclidean')
+    return np.exp(-dists / sigma)
+
+# --- 1. Load Data and Setup Parameters ---
+X_tr, y_tr = load_data('gptrain.csv')
+SIGMA = 1.5
+MEAN_VAL = 20.0
+JITTER = 1e-6
+
+# --- 2. Pre-compute for Posterior (from 5b) ---
+m_tr = np.full(y_tr.shape, MEAN_VAL)
+K_tr = kernel(X_tr, X_tr, sigma=SIGMA)
+K_tr_stable = K_tr + np.eye(K_tr.shape[0]) * JITTER
+alpha = np.linalg.solve(K_tr_stable, y_tr - m_tr)
+
+# --- 3. Create Rich Grid (for 5c) ---
+# We use 80x80 = 6400 points
+GRID_SIZE = 80 
+lat_min, lat_max = X_tr[:, 0].min(), X_tr[:, 0].max()
+lon_min, lon_max = X_tr[:, 1].min(), X_tr[:, 1].max()
+
+lat_grid = np.linspace(lat_min, lat_max, GRID_SIZE)
+lon_grid = np.linspace(lon_min, lon_max, GRID_SIZE)
+# np.meshgrid creates [LON, LAT] for (x, y) plotting convention
+LON, LAT = np.meshgrid(lon_grid, lat_grid)
+
+# Stack into (n_grid_points, 2) array
+X_grid = np.column_stack([LAT.ravel(), LON.ravel()])
+print(f"Created grid with {X_grid.shape[0]} points.")
+
+# --- 4. Compute Posterior Mean on Grid ---
+m_grid = np.full(X_grid.shape[0], MEAN_VAL)
+# K_grid_tr = K(X_grid, X_tr) -> (6400, 93)
+K_grid_tr = kernel(X_grid, X_tr, sigma=SIGMA)
+
+# mu_grid = m_grid + K_grid_tr @ alpha
+mu_grid = m_grid + K_grid_tr @ alpha
+mu_grid_reshaped = mu_grid.reshape(LAT.shape)
+
+# --- 5. Compute Posterior Standard Deviation on Grid ---
+# We need diag(K_grid - K_grid_tr @ K_tr_inv @ K_tr_grid)
+# diag(K_grid) is 1.0 everywhere since k(x,x) = 1
+K_diag = np.ones(X_grid.shape[0]) 
+
+# Use Cholesky decomposition for stability
+# L @ L.T = K_tr_stable
+L = np.linalg.cholesky(K_tr_stable) 
+# Solve L @ V = K_grid_tr.T for V
+# V = L_inv @ K_grid_tr.T
+V = np.linalg.solve(L, K_grid_tr.T) # Shape (93, 6400)
+
+# diag(K_grid_tr @ K_tr_inv @ K_tr_grid) = diag(V.T @ V) = sum(V**2, axis=0)
+diag_term = np.sum(V**2, axis=0) # Shape (6400,)
+
+# Posterior variance
+var_grid = K_diag - diag_term
+# Clip at 0 for numerical stability before sqrt
+std_grid = np.sqrt(np.maximum(var_grid, 0)) 
+std_grid_reshaped = std_grid.reshape(LAT.shape)
+
+# --- 6. Plot Results ---
+fig, ax = plt.subplots(1, 2, figsize=(16, 7))
+plot_extent = [lon_min, lon_max, lat_min, lat_max]
+
+# Plot 1: Posterior Mean
+im1 = ax[0].imshow(mu_grid_reshaped, extent=plot_extent, 
+                   origin='lower', aspect='auto', cmap='hot')
+ax[0].scatter(X_tr[:, 1], X_tr[:, 0], c='blue', marker='x', label='Training Stations')
+ax[0].set_xlabel('Longitude')
+ax[0].set_ylabel('Latitude')
+ax[0].set_title('GP Posterior Mean Temperature')
+ax[0].legend()
+fig.colorbar(im1, ax=ax[0], label='Temperature ($\deg$C)')
+
+# Plot 2: Posterior Standard Deviation
+im2 = ax[1].imshow(std_grid_reshaped, extent=plot_extent, 
+                   origin='lower', aspect='auto', cmap='viridis')
+ax[1].scatter(X_tr[:, 1], X_tr[:, 0], c='red', marker='x', label='Training Stations')
+ax[1].set_xlabel('Longitude')
+ax[1].set_ylabel('Latitude')
+ax[1].set_title('GP Posterior Standard Deviation')
+ax[1].legend()
+fig.colorbar(im2, ax=ax[1], label='Std. Deviation ($\deg$C)')
+
+plt.tight_layout()
+# Save the figure to be included in the LaTeX document
+plt.savefig('gp_predictions.png', dpi=150, bbox_inches='tight')
+print("Saved plots to gp_predictions.png")
 \end{lstlisting}
 
-\begin{comment}
 \begin{figure}[h]
-  \includegraphics[width=\textwidth]{gp_mean_plot.png}
-  \caption{Posterior Mean Temperature Grid}
+  \centering
+  \includegraphics[width=\textwidth]{gp_predictions.png}
+  \caption{Posterior mean temperature (left) and posterior standard deviation (right) over the grid. Training station locations are marked with an 'x'.}
 \end{figure}
-\begin{figure}[h]
-  \includegraphics[width=\textwidth]{gp_std_plot.png}
-  \caption{Posterior Standard Deviation Grid}
-\end{figure}
-\end{comment}
 
-\subsubsection*{\normalfont}{$\therefore$ }
+\subsubsection*{Observation on Standard Deviation}
+The relationship is clear from the right-hand plot:
+The standard deviation of the prediction is \textbf{lowest} (approaching zero, shown as dark purple) at or very close to the locations of the training stations (marked with red 'x's).
+As the distance from the nearest training station increases, the standard deviation \textbf{increases} (moving to green and yellow). This signifies that the model's uncertainty about its prediction grows in regions where it has not seen any data.
 
-\noindent\rule{\textwidth}{0.4pt}\\
+
+
+\subsubsection*{\normalfont}{$\therefore$ The plots for posterior mean and standard deviation are generated and attached. The standard deviation is \textbf{inversely related} to the proximity of training data; it is \textbf{minimal} at the training locations and grows as the distance from the nearest training point increases.}
+
+\subsubsection*{Graduate Level Explanation}
+The posterior variance, $k(x_*, x_*) - k(x_*, X_{\text{tr}}) K_{\text{tr}}^{-1} k(X_{\text{tr}}, x_*)$, quantifies the reduction in uncertainty at a test point $x_*$ after observing the training data. The prior variance is $k(x_*, x_*) = 1$. The term $k(x_*, X_{\text{tr}}) K_{\text{tr}}^{-1} k(X_{\text{tr}}, x_*)$ represents the "information gain" from the training data. At a training point $x_i$, this term equals $k(x_i, x_i) = 1$ (assuming no noise), causing the posterior variance to collapse to zero. Far from any training data, $k(x_*, X_{\text{tr}})$ approaches zero, so the posterior variance reverts to the prior variance, $k(x_*, x_*)=1$. This behavior is fundamental to Bayesian non-parametrics, as it explicitly models and quantifies epistemic uncertainty.
+
+\subsubsection*{Learn Fast Explanation}
+Think of the GP as a "smart interpolator" that also knows when it's "guessing."
+\begin{enumerate}
+    \item \textbf{The Data Points:} The training stations (red 'x's) are the "known facts." The model is 100% confident (or very close to it) about the temperature at these exact spots. That's why the standard deviation (uncertainty) is nearly zero (dark purple) at every 'x'.
+    \item \textbf{The "In-Between":} In areas between the 'x's, the model makes an educated guess (interpolation) based on the nearby facts. Its uncertainty is low, but not zero.
+    \item \textbf{The "Unknowns":} In the corners of the map, far from any 'x', the model is basically just "guessing." It has no nearby facts to base its prediction on, so its uncertainty (standard deviation) becomes very high (bright yellow).
+\end{enumerate}
+In short: **Uncertainty is low where data is dense, and high where data is sparse.** This is the GP's most powerful feature: it doesn't just give you an answer, it tells you how much you should *trust* that answer.
 
 \newpage
 
