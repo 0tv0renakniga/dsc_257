@@ -573,31 +573,8 @@ Now, substitute the values into the equation above for $P(F_1, F_2, F_3, F_4)$:
 %------------------
 \subsection*{Solution 7}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 7}
-\begin{flushleft}
-    \textbf{Non-uniqueness of underlying DAG.} Suppose random variables $X$ and $Y$ take values in $\{0,1\}$. 
-    Does the joint distribution of $(X, Y)$ necessarily factor over the DAG on the left below? 
-    What about the DAG on the right? 
-
-    \begin{center}
-    \begin{tikzpicture}[node distance=1.5cm]
-        \node[circle, draw] (F1) {$X$}; 
-        \node[circle, draw, right=of F1] (F3) {$Y$}; 
-        \node[circle, draw, right=of F3] (F2) {$X$};
-        \node[circle, draw, right=of F2] (F4) {$Y$};
-        \draw[-Stealth] (F1) -- (F3); 
-        \draw[-Stealth] (F4) -- (F2); 
-    \end{tikzpicture}
-    \end{center}
-\end{flushleft}
-
-\subsubsection*{Solution 7}
-For any joint distribution $P(X, Y)$ can be factored in two ways (via chain rule):
-\begin{enumerate}
-    \item $P(X, Y) = P(X) \cdot P(Y \mid X)$
-    \item $P(X, Y) = P(Y) \cdot P(X \mid Y)$
-\end{enumerate}
-Consider the DAG on the left which is illustrated below:
+\subsubsection*{Left DAG}
+Consider the DAG below:
 \begin{center}
     \begin{tikzpicture}[node distance=1.5cm]
         \node[circle, draw] (F1) {$X$}; 
@@ -605,7 +582,13 @@ Consider the DAG on the left which is illustrated below:
         \draw[-Stealth] (F1) -- (F3); 
     \end{tikzpicture}
 \end{center}
-Consider the DAG on the right now, which is illustrated below:
+The rules of Bayesian networks (that a variable is conditioned on its parents), the DAG above implies a factorization of the joint probability as:
+    $$P(X,Y) = P(X) \cdot P(Y \mid X)$$
+From the chain rule of probability, any joint distribution $P(X,Y)$ can always be written as:
+$$P(X)P(Y \mid X)$$
+Hence, the factorization required by the Left DAG  for any $P(X,Y)$
+\subsubsection*{Right DAG}
+Consider the DAG below:
 \begin{center}
     \begin{tikzpicture}[node distance=1.5cm]
         \node[circle, draw] (F1) {$X$}; 
@@ -613,9 +596,12 @@ Consider the DAG on the right now, which is illustrated below:
         \draw[-Stealth] (F3) -- (F1); 
     \end{tikzpicture}
 \end{center}
-
-
-\subsubsection*{\normalfont}{$\therefore$ }
+This DAG implies a factorization of the joint probability as:
+$$P(X,Y) = P(Y) \cdot P(X \mid Y)$$
+From the chain rule of probability, any joint distribution $P(X,Y)$ can always be written as:
+$$P(Y)P(X \mid Y)$$
+Hence, the factorization required by the DAG  for any $P(X,Y)$
+\subsubsection*{\normalfont}{$\therefore$ Any joint distribution $P(X, Y)$ factors over both the DAGs}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
