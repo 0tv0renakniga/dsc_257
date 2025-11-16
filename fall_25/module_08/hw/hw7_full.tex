@@ -56,10 +56,9 @@
 %------------------
 \subsection*{Solution 1}
 \noindent\rule{\textwidth}{0.4pt}\\
-
-\subsubsection*{Solution 1 (a)}
+\subsubsection*{Question 1 (a)}
 \begin{flushleft}
-    Given the probability distribution $P$ over binary variables $x_1, \ldots, x_6 \in \{0, 1\}$ has the following form:
+    Probability distribution $P$ over binary variables $x_1, \ldots, x_6 \in \{0, 1\}$ has the following form:
 \end{flushleft}
 $$
 P(x_1, \ldots, x_6) = \frac{1}{Z} \psi(x_1, x_2)\psi(x_2, x_3)\psi(x_3, x_4)\psi(x_4, x_5)\psi(x_5, x_6)\psi(x_6, x_1)
@@ -74,24 +73,34 @@ $$
 \end{cases}
 $$
 \begin{flushleft}
-    From the Hammersley-Clifford theorem the potential terms are:
-\end{flushleft}
-$$\psi(x_1, x_2) \implies \text{ edge between } x_1 \text{ and } x_2 \qquad \psi(x_4, x_5) \implies \text{ edge between } x_4 \text{ and } x_5$$
-$$\psi(x_2, x_3) \implies \text{ edge between } x_2 \text{ and } x_3 \qquad \psi(x_5, x_6) \implies \text{ edge between } x_5 \text{ and } x_6$$
-$$\psi(x_3, x_4) \implies \text{ edge between } x_3 \text{ and } x_4 \qquad \psi(x_6, x_1) \implies \text{ edge between } x_6 \text{ and } x_1$$
-\begin{flushleft}
-    Now, with the information above, we can draw the minimal undirected graph.
+    \textit{Draw the minimal undirected graph $G$ over which $P$ factors. (This is the undirected graph with the fewest possible edges that contains cliques corresponding to each of the terms in $P$.)}
 \end{flushleft}
 
-\begin{center}
+\subsubsection*{Solution 1 (a)}
+\subsubsection*{Minimal Undirected Graph}
+The given probability distribution factors into pairwise potential functions $\psi(x_i, x_j)$. According to the Hammersley-Clifford theorem, a probability distribution factors over an undirected graph $G$ if and only if it can be written as a product of potential functions over the maximal cliques of $G$. In this case, each potential function $\psi(x_i, x_{i+1})$ (with $x_7 = x_1$) corresponds to an edge between $x_i$ and $x_{i+1}$ in the graph. Since these potentials are pairwise, the graph is formed by directly connecting the variables involved in each potential.
+
+The potential terms are:
+\begin{itemize}
+    \item $\psi(x_1, x_2) \implies$ edge between $x_1$ and $x_2$
+    \item $\psi(x_2, x_3) \implies$ edge between $x_2$ and $x_3$
+    \item $\psi(x_3, x_4) \implies$ edge between $x_3$ and $x_4$
+    \item $\psi(x_4, x_5) \implies$ edge between $x_4$ and $x_5$
+    \item $\psi(x_5, x_6) \implies$ edge between $x_5$ and $x_6$
+    \item $\psi(x_6, x_1) \implies$ edge between $x_6$ and $x_1$
+\end{itemize}
+This forms a cycle graph with 6 nodes.
+
+\begin{figure}[h!]
+\centering
 \begin{tikzpicture}[node distance=2cm, thick]
     % Nodes
-    \node[circle, draw, fill=blue!10, label=left:$x_1$] (x1) at (0, 2) {};
-    \node[circle, draw, fill=blue!10, label=right:$x_2$] (x2) at (3, 2) {};
-    \node[circle, draw, fill=blue!10, label=right:$x_3$] (x3) at (4.8, 0) {};
-    \node[circle, draw, fill=blue!10, label=right:$x_4$] (x4) at (3, -2) {};
-    \node[circle, draw, fill=blue!10, label=left:$x_5$] (x5) at (0, -2) {};
-    \node[circle, draw, fill=blue!10, label=left:$x_6$] (x6) at (-1.8, 0) {};
+    \node[circle, draw, fill=blue!10, label=left:$x_1$] (x1) {};
+    \node[circle, draw, fill=blue!10, right of=x1, label=above:$x_2$] (x2) {};
+    \node[circle, draw, fill=blue!10, right of=x2, label=above:$x_3$] (x3) {};
+    \node[circle, draw, fill=blue!10, below right of=x3, label=right:$x_4$] (x4) {};
+    \node[circle, draw, fill=blue!10, below left of=x4, label=below:$x_5$] (x5) {};
+    \node[circle, draw, fill=blue!10, left of=x5, label=below:$x_6$] (x6) {};
 
     % Edges
     \draw (x1) -- (x2);
@@ -101,9 +110,17 @@ $$\psi(x_3, x_4) \implies \text{ edge between } x_3 \text{ and } x_4 \qquad \psi
     \draw (x5) -- (x6);
     \draw (x6) -- (x1);
 \end{tikzpicture}
-\end{center}
+\caption{Minimal Undirected Graph for $P(x_1, \ldots, x_6)$}
+\label{fig:mrf_cycle_graph}
+\end{figure}
 
-\subsubsection*{\normalfont}{$\therefore$ The minimal undirected graph given the probability distribution $P$ is seen above.}
+\subsubsection*{\normalfont}{$\therefore$ The minimal undirected graph is a 6-node cycle graph where each variable $x_i$ is connected to $x_{i-1}$ (or $x_6$ for $i=1$) and $x_{i+1}$ (or $x_1$ for $i=6$).}
+
+\subsubsection*{Graduate Level Explanation}
+This problem concerns the graphical representation of a pairwise Markov Random Field (MRF), specifically an Ising-like model on a cycle graph. The factorization $P(\mathbf{x}) \propto \prod_{(i,j) \in E} \psi(x_i, x_j)$ directly implies that the graph $G=(V,E)$ must have edges corresponding to each pairwise potential function. For an MRF, the set of maximal cliques in the graph dictates the factorization of the joint probability distribution. In this case, each edge $(x_i, x_{i+1})$ forms a maximal clique of size two (a pairwise clique), thus forming a cycle graph. This structure directly encodes the local dependencies defined by the potential functions.
+
+\subsubsection*{Simple Expedited Learning Explanation}
+Imagine each $x_i$ is a person, and the $\psi(x_i, x_j)$ terms are "relationships" between pairs of people. If there's a relationship between $x_1$ and $x_2$, you draw a line (an edge) connecting them. The problem lists six such relationships: $x_1$ with $x_2$, $x_2$ with $x_3$, and so on, until $x_6$ with $x_1$. When you draw all these connections, starting from $x_1$ and going around to $x_6$ and back to $x_1$, you end up with a closed loop, or a cycle graph. This graph is "minimal" because you only draw lines for the direct relationships given by the $\psi$ terms, and no extra lines.
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -114,15 +131,15 @@ $$\psi(x_3, x_4) \implies \text{ edge between } x_3 \text{ and } x_4 \qquad \psi
 %------------------
 \subsection*{Solution 1}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 1 (b)}
+\subsubsection*{Question 1 (b)}
 \begin{flushleft}
-    Given the probability distribution $P$ over binary variables $x_1, \ldots, x_6 \in \{0, 1\}$ has the following form:
+    Probability distribution $P$ over binary variables $x_1, \ldots, x_6 \in \{0, 1\}$ has the following form:
 \end{flushleft}
 $$
 P(x_1, \ldots, x_6) = \frac{1}{Z} \psi(x_1, x_2)\psi(x_2, x_3)\psi(x_3, x_4)\psi(x_4, x_5)\psi(x_5, x_6)\psi(x_6, x_1)
 $$
 \begin{flushleft}
-    where for $a, b \in \{0, 1\}$, and
+    where for $a, b \in \{0, 1\}$,
 \end{flushleft}
 $$
 \psi(a, b) = \begin{cases}
@@ -131,33 +148,46 @@ $$
 \end{cases}
 $$
 \begin{flushleft}
-    To find the $x$ that maximizes $P(X)$ we have the following:
+    \textit{For what configuration(s) $x \in \{0, 1\}^6$ is $P(x)$ maximized?}
 \end{flushleft}
+
+We want to find the configuration $x = (x_1, \ldots, x_6)$ that maximizes $P(x)$.
 \begin{align*}
     \arg\max_{x} P(x) &= \arg\max_{x} \left[ \frac{1}{Z} \prod_{i=1}^{5} \psi(x_i, x_{i+1}) \cdot \psi(x_6, x_1) \right]
 \end{align*}
-\begin{flushleft}
-    Since the partition function $Z$ is a positive constant,we can ignore it and maximizing $P(x)$ becomes:
-\end{flushleft}
+Since the partition function $Z$ is a positive constant, maximizing $P(x)$ is equivalent to maximizing the unnormalized product of potentials:
 \begin{align*}
     \arg\max_{x} P(x) &= \arg\max_{x} \left[ \psi(x_1, x_2)\psi(x_2, x_3)\psi(x_3, x_4)\psi(x_4, x_5)\psi(x_5, x_6)\psi(x_6, x_1) \right]
 \end{align*}
-\begin{flushleft}
-    Given $\psi(a,b)$ is maximized at, the maximum possible value for any single potential is $\psi(a, a) = 1$.
-\end{flushleft}
+We are multiplying six potential terms together. From the definition of $\psi(a, b)$, the maximum possible value for any single potential is $\psi(a, a) = 1$. The other possible value is $\psi(a, b) = 0.5$ for $a \neq b$.
 
-$$\psi(a, b) = 1 \text{ where } a=b$$
-Now, maximizing the value of each term in the product yeilds:
-$$\psi(x_1, x_2) = 1 \implies  x_1 = x_2 \qquad \psi(x_4, x_5) = 1 \implies  x_4 = x_5$$
-$$\psi(x_2, x_3) = 1 \implies  x_2 = x_3 \qquad \psi(x_5, x_6) = 1 \implies  x_5 = x_6$$
-$$\psi(x_3, x_4) = 1 \implies  x_3 = x_4 \qquad \psi(x_6, x_1) = 1 \implies  x_6 = x_1$$
+To maximize the product, we want to maximize the value of each term in the product. The largest possible product is achieved if we can make all six terms equal to 1.
+This requires:
+\begin{itemize}
+    \item $\psi(x_1, x_2) = 1 \implies x_1 = x_2$
+    \item $\psi(x_2, x_3) = 1 \implies x_2 = x_3$
+    \item $\psi(x_3, x_4) = 1 \implies x_3 = x_4$
+    \item $\psi(x_4, x_5) = 1 \implies x_4 = x_5$
+    \item $\psi(x_5, x_6) = 1 \implies x_5 = x_6$
+    \item $\psi(x_6, x_1) = 1 \implies x_6 = x_1$
+\end{itemize}
+Combining these conditions, we must have $x_1 = x_2 = x_3 = x_4 = x_5 = x_6$.
+Since the variables are binary, $x_i \in \{0, 1\}$, there are exactly two configurations that satisfy this condition:
+\begin{enumerate}
+    \item $x = (0, 0, 0, 0, 0, 0)$
+    \item $x = (1, 1, 1, 1, 1, 1)$
+\end{enumerate}
+For both of these configurations, the product of potentials is $1 \cdot 1 \cdot 1 \cdot 1 \cdot 1 \cdot 1 = 1$.
+Any other configuration (e.g., $x=(0,1,0,1,0,1)$) must have at least one pair of disagreeing neighbors. For every such pair, the potential function evaluates to $0.5$. This will result in a total product strictly less than 1 (e.g., $0.5^6$ for the alternating case).
+Therefore, the two configurations where all variables are aligned are the unique maximizers of $P(x)$.
 
-\begin{flushleft}
-    Hence, $x_1 = x_2 = x_3 = x_4 = x_5 = x_6$ is the condition for the configuration that maximizes of $P(x)$. 
-\end{flushleft}
+\subsubsection*{\normalfont}{$\therefore$ The two configurations that maximize $P(x)$ are $x = (0, 0, 0, 0, 0, 0)$ and $x = (1, 1, 1, 1, 1, 1)$.}
 
-\subsubsection*{\normalfont}{$\therefore$ Since $x_i$ can only be $0$ or $1$ ($x_i \in \{0,1\}$), the configurations that maximize $P(x)$ are:}
-$$x = (0, 0, 0, 0, 0, 0) \qquad \text{and} \qquad x = (1, 1, 1, 1, 1, 1)$$
+\subsubsection*{Graduate Level Explanation}
+This problem is a Maximum A Posteriori (MAP) inference task on a pairwise Markov Random Field. The potential function $\psi(a,b)$, which assigns a higher value to agreement ($a=b$), defines this as a **ferromagnetic Ising model**. Finding the configuration $x$ that maximizes $P(x)$ is equivalent to finding the **ground state** (minimum energy configuration) of the system. The probability $P(x) \propto \exp(-E(x))$ where $E(x) = -\sum_{(i,j)} \log \psi(x_i, x_j)$ is the energy. To maximize $P(x)$, we must minimize $E(x)$. Since $-\log(1) = 0$ and $-\log(0.5) > 0$, the energy is minimized (at $E=0$) when all neighboring "spins" are aligned. This model exhibits two degenerate ground states: all spins "down" (all 0s) and all spins "up" (all 1s).
+
+\subsubsection*{Simple Expedited Learning Explanation}
+Think of this as six friends sitting in a circle, and each must choose a "0" or a "1" hat. The "happiness" of the group is determined by multiplying "agreement scores" between all neighbors. If two neighbors have the same hat, their score $\psi$ is $1$. If they have different hats, their score is only $0.5$. To make the *total* group happiness (the final $P(x)$) as high as possible, you need every single pair of neighbors to have the highest possible score. The highest score is $1$, which happens when they match. The only way for everyone to match their neighbor in a circle is if everyone makes the same choice: either everyone wears a "0" hat, or everyone wears a "1" hat.
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -168,15 +198,15 @@ $$x = (0, 0, 0, 0, 0, 0) \qquad \text{and} \qquad x = (1, 1, 1, 1, 1, 1)$$
 %------------------
 \subsection*{Solution 1}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Solution 1 (c)}
+\subsubsection*{Question 1 (c)}
 \begin{flushleft}
-    Given the probability distribution $P$ over binary variables $x_1, \ldots, x_6 \in \{0, 1\}$ has the following form:
+    Probability distribution $P$ over binary variables $x_1, \ldots, x_6 \in \{0, 1\}$ has the following form:
 \end{flushleft}
 $$
 P(x_1, \ldots, x_6) = \frac{1}{Z} \psi(x_1, x_2)\psi(x_2, x_3)\psi(x_3, x_4)\psi(x_4, x_5)\psi(x_5, x_6)\psi(x_6, x_1)
 $$
 \begin{flushleft}
-    where for $a, b \in \{0, 1\}$, and
+    where for $a, b \in \{0, 1\}$,
 \end{flushleft}
 $$
 \psi(a, b) = \begin{cases}
@@ -185,35 +215,63 @@ $$
 \end{cases}
 $$
 \begin{flushleft}
-    To find the $x$ that minimizes $P(X)$ we have the following:
+    \textit{For what configuration(s) $x \in \{0, 1\}^6$ is $P(x)$ minimized?}
 \end{flushleft}
+
+\subsubsection*{Solution 1 (c)}
+We want to find the configuration $x = (x_1, \ldots, x_6)$ that minimizes $P(x)$.
 \begin{align*}
     \arg\min_{x} P(x) &= \arg\min_{x} \left[ \frac{1}{Z} \prod_{i=1}^{5} \psi(x_i, x_{i+1}) \cdot \psi(x_6, x_1) \right]
 \end{align*}
-\begin{flushleft}
-    Since the partition function $Z$ is a positive constant,we can ignore it and minimumizing $P(x)$ becomes:
-\end{flushleft}
+Since $Z$ is a positive constant, minimizing $P(x)$ is equivalent to minimizing the unnormalized product of potentials:
 \begin{align*}
     \arg\min_{x} P(x) &= \arg\min_{x} \left[ \psi(x_1, x_2)\psi(x_2, x_3)\psi(x_3, x_4)\psi(x_4, x_5)\psi(x_5, x_6)\psi(x_6, x_1) \right]
 \end{align*}
-\begin{flushleft}
-    Given $\psi(a,b)$ is minimized at:
-\end{flushleft}
-$$\psi(a, b) = 0.5 \text{ where } a \neq b$$
-Now, minimizing the value of each term in the product yeilds:
-$$\psi(x_1, x_2) = 0.5 \implies  x_1 \neq x_2 \implies x_1 = 0 , x_2 = 1 \text{ OR } x_1 = 1 , x_2 = 0 $$
-$$\psi(x_2, x_3) = 0.5 \implies  x_2 \neq x_3 \implies x_2 = 0 , x_3 = 1 \text{ OR } x_2 = 1 , x_3 = 0 $$
-$$\psi(x_3, x_4) = 0.5 \implies  x_3 \neq x_4 \implies x_3 = 0 , x_4 = 1 \text{ OR } x_3 = 1 , x_4 = 0 $$
-$$\psi(x_4, x_5) = 0.5 \implies  x_4 \neq x_5 \implies x_4 = 0 , x_5 = 1 \text{ OR } x_4 = 1 , x_5 = 0 $$
-$$\psi(x_5, x_6) = 0.5 \implies  x_5 \neq x_6 \implies x_5 = 0 , x_6 = 1 \text{ OR } x_5 = 1 , x_6 = 0 $$
-$$\psi(x_6, x_1) = 0.5 \implies  x_6 \neq x_1 \implies x_6 = 0 , x_1 = 1 \text{ OR } x_6 = 1 , x_1 = 0 $$
-\begin{flushleft}
-    Hence, the conditions for the configuration that minimumizes of $P(x)$ are: 
-\end{flushleft}
-$$x = (0, 1, 0, 1, 0, 1) \qquad \text{ and } \qquad x = (1, 0, 1, 0, 1, 0)$$
+The potential function $\psi(a, b)$ has a minimum value of $0.5$, which occurs when $a \neq b$. The value is $1$ when $a = b$.
 
-\subsubsection*{\normalfont}{$\therefore$ Since $x_i$ can only be $0$ or $1$ ($x_i \in \{0,1\}$), and $a \neq b$ the configurations that maximize $P(x)$ are:}
-$$x = (0, 1, 0, 1, 0, 1) \qquad \text{ and } \qquad x = (1, 0, 1, 0, 1, 0)$$
+To minimize the product of these six terms, we want to make each term in the product as small as possible. The smallest possible product is achieved if we can make all six terms equal to $0.5$.
+This requires that all adjacent nodes disagree:
+\begin{itemize}
+    \item $\psi(x_1, x_2) = 0.5 \implies x_1 \neq x_2$
+    \item $\psi(x_2, x_3) = 0.5 \implies x_2 \neq x_3$
+    \item $\psi(x_3, x_4) = 0.5 \implies x_3 \neq x_4$
+    \item $\psi(x_4, x_5) = 0.5 \implies x_4 \neq x_5$
+    \item $\psi(x_5, x_6) = 0.5 \implies x_5 \neq x_6$
+    \item $\psi(x_6, x_1) = 0.5 \implies x_6 \neq x_1$
+\end{itemize}
+This set of conditions requires a perfectly alternating assignment of values. Let's see if this is possible.
+\begin{enumerate}
+    \item \textbf{Case 1: Start with $x_1 = 0$}
+        \begin{itemize}
+            \item $x_1 = 0 \implies x_2 = 1$
+            \item $x_2 = 1 \implies x_3 = 0$
+            \item $x_3 = 0 \implies x_4 = 1$
+            \item $x_4 = 1 \implies x_5 = 0$
+            \item $x_5 = 0 \implies x_6 = 1$
+            \item \textbf{Check final link:} We need $x_6 \neq x_1$. Here, $x_6 = 1$ and $x_1 = 0$. This condition is satisfied.
+            \item This gives the configuration: $x = (0, 1, 0, 1, 0, 1)$.
+        \end{itemize}
+    \item \textbf{Case 2: Start with $x_1 = 1$}
+        \begin{itemize}
+            \item $x_1 = 1 \implies x_2 = 0$
+            \item $x_2 = 0 \implies x_3 = 1$
+            \item $x_3 = 1 \implies x_4 = 0$
+            \item $x_4 = 0 \implies x_5 = 1$
+            \item $x_5 = 1 \implies x_6 = 0$
+            \item \textbf{Check final link:} We need $x_6 \neq x_1$. Here, $x_6 = 0$ and $x_1 = 1$. This condition is satisfied.
+            \item This gives the configuration: $x = (1, 0, 1, 0, 1, 0)$.
+        \end{itemize}
+\end{enumerate}
+These two alternating configurations both result in a product of potentials equal to $0.5^6 = 0.015625$. Any other configuration must have at least one pair of agreeing neighbors, e.g., $\psi(x_i, x_{i+1}) = 1$. This would make the product $1 \cdot 0.5^5 = 0.03125$ (or larger), which is greater than $0.5^6$.
+Therefore, the two alternating configurations are the unique minimizers.
+
+\subsubsection*{\normalfont}{$\therefore$ The two configurations that minimize $P(x)$ are the alternating patterns: $x = (0, 1, 0, 1, 0, 1)$ and $x = (1, 0, 1, 0, 1, 0)$.}
+
+\subsubsection*{Graduate Level Explanation}
+This problem asks for the maximum energy (minimum probability) states of a ferromagnetic Ising model. The potential $\psi(a,b)$ penalizes disagreement, so the highest energy states are those with the most disagreements. The underlying graph is a 6-cycle, which is a **bipartite graph** (a graph whose vertices can be divided into two disjoint sets such that every edge connects a vertex in one set to one in the other). For a bipartite graph, a 2-coloring is possible, which corresponds exactly to an assignment where no two adjacent nodes have the same value. The two configurations found, $(0,1,0,1,0,1)$ and $(1,0,1,0,1,0)$, represent the two valid 2-colorings of this graph. These states maximize the system's energy (minimize probability) by maximizing the number of "unhappy" (disagreeing) links. This is only possible without **frustration** because the cycle length is even.
+
+\subsubsection*{Simple Expedited Learning Explanation}
+Following the "six friends in a circle" analogy, we now want to find the configuration that makes the group *unhappiest*. The group's "happiness score" is $1$ if neighbors match and only $0.5$ if they differ. To get the lowest possible total score (the minimum $P(x)$), we need every single pair of neighbors to get the lowest score of $0.5$. This means everyone must have a different hat from their neighbors. If person 1 picks "0", person 2 must pick "1", person 3 must pick "0", and so on. This creates an alternating pattern $(0, 1, 0, 1, 0, 1)$. We check the last link: person 6 (with "1") is different from person 1 (with "0"), so it works! The only other possibility is starting with "1", which gives the other alternating pattern $(1, 0, 1, 0, 1, 0)$.
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
