@@ -224,48 +224,31 @@ $$x = (0, 1, 0, 1, 0, 1) \qquad \text{ and } \qquad x = (1, 0, 1, 0, 1, 0)$$
 %------------------
 \subsection*{Solution 2}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 2 (a)}
-\begin{flushleft}
-In a tournament, each player plays three games. Define three random variables:
-\begin{itemize}
-\item Random variable $A$ is 1 if Tom wins his first game, and is 0 otherwise.
-\item Random variable $B$ is 1 if Tom wins his first two games, and is 0 otherwise.
-\item Random variable $C$ is 1 if Tom wins all three of his games, and is 0 otherwise.
-\end{itemize}
-\textit{Is $C$ independent of $A$ (i.e., is it true that for any values $a, c$ that $A, C$ might take on, we have $\Pr(A = a, C = c) = \Pr(A = a)\Pr(C = c)$)? Give a brief (one-sentence) reason for your answer.} 
-\end{flushleft}
-\begin{flushleft}
-    \textit{Hint: The answer is no; show this by exhibiting specific choices of $a, c$ for which $\Pr(A = a, C = c) \neq \Pr(A = a)\Pr(C = c)$.}
-\end{flushleft}
 
 \subsubsection*{Solution 2 (a)}
-We follow the hint and test the case where $a=0$ and $c=1$.
+We will test for independence by finding a counterexample. Let's use $a=0$ and $c=1$.
 \begin{itemize}
     \item $A=0$ is the event "Tom does not win his first game."
     \item $C=1$ is the event "Tom wins all three of his games."
 \end{itemize}
-By definition, the event $C=1$ implies that Tom wins Game 1, Game 2, and Game 3. This means that $C=1$ and $A=0$ are mutually exclusive events; it is impossible for Tom to lose his first game *and* win all three games.
+The event $C=1$ (winning all three) requires winning Game 1. The event $A=0$ requires losing Game 1. These two events are mutually exclusive, so they cannot happen at the same time.
 
 Therefore, the joint probability is $\Pr(A=0, C=1) = 0$.
 
-Now we consider the product of the marginal probabilities, $\Pr(A=0)\Pr(C=1)$.
-Let's assume the probability of winning any game $i$ is $p_i$, where $0 < p_i < 1$. This means the games are non-deterministic (it's possible to both win and lose).
+Now, we check the product of the marginal probabilities, $\Pr(A=0)\Pr(C=1)$.
+Assuming the games are non-deterministic (i.e., the probability of winning any game $p_i$ is $0 < p_i < 1$):
 \begin{itemize}
-    \item $\Pr(A=0) = \Pr(\text{Lose Game 1}) = 1 - p_1$. Since $p_1 < 1$, we have $\Pr(A=0) > 0$.
-    \item $\Pr(C=1) = \Pr(\text{Win G1, G2, G3})$. Assuming game independence, $\Pr(C=1) = p_1 p_2 p_3$. Since $p_i > 0$, we have $\Pr(C=1) > 0$.
+    \item $\Pr(A=0) = 1 - p_1 > 0$
+    \item $\Pr(C=1) = p_1 p_2 p_3 > 0$
 \end{itemize}
-The product of the marginals is $\Pr(A=0)\Pr(C=1) = (1 - p_1)(p_1 p_2 p_3)$, which is strictly greater than 0.
+The product of the marginals is $\Pr(A=0)\Pr(C=1) = (1-p_1)(p_1 p_2 p_3) > 0$.
 
-We have found a case where $\Pr(A=0, C=1) = 0$ but $\Pr(A=0)\Pr(C=1) > 0$.
-Since $0 \neq (1-p_1)(p_1 p_2 p_3)$, the independence condition $\Pr(A=a, C=c) = \Pr(A=a)\Pr(C=c)$ is violated.
+We have shown: $\Pr(A=0, C=1) = 0$ but $\Pr(A=0)\Pr(C=1) > 0$.
+Since $0 \neq \Pr(A=0)\Pr(C=1)$, the independence condition is violated.
 
-\subsubsection*{\normalfont}{$\therefore$ No, $C$ is not independent of $A$ because if Tom loses his first game ($A=0$), he *cannot* win all three games ($C=1$), so $\Pr(A=0, C=1)=0$, which is not equal to the product $\Pr(A=0)\Pr(C=1)$ (as both marginal probabilities are non-zero, assuming non-trivial games).}
+\subsubsection*{\normalfont}{$\therefore$ No, $C$ is not independent of $A$.}
 
-\subsubsection*{Graduate Level Explanation}
-The variables $A$ and $C$ are not marginally independent because a deterministic, causal relationship exists between them. Specifically, $C$ is a logical subset of $A$; the event $C=1$ (winning all three) *implies* the event $A=1$ (winning the first). Therefore, $\Pr(C=1 \mid A=0) = 0$. For independence to hold, this conditional probability must equal the marginal probability $\Pr(C=1)$, but $\Pr(C=1) > 0$ (assuming a non-zero chance of winning). Because $\Pr(C=1 \mid A=0) \neq \Pr(C=1)$, they are dependent; observing $A=0$ provides definitive information about $C$ (namely, that $C=0$).
-
-\subsubsection*{Simple Expedited Learning Explanation}
-No. Think of it this way: "Winning all three games" ($C=1$) *includes* "Winning the first game" ($A=1$). They are not separate events. If I tell you "Tom lost the first game" ($A=0$), you know *for sure* that "Tom won all three games" ($C=1$) is false. Since knowing the outcome of $A$ gives you 100\% certainty about $C$ in this case, they are clearly dependent.
+\noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
 
@@ -274,56 +257,17 @@ No. Think of it this way: "Winning all three games" ($C=1$) *includes* "Winning 
 %------------------
 \subsection*{Solution 2}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 2 (b)}
-\begin{flushleft}
-In a tournament, each player plays three games. Define three random variables:
-\begin{itemize}
-\item Random variable $A$ is 1 if Tom wins his first game, and is 0 otherwise.
-\item Random variable $B$ is 1 if Tom wins his first two games, and is 0 otherwise.
-\item Random variable $C$ is 1 if Tom wins all three of his games, and is 0 otherwise.
-\end{itemize}
-\textit{Is $C$ conditionally independent of $A$ given $B$ (i.e., is it true that $\Pr(C = c|A = a, B = b) = \Pr(C = c|B = b)$)? Give a brief reason.} 
-\end{flushleft}
-
 \subsubsection*{Solution 2 (b)}
-Yes, $C$ is conditionally independent of $A$ given $B$. We can prove this by checking all possible values of the conditioning variable $B$.
+Yes, $C$ is conditionally independent of $A$ given $B$.
 
-Let $p_3 = \Pr(\text{Win Game 3} \mid \text{Win Game 1, Win Game 2})$. We assume $0 < p_3 < 1$.
-
-\begin{enumerate}
-    \item \textbf{Case 1: We condition on $B=1$ (Tom wins the first two games).}
-        \begin{itemize}
-            \item If $B=1$, then $A$ *must* be 1 (winning the first two games implies winning the first game). The case $A=0, B=1$ has zero probability, so we only need to check $A=1, B=1$.
-            \item $\Pr(C=1 \mid B=1)$: Given Tom won the first two games, the probability of winning all three is just the probability of winning Game 3. So, $\Pr(C=1 \mid B=1) = p_3$.
-            \item $\Pr(C=1 \mid A=1, B=1)$: Given Tom won the first game ($A=1$) AND won the first two games ($B=1$), the $A=1$ information is redundant. The probability of winning all three is still just the probability of winning Game 3. So, $\Pr(C=1 \mid A=1, B=1) = p_3$.
-            \item In this case, $\Pr(C \mid A, B=1) = \Pr(C \mid B=1)$.
-        \end{itemize}
-    \item \textbf{Case 2: We condition on $B=0$ (Tom does not win the first two games).}
-        \begin{itemize}
-            \item If Tom did not win the first two games, it is impossible for him to win all three games.
-            \item $\Pr(C=1 \mid B=0) = 0$.
-            \item Now we check $\Pr(C=1 \mid A, B=0)$ for both values of $A$:
-                \item $\Pr(C=1 \mid A=0, B=0)$: Given Tom lost the first game ($A=0$), it is impossible to win all three. This probability is 0.
-                \item $\Pr(C=1 \mid A=1, B=0)$: Given Tom won the first game ($A=1$) but failed to win the first two ($B=0$) (i.e., he lost Game 2), it is impossible to win all three. This probability is 0.
-            \item In all sub-cases where $B=0$, $\Pr(C=1 \mid A, B=0) = 0$, which equals $\Pr(C=1 \mid B=0)$.
-        \end{itemize}
-\end{enumerate}
-Since $\Pr(C \mid A, B) = \Pr(C \mid B)$ holds for all possible values of $A, B, C$, the conditional independence statement is true.
+The brief reason is that the event $B$ (winning the first two games) already contains all the information from event $A$ (winning the first game).
+\begin{itemize}
+    \item If we know $B=1$ (Tom won G1 and G2), we already know $A=1$. Thus, knowing $A$ provides no new information.
+    \item If we know $B=0$ (Tom did not win G1 and G2), we know $C$ must be 0 (he cannot win all three). This is true regardless of $A$, so again, $A$ provides no new information.
+\end{itemize}
+Since $\Pr(C \mid A, B) = \Pr(C \mid B)$ holds in all cases, the statement is true.
 
 \subsubsection*{\normalfont}{$\therefore$ Yes, $C$ is conditionally independent of $A$ given $B$, because once we know the outcome of the first two games ($B$), knowing the outcome of *only* the first game ($A$) provides no new information for predicting the outcome of all three games ($C$).}
-
-\subsubsection*{Graduate Level Explanation}
-Yes. The probabilistic relationships $A \leftarrow B \leftarrow C$ form a **Markov chain** (where $C=1 \implies B=1 \implies A=1$). A fundamental property of Markov chains is that, given the "present" state ($B$), the "future" ($C$) is conditionally independent of the "past" ($A$). The variable $B$ acts as an information bottleneck; it "screens off" any influence $A$ has on $C$. Any path from $A$ to $C$ in the dependency graph must pass through $B$, so conditioning on $B$ blocks this path, satisfying the definition of d-separation.
-
-\subsubsection*{Simple Expedited Learning Explanation}
-Yes. Think of $B$ as a "gate". To predict $C$ (winning all 3 games), you only need to know two things:
-\begin{enumerate}
-    \item Did Tom pass the gate $B$ (win the first two games)?
-    \item Did Tom win Game 3?
-\end{enumerate}
-If I tell you $B=0$ (he didn't pass the gate), you know $C$ is 0 (he can't win all 3). It doesn't matter *why* he failed $B$ (whether he lost G1 or G2).
-If I tell you $B=1$ (he passed the gate), all you care about now is Game 3. Does it help to *also* tell you $A=1$ (he won Game 1)? No, you already knew that, because $B=1$ *means* he won Game 1 and Game 2.
-Since $B$ tells you everything $A$ could, and more, $B$ makes $A$ redundant.
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -334,31 +278,16 @@ Since $B$ tells you everything $A$ could, and more, $B$ makes $A$ redundant.
 %------------------
 \subsection*{Solution 2}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 2 (c)}
-\begin{flushleft}
-In a tournament, each player plays three games. Define three random variables:
-\begin{itemize}
-\item Random variable $A$ is 1 if Tom wins his first game, and is 0 otherwise.
-\item Random variable $B$ is 1 if Tom wins his first two games, and is 0 otherwise.
-\item Random variable $C$ is 1 if Tom wins all three of his games, and is 0 otherwise.
-\end{itemize}
-\textit{Draw an undirected graphical model for $(A, B, C)$.} 
-\end{flushleft}
-
 \subsubsection*{Solution 2 (c)}
-\subsubsection*{Solution 2 (c)}
-\subsubsection*{Undirected Graphical Model}
-An undirected graphical model (UGM) represents conditional independencies. An edge is absent between two nodes $X$ and $Y$ if they are conditionally independent given all other variables in the graph.
+The structure of the minimal undirected graph is determined by the conditional independence relationships between the variables.
 
-From our answer in 2(b), we proved the key conditional independence relationship: $A \perp C \mid B$.
-This means that in our undirected graph, the node $B$ must separate nodes $A$ and $C$. The only way to achieve this in a three-node graph is to *not* have a direct edge between $A$ and $C$.
-
-We must also check if other edges are required:
 \begin{itemize}
-    \item \textbf{Edge (A, B):} Are $A$ and $B$ conditionally independent given $C$? No. For example, if $C=0$, knowing $A=0$ makes $B=0$ certain, while knowing $A=1$ does not ( $B$ could be 0 or 1, though $B=1$ is impossible if $C=0$). Since $A \not\perp B \mid C$, we need an edge between $A$ and $B$.
-    \item \textbf{Edge (B, C):} Are $B$ and $C$ conditionally independent given $A$? No. If $A=1$, knowing $B=0$ (lost G2) makes $C=0$ certain, while knowing $B=1$ (won G1 \& G2) makes $C$ uncertain (depends on G3). Since $B \not\perp C \mid A$, we need an edge between $B$ and $C$.
+    \item Edge (A, C): From \textit{part (b)}, we know $A \perp C \mid B$. This means that $B$ separates $A$ and $C$. Hence, there does not exist a direct edge between $A$ and $C$.
+    
+    \item Edge (A, B): Check if $A \perp B \mid C$. They are not independent, consider if $C=0$, knowing $A=0$ implies $B=0$. Since $A \not\perp B \mid C$, there exists an edge between $A$ and $B$.
+    
+    \item Edge (B, C): Check if $B \perp C \mid A$. They are not independent, consider if $A=1$, knowing $B=0$ (Tom lost G2) implies $C=0$. Since $B \not\perp C \mid A$, there exists an edge between $B$ and $C$.
 \end{itemize}
-The graph must therefore have edges $(A, B)$ and $(B, C)$, but no edge $(A, C)$. This forms a simple chain.
 
 \begin{figure}[h!]
 \centering
@@ -374,19 +303,7 @@ The graph must therefore have edges $(A, B)$ and $(B, C)$, but no edge $(A, C)$.
 \label{fig:ugm_abc}
 \end{figure}
 
-\subsubsection*{\normalfont}{$\therefore$ The undirected graphical model is the chain $A - B - C$, which correctly encodes the relationship that $A$ and $C$ are conditionally independent given $B$.}
-
-\subsubsection*{Graduate Level Explanation}
-The minimal directed acyclic graph (DAG) that captures the dependency structure is the Markov chain $A \to B \to C$. This is because the event $B$ (winning G1 \& G2) depends on $A$ (winning G1), and $C$ (winning G1, G2, \& G3) depends on $B$. This DAG encodes the conditional independence $A \perp C \mid B$ via d-separation. To find the minimal undirected graph (the "moral graph") that preserves this independence, we apply the moralization procedure: 1) "Marry" (connect) all pairs of non-adjacent parents, and 2) Drop all arrowheads. Since there are no nodes with multiple parents (no v-structures), no edges are added. Dropping the arrows from $A \to B \to C$ directly yields the UGM $A - B - C$.
-
-\subsubsection*{Simple Expedited Learning Explanation}
-Think of the graph as showing who "talks to" whom.
-\begin{itemize}
-    \item $A$ (Win G1) talks directly to $B$ (Win G1 \& G2), because $B$'s outcome is built from $A$'s.
-    \item $C$ (Win G1, G2, \& G3) talks directly to $B$ (Win G1 \& G2), because $C$'s outcome is built from $B$'s.
-    \item $A$ and $C$ do *not* talk directly. $C$ gets all the information it needs about $A$ *through* $B$.
-\end{itemize}
-Therefore, we draw a line from $A$ to $B$, and from $B$ to $C$. The resulting picture is just a simple chain: $A - B - C$. The missing line between $A$ and $C$ is the most important part: it means "if you know $B$, $A$ and $C$ have nothing left to say to each other."
+\subsubsection*{\normalfont}{$\therefore$ The undirected graphical model , seen above, encodes the relationship that $A$ and $C$ are conditionally independent given $B$.}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -397,9 +314,10 @@ Therefore, we draw a line from $A$ to $B$, and from $B$ to $C$. The resulting pi
 %------------------
 \subsection*{Solution 3}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 3 (a)}
+\subsubsection*{Solution 3 (a)}
+From the Hammersley-Clifford theorem, the joint probability distribution $P$ that factors over an undirected graph $G$ can be written as a product of potential functions ($\psi_C$) over the maximal cliques of the graph.
 \begin{flushleft}
-    Four random variables $W, X, Y, Z$ factor over the graph shown below.
+    Given, four random variables $W, X, Y, Z$ factor over the graph shown below.
 \end{flushleft}
 \begin{center}
 \begin{tikzpicture}[node distance=2cm]
@@ -413,51 +331,24 @@ Therefore, we draw a line from $A$ to $B$, and from $B$ to $C$. The resulting pi
 \draw (W) -- (Z);
 \end{tikzpicture}
 \end{center}
-
+By inspection of the graph above the two maximal cliques are:
+\begin{itemize}
+    \item The triangle $\{W, Y, Z\}$
+    \item The edge $\{W, X\}$
+\end{itemize}
+Hence, all other cliques, 
+$$\{W, Y\}, \{W, Z\}, \text{ and } \{Y, Z\}$$
 \begin{flushleft}
-    \textit{What is the functional form of the joint distribution $P(W, X, Y, Z)$?}
+    are not maximal, as they are all subsets of the larger clique $\{W, Y, Z\}$.
 \end{flushleft}
 
-\subsubsection*{Solution 3 (a)}
-\subsubsection*{Solution 3 (a)}
-According to the **Hammersley-Clifford theorem**, any positive probability distribution $P$ that factors over an undirected graph $G$ can be written as a product of potential functions ($\psi_C$) over the **maximal cliques** of the graph, normalized by a partition function $Z$.
 
-\begin{enumerate}
-    \item \textbf{Define a Clique:} A clique is a subset of nodes in the graph where every node in the subset is connected to every other node in the subset.
-    \item \textbf{Define a Maximal Clique:} A clique is *maximal* if it is not a subset of any larger clique.
-    \item \textbf{Identify Cliques in G:}
-        \begin{itemize}
-            \item \textit{Size 2 (edges):} $\{W, X\}$, $\{W, Y\}$, $\{W, Z\}$, $\{Y, Z\}$
-            \item \textit{Size 3 (triangles):} We check subsets of size 3.
-                \begin{itemize}
-                    \item $\{W, Y, Z\}$: The edges are $(W,Y)$, $(W,Z)$, and $(Y,Z)$. All three edges exist. This is a clique.
-                    \item $\{W, X, Y\}$: The edges are $(W,X)$, $(W,Y)$, and $(X,Y)$. The edge $(X,Y)$ is missing. This is not a clique.
-                    \item $\{W, X, Z\}$: The edges are $(W,X)$, $(W,Z)$, and $(X,Z)$. The edge $(X,Z)$ is missing. This is not a clique.
-                \end{itemize}
-            \item \textit{Size 4:} $\{W, X, Y, Z\}$ is not a clique (e.g., $(X,Y)$ is missing).
-        \end{itemize}
-    \item \textbf{Identify Maximal Cliques $\mathcal{C}$:}
-        \begin{itemize}
-            \item Is $\{W, Y, Z\}$ maximal? Yes. It is a clique, and we cannot add the only remaining node $X$ (as $X$ is not connected to $Y$ or $Z$).
-            \item Is $\{W, X\}$ maximal? Yes. It is a clique, and we cannot add $Y$ (no $X-Y$ edge) or $Z$ (no $X-Z$ edge).
-            \item The other cliques, $\{W, Y\}$, $\{W, Z\}$, and $\{Y, Z\}$, are *not* maximal because they are all subsets of the larger clique $\{W, Y, Z\}$.
-        \end{itemize}
-    \item \textbf{Construct Functional Form:} The set of maximal cliques is $\mathcal{C} = \{\{W, X\}, \{W, Y, Z\}\}$. The joint distribution is the product of potentials over these two cliques.
-\end{enumerate}
+The joint distribution is the product of potentials over these two maximal cliques, normalized by the partition function $Z$.
 
-
-\subsubsection*{\normalfont}{$\therefore$ The functional form is $P(W, X, Y, Z) = \frac{1}{Z} \psi_1(W, X) \psi_2(W, Y, Z)$, where $Z$ is the partition function, defined as $Z = \sum_{w,x,y,z} \psi_1(w, x) \psi_2(w, y, z)$.}
-
-\subsubsection*{Graduate Level Explanation}
-The Hammersley-Clifford theorem establishes the equivalence between the conditional independence properties of an undirected graphical model (a Markov Random Field) and its factorization into a product of potentials over its maximal cliques. This form of distribution is also known as a **Gibbs distribution**. The graph's topology, $G=(V,E)$, defines the set of maximal cliques $\mathcal{C}$. Here, $\mathcal{C} = \{\{W, X\}, \{W, Y, Z\}\}$. This factorization implies all the conditional independencies in the graph, such as $X \perp \{Y, Z\} \mid W$, which can be verified by graph separation.
-
-\subsubsection*{Simple Expedited Learning Explanation}
-Think of the graph as a network of "friend groups" where everyone in a group is friends with everyone else. These groups are "cliques." We are looking for the *biggest* friend groups that can't add any new members (these are "maximal cliques").
-\begin{itemize}
-    \item $W, Y, Z$ are all friends with each other, forming a trio. They can't add $X$ because $X$ isn't friends with $Y$ or $Z$. So, $\{W, Y, Z\}$ is one maximal group.
-    \item $W, X$ are friends. They can't add $Y$ (not friends with $X$) or $Z$ (not friends with $X$). So, $\{W, X\}$ is another maximal group.
-\end{itemize}
-The total probability of the system is just the "score" of the $\{W, X\}$ group multiplied by the "score" of the $\{W, Y, Z\}$ group, all divided by a number $Z$ to make sure the probabilities add up to 1.
+\subsubsection*{\normalfont}{$\therefore$ The functional form is $P(W, X, Y, Z)$ ,where $Z$ is the partition function, is defined as:}
+$$
+P(W, X, Y, Z) = \frac{1}{Z} \psi_1(W, X) \psi_2(W, Y, Z) \text{ such that } Z = \sum_{w,x,y,z} \psi_1(w, x) \psi_2(w, y, z)
+$$
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -468,9 +359,9 @@ The total probability of the system is just the "score" of the $\{W, X\}$ group 
 %------------------
 \subsection*{Solution 3}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 3 (b)}
+\subsubsection*{Solution 3 (b)}
 \begin{flushleft}
-    Four random variables $W, X, Y, Z$ factor over the graph shown below.
+    Given, four random variables $W, X, Y, Z$ factor over the graph shown below.
 \end{flushleft}
 \begin{center}
 \begin{tikzpicture}[node distance=2cm]
@@ -484,47 +375,39 @@ The total probability of the system is just the "score" of the $\{W, X\}$ group 
 \draw (W) -- (Z);
 \end{tikzpicture}
 \end{center}
-
 \begin{flushleft}
-    \textit{Write down a conditional independence property of this distribution.}
+    Let, $A = \{X\}$ and $B = \{Y, Z\}$
+\end{flushleft}
+\begin{flushleft}
+    Now, check all paths from $A$ to $B$ to see if $C = \{W\}$ is a separating set.
 \end{flushleft}
 
-\subsubsection*{Solution 3 (b)}
-In an undirected graphical model, conditional independence is determined by **graph separation**. A set of nodes $A$ is conditionally independent of a set of nodes $B$ given a set of nodes $C$ (written $A \perp B \mid C$) if $C$ separates $A$ and $B$. This means that every path from any node in $A$ to any node in $B$ must pass through at least one node in $C$.
-
-Let's test the independence between $X$ and the set $\{Y, Z\}$.
-\begin{itemize}
-    \item Let $A = \{X\}$.
-    \item Let $B = \{Y, Z\}$.
-    \item Let's test if $C = \{W\}$ is a separating set.
-\end{itemize}
-We must check all paths from $A$ to $B$:
 \begin{enumerate}
-    \item \textbf{Paths from $X$ to $Y$:} The two paths are $X-W-Y$ and $X-W-Z-Y$. Both of these paths pass through $W$.
-    \item \textbf{Paths from $X$ to $Z$:} The two paths are $X-W-Z$ and $X-W-Y-Z$. Both of these paths also pass through $W$.
+    \item Paths from $X$ to $Y$ are 
+    $$X\rightarrow W \rightarrow Y \text{ and } X \rightarrow W \rightarrow Z \rightarrow Y$$ 
+    \item Paths from $X$ to $Z$ are: 
+    $$X \rightarrow W \rightarrow Z \text{ and } X \rightarrow W \rightarrow Y \rightarrow Z$$ 
 \end{enumerate}
-Since every possible path from $X$ to any node in $\{Y, Z\}$ is blocked by (i.e., must pass through) the node $W$, the set $C=\{W\}$ separates $A=\{X\}$ from $B=\{Y, Z\}$.
+\begin{flushleft}
+    
+\end{flushleft}
+Hence, every possible path from $X$ must pass through the node $W$ to travel to any node in $\{Y, Z\}$. The set $C=\{W\}$ separates $A=\{X\}$ from $B=\{Y, Z\}$.
 
-Therefore, the distribution must satisfy the conditional independence property $X \perp \{Y, Z\} \mid W$.
+\subsubsection*{\normalfont}{$\therefore$ The distribution must satisfy the conditional independence property:}
+$$X \perp \{Y, Z\} \mid W$$
 
-\subsubsection*{\normalfont}{$\therefore$ A conditional independence property of this distribution is $X \perp \{Y, Z\} \mid W$ (or $X \perp Y \mid W$, or $X \perp Z \mid W$, which are also true).}
+\noindent\rule{\textwidth}{0.4pt}\\
 
-\subsubsection*{Graduate Level Explanation}
-The graph $G$ implies a set of conditional independencies defined by the **Global Markov Property**: for any disjoint sets $A, B, C$, if $C$ separates $A$ from $B$, then $A \perp B \mid C$. The node $W$ acts as an **articulation point** (or separating set) between node $X$ and the subgraph induced by $\{Y, Z\}$. The factorization found in 3(a), $P \propto \psi_1(W,X)\psi_2(W,Y,Z)$, also implies this. When we condition on $W$, the joint distribution $P(X, Y, Z \mid W)$ becomes proportional to $\psi_1(W, X) \psi_2(W, Y, Z)$. Since $X$ only appears in the first potential and $\{Y, Z\}$ only in the second, the distribution factors as $P(X \mid W) P(Y, Z \mid W)$, which is the definition of $X \perp \{Y, Z\} \mid W$.
-
-\subsubsection*{Simple Expedited Learning Explanation}
-Think of the graph lines as information channels. $X$ can only send or receive information to $Y$ or $Z$ by going *through* $W$. The node $W$ is the "gatekeeper" for $X$. If we "condition on $W$", it means we are standing at the gate $W$ and we already know its value. Once we know $W$'s value, $X$ has no *new* information to tell $Y$ or $Z$, and $Y$ and $Z$ have no *new* information to tell $X$. By observing the gatekeeper $W$, we "block" the channel of influence, making $X$ and the pair $\{Y, Z\}$ independent of each other.
 \newpage
-
 
 %------------------
 % Solution for 4(a)
 %------------------
 \subsection*{Solution 4}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 4 (a)}
+\subsubsection*{Solution 4 (a)}
 \begin{flushleft}
-    The joint distribution $P$ over $(x_1, x_2, x_3)$ is given by the following table.
+    Given, the joint distribution $P$ over $(x_1, x_2, x_3)$ is given by the following table:
 \end{flushleft}
 \begin{center}
 \begin{tabular}{c|c|c|c}
@@ -535,67 +418,39 @@ $x_1$ & $x_2$ & $x_3$ & Pr \\\hline
 1 & 1 & 1 & 1/6
 \end{tabular}
 \end{center}
-
 \begin{flushleft}
-    \textit{One of these variables is a deterministic function of the other two. Identify this relationship.}
+    To check if variable $Y$ is a deterministic function of $X$ and $Z$, we check if, for every pair of values $(x, z)$ that has a non-zero probability of occurring, there is only one possible value for $y$.
 \end{flushleft}
 
-\subsubsection*{Solution 4 (a)}
-A variable $Y$ is a deterministic function of $X$ and $Z$ if, for every pair of values $(x, z)$ that has a non-zero probability of occurring, there is only one possible value for $y$. We inspect the four configurations in the table that have non-zero probability.
-
 \begin{enumerate}
-    \item \textbf{Is $x_1 = f(x_2, x_3)$?}
-    No. We test the input $(x_2=0, x_3=0)$.
+    \item Test $x_1 = f(x_2, x_3)$
     \begin{itemize}
         \item Row 1: $(x_2=0, x_3=0)$ maps to $x_1=0$.
         \item Row 3: $(x_2=0, x_3=0)$ maps to $x_1=1$.
     \end{itemize}
-    Since a single input maps to multiple outputs, $x_1$ is not a deterministic function of $x_2$ and $x_3$.
+    Hence, this single input maps to two different outputs.
 
-    \item \textbf{Is $x_3 = f(x_1, x_2)$?}
-    No. We test the input $(x_1=0, x_2=0)$.
+    \item Test $x_3 = f(x_1, x_2)$
     \begin{itemize}
         \item Row 1: $(x_1=0, x_2=0)$ maps to $x_3=0$.
         \item Row 2: $(x_1=0, x_2=0)$ maps to $x_3=1$.
     \end{itemize}
-    Since a single input maps to multiple outputs, $x_3$ is not a deterministic function of $x_1$ and $x_2$.
+    Hence, this single input maps to two different outputs.
 
-    \item \textbf{Is $x_2 = f(x_1, x_3)$?}
-    Yes. We test all input pairs $(x_1, x_3)$ that appear in the table:
+    \item $x_2 = f(x_1, x_3)$
     \begin{itemize}
         \item Row 1: Input $(x_1=0, x_3=0)$ maps to $x_2=0$.
         \item Row 2: Input $(x_1=0, x_3=1)$ maps to $x_2=0$.
         \item Row 3: Input $(x_1=1, x_3=0)$ maps to $x_2=0$.
         \item Row 4: Input $(x_1=1, x_3=1)$ maps to $x_2=1$.
     \end{itemize}
-    In every case, a given input pair $(x_1, x_3)$ maps to a single, unique output for $x_2$. We can summarize this function in a truth table:
-    \begin{center}
-    \begin{tabular}{cc|c}
-    $x_1$ & $x_3$ & $x_2$ \\\hline
-    0 & 0 & 0 \\
-    0 & 1 & 0 \\
-    1 & 0 & 0 \\
-    1 & 1 & 1
-    \end{tabular}
-    \end{center}
-    This is the truth table for the logical AND operation.
+    In every case, a given input pair $(x_1, x_3)$ maps to a single, unique output for $x_2$.
 \end{enumerate}
 
-\subsubsection*{\normalfont}{$\therefore$ The deterministic relationship is $x_2 = x_1 \land x_3$ (i.e., $x_2$ is 1 if and only if $x_1=1$ and $x_3=1$).}
+\subsubsection*{\normalfont}{$\therefore$ The deterministic relationship is:} 
+$$x_2 = x_1 \land x_3 \quad (\text{i.e., }x_2 \text{ is } 1 \iff x_1=1 \text{ and } x_3=1)$$
 
-\subsubsection*{Graduate Level Explanation}
-The support of the joint distribution $P(x_1, x_2, x_3)$ (the set of configurations with non-zero probability) is a strict subset of the full space $\{0, 1\}^3$. This implies that at least one conditional probability is deterministic (has zero entropy). By inspection, we find that the conditional distribution $P(x_2 \mid x_1, x_3)$ is deterministic for all $(x_1, x_3)$ in the support of the marginal $P(x_1, x_3)$. Specifically, $P(x_2 \mid x_1, x_3) = \delta(x_2, x_1 \land x_3)$, where $\delta$ is the Kronecker delta. This functional dependence means the joint distribution can be factored as $P(x_1, x_2, x_3) = P(x_1, x_3) P(x_2 \mid x_1, x_3)$.
-
-\subsubsection*{Simple Expedited Learning Explanation}
-Look at the four rows in the table that are "allowed" (have non-zero probability). We are looking for a rule where two columns perfectly predict the third.
-\begin{itemize}
-    \item Try to predict $x_2$ using $x_1$ and $x_3$.
-    \item Row 1: $x_1=0, x_3=0$. The $x_2$ is $0$.
-    \item Row 2: $x_1=0, x_3=1$. The $x_2$ is $0$.
-    \item Row 3: $x_1=1, x_3=0$. The $x_2$ is $0$.
-    \item Row 4: $x_1=1, x_3=1$. The $x_2$ is $1$.
-\end{itemize}
-This rule works every time. Notice that $x_2$ is $1$ *only when* $x_1$ AND $x_3$ are both $1$. In all other cases, $x_2$ is $0$. This is the logical "AND" rule.
+\noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
 
@@ -604,46 +459,30 @@ This rule works every time. Notice that $x_2$ is $1$ *only when* $x_1$ AND $x_3$
 %------------------
 \subsection*{Solution 4}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 4 (b)}
-\begin{flushleft}
-    The joint distribution $P$ over $(x_1, x_2, x_3)$ is given by the following table.
-\end{flushleft}
-\begin{center}
-\begin{tabular}{c|c|c|c}
-$x_1$ & $x_2$ & $x_3$ & Pr \\\hline
-0 & 0 & 0 & 1/3 \\
-0 & 0 & 1 & 1/3 \\
-1 & 0 & 0 & 1/6 \\
-1 & 1 & 1 & 1/6
-\end{tabular}
-\end{center}
-
-\begin{flushleft}
-    \textit{Draw the minimal Bayes net $G$ over which this distribution factors.}
-\end{flushleft}
-\begin{flushleft}
-    \textit{Hint: Start from (a), which shows that one variable is fully determined by the other two; are the latter two variables independent or not?}
-\end{flushleft}
-
 \subsubsection*{Solution 4 (b)}
-A Bayes net $G$ provides a factorization of the joint distribution $P(x_1, x_2, x_3) = \prod_i P(x_i \mid \text{parents}_G(x_i))$.
-From 4(a), we know $x_2$ is a deterministic function of $x_1$ and $x_3$, namely $x_2 = x_1 \land x_3$. This means $P(x_2 \mid x_1, x_3)$ is deterministic (1 for $x_2 = x_1 \land x_3$ and 0 otherwise). This strongly suggests a structure where $x_1$ and $x_3$ are parents of $x_2$, i.e., $x_1 \to x_2 \leftarrow x_3$.
+From \textit{part (a)}, $x_2$ is a deterministic function of $x_1$ and $x_3$, defined as:
+$$x_2 = x_1 \land x_3$$
+\begin{flushleft}
+    This means $P(x_2 \mid x_1, x_3)$ is deterministic. This strongly suggests a structure where $x_1$ and $x_3$ are parents of $x_2$.
+\end{flushleft}
+\begin{flushleft}
+    This implies the factorization: 
+\end{flushleft}
+$$P(x_1, x_2, x_3) = P(x_1)P(x_3)P(x_2 \mid x_1, x_3)$$
 
-This v-structure implies the factorization $P(x_1, x_2, x_3) = P(x_1)P(x_3)P(x_2 \mid x_1, x_3)$. This factorization is valid if and only if $x_1$ and $x_3$ are marginally independent ($x_1 \perp x_3$).
-
-We must test this independence by computing the marginals from the table:
+To test this independence, we first compute the marginals from the table:
 \begin{itemize}
-    \item \textbf{Marginal $P(x_1)$:}
+    \item Marginal $P(x_1)$:
         \begin{itemize}
             \item $\Pr(x_1=0) = \Pr(0,0,0) + \Pr(0,0,1) = 1/3 + 1/3 = 2/3$
             \item $\Pr(x_1=1) = \Pr(1,0,0) + \Pr(1,1,1) = 1/6 + 1/6 = 1/3$
         \end{itemize}
-    \item \textbf{Marginal $P(x_3)$:}
+    \item Marginal $P(x_3)$:
         \begin{itemize}
             \item $\Pr(x_3=0) = \Pr(0,0,0) + \Pr(1,0,0) = 1/3 + 1/6 = 3/6 = 1/2$
             \item $\Pr(x_3=1) = \Pr(0,0,1) + \Pr(1,1,1) = 1/3 + 1/6 = 3/6 = 1/2$
         \end{itemize}
-    \item \textbf{Joint $P(x_1, x_3)$:} (Summing over $x_2$)
+    \item Joint $P(x_1, x_3)$: (Sum over $x_2$)
         \begin{itemize}
             \item $\Pr(x_1=0, x_3=0) = \Pr(0,0,0) = 1/3$
             \item $\Pr(x_1=0, x_3=1) = \Pr(0,0,1) = 1/3$
@@ -651,18 +490,17 @@ We must test this independence by computing the marginals from the table:
             \item $\Pr(x_1=1, x_3=1) = \Pr(1,1,1) = 1/6$
         \end{itemize}
 \end{itemize}
-\textbf{Check for independence:} $\Pr(x_1, x_3) \stackrel{?}{=} \Pr(x_1)\Pr(x_3)$
+Now, check for independence: $\Pr(x_1, x_3) = \Pr(x_1)\Pr(x_3)$
 \begin{itemize}
     \item $\Pr(x_1=0)\Pr(x_3=0) = (2/3)(1/2) = 1/3$. This equals $\Pr(x_1=0, x_3=0)$.
     \item $\Pr(x_1=0)\Pr(x_3=1) = (2/3)(1/2) = 1/3$. This equals $\Pr(x_1=0, x_3=1)$.
     \item $\Pr(x_1=1)\Pr(x_3=0) = (1/3)(1/2) = 1/6$. This equals $\Pr(x_1=1, x_3=0)$.
     \item $\Pr(x_1=1)\Pr(x_3=1) = (1/3)(1/2) = 1/6$. This equals $\Pr(x_1=1, x_3=1)$.
 \end{itemize}
-Since $P(x_1, x_3) = P(x_1)P(x_3)$ holds for all combinations, $x_1$ and $x_3$ are indeed marginally independent.
-The minimal Bayes net is therefore the one that encodes $x_1 \perp x_3$ and the dependency $x_2 = f(x_1, x_3)$. This is the v-structure $x_1 \to x_2 \leftarrow x_3$.
+It follows that, $P(x_1, x_3) = P(x_1)P(x_3)$ holds for all combinations, $x_1$ and $x_3$ are marginally independent.
+Hence, the minimal Bayes net is therefore the one that encodes $x_1 \perp x_3$ and the dependency $x_2 = f(x_1, x_3)$. This is the v-structure $x_1 \to x_2 \leftarrow x_3$.
 
-\begin{figure}[h!]
-\centering
+\begin{center}
 \begin{tikzpicture}[node distance=1.5cm and 2cm, thick]
     \node[circle, draw, fill=blue!10, minimum size=1cm] (x1) {$x_1$};
     \node[circle, draw, fill=blue!10, minimum size=1cm, right of=x1] (x3) {$x_3$};
@@ -671,17 +509,9 @@ The minimal Bayes net is therefore the one that encodes $x_1 \perp x_3$ and the 
     \draw[->, >=latex, line width=1.5pt] (x1) -- (x2);
     \draw[->, >=latex, line width=1.5pt] (x3) -- (x2);
 \end{tikzpicture}
-\caption{Minimal Bayes Net for $P(x_1, x_2, x_3)$}
-\label{fig:v_structure}
-\end{figure}
+\end{center}
 
 \subsubsection*{\normalfont}{$\therefore$ The minimal Bayes net is the v-structure $x_1 \to x_2 \leftarrow x_3$, as $x_1$ and $x_3$ are marginally independent, and $x_2$ is a deterministic function of both.}
-
-\subsubsection*{Graduate Level Explanation}
-The distribution's support reveals a deterministic conditional $P(x_2 \mid x_1, x_3) = \delta(x_2, x_1 \land x_3)$. This necessitates $x_1$ and $x_3$ being parents of $x_2$. The marginal independence $x_1 \perp x_3$, which we verified via calculation, implies there are no edges or other paths between $x_1$ and $x_3$. The resulting graph, $x_1 \to x_2 \leftarrow x_3$, is a **v-structure**, also known as a **collider**. This minimal directed acyclic graph (DAG) correctly encodes the marginal independence of the parents ($x_1 \perp x_3$) while also encoding a conditional dependence ($x_1 \not\perp x_3 \mid x_2$) via the "explaining away" phenomenon.
-
-\subsubsection*{Simple Expedited Learning Explanation}
-In 4(a) we found that $x_2$ is built using $x_1$ and $x_3$ (specifically, an "AND" rule). In a Bayes net, this means $x_1$ and $x_3$ are the "parents," and we draw arrows from them *to* $x_2$: $x_1 \to x_2 \leftarrow x_3$. The only other question is whether $x_1$ and $x_3$ are connected. We checked the probabilities and found that $x_1$ and $x_3$ are completely independent, like two separate coin flips. Since they are independent, we do not draw any edge between them. The final, minimal graph is just the two parents pointing to their child.
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -692,82 +522,45 @@ In 4(a) we found that $x_2$ is built using $x_1$ and $x_3$ (specifically, an "AN
 %------------------
 \subsection*{Solution 4}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 4 (c)}
-\begin{flushleft}
-    The joint distribution $P$ over $(x_1, x_2, x_3)$ is given by the following table.
-\end{flushleft}
-\begin{center}
-\begin{tabular}{c|c|c|c}
-$x_1$ & $x_2$ & $x_3$ & Pr \\\hline
-0 & 0 & 0 & 1/3 \\
-0 & 0 & 1 & 1/3 \\
-1 & 0 & 0 & 1/6 \\
-1 & 1 & 1 & 1/6
-\end{tabular}
-\end{center}
-
-\begin{flushleft}
-    \textit{Now show how $P$ factors over $G$ by explicitly giving the three (conditional) probability tables, one per $x_i$.}
-\end{flushleft}
-
 \subsubsection*{Solution 4 (c)}
-From 4(b), we know the minimal Bayes net is the v-structure $x_1 \to x_2 \leftarrow x_3$. The joint distribution thus factors as $P(x_1, x_2, x_3) = P(x_1) P(x_3) P(x_2 \mid x_1, x_3)$.
-We need to find the three (Conditional) Probability Tables (CPTs) for $P(x_1)$, $P(x_3)$, and $P(x_2 \mid x_1, x_3)$.
+From \textit{part(b)}, we know the minimal Bayes net is the v-structure $x_1 \to x_2 \leftarrow x_3$. The joint distribution thus factors as:
+$$ P(x_1, x_2, x_3) = P(x_1) P(x_3) P(x_2 \mid x_1, x_3) $$
+This factorization yeilds three (Conditional) Probability Tables (CPTs).
+\begin{enumerate}
+    \item CPT for $x_1$: Find the marginal probability $P(x_1)$ by summing over $x_2$ and $x_3$ in the joint table.
+    $$\Pr(x_1=0) = \Pr(0,0,0) + \Pr(0,0,1) = \frac{1}{3} + \frac{1}{3} = \frac{2}{3}$$
+    $$\Pr(x_1=1) = \Pr(1,0,0) + \Pr(1,1,1) = \frac{1}{6} + \frac{1}{6} = \frac{1}{3}$$
+    \begin{center}
+    \begin{tabular}{c|c}
+    $x_1$ & $\Pr(x_1)$ \\\hline
+    0 & 2/3 \\
+    1 & 1/3
+    \end{tabular}
+    \end{center}
+    \item CPT for $x_3$: Find the marginal probability $P(x_3)$ by summing over $x_1$ and $x_2$.
+    $$\Pr(x_3=0) = \Pr(0,0,0) + \Pr(1,0,0) = \frac{1}{3} + \frac{1}{6} = \frac{1}{2}$$
+    $$\Pr(x_3=1) = \Pr(0,0,1) + \Pr(1,1,1) = \frac{1}{3} + \frac{1}{6} = \frac{1}{2}$$
+    \begin{center}
+    \begin{tabular}{c|c}
+    $x_3$ & $\Pr(x_3)$ \\\hline
+    0 & 1/2 \\
+    1 & 1/2
+    \end{tabular}
+    \end{center}
+    \item CPT for $x_2$:From \textit{part (a)}, $x_2 = x_1 \land x_3$. This conditional probability is deterministic.
+    \begin{center}
+    \begin{tabular}{cc|c|c}
+    $x_1$ & $x_3$ & $\Pr(x_2=0 \mid x_1, x_3)$ & $\Pr(x_2=1 \mid x_1, x_3)$ \\\hline
+    0 & 0 & 1 & 0 \\
+    0 & 1 & 1 & 0 \\
+    1 & 0 & 1 & 0 \\
+    1 & 1 & 0 & 1
+    \end{tabular}
+    \end{center}
 
-\textbf{1. CPT for $x_1$:}
-We find the marginal probability $P(x_1)$ by summing over $x_2$ and $x_3$ in the joint table.
-\begin{itemize}
-    \item $\Pr(x_1=0) = \Pr(0,0,0) + \Pr(0,0,1) = 1/3 + 1/3 = 2/3$
-    \item $\Pr(x_1=1) = \Pr(1,0,0) + \Pr(1,1,1) = 1/6 + 1/6 = 2/6 = 1/3$
-\end{itemize}
-\begin{center}
-\begin{tabular}{c|c}
-$x_1$ & $\Pr(x_1)$ \\\hline
-0 & 2/3 \\
-1 & 1/3
-\end{tabular}
-\end{center}
-
-\textbf{2. CPT for $x_3$:}
-We find the marginal probability $P(x_3)$ by summing over $x_1$ and $x_2$.
-\begin{itemize}
-    \item $\Pr(x_3=0) = \Pr(0,0,0) + \Pr(1,0,0) = 1/3 + 1/6 = 2/6 + 1/6 = 1/2$
-    \item $\Pr(x_3=1) = \Pr(0,0,1) + \Pr(1,1,1) = 1/3 + 1/6 = 2/6 + 1/6 = 1/2$
-\end{itemize}
-\begin{center}
-\begin{tabular}{c|c}
-$x_3$ & $\Pr(x_3)$ \\\hline
-0 & 1/2 \\
-1 & 1/2
-\end{tabular}
-\end{center}
-
-\textbf{3. CPT for $x_2$:}
-We need the conditional probability $P(x_2 \mid x_1, x_3)$. From 4(a), we know this is a deterministic relationship: $x_2 = x_1 \land x_3$. This means $\Pr(x_2=1 \mid x_1, x_3)$ is 1 if and only if $x_1=1$ and $x_3=1$. For all other parent combinations, $\Pr(x_2=0 \mid x_1, x_3) = 1$.
-\begin{center}
-\begin{tabular}{cc|c|c}
-$x_1$ & $x_3$ & $\Pr(x_2=0 \mid x_1, x_3)$ & $\Pr(x_2=1 \mid x_1, x_3)$ \\\hline
-0 & 0 & 1 & 0 \\
-0 & 1 & 1 & 0 \\
-1 & 0 & 1 & 0 \\
-1 & 1 & 0 & 1
-\end{tabular}
-\end{center}
-\textit{Verification:} We can check one row of the original table. $\Pr(x_1=0, x_2=0, x_3=1) = P(x_1=0)P(x_3=1)P(x_2=0 \mid x_1=0, x_3=1) = (2/3) \cdot (1/2) \cdot (1) = 2/6 = 1/3$. This matches the original table.
+\end{enumerate}
 
 \subsubsection*{\normalfont}{$\therefore$ The three tables are $P(x_1)$ (with $\Pr(x_1=1)=1/3$), $P(x_3)$ (with $\Pr(x_3=1)=1/2$), and the deterministic CPT for $P(x_2 \mid x_1, x_3)$ which implements the $x_2 = x_1 \land x_3$ function.}
-
-\subsubsection*{Graduate Level Explanation}
-The chain rule for Bayes nets asserts that $P(\mathbf{X}) = \prod_{i} P(X_i \mid \text{Pa}_G(X_i))$. For our minimal DAG $G$ where $\text{Pa}(x_1)=\emptyset$, $\text{Pa}(x_3)=\emptyset$, and $\text{Pa}(x_2)=\{x_1, x_3\}$, this becomes $P(x_1, x_2, x_3) = P(x_1)P(x_3)P(x_2 \mid x_1, x_3)$. The CPTs for the root nodes $x_1$ and $x_3$ are their marginal distributions, which we found by summing out the other variables. The CPT for the child $x_2$ is **degenerate** (contains only 0s and 1s), reflecting the deterministic functional relationship in the joint distribution's support.
-
-\subsubsection*{Simple Expedited Learning Explanation}
-The Bayes net $x_1 \to x_2 \leftarrow x_3$ is a "recipe" for building the full probability table. These CPTs are the "ingredients."
-\begin{enumerate}
-    \item \textbf{Table 1 ($P(x_1)$):} "Flip a biased coin for $x_1$. It lands on '1' 1/3 of the time."
-    \item \textbf{Table 2 ($P(x_3)$):} "Flip a fair coin for $x_3$. It lands on '1' 1/2 of the time."
-    \item \textbf{Table 3 ($P(x_2 \mid \ldots)$):} "Look at the results of $x_1$ and $x_3$. Set $x_2$ to 1 *if and only if* both $x_1$ and $x_3$ were 1. Otherwise, set $x_2$ to 0."
-\end{enumerate}
-These three simple tables store all the information from the original (and more complex) joint table.
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -778,60 +571,33 @@ These three simple tables store all the information from the original (and more 
 %------------------
 \subsection*{Solution 4}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 4 (d)}
-\begin{flushleft}
-    The joint distribution $P$ over $(x_1, x_2, x_3)$ is given by the following table.
-\end{flushleft}
-\begin{center}
-\begin{tabular}{c|c|c|c}
-$x_1$ & $x_2$ & $x_3$ & Pr \\\hline
-0 & 0 & 0 & 1/3 \\
-0 & 0 & 1 & 1/3 \\
-1 & 0 & 0 & 1/6 \\
-1 & 1 & 1 & 1/6
-\end{tabular}
-\end{center}
-
-\begin{flushleft}
-    \textit{Draw the minimal undirected graph $G'$ over which distribution $P$ factors.}
-\end{flushleft}
-
 \subsubsection*{Solution 4 (d)}
-The minimal undirected graph $G'$ that represents a distribution $P$ can be derived from its minimal Bayes net $G$ (found in 4(b)) using the process of **moralization**.
+To find the minimal undirected graph (UGM), we "moralize" the minimal Bayes net from \textit{part (b)}.
 
 \begin{enumerate}
-    \item \textbf{Start with the Bayes Net $G$:} From 4(b), the minimal DAG was the v-structure $x_1 \to x_2 \leftarrow x_3$.
-    \item \textbf{"Marry the parents":} Add an undirected edge between all pairs of nodes that have a common child. In $G$, $x_1$ and $x_3$ are both parents of $x_2$. Since they are not already connected, we must add the "moral" edge $x_1 - x_3$.
-    \item \textbf{Drop all arrowheads:} Convert all directed edges to undirected edges. This turns $x_1 \to x_2$ into $x_1 - x_2$ and $x_3 \to x_2$ into $x_3 - x_2$.
+    \item Start with the Bayes Net: From \textit{part (b)}, the graph was the v-structure $x_1 \to x_2 \leftarrow x_3$.
+
+    \item Add moral edge: The nodes $x_1$ and $x_3$ are both parents of $x_2$. We must add an undirected edge between them.
+
+    \item Drop Arrowheads: Convert all directed edges ($x_1 \to x_2$ and $x_3 \to x_2$) into undirected edges.
 \end{enumerate}
+\begin{flushleft}
+    This process results in a fully connected graph (a 3-clique) with edges $(x_1, x_2)$, $(x_2, x_3)$, and the new moral edge $(x_1, x_3)$.
+\end{flushleft}
 
-The resulting graph $G'$ has three edges: $(x_1, x_2)$, $(x_2, x_3)$, and the new moral edge $(x_1, x_3)$. This forms a fully connected graph, or a 3-clique.
-
-\begin{figure}[h!]
-\centering
-\begin{tikzpicture}[node distance=1.5cm and 2cm, thick, scale=1.0, every node/.style={transform shape}]
+\begin{center}
+\begin{tikzpicture}[node distance=1.5cm and 2cm, thick]
     \node[circle, draw, fill=blue!10, minimum size=1cm] (x1) {$x_1$};
     \node[circle, draw, fill=blue!10, minimum size=1cm, right of=x1] (x3) {$x_3$};
     \node[circle, draw, fill=blue!10, minimum size=1cm, below of=x1, xshift=1cm] (x2) {$x_2$};
     
     \draw[line width=1.5pt] (x1) -- (x2);
     \draw[line width=1.5pt] (x3) -- (x2);
-    % The "moral" edge
     \draw[line width=1.5pt] (x1) -- (x3);
 \end{tikzpicture}
-\caption{Minimal Undirected Graph $G'$}
-\label{fig:ugm_moralized}
-\end{figure}
+\end{center}
 
-This graph is minimal because the distribution $P$ contains no conditional independence properties. For example, $x_1$ and $x_3$ are *not* independent given $x_2$ (this is "explaining away"). Any UGM with fewer edges (e.g., $x_1 - x_2 - x_3$) would incorrectly imply $x_1 \perp x_3 \mid x_2$. Therefore, the fully connected graph is the minimal UGM.
-
-\subsubsection*{\normalfont}{$\therefore$ The minimal undirected graph $G'$ is a fully connected graph on all three nodes (a 3-clique), formed by moralizing the v-structure $x_1 \to x_2 \leftarrow x_3$.}
-
-\subsubsection*{Graduate Level Explanation}
-The minimal UGM $G'$ that is an I-map (Independence Map) of a distribution $P$ is constructed by adding edges for all pairs of variables $X, Y$ that are not conditionally independent given all other variables. The v-structure $x_1 \to x_2 \leftarrow x_3$ in the minimal DAG $G$ encodes $x_1 \perp x_3$ but $x_1 \not\perp x_3 \mid x_2$. An undirected graph cannot capture this specific structure; the UGM chain $x_1 - x_2 - x_3$ would imply $x_1 \perp x_3 \mid x_2$, which is false for our distribution. To avoid asserting this false independence, the moralization process adds the $x_1 - x_3$ edge, creating a 3-clique. This UGM implies a factorization $P \propto \psi(x_1, x_2, x_3)$, which is the least-constraining (and thus correct) UGM for this distribution.
-
-\subsubsection*{Simple Expedited Learning Explanation}
-To change a Bayes Net (with arrows) into an Undirected Graph (no arrows), you must follow one crucial rule: **"Marry the parents."** In our Bayes Net, $x_1$ and $x_3$ were "parents" who had a "child" $x_2$, but they weren't connected to each other. The moralization rule says you *must* draw an edge between them. After you add that new $x_1 - x_3$ edge and remove all the arrows, you are left with a triangle where everyone is connected. This is the correct graph because in the original problem, $x_1$ and $x_3$ *became* dependent on each other when you looked at $x_2$, and this triangle is the only way to show that dependency in an undirected graph.
+\subsubsection*{\normalfont}{$\therefore$ The minimal undirected graph can be seen above.}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -842,62 +608,36 @@ To change a Bayes Net (with arrows) into an Undirected Graph (no arrows), you mu
 %------------------
 \subsection*{Solution 5}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 5 (a)}
-\begin{flushleft}
-    A Bayesian approach to image denoising. Download the file \texttt{gibbs.zip} from the course website. This contains a Jupyter notebook and two images (\texttt{noisy\_bear.png} and \texttt{original\_bear.png}). The former is a corrupted version of the latter (which is provided only for reference).
-\end{flushleft}
-
-\begin{flushleft}
-    Let $X$ be the corrupted image and $Y$ the uncorrupted version that we wish to recover. Both are of the form $\{-1, +1\}^{M \times N}$. In the notebook, a Markov random field joint distribution for $(X, Y)$ is given. You will use this to design a Gibbs sampler for $Y|X$.
-\end{flushleft}
-
-\begin{flushleft}
-    \textit{Let $p$ denote a specific pixel in the image. Then $Y_p$ is the (reconstructed) value at that pixel, and $Y_{\backslash p}$ is the value at all remaining pixels. Give a precise expression for $\Pr(Y_p = +1|Y_{\backslash p}, X)$.}
-\end{flushleft}
-
 \subsubsection*{Solution 5 (a)}
 The joint distribution from the notebook is:
 $$
-\Pr(X,Y) \propto \prod_{p} \phi(X_{p},Y_{p})\prod_{p \sim q}\phi(Y_p, Y_q)
+\Pr(X,Y) \propto \exp\left( \sum_p X_p Y_p + \sum_{p \sim q} Y_p Y_q \right)
 $$
-With the potential function $\phi(u, v) = e^{uv}$.
-Substituting the potential, the joint distribution is:
-$$
-\Pr(X,Y) \propto \prod_{p} e^{X_p Y_p} \prod_{p \sim q} e^{Y_p Y_q} = \exp\left( \sum_p X_p Y_p + \sum_{p \sim q} Y_p Y_q \right)
-$$
-This corresponds to the Ising model $\exp(\eta \sum_p X_p Y_p + \beta \sum_{p \sim q} Y_p Y_q)$ with $\eta=1$ and $\beta=1$.
-
-For Gibbs sampling, the full conditional $\Pr(Y_p \mid Y_{\backslash p}, X)$ is proportional to the joint distribution $\Pr(X,Y)$. We only need to keep the terms in the joint distribution that *involve* the variable $Y_p$:
+For Gibbs sampling, the full conditional probability $\Pr(Y_p \mid Y_{\backslash p}, X)$ is proportional to all terms in the joint distribution that involve $Y_p$:
 \begin{align*}
-    \Pr(Y_p \mid Y_{\backslash p}, X) &\propto P(X,Y) \\
-    &\propto \exp\left( X_p Y_p + \sum_{q \in \mathcal{N}(p)} Y_p Y_q \right)
+    \Pr(Y_p \mid Y_{\backslash p}, X) &\propto \exp\left( X_p Y_p + \sum_{q \in \mathcal{N}(p)} Y_p Y_q \right)
 \end{align*}
-where $\mathcal{N}(p)$ is the set of neighbors of pixel $p$. We can factor out $Y_p$ from the exponent:
+where $\mathcal{N}(p)$ is the set of neighbors of pixel $p$. We can factor out $Y_p$:
 $$
 \Pr(Y_p \mid Y_{\backslash p}, X) \propto \exp\left( Y_p \cdot \left( X_p + \sum_{q \in \mathcal{N}(p)} Y_q \right) \right)
 $$
-Let's define the "local evidence" $E_p = X_p + \sum_{q \in \mathcal{N}(p)} Y_q$. The expression simplifies to:
+The local evidence is defined as:
+$$E_p = X_p + \sum_{q \in \mathcal{N}(p)} Y_q$$
+Substituting $E_p$ the equation simplifies to:
 $$
 \Pr(Y_p \mid Y_{\backslash p}, X) \propto \exp( Y_p E_p )
 $$
-We are interested in $\Pr(Y_p = +1 \mid \ldots)$. We can find this by normalizing over the two possible states of $Y_p \in \{-1, +1\}$:
-\begin{align*}
-    \Pr(Y_p = +1 \mid \ldots) &= \frac{\exp( (+1) \cdot E_p )}{\exp( (+1) \cdot E_p ) + \exp( (-1) \cdot E_p )} \\
-    &= \frac{e^{E_p}}{e^{E_p} + e^{-E_p}}
-\end{align*}
-To make this more numerically stable, we can multiply the numerator and denominator by $e^{-E_p}$:
+Now, normalize over the two possible states $Y_p \in \{-1, +1\}$:
+
+$$\Pr(Y_p = +1 \mid \ldots) = \frac{\exp( (+1) \cdot E_p )}{\exp( (+1) \cdot E_p ) + \exp( (-1) \cdot E_p )} = \frac{e^{E_p}}{e^{E_p} + e^{-E_p}}$$
+
+Finally, multiply the numerator and denominator by $e^{-E_p}$ (1) and we arrive at the following:
 $$
-\Pr(Y_p = +1 \mid \ldots) = \frac{1}{1 + e^{-2E_p}} = \sigma(2 E_p)
+\Pr(Y_p = +1 \mid \ldots) = \frac{1}{1 + e^{-2E_p}}
 $$
-where $\sigma(z) = 1/(1+e^{-z})$ is the logistic sigmoid function.
 
-\subsubsection*{\normalfont}{$\therefore$ The precise expression is $\Pr(Y_p = +1 \mid Y_{\backslash p}, X) = \frac{1}{1 + \exp(-2 E_p)}$, where $E_p = X_p + \sum_{q \in \mathcal{N}(p)} Y_q$. (Note: based on the notebook's model, $\eta=1$ and $\beta=1$.)}
-
-\subsubsection*{Graduate Level Explanation}
-The full conditional distribution $\Pr(Y_p \mid Y_{\backslash p}, X)$ is required for the Gibbs update at site $p$. Due to the local Markov property of the MRF, this distribution simplifies to $\Pr(Y_p \mid Y_{\mathcal{B}(p)}, X_p)$, where $\mathcal{B}(p) = \mathcal{N}(p) \cup \{X_p\}$ is the Markov Blanket of $Y_p$. The resulting expression is a logistic function of the local evidence $E_p$, which is a general property of binary exponential-family models (like the Ising model).
-
-\subsubsection*{Simple Expedited Learning Explanation}
-To decide the color of a single pixel $Y_p$ (black or white), we have it "ask its friends" for their opinion. Its "friends" are its four neighbors ($Y_q$) and the corresponding pixel in the noisy image ($X_p$). The term $E_p$ is a "vote": if all its friends are white (+1), $E_p$ is a big positive number. The sigmoid function $\sigma(2E_p)$ then turns this strong vote into a very high *probability* (e.g., 99\%) that $Y_p$ should also be white.
+\subsubsection*{\normalfont}{$\therefore$ The precise expression is:}
+$$\Pr(Y_p = +1 \mid Y_{\backslash p}, X) = \frac{1}{1 + \exp(-2 E_p)} \quad \text{,where } E_p = X_p + \sum_{q \in \mathcal{N}(p)} Y_q$$
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
