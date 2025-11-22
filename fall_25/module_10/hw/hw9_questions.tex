@@ -1,0 +1,98 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usepackage{listings}
+
+\title{DSC 257R: Unsupervised Learning \\ Homework 9}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Representations Based on Clustering and Multidimensional Scaling}
+
+\begin{enumerate}
+\item \textbf{Representations based on clustering.} Suppose that we have a data set $X=\{x_1, \ldots, x_n\}$ consisting of points in a metric space $(\mathcal{X}, d)$. We cluster the data to get $k$ cluster centers $\mu_1, \ldots, \mu_k \in \mathcal{X}$. Here are a couple of the ways in which we can create a new representation of the data based on this clustering:
+
+\begin{enumerate}
+\item Represent each point by its cluster label, i.e., $\phi(x) = \arg \min_j d(x, \mu_j)$.
+
+\item Represent each point by its distance to each of the centers, i.e., $\phi(x)_j = d(x, \mu_j)$.
+\end{enumerate}
+
+In each of these cases, precisely specify the space in which the representation $\phi(x)$ lies (e.g. $\mathbb{R}^n$).
+
+Note: When we have a hierarchical clustering, we can get more elaborate multi-scale representations.
+
+\item Each of the following matrices gives distances (not squared distances) between a set of three points. In each case, say whether the distances can be realized in Euclidean space. If they can, show how by specifying three vectors with exactly the given interpoint distances. If they can't, give a reason.
+
+\[
+\begin{bmatrix}
+0 & 1 & 2 \\
+1 & 0 & 1 \\
+2 & 1 & 0
+\end{bmatrix}, \quad
+\begin{bmatrix}
+0 & 1 & 3 \\
+1 & 0 & 1 \\
+3 & 1 & 0
+\end{bmatrix}
+\]
+
+\item Consider the following three points in $\mathbb{R}^3$:
+
+\[
+x = \begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix}, \quad
+y = \begin{bmatrix}-1 \\ 0 \\ 1\end{bmatrix}, \quad
+z = \begin{bmatrix}0 \\ -2 \\ -4\end{bmatrix}
+\]
+
+\begin{enumerate}
+\item Let $D$ be the matrix of squared interpoint distances. What is $D$?
+
+\item What is the appropriate $H$ matrix for this situation?
+
+\item Compute $-\frac{1}{2}HDH$. What do you get?
+
+\item Is the answer in (c) the correct Gram matrix for the data?
+\end{enumerate}
+
+\item A set of $n$ points in $\mathbb{R}^d$ is orthonormal: that is, each point has unit length and the points are orthogonal to one another.
+
+\begin{enumerate}
+\item What is the Gram matrix for this data? Be sure to specify its dimension clearly.
+
+\item What is the matrix of squared interpoint distances?
+\end{enumerate}
+
+\item \textbf{Experiments with multidimensional scaling.} The file \texttt{cities.txt} contains distances (as the crow flies) between ten European cities. We will use multidimensional scaling to obtain a two-dimensional embedding of these cities.
+
+\begin{enumerate}
+\item Show the 2-d embedding of the distance matrix obtained by cMDS. Here are the steps to follow:
+\begin{itemize}
+\item Write a function that implements the classical MDS algorithm from the lecture slides, taking as input a matrix of interpoint distances $D$ and a target embedding dimension $k$.In order
+to perform the eigendecomposition, you can use np.linalg.eigh, although note that this
+returns eigenvalues in increasing rather than decreasing order.
+\item Write a function that takes a 2-d embedding of the points and plots them, annotating each point with the corresponding city name. he function matplotlib.pyplot.annotate is
+useful for these annotations.
+\end{itemize}
+
+\item The embedding returned by cMDS (or any other multidimensional scaling method) is not unique: any rotation or translation of the points will produce the same interpoint distances. Show a rotated version of points that fits our own map of Europe more closely. Here are the steps to follow:
+\begin{itemize}
+\item Write a function that takes a 2-d data set and an angle, and rotates each of the points through that angle.
+\item Play around with the angle until you find something suitable.
+\end{itemize}
+
+\item There are many other algorithms for multidimensional scaling. Use \texttt{sklearn.manifold.MDS} to produce an embedding of the distances and find a suitable rotation. Plot the embedded points before and after rotation.
+\end{enumerate}
+\end{enumerate}
+
+\end{document}

@@ -48,7 +48,7 @@
 
 \pagestyle{fancy}
 \chead{DSC 257: Unsupervised Learning (Fall 2025)}
-\lhead{Homework 6}
+\lhead{Homework 9}
 \rhead{Randall Rogers}
 
 %------------------
@@ -58,8 +58,15 @@
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Question 1 (a)}
 \begin{flushleft}
-    Consider the spherical Gaussian $N(0, I_d)$ in $d$-dimensional space. 
-    What is the maximum density achieved by this distribution? At what point is it achieved? 
+    Representations based on clustering Suppose that we have a data set $X=\{x_1, \ldots, x_n\}$ consisting of points in a metric space $(\mathcal{X}, d)$. We cluster the data to get $k$ cluster centers $\mu_1, \ldots, \mu_k \in \mathcal{X}$. Here are a couple of the ways in which we can create a new representation of the data based on this clustering:
+\end{flushleft}
+\begin{flushleft}
+    \textit{Represent each point by its cluster label, i.e., $\phi(x) = \arg \min_j d(x, \mu_j)$.}
+\end{flushleft}
+\begin{flushleft}
+    In each of these cases, precisely specify the space in which the representation $\phi(x)$ lies (e.g. $\mathbb{R}^n$).
+
+Note: When we have a hierarchical clustering, we can get more elaborate multi-scale representations.
 \end{flushleft}
 
 \subsubsection*{Solution 1 (a)}
@@ -75,18 +82,132 @@
 \newpage
 
 %------------------
-% Solution for 1(b)
+% Solution for 1(a)
 %------------------
 \subsection*{Solution 1}
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Question 1 (b)}
 \begin{flushleft}
-    Consider the spherical Gaussian $N(0, I_d)$ in $d$-dimensional space. 
-    In very rough terms, what happens to the maximum density as $d$ grows? 
-    (This helps explain why for high-dimensional data we typically work with the logarithm of the density, in order to avoid numerical underflow errors.) 
+    Representations based on clustering Suppose that we have a data set $X=\{x_1, \ldots, x_n\}$ consisting of points in a metric space $(\mathcal{X}, d)$. We cluster the data to get $k$ cluster centers $\mu_1, \ldots, \mu_k \in \mathcal{X}$. Here are a couple of the ways in which we can create a new representation of the data based on this clustering:
+\end{flushleft}
+\begin{flushleft}
+    \textit{Represent each point by its distance to each of the centers, i.e., $\phi(x)_j = d(x, \mu_j)$.}
+\end{flushleft}
+\begin{flushleft}
+    In each of these cases, precisely specify the space in which the representation $\phi(x)$ lies (e.g. $\mathbb{R}^n$).
+
+Note: When we have a hierarchical clustering, we can get more elaborate multi-scale representations.
 \end{flushleft}
 
 \subsubsection*{Solution 1 (b)}
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\subsubsection*{Graduate Level Explanation}
+
+\subsubsection*{Learn Fast Explanation}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 2
+%------------------
+\subsection*{Solution 2}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 2}
+\begin{flushleft}
+    Each of the following matrices gives distances (not squared distances) between a set of three points. In each case, say whether the distances can be realized in Euclidean space. If they can, show how by specifying three vectors with exactly the given interpoint distances. If they can't, give a reason.
+
+\[
+\begin{bmatrix}
+0 & 1 & 2 \\
+1 & 0 & 1 \\
+2 & 1 & 0
+\end{bmatrix}, \quad
+\begin{bmatrix}
+0 & 1 & 3 \\
+1 & 0 & 1 \\
+3 & 1 & 0
+\end{bmatrix}
+\]
+\end{flushleft}
+
+\subsubsection*{Solution 2}
+\begin{flushleft}
+    diagonal matrix,symmetric matrices, determinate=0
+\end{flushleft}
+
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\subsubsection*{Graduate Level Explanation}
+
+\subsubsection*{Learn Fast Explanation}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 3(a)
+%------------------
+\subsection*{Solution 3}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 3 (a)}
+\begin{flushleft}
+    Consider the following three points in $\mathbb{R}^3$:
+
+\[
+x = \begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix}, \quad
+y = \begin{bmatrix}-1 \\ 0 \\ 1\end{bmatrix}, \quad
+z = \begin{bmatrix}0 \\ -2 \\ -4\end{bmatrix}
+\]
+
+\end{flushleft}
+\begin{flushleft}
+    Let $D$ be the matrix of squared interpoint distances. What is $D$?
+    
+\end{flushleft}
+
+\subsubsection*{Solution 3 (a)}
+
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\subsection*{Graduate Level Explanation}
+
+\subsection*{Learn Fast Explanation}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+
+%------------------
+% Solution for 3(b)
+%------------------
+\subsection*{Solution 3}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 3 (b)}
+\begin{flushleft}
+    Consider the following three points in $\mathbb{R}^3$:
+
+\[
+x = \begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix}, \quad
+y = \begin{bmatrix}-1 \\ 0 \\ 1\end{bmatrix}, \quad
+z = \begin{bmatrix}0 \\ -2 \\ -4\end{bmatrix}
+\]
+
+\end{flushleft}
+\begin{flushleft}
+
+What is the appropriate $H$ matrix for this situation?
+  
+\end{flushleft}
+
+\subsubsection*{Solution 3 (b)}
 
 
 \subsubsection*{\normalfont}{$\therefore$ }
@@ -100,17 +221,151 @@
 \newpage
 
 %------------------
-% Solution for 2(a)
+% Solution for 3(c)
 %------------------
-\subsection*{Solution 2}
+\subsection*{Solution 3}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 2 (a)}
+\subsubsection*{Question 3 (c)}
 \begin{flushleft}
-    \textbf{Length concentration.} Write a procedure that draws 10000 points $X_1, \ldots, X_{10000}$ from the spherical Gaussian $N(0, I_d)$ and plots a histogram of their (squared) lengths $\|X_i\|^2$. 
-    Do this for $d=10$. What seems to be the typical (squared) length? 
+    Consider the following three points in $\mathbb{R}^3$:
+
+\[
+x = \begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix}, \quad
+y = \begin{bmatrix}-1 \\ 0 \\ 1\end{bmatrix}, \quad
+z = \begin{bmatrix}0 \\ -2 \\ -4\end{bmatrix}
+\]
+
+\end{flushleft}
+\begin{flushleft}
+
+Compute $-\frac{1}{2}HDH$. What do you get?
+    
 \end{flushleft}
 
-\subsubsection*{Solution 2 (a)}
+\subsubsection*{Solution 3 (c)}
+
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\subsection*{Graduate Level Explanation}
+
+\subsection*{Learn Fast Explanation}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 3(d)
+%------------------
+\subsection*{Solution 3}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 3 (d)}
+\begin{flushleft}
+    Consider the following three points in $\mathbb{R}^3$:
+
+\[
+x = \begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix}, \quad
+y = \begin{bmatrix}-1 \\ 0 \\ 1\end{bmatrix}, \quad
+z = \begin{bmatrix}0 \\ -2 \\ -4\end{bmatrix}
+\]
+
+\end{flushleft}
+\begin{flushleft}
+
+Is the answer in (c) the correct Gram matrix for the data?
+    
+\end{flushleft}
+
+\subsubsection*{Solution 3 (d)}
+
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\subsection*{Graduate Level Explanation}
+
+\subsection*{Learn Fast Explanation}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 4(a)
+%------------------
+\subsection*{Solution 4}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 4 (a)}
+\begin{flushleft}
+    A set of $n$ points in $\mathbb{R}^d$ is orthonormal: that is, each point has unit length and the points are orthogonal to one another.
+
+\end{flushleft}
+\begin{flushleft}
+    What is the Gram matrix for this data? Be sure to specify its dimension clearly.
+    
+\end{flushleft}
+
+\subsubsection*{Solution 4 (a)}
+
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\subsection*{Graduate Level Explanation}
+
+\subsection*{Learn Fast Explanation}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+
+%------------------
+% Solution for 4(b)
+%------------------
+\subsection*{Solution 4}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 4 (b)}
+\begin{flushleft}
+    A set of $n$ points in $\mathbb{R}^d$ is orthonormal: that is, each point has unit length and the points are orthogonal to one another.
+
+\end{flushleft}
+\begin{flushleft}
+
+What is the matrix of squared interpoint distances?
+  
+\end{flushleft}
+
+\subsubsection*{Solution 4 (b)}
+
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\subsection*{Graduate Level Explanation}
+
+\subsection*{Learn Fast Explanation}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 5(a)
+%------------------
+\subsection*{Solution 5}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 5 (a)}
+\begin{flushleft}
+Show the 2-d embedding of the distance matrix obtained by cMDS. Here are the steps to follow:
+\begin{itemize}
+\item Write a function that implements the classical MDS algorithm from the lecture slides, taking as input a matrix of interpoint distances $D$ and a target embedding dimension $k$.In order
+to perform the eigendecomposition, you can use np.linalg.eigh, although note that this
+returns eigenvalues in increasing rather than decreasing order.
+\item Write a function that takes a 2-d embedding of the points and plots them, annotating each point with the corresponding city name. he function matplotlib.pyplot.annotate is
+useful for these annotations.
+\end{itemize}
+\end{flushleft}
+
+\subsubsection*{Solution 5 (a)}
 
 \subsubsection*{Python Code for d=10}
 \begin{lstlisting}
@@ -118,6 +373,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 \end{lstlisting}
 
+\subsubsection*{Plot}
 \begin{comment}
 \begin{figure}[h]
   \includegraphics[width=\textwidth]{histogram_d10.png}
@@ -132,14 +388,69 @@ import matplotlib.pyplot as plt
 \newpage
 
 %------------------
-% Solution for 2(b)
+% Solution for 5(b)
 %------------------
-\subsection*{Solution 2}
+\subsection*{Solution 5}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 2 (b)}
+\subsubsection*{Question 5 (b)}
 \begin{flushleft}
-    \textbf{Length concentration.} Write a procedure that draws 10000 points $X_1, \ldots, X_{10000}$ from the spherical Gaussian $N(0, I_d)$ and plots a histogram of their (squared) lengths $\|X_i\|^2$. 
-    Repeat for $d=100$. Is the histogram more concentrated than in (a), or is it less concentrated? 
+he embedding returned by cMDS (or any other multidimensional scaling method) is not unique:
+any rotation or translation of the points will produce the same interpoint distances. For this
+reason, your plot in (a) is unlikely to correspond to our own map of Europe. Show a rotated
+version of points that ﬁts our own map more closely. Here are the steps to follow:
+\begin{itemize}
+\item Write a function that implements the classical MDS algorithm from the lecture slides, taking as input a matrix of interpoint distances $D$ and a target embedding dimension $k$.In order
+to perform the eigendecomposition, you can use np.linalg.eigh, although note that this
+returns eigenvalues in increasing rather than decreasing order.
+\item Write a function that takes a 2-d embedding of the points and plots them, annotating each point with the corresponding city name. he function matplotlib.pyplot.annotate is
+useful for these annotations.
+\end{itemize}
+\end{flushleft}
+\begin{flushleft}
+    \item Write a function that takes a 2-d data set and an angle, and rotates each of the points through that angle.
+\item Play around with the angle until you find something suitable.
+\end{flushleft}
+$$
+\begin{bmatrix}
+    \text{cos}(\theta) & -\text{sin}(\theta) \\
+    \text{sin}(\theta) & \text{cos}(\theta) 
+\end{bmatrix}
+$$
+Play around with the angle until you ﬁnd something suitable.
+
+\subsubsection*{Solution 5 (b)}
+
+\subsubsection*{Python Code}
+\begin{lstlisting}
+import numpy as np
+import matplotlib.pyplot as plt
+\end{lstlisting}
+
+\subsubsection*{Plot}
+\begin{comment}
+\begin{figure}[h]
+  \includegraphics[width=\textwidth]{histogram_d10.png}
+  \caption{Histogram of squared lengths for d=10}
+\end{figure}
+\end{comment}
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+%------------------
+% Solution for 5(c)
+%------------------
+\subsection*{Solution 5}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 5 (c)}
+\begin{flushleft}
+    here are many other algorithms for multidimensional scaling. Some of them work by deﬁning a
+“stress function” that captures the disparity between the speciﬁed interpoint distances and a given
+embedding; this stress function is then minimized using gradient descent. One such approach is
+implemented in sklearn.manifold.MDS. Use this to produce an embedding of the distances (use
+the setting dissimilarity='precomputed'), and once again ﬁnd a suitable rotation. Plot the
+embedded points, annotated with city names, before and after rotation.
 \end{flushleft}
 
 \subsubsection*{Solution 2 (b)}
