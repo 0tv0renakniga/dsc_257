@@ -388,62 +388,36 @@ plt.show()
 %------------------
 \subsection*{Solution 1}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 1 (f)}
-\begin{flushleft}
-\textit{Experiments with the EM algorithm:} In this problem, we'll generate data from a mixture of Gaussians and then see whether the EM algorithm is able to recover the correct clustering and the correct parameters of the mixture model.
-\end{flushleft}
-\begin{flushleft}
-    Consider a mixture of four Gaussians in $\mathbb{R}^2$ such that:
-\end{flushleft}
-$$p(x) = \pi_1 N(\mu_1, \Sigma_1) + \pi_2 N(\mu_2, \Sigma_2) + \pi_3 N(\mu_3, \Sigma_3) + \pi_4 N(\mu_4, \Sigma_4)$$
-\begin{flushleft}
-    where the mixing weights $\pi_i \ni i \in \{1,2,3,4\} \text{ and } \pi_i \in \mathbb{R}$ are given by:
-\end{flushleft}
-$$\pi_1 = 0.1, \pi_2 = 0.2, \pi_3 = 0.5, \pi_4 = 0.2$$
-\begin{flushleft}
-    the cluster means $\mu_i \in \mathbb{R}^2$ are given by:
-\end{flushleft}
-$$\mu_1 = \begin{bmatrix}7 \\ 6\end{bmatrix}, \mu_2 = \begin{bmatrix}0 \\ 0\end{bmatrix}, \mu_3 = \begin{bmatrix}-1 \\ 4\end{bmatrix}, \mu_4 = \begin{bmatrix}5 \\ -2\end{bmatrix}$$
-\begin{flushleft}
-    and the covariance matrices $\Sigma_i \in \mathbb{R}^{2 \times 2}$ are given by:
-\end{flushleft}
-$$\Sigma_1 = \begin{bmatrix}1 & 0 \\ 0 & 25\end{bmatrix}, \Sigma_2 = \begin{bmatrix}1 & 0 \\ 0 & 1\end{bmatrix}, \Sigma_3 = \begin{bmatrix}9 & 1 \\ 1 & 1\end{bmatrix}, \Sigma_4 = \begin{bmatrix}16 & -6 \\ -6 & 4\end{bmatrix}$$
-\begin{itemize}
-    \item Finally, let's see how EM's solution evolves over iterations of local search. Show four plots, depicting the progress of EM at different iterations.
-\end{itemize}
 \subsubsection*{Solution 1 (f)}
 \subsubsection*{Python Code}
 
 \begin{lstlisting}[language=Python]
+import warnings
 from sklearn.mixture import GaussianMixture
 
-# Define the iteration snapshots we want to capture
-# We use 'random' initialization to make the convergence process visible.
-# (Default 'k-means' init is often too fast to see the progression)
+# set iteration snapshots 
 iterations = [1, 5, 10, 50] 
 
 plt.figure(figsize=(15, 10))
 
 for idx, n_iter in enumerate(iterations):
-    # Initialize GMM with specific max_iter
-    # init_params='random' ensures we start from a raw state to see evolution
+    # initialize GMM 
     gmm = GaussianMixture(n_components=4, 
                           covariance_type='full', 
                           max_iter=n_iter, 
                           random_state=42,
                           init_params='random')
     
-    # Suppress convergence warnings for low iteration counts
-    import warnings
+    # suppress warnings
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         gmm.fit(X)
     
-    # Plotting subplot
+    # plot subplot
     ax = plt.subplot(2, 2, idx+1)
     ax.scatter(X[:, 0], X[:, 1], c='k', s=5, alpha=0.2)
     
-    # Plot learned ellipses
+    # plot learned ellipses
     for i in range(4):
         plot_ellipse(gmm.means_[i], gmm.covariances_[i], ax)
         ax.scatter(gmm.means_[i][0], gmm.means_[i][1], c='blue', marker='+')
@@ -454,46 +428,22 @@ for idx, n_iter in enumerate(iterations):
 plt.tight_layout()
 plt.savefig('q1f_evolution.png')
 plt.show()
-
-# Note: The code above generates one combined image (q1f_evolution.png). 
-# You can also save them individually as q1f_1.png, q1f_10.png etc. if preferred.
 \end{lstlisting}
 
+\newpage
+
+\subsection*{Solution 1}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 1 (f)}
 \subsubsection*{Plot}
 % Ideally, display the 4 snapshots. 
 % If you saved them as one combined image:
 \begin{figure}[h!]
 \centering
 \includegraphics[width=1.0\textwidth]{q1f_evolution.png}
-\caption{Evolution of the EM algorithm at iterations 1, 5, 10, and 50. Note how the ellipses initially start in random positions (Iter 1) and gradually migrate to fit the data clusters (Iter 50).}
+\caption{Evolution of the EM algorithm at iterations 1, 5, 10, and 50.}
 \label{fig:q1f}
 \end{figure}
-
-\subsubsection*{\normalfont}{$\therefore$ }
-We observe the iterative refinement of the model parameters.
-\begin{itemize}
-    \item \textbf{Iteration 1:} The means are randomly initialized near the center of the data, and covariances are largely spherical. The fit is poor.
-    \item \textbf{Iteration 5:} The components begin to "lock on" to dense regions. One component has likely found the distinct cluster at top-right ($\mu_1$), while others struggle with the overlapping center.
-    \item \textbf{Iteration 10:} The distinct clusters are well-defined. The algorithm is now fine-tuning the orientation (rotation) of the ellipses.
-    \item \textbf{Iteration 50:} Convergence is achieved. The parameters match the "True" parameters found in part (d).
-\end{itemize}
-
-\subsubsection*{Graduate Level Explanation}
-
-The plots visualize the ascent of the log-likelihood surface $\ln p(X|\theta)$. 
-The **E-Step** computes the expected value of the latent variables (responsibilities $\gamma_{ik}$) given the current parameter estimates.
-The **M-Step** updates the parameters $\theta$ ($\mu_k, \Sigma_k, \pi_k$) to maximize the expected complete data log-likelihood.
-Because the objective function is non-convex, the initialization (Iteration 1) is critical. As iterations proceed, the algorithm exploits the coordinate-ascent nature of EM to strictly increase (or maintain) the likelihood at each step, eventually settling into a local maximum.
-
-\subsubsection*{Learn Fast Explanation}
-Think of this like parking four cars in four specific parking spots, but you're doing it in the dark.
-\begin{itemize}
-    \item **Iter 1:** You drive the cars into the lot randomly. They are crooked and taking up two spots.
-    \item **Iter 5:** You get out, feel around, and realize "Car 1 is too far left." You adjust it slightly.
-    \item **Iter 10:** You adjust again. Now they are mostly in the lines, but maybe a bit crooked.
-    \item **Iter 50:** You make tiny adjustments until every car is perfectly centered in its spot.
-\end{itemize}
-The EM algorithm is just "nudging" the ellipses over and over until they fit the data perfectly.
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
