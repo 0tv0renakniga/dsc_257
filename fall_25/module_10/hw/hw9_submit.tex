@@ -1,0 +1,1330 @@
+\documentclass{article}
+
+% Required packages (merged from hw5_template.tex and hw6_questions.tex)
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{tikz}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{comment}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{caption}
+\usepackage{siunitx}
+\usepackage{hyperref}
+\usetikzlibrary{arrows.meta, positioning} % Required for hw6 diagrams
+
+% Set page geometry
+\geometry{a4paper, margin=1in}
+
+% Configure listings for Python
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\footnotesize,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  frame=single,
+  breaklines=true,
+  breakatwhitespace=true,
+  captionpos=b,
+  tabsize=4,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  commentstyle=\color{gray}\textit,
+  keywordstyle=\color{blue}\bfseries,
+  stringstyle=\color{red}
+}
+
+\begin{document}
+
+\pagestyle{fancy}
+\chead{DSC 257: Unsupervised Learning (Fall 2025)}
+\lhead{Homework 9}
+\rhead{Randall Rogers}
+
+%------------------
+% Solution for 1(a)
+%------------------
+\subsection*{Solution 1}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 1 (a)}
+\begin{flushleft}
+    Representations based on clustering Suppose that we have a data set $X=\{x_1, \ldots, x_n\}$ consisting of points in a metric space $(\mathcal{X}, d)$. We cluster the data to get $k$ cluster centers $\mu_1, \ldots, \mu_k \in \mathcal{X}$. Here are a couple of the ways in which we can create a new representation of the data based on this clustering:
+\end{flushleft}
+\begin{flushleft}
+    \textit{Represent each point by its cluster label, i.e., $\phi(x) = \arg \min_j d(x, \mu_j)$.}
+\end{flushleft}
+\begin{flushleft}
+    In each of these cases, precisely specify the space in which the representation $\phi(x)$ lies (e.g. $\mathbb{R}^n$).
+
+Note: When we have a hierarchical clustering, we can get more elaborate multi-scale representations.
+\end{flushleft}
+
+\subsubsection*{Solution 1 (a)}
+The function $\phi(x)$ returns the index $j$ corresponding to the closest cluster center. Since there are $k$ cluster centers indexed from $1$ to $k$, the output is a single discrete integer.
+
+Thus, the space is the discrete set of indices:
+$$ \phi(x) \in \{1, 2, \ldots, k\} $$
+
+\subsubsection*{\normalfont}{$\therefore \phi(x) \in \{1, \ldots, k\}$ (Discrete/Categorical Space)}
+
+\subsubsection*{Graduate Level Explanation}
+This representation is known as \textbf{Vector Quantization} or \textbf{Hard Assignment}. Mathematically, this maps the continuous input space $\mathcal{X}$ onto a discrete codebook. This effectively partitions the space into Voronoi regions, where every point in a region is mapped to the same integer label. This is a form of lossy compression; all local geometric information about $x$ relative to the center is discarded, retaining only the identity of the partition.
+
+\subsubsection*{Learn Fast Explanation}
+Think of this like a Zip Code. We don't care exactly where your house is (your exact coordinates); we just care which post office (cluster center) is closest to you. The result isn't a coordinate; it's just an ID number.
+
+\noindent\rule{\textwidth}{0.4pt}\\
+\newpage
+
+%------------------
+% Solution for 1(b)
+%------------------
+\subsection*{Solution 1}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 1 (b)}
+\begin{flushleft}
+    Representations based on clustering Suppose that we have a data set $X=\{x_1, \ldots, x_n\}$ consisting of points in a metric space $(\mathcal{X}, d)$. We cluster the data to get $k$ cluster centers $\mu_1, \ldots, \mu_k \in \mathcal{X}$. Here are a couple of the ways in which we can create a new representation of the data based on this clustering:
+\end{flushleft}
+\begin{flushleft}
+    \textit{Represent each point by its distance to each of the centers, i.e., $\phi(x)_j = d(x, \mu_j)$.}
+\end{flushleft}
+\begin{flushleft}
+    In each of these cases, precisely specify the space in which the representation $\phi(x)$ lies (e.g. $\mathbb{R}^n$).
+
+Note: When we have a hierarchical clustering, we can get more elaborate multi-scale representations.
+\end{flushleft}
+
+\subsubsection*{Solution 1 (b)}
+The representation $\phi(x)$ is constructed by calculating the distance from $x$ to every cluster center $\mu_1, \ldots, \mu_k$. This results in an ordered collection of $k$ real numbers.
+
+Since distances in a metric space are non-negative real numbers, $\phi(x)$ is a vector in a $k$-dimensional Euclidean space (specifically the non-negative orthant).
+
+\begin{center}
+\begin{tikzpicture}[scale=1.5]
+    % Define coordinates
+    \coordinate (X) at (2, 2);
+    \coordinate (Mu1) at (0, 3);
+    \coordinate (Mu2) at (4, 3);
+    \coordinate (Mu3) at (2, 0);
+
+    % Draw connections (Distances)
+    \draw[dashed, blue, thick] (X) -- (Mu1) node[midway, above left] {$d(x, \mu_1)$};
+    \draw[dashed, red, thick] (X) -- (Mu2) node[midway, above right] {$d(x, \mu_2)$};
+    \draw[dashed, green!60!black, thick] (X) -- (Mu3) node[midway, right] {$d(x, \mu_3)$};
+
+    % Draw Points
+    \filldraw[black] (X) circle (2pt) node[below=5pt] {Data Point $x$};
+    
+    % Draw Cluster Centers
+    \filldraw[blue] (Mu1) circle (3pt) node[above] {$\mu_1$};
+    \filldraw[red] (Mu2) circle (3pt) node[above] {$\mu_2$};
+    \filldraw[green!60!black] (Mu3) circle (3pt) node[below] {$\mu_3$};
+    
+    % Annotate the resulting vector
+    \node[align=center, draw, rectangle, rounded corners] at (6, 2) {
+        Feature Vector $\phi(x)$: \\
+        $\begin{bmatrix} 
+        \textcolor{blue}{d(x, \mu_1)} \\ 
+        \textcolor{red}{d(x, \mu_2)} \\ 
+        \textcolor{green!60!black}{d(x, \mu_3)} 
+        \end{bmatrix} \in \mathbb{R}^3$
+    };
+\end{tikzpicture}
+\end{center}
+
+\subsubsection*{\normalfont}{$\therefore \phi(x) \in \mathbb{R}^k$}
+
+\subsubsection*{Graduate Level Explanation}
+This representation embeds the data into a $k$-dimensional feature space based on similarity to prototypes. This is often called a \textbf{Radial Basis Function (RBF)} representation (if passed through a Gaussian kernel) or simply a distance-based embedding. Unlike 1(a), this preserves global geometry relative to the "landmarks" ($\mu_j$). If $k$ is large enough, we can often triangulate the exact position of $x$. This is a "soft" representation compared to the "hard" assignment of 1(a).
+
+\subsubsection*{Learn Fast Explanation}
+Think of this like GPS triangulation. Instead of just saying "You are in New York" (Label), this says "You are 10 miles from Tower A, 50 miles from Tower B, and 100 miles from Tower C." It results in a list of numbers (a vector) that describes your location much more precisely.
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 2
+%------------------
+\subsection*{Solution 2}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 2}
+\begin{flushleft}
+    Each of the following matrices gives distances (not squared distances) between a set of three points. In each case, say whether the distances can be realized in Euclidean space. If they can, show how by specifying three vectors with exactly the given interpoint distances. If they can't, give a reason.
+
+\[
+\begin{bmatrix}
+0 & 1 & 2 \\
+1 & 0 & 1 \\
+2 & 1 & 0
+\end{bmatrix}, \quad
+\begin{bmatrix}
+0 & 1 & 3 \\
+1 & 0 & 1 \\
+3 & 1 & 0
+\end{bmatrix}
+\]
+\end{flushleft}
+
+%------------------
+% Solution for 2
+%------------------
+\subsection*{Solution 2}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 2}
+\begin{flushleft}
+    Determine if the following distance matrices are realizable in Euclidean space.
+    \[
+    D_1 = \begin{bmatrix}
+    0 & 1 & 2 \\
+    1 & 0 & 1 \\
+    2 & 1 & 0
+    \end{bmatrix}, \quad
+    D_2 = \begin{bmatrix}
+    0 & 1 & 3 \\
+    1 & 0 & 1 \\
+    3 & 1 & 0
+    \end{bmatrix}
+    \]
+\end{flushleft}
+
+\subsubsection*{Solution 2}
+
+\textbf{Case 1: Matrix $D_1$} \\
+Let the three points be $x_1, x_2, x_3$. From the matrix, the distances are:
+$$d(x_1, x_2) = 1, \quad d(x_2, x_3) = 1, \quad d(x_1, x_3) = 2$$
+We check the triangle inequality: $d(x_1, x_2) + d(x_2, x_3) = 1 + 1 = 2$.
+Since $d(x_1, x_2) + d(x_2, x_3) = d(x_1, x_3)$, the triangle inequality holds with equality. This implies the points are collinear (lie on a single line).
+We can construct these points in 1-dimensional Euclidean space ($\mathbb{R}^1$) by placing them on the number line:
+$$ x_1 = 0, \quad x_2 = 1, \quad x_3 = 2 $$
+Verification:
+$|x_1 - x_2| = |0 - 1| = 1$ \checkmark \\
+$|x_2 - x_3| = |1 - 2| = 1$ \checkmark \\
+$|x_1 - x_3| = |0 - 2| = 2$ \checkmark
+
+\vspace{1em}
+
+\textbf{Case 2: Matrix $D_2$} \\
+From the matrix, the distances are:
+$$d(x_1, x_2) = 1, \quad d(x_2, x_3) = 1, \quad d(x_1, x_3) = 3$$
+The triangle inequality states that for any three points in a metric space, the direct path must be less than or equal to any detour:
+$$ d(x_1, x_3) \leq d(x_1, x_2) + d(x_2, x_3) $$
+Substituting our values:
+$$ 3 \leq 1 + 1 \implies 3 \leq 2 $$
+This is False. The direct distance between $x_1$ and $x_3$ is larger than the sum of the steps via $x_2$, which is impossible in Euclidean geometry (or any valid metric space).
+
+\subsubsection*{\normalfont}{$\therefore$ Matrix 1 is realizable ($x_1=0, x_2=1, x_3=2$). Matrix 2 is NOT realizable.}
+
+\subsubsection*{Graduate Level Explanation}
+Euclidean realizability requires two conditions. First, the distance matrix must define a valid \textbf{Metric Space}, satisfying the axioms of non-negativity, identity, symmetry, and the triangle inequality ($d(x,z) \le d(x,y) + d(y,z)$). Matrix $D_2$ fails this fundamental axiom, meaning it does not describe a geometry at all.
+
+Second, if the metric axioms hold, the squared distance matrix $D^{(2)}$ must be transformable into a Positive Semi-Definite (PSD) Gram matrix $B$ via centering: $B = -\frac{1}{2}HD^{(2)}H$. If $B$ has negative eigenvalues, the distances form a valid metric but require non-Euclidean (e.g., hyperbolic) space. Matrix $D_1$ satisfies both; its Gram matrix has one positive eigenvalue (dimension 1) and zero negative eigenvalues.
+
+\subsubsection*{Learn Fast Explanation}
+Imagine walking.
+For Matrix 1: You walk 1 mile to a store, then 1 more mile in the same direction to a park. You are now 2 miles from home. This makes sense.
+For Matrix 2: You walk 1 mile to a store, then 1 mile to a park, but somehow you end up 3 miles from home. That's magic, not math. You can't end up further away than the total distance you walked.
+
+\noindent\rule{\textwidth}{0.4pt}\\
+\newpage
+
+%------------------
+% Solution for 3(a)
+%------------------
+\subsection*{Solution 3}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 3 (a)}
+\begin{flushleft}
+    Consider the following three points in $\mathbb{R}^3$:
+
+\[
+x = \begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix}, \quad
+y = \begin{bmatrix}-1 \\ 0 \\ 1\end{bmatrix}, \quad
+z = \begin{bmatrix}0 \\ -2 \\ -4\end{bmatrix}
+\]
+
+\end{flushleft}
+\begin{flushleft}
+    Let $D$ be the matrix of squared interpoint distances. What is $D$?
+    
+\end{flushleft}
+
+\subsubsection*{Solution 3 (a)}
+Let the points be denoted as vectors:
+$x_1 = [1, 2, 3]^T$, $x_2 = [-1, 0, 1]^T$, $x_3 = [0, -2, -4]^T$.
+
+The matrix $D$ consists of squared Euclidean distances $D_{ij} = ||x_i - x_j||^2$.
+Calculations:
+\begin{align*}
+    D_{11} &= D_{22} = D_{33} = 0 \\
+    D_{12} &= ||x_1 - x_2||^2 = (1 - (-1))^2 + (2 - 0)^2 + (3 - 1)^2 = 2^2 + 2^2 + 2^2 = 4+4+4 = 12 \\
+    D_{13} &= ||x_1 - x_3||^2 = (1 - 0)^2 + (2 - (-2))^2 + (3 - (-4))^2 = 1^2 + 4^2 + 7^2 = 1+16+49 = 66 \\
+    D_{23} &= ||x_2 - x_3||^2 = (-1 - 0)^2 + (0 - (-2))^2 + (1 - (-4))^2 = (-1)^2 + 2^2 + 5^2 = 1+4+25 = 30
+\end{align*}
+By symmetry $D_{ij} = D_{ji}$.
+
+\subsubsection*{\normalfont}{$\therefore D = \begin{bmatrix} 0 & 12 & 66 \\ 12 & 0 & 30 \\ 66 & 30 & 0 \end{bmatrix}$}
+
+\subsubsection*{Graduate Level Explanation}
+This matrix represents the raw geometry of the point cloud invariant to rotation and translation. However, $D$ itself is not positive semi-definite (PSD). In spectral clustering and MDS, we typically operate on affinity or Gram matrices which are PSD. The transformation from $D$ (squared distances) to a Gram matrix involves a specific geometric mapping known as "Double Centering."
+
+\subsubsection*{Learn Fast Explanation}
+We are just using the Pythagorean theorem here. $a^2 + b^2 + c^2 = distance^2$. The matrix is symmetric because the distance from me to you is the same as the distance from you to me.
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+
+%------------------
+% Solution for 3(b)
+%------------------
+\subsection*{Solution 3}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 3 (b)}
+\begin{flushleft}
+    Consider the following three points in $\mathbb{R}^3$:
+
+\[
+x = \begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix}, \quad
+y = \begin{bmatrix}-1 \\ 0 \\ 1\end{bmatrix}, \quad
+z = \begin{bmatrix}0 \\ -2 \\ -4\end{bmatrix}
+\]
+
+\end{flushleft}
+\begin{flushleft}
+
+What is the appropriate $H$ matrix for this situation?
+  
+\end{flushleft}
+
+\subsubsection*{Solution 3 (b)}
+$H$ is the centering matrix defined as $H = I - \frac{1}{n}\mathbf{1}\mathbf{1}^T$, where $I$ is the identity matrix, $n$ is the number of points, and $\mathbf{1}$ is a column vector of ones.
+Here, $n=3$.
+
+$$ H = \begin{bmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix} - \frac{1}{3}\begin{bmatrix} 1 \\ 1 \\ 1 \end{bmatrix}\begin{bmatrix} 1 & 1 & 1 \end{bmatrix} $$
+
+$$ H = \begin{bmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix} - \begin{bmatrix} 1/3 & 1/3 & 1/3 \\ 1/3 & 1/3 & 1/3 \\ 1/3 & 1/3 & 1/3 \end{bmatrix} $$
+
+\subsubsection*{\normalfont}{$\therefore H = \begin{bmatrix} 2/3 & -1/3 & -1/3 \\ -1/3 & 2/3 & -1/3 \\ -1/3 & -1/3 & 2/3 \end{bmatrix}$}
+
+\subsubsection*{Graduate Level Explanation}
+The matrix $H$ is an idempotent projection matrix ($H^2 = H$). Geometrically, it projects any vector onto the subspace orthogonal to the vector $\mathbf{1} = [1, 1, 1]^T$. When applied to a data matrix, it removes the mean (centers the data). When applied to a distance matrix (as in MDS), it effectively places the origin at the geometric centroid of the points.
+
+\subsubsection*{Learn Fast Explanation}
+$H$ stands for "Centering." Think of it as a tool that shifts the camera so that the "average" of all points is exactly at $(0,0,0)$.
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 3(c)
+%------------------
+\subsection*{Solution 3}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 3 (c)}
+\begin{flushleft}
+    Consider the following three points in $\mathbb{R}^3$:
+
+\[
+x = \begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix}, \quad
+y = \begin{bmatrix}-1 \\ 0 \\ 1\end{bmatrix}, \quad
+z = \begin{bmatrix}0 \\ -2 \\ -4\end{bmatrix}
+\]
+
+\end{flushleft}
+\begin{flushleft}
+
+Compute $-\frac{1}{2}HDH$. What do you get?
+    
+\end{flushleft}
+
+\subsubsection*{Solution 3 (c)}
+This operation converts the squared distance matrix into the centered Gram matrix $B$.
+$$ B = -\frac{1}{2} H D H $$
+Performing the matrix multiplication:
+1. $DH = \begin{bmatrix} 0 & 12 & 66 \\ 12 & 0 & 30 \\ 66 & 30 & 0 \end{bmatrix} \begin{bmatrix} 2/3 & -1/3 & -1/3 \\ -1/3 & 2/3 & -1/3 \\ -1/3 & -1/3 & 2/3 \end{bmatrix} = \begin{bmatrix} -26 & -14 & 40 \\ -2 & 14 & -12 \\ 34 & -12 & -22 \end{bmatrix}$
+
+2. $H(DH) = \begin{bmatrix} 2/3 & -1/3 & -1/3 \\ -1/3 & 2/3 & -1/3 \\ -1/3 & -1/3 & 2/3 \end{bmatrix} \begin{bmatrix} -26 & -14 & 40 \\ -2 & 14 & -12 \\ 34 & -12 & -22 \end{bmatrix} = \begin{bmatrix} -28 & -4 & 32 \\ -4 & -4 & 8 \\ 32 & 8 & -40 \end{bmatrix}$
+
+3. Multiply by $-\frac{1}{2}$:
+$$ B = -\frac{1}{2} \begin{bmatrix} -28 & -4 & 32 \\ -4 & -4 & 8 \\ 32 & 8 & -40 \end{bmatrix} $$
+
+\subsubsection*{\normalfont}{$\therefore \begin{bmatrix} 14 & 2 & -16 \\ 2 & 2 & -4 \\ -16 & -4 & 20 \end{bmatrix}$}
+
+\subsubsection*{Graduate Level Explanation}
+This result is the Gram Matrix $B$ where $B_{ij} = \langle x_i - \mu, x_j - \mu \rangle$.
+We can verify this via the Law of Cosines relation used in MDS:
+$x_i^T x_j = -\frac{1}{2} (d_{ij}^2 - d_{i \cdot}^2 - d_{\cdot j}^2 + d_{\cdot \cdot}^2)$. The matrix operations $HDH$ perform this "double centering" automatically, subtracting row means and column means from the distance matrix to recover the inner products.
+
+\subsubsection*{Learn Fast Explanation}
+We just converted "relative distances" (how far points are from each other) into "absolute coordinates" (how far points are from the center). The result tells us the dot product between every pair of points.
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 3(d)
+%------------------
+\subsection*{Solution 3}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 3 (d)}
+\begin{flushleft}
+    Consider the following three points in $\mathbb{R}^3$:
+
+\[
+x = \begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix}, \quad
+y = \begin{bmatrix}-1 \\ 0 \\ 1\end{bmatrix}, \quad
+z = \begin{bmatrix}0 \\ -2 \\ -4\end{bmatrix}
+\]
+
+\end{flushleft}
+\begin{flushleft}
+
+Is the answer in (c) the correct Gram matrix for the data?
+    
+\end{flushleft}
+
+\subsubsection*{Solution 3 (d)}
+Yes.
+The definition of the Gram matrix for a set of vectors $X$ is $G = XX^T$.
+Let us calculate $XX^T$ directly for the provided points:
+$$ x = \begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix}, y = \begin{bmatrix}-1 \\ 0 \\ 1\end{bmatrix}, z = \begin{bmatrix}0 \\ -2 \\ -4\end{bmatrix} $$
+$$ X = \begin{bmatrix} 1 & 2 & 3 \\ -1 & 0 & 1 \\ 0 & -2 & -4 \end{bmatrix} $$
+The dot products are:
+$x \cdot x = 1^2 + 2^2 + 3^2 = 14$ \\
+$x \cdot y = -1 + 0 + 3 = 2$ \\
+$x \cdot z = 0 - 4 - 12 = -16$ \\
+... and so on.
+
+The result matches the matrix from part (c) exactly.
+Note: The operation in (c) produces the Gram matrix of the \textit{centered} data. Since the mean of the original points is $\vec{0}$, the centered Gram matrix and the original Gram matrix are identical.
+
+\subsubsection*{\normalfont}{$\therefore$ Yes, it matches $X X^T$ exactly.}
+
+\subsubsection*{Graduate Level Explanation}
+Usually, Classical MDS recovers the Gram matrix of the centered coordinates. If the original data had a non-zero mean $\mu$, the result of (c) would be $(X - \mathbf{1}\mu^T)(X - \mathbf{1}\mu^T)^T$, while the "true" Gram matrix would be $XX^T$. They would differ by rank-1 updates related to the mean. However, in this specific problem instance, $\sum x_i = \vec{0}$, so the data manifold is already centered at the origin, making the two matrices equivalent.
+
+\subsubsection*{Learn Fast Explanation}
+Yes. We proved it by doing it the hard way (using $H$ and $D$) and the easy way (just multiplying the point vectors directly). We got the same numbers both times.
+
+\noindent\rule{\textwidth}{0.4pt}\\
+\newpage
+
+%------------------
+% Solution for 4(a)
+%------------------
+\subsection*{Solution 4}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 4 (a)}
+\begin{flushleft}
+    A set of $n$ points in $\mathbb{R}^d$ is orthonormal: that is, each point has unit length and the points are orthogonal to one another.
+
+\end{flushleft}
+\begin{flushleft}
+    What is the Gram matrix for this data? Be sure to specify its dimension clearly.
+    
+\end{flushleft}
+
+\subsubsection*{Solution 4 (a)}
+Let the points be vectors $x_1, \ldots, x_n$.
+The definition of \textbf{orthonormal} is:
+1. Orthogonal: The dot product of distinct vectors is zero ($x_i^T x_j = 0$ for $i \neq j$).
+2. Normal: The length of each vector is one ($x_i^T x_i = ||x_i||^2 = 1$).
+
+The Gram matrix $G$ is defined as $G_{ij} = x_i^T x_j$.
+Applying the definition:
+\begin{itemize}
+    \item Diagonal entries ($i=j$): $G_{ii} = x_i^T x_i = 1$.
+    \item Off-diagonal entries ($i \neq j$): $G_{ij} = x_i^T x_j = 0$.
+\end{itemize}
+Thus, $G$ is the Identity matrix.
+
+\subsubsection*{\normalfont}{$\therefore G = I_n$ (The $n \times n$ Identity Matrix)}
+
+
+
+%------------------
+% Solution for 4(b)
+%------------------
+\subsection*{Solution 4}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 4 (b)}
+\begin{flushleft}
+    A set of $n$ points in $\mathbb{R}^d$ is orthonormal: that is, each point has unit length and the points are orthogonal to one another.
+
+\end{flushleft}
+\begin{flushleft}
+
+What is the matrix of squared interpoint distances?
+  
+\end{flushleft}
+
+
+\subsubsection*{Solution 4 (b)}
+The squared Euclidean distance between two vectors $x_i$ and $x_j$ is given by the expansion:
+$$ ||x_i - x_j||^2 = (x_i - x_j)^T (x_i - x_j) $$
+$$ = x_i^T x_i - 2x_i^T x_j + x_j^T x_j $$
+Substitute the orthonormal properties from part (a):
+\begin{itemize}
+    \item If $i = j$: $||x_i - x_i||^2 = 0$.
+    \item If $i \neq j$: $||x_i - x_j||^2 = 1 - 2(0) + 1 = 2$.
+\end{itemize}
+Therefore, the squared distance matrix $D$ has $0$ on the diagonal and $2$ everywhere else.
+
+\subsubsection*{\normalfont}{$\therefore D = 2(\mathbf{1}\mathbf{1}^T - I) = \begin{bmatrix} 0 & 2 & \dots & 2 \\ 2 & 0 & \dots & 2 \\ \vdots & \vdots & \ddots & \vdots \\ 2 & 2 & \dots & 0 \end{bmatrix}$}
+
+\subsubsection*{Graduate Level Explanation}
+This geometry describes a \textbf{Regular Simplex}. The points form the vertices of a generalized equilateral triangle (or tetrahedron) in high-dimensional space. Every point is equidistant from every other point. This is a common initialization state in high-dimensional spaces (e.g., "one-hot" encoding of words in NLP often approximates this geometry before training embeddings).
+
+\subsubsection*{Learn Fast Explanation}
+Imagine the corners of a cube (but in higher dimensions). They are all "unit length" away from the center. The distance between any two distinct corners (that are connected by an edge) is exactly $\sqrt{2}$, so the squared distance is 2.
+
+\newpage
+
+%------------------
+% Solution for 5(a)
+%------------------
+\subsection*{Solution 5}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 5 (a)}
+\begin{flushleft}
+Show the 2-d embedding of the distance matrix obtained by cMDS. Here are the steps to follow:
+\begin{itemize}
+\item Write a function that implements the classical MDS algorithm from the lecture slides, taking as input a matrix of interpoint distances $D$ and a target embedding dimension $k$.In order
+to perform the eigendecomposition, you can use np.linalg.eigh, although note that this
+returns eigenvalues in increasing rather than decreasing order.
+\item Write a function that takes a 2-d embedding of the points and plots them, annotating each point with the corresponding city name. he function matplotlib.pyplot.annotate is
+useful for these annotations.
+\end{itemize}
+\end{flushleft}
+
+\subsubsection*{Solution 5 (a)}
+
+\subsubsection*{Python Code for d=10}
+\begin{lstlisting}
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.metrics import euclidean_distances
+
+def cmdscale(D_squared, k=2):
+    """
+    Classical Multidimensional Scaling (cMDS)
+    Parameters:
+    D_squared (n x n): Matrix of squared interpoint distances
+    k (int): Target dimension
+    
+    Returns:
+    Y (n x k): Projected coordinates
+    """
+    n = D_squared.shape[0]
+    
+    # 1. Compute Centering Matrix H
+    H = np.eye(n) - (1/n) * np.ones((n, n))
+    
+    # 2. Compute B = -1/2 * H * D_squared * H
+    B = -0.5 * H @ D_squared @ H
+    
+    # 3. Spectral Decomposition
+    # np.linalg.eigh returns eigenvalues in ASCENDING order
+    evals, evecs = np.linalg.eigh(B)
+    
+    # Sort DESCENDING (Flip arrays)
+    idx = np.argsort(evals)[::-1]
+    evals = evals[idx]
+    evecs = evecs[:, idx]
+    
+    # 4. Zero out negative eigenvalues (for non-Euclidean noise)
+    # This matches Step 3 of your lecture notes
+    evals_pos = np.maximum(evals, 0)
+    
+    # 5. Compute Coordinates Y
+    # Diagonal matrix of sqrt(eigenvalues)
+    Lambda_sqrt = np.diag(np.sqrt(evals_pos))
+    
+    # Project: Y = U * Lambda^1/2
+    Y = evecs @ Lambda_sqrt
+    
+    # 6. Return first k columns
+    return Y[:, :k]
+
+# --- Data Loading / Simulation ---
+# If you don't have cities.txt, we use this dummy data
+# 1. Read the whole file as a single list of words/numbers
+# .split() automatically ignores newlines and spaces!
+raw_data = open('cities.txt').read().split()
+
+# 2. Extract names (Indices might need adjustment based on where "# Cities:" falls)
+# Assuming the file starts with "# Cities: City1 City2..."
+# The first distinct city name is usually at index 2 or 3 depending on the hash.
+city_names = raw_data[2:12] 
+
+# 3. Extract the numbers and reshape
+# Everything after the names is the matrix
+matrix_values = [float(x) for x in raw_data[12:]]
+D = np.array(matrix_values).reshape(10, 10)
+D_squared = D ** 2
+
+# --- Run MDS ---
+# Project 2D coordinates
+Y_k = cmdscale(D_squared, k=2)
+
+# --- Rotation (Optional) ---
+# MDS output has arbitrary rotation. We can rotate it manually to look like a map.
+def rotate(points, angle_degrees):
+    theta = np.radians(angle_degrees)
+    c, s = np.cos(theta), np.sin(theta)
+    R = np.array([[c, -s], [s, c]])
+    return points @ R.T
+
+# Try changing this angle if the map looks upside down!
+Y_rotated = rotate(Y_k, angle_degrees=180) 
+
+# --- Plotting ---
+plt.figure(figsize=(10, 6))
+plt.scatter(Y_rotated[:, 0], Y_rotated[:, 1], c='blue', s=100)
+
+# FIX: Use 'city_names' instead of 'names'
+for i, name in enumerate(city_names): 
+    plt.annotate(name, (Y_rotated[i, 0], Y_rotated[i, 1]), 
+                 xytext=(5, 5), textcoords='offset points')
+
+plt.title("Reconstructed Map from Distance Matrix (MDS)")
+plt.grid(True)
+plt.axis('equal') 
+plt.show()
+
+# Verification
+print("Reconstruction successful. Shape:", Y_k.shape)
+\end{lstlisting}
+
+\newpage
+
+\subsubsection*{Plot}
+
+\begin{figure}[h]
+  \includegraphics[width=\textwidth]{q5a.png}
+  \caption{Plot of cities.txt}
+\end{figure}
+
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 5(b)
+%------------------
+\subsection*{Solution 5}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 5 (b)}
+\begin{flushleft}
+he embedding returned by cMDS (or any other multidimensional scaling method) is not unique:
+any rotation or translation of the points will produce the same interpoint distances. For this
+reason, your plot in (a) is unlikely to correspond to our own map of Europe. Show a rotated
+version of points that ﬁts our own map more closely. Here are the steps to follow:
+\begin{itemize}
+\item Write a function that implements the classical MDS algorithm from the lecture slides, taking as input a matrix of interpoint distances $D$ and a target embedding dimension $k$.In order
+to perform the eigendecomposition, you can use np.linalg.eigh, although note that this
+returns eigenvalues in increasing rather than decreasing order.
+\item Write a function that takes a 2-d embedding of the points and plots them, annotating each point with the corresponding city name. he function matplotlib.pyplot.annotate is
+useful for these annotations.
+\end{itemize}
+\end{flushleft}
+\begin{flushleft}
+    \item Write a function that takes a 2-d data set and an angle, and rotates each of the points through that angle.
+\item Play around with the angle until you find something suitable.
+\end{flushleft}
+$$
+\begin{bmatrix}
+    \text{cos}(\theta) & -\text{sin}(\theta) \\
+    \text{sin}(\theta) & \text{cos}(\theta) 
+\end{bmatrix}
+$$
+Play around with the angle until you ﬁnd something suitable.
+
+\subsubsection*{Solution 5 (b)}
+
+\subsubsection*{Python Code}
+\begin{lstlisting}
+# --- 2. MDS Function ---
+def cmdscale(D, k=2):
+    """
+    Classical MDS: Projects n points into k-dimensional space.
+    """
+    n = D.shape[0]
+    H = np.eye(n) - (1/n) * np.ones((n, n))
+    B = -0.5 * H @ D @ H
+    
+    evals, evecs = np.linalg.eigh(B)
+    
+    # Sort descending
+    idx = np.argsort(evals)[::-1]
+    evals = evals[idx]
+    evecs = evecs[:, idx]
+    
+    # Project
+    w_pos = np.maximum(evals, 0)
+    Y = evecs @ np.diag(np.sqrt(w_pos))
+    return Y[:, :k]
+
+# --- 3. Rotation Function (The Homework Requirement) ---
+def rotate_data(X, angle_degrees):
+    """
+    Rotates 2D data X by angle_degrees (counter-clockwise).
+    """
+    theta = np.radians(angle_degrees)
+    c, s = np.cos(theta), np.sin(theta)
+    
+    # Rotation Matrix
+    R = np.array([[c, -s], 
+                  [s,  c]])
+    
+    # Apply R to every point. 
+    # Since X is (N x 2), we compute (R @ X.T).T or simply X @ R.T
+    return X @ R.T
+
+# --- 4. Plotting Function ---
+def plot_map(X, labels, title="MDS Map"):
+    plt.figure(figsize=(8, 8))
+    plt.scatter(X[:, 0], X[:, 1], c='red', marker='o')
+    
+    for i, txt in enumerate(labels):
+        plt.annotate(txt, (X[i, 0], X[i, 1]), 
+                     xytext=(5, 5), textcoords='offset points')
+        
+    plt.title(title)
+    plt.grid(True)
+    plt.axis('equal')
+    plt.show()
+
+# --- Execution ---
+# 1. Get raw MDS coordinates
+Y_raw = cmdscale(D_squared)
+
+# 2. Rotate
+# Trial and Error: 190 degrees usually flips it "North-Up" for this specific data
+best_angle = 190 
+Y_rotated = rotate_data(Y_raw, best_angle)
+
+# OPTIONAL: Reflection
+# If the map is mirrored (e.g. London is East of Berlin), uncomment this:
+# Y_rotated[:, 0] = -Y_rotated[:, 0] 
+
+# 3. Plot
+plot_map(Y_rotated, city_names, title=f"European Cities (Rotated {best_angle} degrees)")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection*{Plot}
+
+\begin{figure}[h]
+  \includegraphics[width=\textwidth]{q5b.png}
+  \caption{Plot 5b}
+\end{figure}
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+%------------------
+% Solution for 5(c)
+%------------------
+\subsection*{Solution 5}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 5 (c)}
+\begin{flushleft}
+    here are many other algorithms for multidimensional scaling. Some of them work by deﬁning a
+“stress function” that captures the disparity between the speciﬁed interpoint distances and a given
+embedding; this stress function is then minimized using gradient descent. One such approach is
+implemented in sklearn.manifold.MDS. Use this to produce an embedding of the distances (use
+the setting dissimilarity='precomputed'), and once again ﬁnd a suitable rotation. Plot the
+embedded points, annotated with city names, before and after rotation.
+\end{flushleft}
+
+\subsubsection*{Solution 2 (b)}
+
+\subsubsection*{Python Code for d=100}
+\begin{lstlisting}
+import numpy as np
+import matplotlib.pyplot as plt
+\end{lstlisting}
+
+\begin{comment}
+\begin{figure}[h]
+  \includegraphics[width=\textwidth]{histogram_d100.png}
+  \caption{Histogram of squared lengths for d=100}
+\end{figure}
+\end{comment}
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 3
+%------------------
+\subsection*{Solution 3}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 3}
+\begin{flushleft}
+    Suppose $X \in \mathbb{R}^2$ has a Gaussian distribution with mean $\begin{bmatrix}1 \\ 2\end{bmatrix}$ and covariance matrix $\begin{bmatrix}2 & 0 \\ 0 & 4\end{bmatrix}$. 
+    What is the distribution of the projection of $X$ onto direction $\frac{1}{\sqrt{2}}\begin{bmatrix}1 \\ 1\end{bmatrix}$? 
+\end{flushleft}
+
+\subsubsection*{Solution 3}
+
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 4(a)
+%------------------
+\subsection*{Solution 4}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 4 (a)}
+\begin{flushleft}
+    We have three sensors $(X_1, X_2, X_3)$ whose joint distribution is Gaussian with mean zero and covariance matrix 
+    \[
+    \begin{bmatrix}
+    6 & 3 & 1 \\
+    3 & 9 & 0 \\
+    1 & 0 & 2
+    \end{bmatrix}
+    \]
+    What is the distribution of sensor $X_3$? 
+\end{flushleft}
+
+\subsubsection*{Solution 4 (a)}
+
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 4(b)
+%------------------
+\subsection*{Solution 4}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 4 (b)}
+\begin{flushleft}
+    We have three sensors $(X_1, X_2, X_3)$ whose joint distribution is Gaussian with mean zero and covariance matrix 
+    \[
+    \begin{bmatrix}
+    6 & 3 & 1 \\
+    3 & 9 & 0 \\
+    1 & 0 & 2
+    \end{bmatrix}
+    \]
+    What is the joint distribution of sensors $X_1, X_2$? 
+\end{flushleft}
+
+\subsubsection*{Solution 4 (b)}
+
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 4(c)
+%------------------
+\subsection*{Solution 4}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 4 (c)}
+\begin{flushleft}
+    We have three sensors $(X_1, X_2, X_3)$ whose joint distribution is Gaussian with mean zero and covariance matrix 
+    \[
+    \begin{bmatrix}
+    6 & 3 & 1 \\
+    3 & 9 & 0 \\
+    1 & 0 & 2
+    \end{bmatrix}
+    \]
+    Suppose we observe $X_2=2$ and $X_3=1$. 
+    What is the resulting conditional distribution of $X_1$? 
+\end{flushleft}
+
+\subsubsection*{Solution 4 (c)}
+
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 5(a)
+%------------------
+\subsection*{Solution 5}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 5 (a)}
+\begin{flushleft}
+    \textbf{Modeling temperature data with Gaussian processes.} In this question, we will explore modeling of geospatial data via Gaussian processes. 
+    Begin by downloading the files \texttt{gptrain.csv} and \texttt{gptest.csv} from the course webpage. 
+    Each row in each file corresponds to a temperature reading at a given weather station in Brazil at 2 pm on January 1, 2021. The first column gives the latitude of the station, the second the longitude, and the final column is the temperature reading in degrees Celsius. 
+    We will fit a simple Gaussian Process model on \texttt{gptrain.csv} and use it to infer temperatures at other locations at that same date and time. 
+    We will fit a Gaussian process with covariance function 
+    \[
+    k(x, x') = \exp\left(\frac{-\|x-x'\|}{\sigma}\right)
+    \]
+    and mean function $m(x) = 20$ (degrees Celsius). 
+    Here $\|x-x'\|$ denotes Euclidean distance between raw latitude and longitude coordinates. 
+    Denote the locations in \texttt{gptrain.csv} by $X_{\text{tr}}$ and the temperatures at those locations by $y_{\text{tr}}$; 
+    define $X_{\text{te}}, y_{\text{te}}$ analogously for \texttt{gptest.csv}. Thus $X_{\text{tr}}$ is a $93 \times 2$ matrix while $y_{\text{tr}}$ is a 93-dimensional vector. 
+    
+    The joint distribution of training and test responses can be written as 
+    \[
+    \begin{bmatrix} y_{\text{tr}} \\ y_{\text{te}} \end{bmatrix} \sim N\left(\begin{bmatrix} 20 \\ \vdots \\ 20 \end{bmatrix}, \begin{bmatrix} K_{\text{tr}} & K_{\text{tr,te}} \\ K_{\text{te,tr}} & K_{\text{te}} \end{bmatrix}\right)
+    \]
+    where the block matrix 
+    \[
+    \begin{bmatrix} K_{\text{tr}} & K_{\text{tr,te}} \\ K_{\text{te,tr}} & K_{\text{te}} \end{bmatrix}
+    \]
+    is the matrix arising from all pairwise evaluations of the covariance function $k(\cdot)$ over all training and testing locations, and its diagonal components $K_{\text{tr}}$ 
+    and $K_{\text{te}}$ are the matrices arising from all pairwise covariances within the training and test sets, respectively. 
+    Explain very briefly how the definition of Gaussian process allows us to come to this conclusion. 
+\end{flushleft}
+
+\subsubsection*{Solution 5 (a)}
+
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 5(b)
+%------------------
+\subsection*{Solution 5}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 5 (b)}
+\begin{flushleft}
+    \textbf{Modeling temperature data with Gaussian processes.} ... [Intro text from 5(a)  
+    
+    Define 
+    \[
+    m_{\text{te}} := \begin{bmatrix} 20 \\ \vdots \\ 20 \end{bmatrix} \in \mathbb{R}^{11}
+    \]
+    since there are 11 locations in the test set. 
+    Using properties of the Gaussian, it can be shown that the distribution of test responses given training locations, training responses, and test locations, follows 
+    \[
+    y_{\text{te}} \mid y_{\text{tr}}, X_{\text{te}}, X_{\text{tr}} \sim m_{\text{te}} + N\left(K_{\text{te,tr}} \cdot K_{\text{tr}}^{-1}(y_{\text{tr}} - m_{\text{tr}}), K_{\text{te}} - K_{\text{te,tr}} K_{\text{tr}}^{-1} K_{\text{tr,te}}\right)
+    \]
+    In Bayesian language, this is the posterior predictive distribution. 
+    \begin{itemize}
+        \item Using $X_{\text{tr}}, X_{\text{te}}$, and $y_{\text{tr}}$, compute the posterior mean of $y_{\text{te}}$ via matrix multiplication, using $\sigma=1.5$ in the covariance function. 
+        Report the mean squared error between your computed posterior mean and the true values found in $y_{\text{te}}$. 
+        \item Report the mean squared error that you would have obtained by simply predicting the average value in $y_{\text{tr}}$ for all locations. 
+    \end{itemize}
+\end{flushleft}
+
+\subsubsection*{Solution 5 (b)}
+
+\subsubsection*{Python Code for Posterior Mean and MSE}
+\begin{lstlisting}
+import numpy as np
+import pandas as pd
+from scipy.spatial.distance import cdist
+\end{lstlisting}
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 5(c)
+%------------------
+\subsection*{Solution 5}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 5 (c)}
+\begin{flushleft}
+    \textbf{Modeling temperature data with Gaussian processes.} 
+    
+    The diagonal of the posterior predictive matrix 
+    \[
+    K_{\text{te}} - K_{\text{te,tr}} K_{\text{tr}}^{-1} K_{\text{tr,te}}
+    \]
+    gives the conditional variances of the test responses given $X_{\text{tr}}, X_{\text{te}}$, and $y_{\text{tr}}$. 
+    \begin{itemize}
+        \item Create a rich grid (at least 5000 points) of test latitudes and longitudes within the range found in the training set. 
+        Make a plot showing the predicted (posterior mean) temperature at all points in the grid. 
+        You might find the function \texttt{matplotlib.pyplot.imshow} helpful for this. 
+        \item Make another plot showing the standard deviation of the prediction at all points in the grid. 
+        Plot the locations of the stations found in the training set as well. 
+        \item What do you notice about the relationship of the standard deviation of the prediction and the distance of that prediction to a training point? 
+    \end{itemize}
+\end{flushleft}
+
+\subsubsection*{Solution 5 (c)}
+
+\subsubsection*{Python Code for Grid Predictions and Plots}
+\begin{lstlisting}
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from scipy.spatial.distance import cdist
+\end{lstlisting}
+
+\begin{comment}
+\begin{figure}[h]
+  \includegraphics[width=\textwidth]{gp_mean_plot.png}
+  \caption{Posterior Mean Temperature Grid}
+\end{figure}
+\begin{figure}[h]
+  \includegraphics[width=\textwidth]{gp_std_plot.png}
+  \caption{Posterior Standard Deviation Grid}
+\end{figure}
+\end{comment}
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 6(a)
+%------------------
+\subsection*{Solution 6}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 6 (a)}
+\begin{flushleft}
+    \textbf{Four friends} $F_1, F_2, F_3, F_4$ like going to the movies. 
+    When a new movie comes out, they behave according to the following scheme: 
+    \begin{itemize}
+    \item $F_1$ sees the movie with probability 0.5. 
+    \item $F_2$ sees the movie with probability 0.7, independently. 
+    \item If either of $F_1$ or $F_2$ (or both) see the movie, $F_3$ goes to see it with probability 0.8; 
+    if neither $F_1$ nor $F_2$ sees the movie, $F_3$ sees it with probability 0.3. 
+    \item If $F_3$ sees the movie, then $F_4$ goes to see it with probability 0.9. 
+    If $F_3$ doesn't see the movie, then $F_4$ sees it with probability 0.5. 
+    \end{itemize}
+
+    Let $F_1, F_2, F_3, F_4 \in \{0,1\}$ denote who sees the movie. 
+    The dependencies between these four random variables can be captured by the following directed graph: 
+
+    \begin{center}
+    \begin{tikzpicture}[node distance=1.5cm]
+        \node[circle, draw] (F1) {$F_1$}; 
+        \node[circle, draw, below=of F1] (F2) {$F_2$}; 
+        \node[circle, draw, right=of F1] (F3) {$F_3$};
+        \node[circle, draw, below=of F3] (F4) {$F_4$};
+        \draw[-Stealth] (F1) -- (F3); 
+        \draw[-Stealth] (F2) -- (F3); 
+        \draw[-Stealth] (F3) -- (F4); 
+    \end{tikzpicture}
+    \end{center}
+
+    Give the conditional probability tables for this Bayes net. 
+\end{flushleft}
+
+\subsubsection*{Solution 6 (a)}
+
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 6(b)
+%------------------
+\subsection*{Solution 6}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 6 (b)}
+\begin{flushleft}
+    \textbf{Four friends} ... [Intro text from 6(a)  
+
+    \begin{center}
+    \begin{tikzpicture}[node distance=1.5cm]
+        \node[circle, draw] (F1) {$F_1$}; 
+        \node[circle, draw, below=of F1] (F2) {$F_2$}; 
+        \node[circle, draw, right=of F1] (F3) {$F_3$};
+        \node[circle, draw, below=of F3] (F4) {$F_4$};
+        \draw[-Stealth] (F1) -- (F3); 
+        \draw[-Stealth] (F2) -- (F3); 
+        \draw[-Stealth] (F3) -- (F4); 
+    \end{tikzpicture}
+    \end{center}
+
+    What is the probability of the configuration $F_1 = F_2 = F_3 = 1, F_4 = 0$? 
+\end{flushleft}
+
+\subsubsection*{Solution 6 (b)}
+
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 7
+%------------------
+\subsection*{Solution 7}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 7}
+\begin{flushleft}
+    \textbf{Non-uniqueness of underlying DAG.} Suppose random variables $X$ and $Y$ take values in $\{0,1\}$. 
+    Does the joint distribution of $(X, Y)$ necessarily factor over the DAG on the left below? 
+    What about the DAG on the right? 
+
+    \begin{center}
+    \begin{tikzpicture}[node distance=1.5cm]
+        \node[circle, draw] (F1) {$X$}; 
+        \node[circle, draw, right=of F1] (F3) {$Y$}; 
+        \node[circle, draw, right=of F3] (F2) {$X$};
+        \node[circle, draw, right=of F2] (F4) {$Y$};
+        \draw[-Stealth] (F1) -- (F3); 
+        \draw[-Stealth] (F4) -- (F2); 
+    \end{tikzpicture}
+    \end{center}
+\end{flushleft}
+
+\subsubsection*{Solution 7}
+
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 8(a)
+%------------------
+\subsection*{Solution 8}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 8 (a)}
+\begin{flushleft}
+    \textbf{Genes, diseases, and outcomes.} There is a fictitious disease $(D)$ that can cause paralysis $(P)$. 
+    Whether or not an individual gets this disease depends in large part on two genes, $G_1$ and $G_2$. 
+    Here is a summary: 
+
+    \begin{itemize}
+    \item Each of these genes $G_1, G_2$ can either be normal (also known as wild-type), represented by $G_i=0$, or mutant, represented by $G_i=1$. 
+    \item For a person with $G_1=G_2=0$ (both genes wild-type) the probability of acquiring the disease is zero. 
+    If $G_1$ is mutant and $G_2$ is wild-type, the probability is 0.2. 
+    If $G_1$ is wild-type and $G_2$ is mutant, it is 0.1. 
+    And if both genes are mutant, then the disease probability is 0.5. 
+    \item For an individual with the disease, the probability of paralysis is 0.5. 
+    Without the disease, there is still a small probability of paralysis (from other causes): 0.01. 
+    \item $G_1$ is mutant with probability 0.1 and $G_2$ is mutant with probability 0.2; these are independent. 
+    \end{itemize}
+
+    Draw a suitable Bayes net over the variables $G_1, G_2, D, P$, and give all relevant conditional probability tables. 
+    Let $D=1$ if the disease is present and $D=0$ if it isn't; likewise with paralysis. 
+\end{flushleft}
+
+\subsubsection*{Solution 8 (a)}
+
+\subsubsection*{Bayes Net Diagram}
+\begin{comment}
+    \begin{center}
+    \begin{tikzpicture}[node distance=1.5cm]
+        \node[circle, draw] (G1) {$G_1$};
+        \node[circle, draw, below=of G1] (G2) {$G_2$};
+        \node[circle, draw, right=of G1] (D) {$D$};
+        \node[circle, draw, below=of D] (P) {$P$};
+        \draw[-Stealth] (G1) -- (D);
+        \draw[-Stealth] (G2) -- (D);
+        \draw[-Stealth] (D) -- (P);
+    \end{tikzpicture}
+    \end{center}
+\end{comment}
+
+\subsubsection*{Conditional Probability Tables}
+
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 8(b)
+%------------------
+\subsection*{Solution 8}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 8 (b)}
+\begin{flushleft}
+    \textbf{Genes, diseases, and outcomes.} ... [Intro text from 8(a)  
+
+    What is the probability of disease $(D=1)$? 
+\end{flushleft}
+
+\subsubsection*{Solution 8 (b)}
+
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 8(c)
+%------------------
+\subsection*{Solution 8}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 8 (c)}
+\begin{flushleft}
+    \textbf{Genes, diseases, and outcomes.} ... [Intro text from 8(a)  
+
+    What is the probability of paralysis $(P=1)$? 
+\end{flushleft}
+
+\subsubsection*{Solution 8 (c)}
+
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 8(d)
+%------------------
+\subsection*{Solution 8}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 8 (d)}
+\begin{flushleft}
+    \textbf{Genes, diseases, and outcomes.} ... [Intro text from 8(a)  
+
+    We observe that a person has paralysis. What is the probability that they have the disease? 
+\end{flushleft}
+
+\subsubsection*{Solution 8 (d)}
+
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 8(e)
+%------------------
+\subsection*{Solution 8}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 8 (e)}
+\begin{flushleft}
+    \textbf{Genes, diseases, and outcomes.} ... [Intro text from 8(a)  
+
+    We observe that a person has the disease $(D=1)$. 
+    What is the probability that they have the mutant form of gene $G_1$? 
+\end{flushleft}
+
+\subsubsection*{Solution 8 (e)}
+
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 9(a)
+%------------------
+\subsection*{Solution 9}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 9 (a)}
+\begin{flushleft}
+    \textbf{A character-level RNN for text generation.} Download the file \texttt{rnn-gen.zip} from the course webpage; 
+    it contains a Jupyter notebook, \texttt{text-gen-rnn.ipynb}, as well as data and helper files. 
+    The notebook is adapted from an excellent blog post by Andrej Karpathy, \textit{The unreasonable effectiveness of recurrent neural networks}. 
+    It fits an RNN (more precisely, an LSTM) to the text of Shakespeare's plays and then uses this to generate more text, one character at a time. 
+    Work through the notebook and try to understand what is going on. There are just three small questions to answer. 
+    
+    How many characters are we considering, and what is the integer code for 'A'? 
+\end{flushleft}
+
+\subsubsection*{Solution 9 (a)}
+
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 9(b)
+%------------------
+\subsection*{Solution 9}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 9 (b)}
+\begin{flushleft}
+    \textbf{A character-level RNN for text generation.} ... [Intro text from 9(a)  
+
+    What is the length of the corpus in characters? 
+\end{flushleft}
+
+\subsubsection*{Solution 9 (b)}
+
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\newpage
+
+%------------------
+% Solution for 9(c)
+%------------------
+\subsection*{Solution 9}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Question 9 (c)}
+\begin{flushleft}
+    \textbf{A character-level RNN for text generation.} ... [Intro text from 9(a)  
+
+    The input and output size for the RNN are set to 66. Why is this? 
+\end{flushleft}
+
+\subsubsection*{Solution 9 (c)}
+
+
+\subsubsection*{\normalfont}{$\therefore$ }
+
+\noindent\rule{\textwidth}{0.4pt}\\
+
+\end{document}
