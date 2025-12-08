@@ -1,0 +1,237 @@
+\documentclass{article}
+% Required packages
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{tikz}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{comment}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{caption}
+\usepackage{siunitx}
+\usepackage{hyperref}
+\usetikzlibrary{arrows.meta, positioning}
+
+% Set page geometry
+\geometry{a4paper, margin=1in}
+
+% Configure listings for Python
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\footnotesize,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  frame=single,
+  breaklines=true,
+  breakatwhitespace=true,
+  captionpos=b,
+  tabsize=4,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  commentstyle=\color{gray}\textit,
+  keywordstyle=\color{blue}\bfseries,
+  stringstyle=\color{red}
+}
+
+% Header setup
+\pagestyle{fancy}
+\chead{DSC 257: Unsupervised Learning (Fall 2025)}
+\lhead{Homework 10}
+\rhead{Randall Rogers}
+
+\begin{document}
+
+%------------------
+% Solution for 1(a)
+%------------------
+\subsection*{Solution 1}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 1 (a)}
+\subsubsection*{Python Code}
+\begin{lstlisting}
+# Train with latent_dim = 4
+latent_dim = 4  # CHANGED FROM 8 TO 4
+model = VAE(x_dim=784, z_dim=latent_dim).to(device)
+optimizer = optim.Adam(model.parameters())
+
+num_epochs = 10 # 10-20 epochs is usually sufficient for a quick result
+for epoch in range(num_epochs):
+    epoch_loss = 0
+    for batch_idx, (data, _) in enumerate(train_loader):
+        data = data.to(device)
+        optimizer.zero_grad()
+        recon_data, mu, logvar = model(data)
+        loss = loss_function(recon_data, data, mu, logvar)
+        loss.backward()
+        optimizer.step()
+        epoch_loss += loss.item()
+    print(f"Epoch {epoch+1} Loss: {epoch_loss / len(train_dataset):.4f}")
+# Save the model
+torch.save(model.state_dict(), f'vae_mnist_z_{latent_dim}.pth')
+# Generate 100 Samples
+with torch.no_grad():
+    # Sample 100 latent vectors from N(0, I)
+    random_sample = torch.randn(100, latent_dim).to(device)
+    # Decode them
+    generated_image = model.decoder(random_sample)
+    # Save as a 10x10 grid
+    save_image(generated_image.view(100, 1, 28, 28), 
+               f'samples_z_{latent_dim}.png', nrow=10)
+    print(f"Saved generated samples to samples_z_{latent_dim}.png")
+\end{lstlisting}
+
+\subsubsection*{Generated Image}
+\begin{center}
+          \includegraphics[scale=0.8]{q1a.png} % Scales to 50% of original size
+\end{center}
+\noindent\rule{\textwidth}{0.4pt}\\
+\newpage
+
+%------------------
+% Solution for 1(b)
+%------------------
+\subsection*{Solution 1}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 1 (b)}
+\subsubsection*{Python Code}
+\begin{lstlisting}
+import torch
+from torchvision.utils import save_image
+import matplotlib.pyplot as plt
+
+# Set latent dim and number of steps
+latent_dim = 4
+num_steps = 256  
+model.eval()     
+
+with torch.no_grad():
+    # Change range(20) to range(2) to get exactly 2 images
+    for idx in range(2):
+        # Pick random start and end points
+        start_point = torch.randn(1, latent_dim).to(device)
+        end_point = torch.randn(1, latent_dim).to(device)
+
+        # Interpolate 256 points between start and end
+        # This creates a smooth transition vector
+        alphas = torch.linspace(0, 1, num_steps).to(device).unsqueeze(1).unsqueeze(2)
+        interpolated_points = start_point + alphas * (end_point - start_point)
+        # Note: shape is [256, 1, 4]
+
+        # Decode these points into images
+        generated_image = model.decoder(interpolated_points)
+        
+        # Save the grid
+        # nrow=16 makes it a square 16x16 grid
+        filename = f'./samples/latent_exploration_z_{latent_dim}_{idx+1}.png'
+        save_image(generated_image.view(num_steps, 1, 28, 28), 
+                   filename, nrow=16)
+        print(f"Saved {filename}")
+
+# Display the first one to check
+img = plt.imread(f'./samples/latent_exploration_z_{latent_dim}_1.png')
+plt.title(f'Latent space exploration (latent dim {latent_dim})')
+plt.axis('off')
+plt.imshow(img)
+plt.show()
+\end{lstlisting}
+
+\subsubsection*{Generated Image}
+\begin{center}
+          \includegraphics[scale=0.5]{./samples/latent_exploration_z_4_1.png} % Scales to 50% of original size
+\end{center}
+\begin{center}
+          \includegraphics[scale=0.5]{./samples/latent_exploration_z_4_2.png} % Scales to 50% of original size
+\end{center}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+\newpage
+
+%------------------
+% Solution for 2(a)
+%------------------
+\subsection*{Solution 2}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 2 (a)}
+
+To construct the 100-dimensional embeddings, the Positive Pointwise Mutual Information factorization approach was applied to the Brown corpus from the NLTK library. The steps are outlined below:
+
+\begin{enumerate}
+    \item \textbf{Vocabulary ($V$) and Context ($C$):} The top 5,000 most frequent words from the corpus to form the vocabulary $V$. For the context words $C$, the top 1,000 most frequent words were selected
+    \item \textbf{Window Definition:} The context window was defined as a symmetric window of size 2 (i.e., 2 words preceding and 2 words succeeding the target word).
+    \item \textbf{Co-occurrence Matrix Construction:} A $5000 \times 1000$ raw count matrix $M$ where $M_{ij}$ represents the number of times context word $c_j$ appeared within the window of target word $w_i$.
+    \item \textbf{PPMI Reweighting:} $M$ was converted to a PPMI matrix where each entry is calculated as $\max(\log(\frac{P(w,c)}{P(w)P(c)}), 0)$. This calculation reweights the entries to represent the likelihood that two words are to co-occur than by random chance.
+    \item \textbf{Dimensionality Reduction (SVD):} Singular Value Decomposition (SVD) on the sparse PPMI matrix to obtain the rank-100 approximation: $M_{PPMI} \approx U \Sigma V^T$. 
+\end{enumerate}
+
+\subsubsection*{\normalfont}{$\therefore$ The $\mathbb{R}^{100}$ is just the representation of the dimensionality reduction of the original $\mathbb{R}^{5000}$ space.}
+\noindent\rule{\textwidth}{0.4pt}\\
+\newpage
+
+%------------------
+% Solution for 2(b)
+%------------------
+\subsection*{Solution 2}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 2 (b)}
+
+Using Cosine Distance ($1 - \text{similarity}$), the nearest neighbor was found for 20 test words.  Below is a subset of the results:
+
+\begin{itemize}
+    \item \textbf{School} $\to$ \textit{College} (Related institution)
+    \item \textbf{Music} $\to$ \textit{Jazz} (Category/Instance relationship)
+    \item \textbf{Government} $\to$ \textit{Administration} (Synonym)
+    \item \textbf{War} $\to$ \textit{Military} (Thematic relation)
+    \item \textbf{He} $\to$ \textit{She} (Syntactic role/pronoun)
+    \item \textbf{Book} $\to$ \textit{Novel} (Synonym)
+    \item \textbf{Car} $\to$ \textit{Driver} (Functional relationship)
+    \item \textbf{Water} $\to$ \textit{Air} (Elemental relationship)
+    \item \textbf{Night} $\to$ \textit{Day} (Antonym/Temporal pair)
+    \item \textbf{Love} $\to$ \textit{Life} (Thematic association)
+\end{itemize}
+
+\subsection*{\normalfont}{$\therefore$ The embedding successfully captures semantic proximity.}
+
+\noindent\rule{\textwidth}{0.4pt}\\
+\newpage
+
+%------------------
+% Solution for 2(c)
+%------------------
+\subsection*{Solution 2}
+\noindent\rule{\textwidth}{0.4pt}\\
+\subsubsection*{Solution 2 (c)}
+
+The K-Means Clustering algorithm to group the 100-dimensional embeddings into $k=100$ clusters. 
+
+\subsubsection*{Algorithm and Distance Choice}
+\begin{itemize}
+    \item \textbf{Algorithm: K-Means.} I chose K-Means because it is computationally efficient for a vocabulary size of $N=5000$ and it produces hard partitions, which simplifies the qualitative analysis of the word groups.
+    \item \textbf{Distance Function: Euclidean (on L2-normalized vectors).} Standard K-Means optimizes for Euclidean distance. Euclidean distance and Cosine distance are monotonically related by:
+    $$||x-y||^2 = 2(1 - \cos\theta)$$
+\end{itemize}
+
+\subsubsection*{Cluster Analysis:}
+The resulting clusters exhibit high coherence, below are examples of this:
+
+\begin{itemize}
+    \item \textbf{Cluster 1 (Time/Duration):} \textit{day, year, week, month, hour, moment, night, morning}
+    \item \textbf{Cluster 2 (Family/People):} \textit{mother, father, son, daughter, wife, husband, girl, boy}
+    \item \textbf{Cluster 3 (Prepositions/Grammar):} \textit{in, on, at, from, by, with, for}
+    \item \textbf{Cluster 4 (Politics/Civics):} \textit{government, state, nation, country, federal, law, policy}
+\end{itemize}
+
+\subsection*{\normalfont}{$\therefore$ The clusters are meaningful and distinct.}
+\noindent\rule{\textwidth}{0.4pt}\\
+
+
+\end{document}
