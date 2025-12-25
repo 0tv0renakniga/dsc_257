@@ -1,0 +1,152 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\title{DSC 257R: Unsupervised Learning \\ Homework 4}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Informative Projections}
+
+\begin{enumerate}
+\item \textbf{Unit vectors.} Find unit vectors in each of the following directions.
+    \begin{enumerate}
+    \item $\begin{bmatrix}3 \\ 4\end{bmatrix} \in \mathbb{R}^{2}$
+    \item $\begin{bmatrix}-4 \\ 12 \\ 3\end{bmatrix} \in \mathbb{R}^{3}$
+    \item The all-ones vector in $\mathbb{R}^{d}$
+    \end{enumerate}
+
+\item Let $x=\begin{bmatrix}-2 \\ 4\end{bmatrix}$ and $u=\begin{bmatrix}1 \\ 2\end{bmatrix}$.
+    \begin{enumerate}
+    \item What is the projection of point $x \in \mathbb{R}^{2}$ onto the direction of $u$?
+    \item On a grid, plot point $x$, indicate direction $u$, and show the projection.
+    \end{enumerate}
+
+\item Let $x=\begin{bmatrix}-4 \\ 3\end{bmatrix} \in \mathbb{R}^{2}$.
+    \begin{enumerate}
+    \item Find the (unit) direction $u$ such that the projection of $x$ onto $u$ is maximized.
+    \item Find the (unit) direction $u$ such that the projection of $x$ onto $u$ is minimized.
+    \item Find all (unit) directions $u$ such that the projection of $x$ onto $u$ is zero.
+    \end{enumerate}
+
+\item \textbf{The variance in different directions.} A certain data set in $\mathbb{R}^{3}$ has covariance matrix
+    \[
+    \Sigma = \begin{bmatrix}
+    1 & 2 & 0 \\
+    2 & 9 & 0 \\
+    0 & 0 & 4
+    \end{bmatrix}
+    \]
+    \begin{enumerate}
+    \item What is the variance of the data in the direction $\begin{bmatrix}0 \\ 1 \\ 0\end{bmatrix}$?
+    \item What is the variance in the direction $\frac{1}{\sqrt{3}}\begin{bmatrix}1 \\ 1 \\ 1\end{bmatrix}$?
+    \item The variance in an arbitrary direction $u \in \mathbb{R}^{3}$ is a function of the form
+        \[
+        a u_{1}^{2} + b u_{2}^{2} + c u_{3}^{2} + d u_{1} u_{2}
+        \]
+        What is this function exactly? (That is, what are the numerical values of $a, b, c, d$?)
+    \end{enumerate}
+
+\item A particular data set in $\mathbb{R}^{5}$ happens to have a diagonal covariance matrix $\Sigma = \operatorname{diag}(5, 10, 20, 1, 4)$. What is the direction of maximum variance?
+
+\item A certain random variable $X \in \mathbb{R}^{3}$ has mean and covariance as follows:
+    \[
+    \mathbb{E} X = \begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix}, \quad \operatorname{cov}(X) = \begin{bmatrix}
+    5 & -3 & 0 \\
+    -3 & 5 & 0 \\
+    0 & 0 & 4
+    \end{bmatrix}
+    \]
+    \begin{enumerate}
+    \item Consider the direction $u = \frac{1}{\sqrt{3}}\begin{bmatrix}1 \\ 1 \\ 1\end{bmatrix}$. What are the mean and variance of $X \cdot u$?
+    \item The eigenvectors of $\operatorname{cov}(X)$ can be found in the following list; which ones are they?
+        \[
+        \begin{bmatrix}1 \\ 0 \\ 0\end{bmatrix}, \begin{bmatrix}0 \\ 1 \\ 0\end{bmatrix}, \begin{bmatrix}0 \\ 0 \\ 1\end{bmatrix}, \quad \frac{1}{\sqrt{2}}\begin{bmatrix}1 \\ 1 \\ 0\end{bmatrix}, \quad \frac{1}{\sqrt{2}}\begin{bmatrix}0 \\ 1 \\ 1\end{bmatrix}, \quad \frac{1}{\sqrt{2}}\begin{bmatrix}1 \\ -1 \\ 0\end{bmatrix}
+        \]
+    \item Find the eigenvalues corresponding to each of the eigenvectors in part (b). Make it clear which eigenvalue belongs to which eigenvector.
+    \item Suppose we used principal component analysis (PCA) to project points $X$ into two dimensions. Which directions would it project onto?
+    \item Continuing from part (d), what would be the resulting two-dimensional projection of the point $x = \begin{bmatrix}4 \\ 0 \\ 2\end{bmatrix}$?
+    \item Continuing from part (e), suppose that starting from the 2-d projection, we tried to reconstruct the original $x$. What would the three-dimensional reconstruction be, exactly?
+    \end{enumerate}
+
+\item \textbf{Some simple visualization methods.} For this problem, we'll again be using the animals with attributes data set (from last week). Recall that this is a small data set that has information about 50 animals. The animals are listed in \texttt{classes.txt}. For each animal, the information consists of values for 85 features: does the animal have a tail, is it slow, does it have tusks, etc. The details of the features are in \texttt{predicates.txt}. The full data consists of a $50 \times 85$ matrix of real values, in \texttt{predicate-matrix-continuous.txt}. Load this real-valued array.
+    \begin{enumerate}
+    \item We would like to visualize these animals in 2-d. Do this with a PCA projection from $\mathbb{R}^{85}$ to $\mathbb{R}^{2}$. Show the position of each animal, and label each with its name.
+
+        \textbf{Python notes:} You will need to make the plot larger by prefacing your code with
+        \begin{verbatim}
+from pylab import rcParams
+rcParams['figure.figsize'] = 10, 10
+        \end{verbatim}
+        (or try a different size if this doesn't seem right).
+
+    \item A popular visualization method is the $t$-SNE algorithm. This method takes a numerical parameter called the perplexity and then obtains an embedding by solving a non-convex optimization problem. The t-SNE algorithm is built into scikit-learn. You can invoke it to get a 2-d embedding of a data set $X$ by using:
+        \begin{verbatim}
+from sklearn.manifold import TSNE
+Z = TSNE(n_components=2, perplexity=10.0).fit_transform(X)
+        \end{verbatim}
+        The perplexity has a significant effect on the output. Try different perplexity values (5, 10, 25, 50) and show each of these embeddings, as you did with the PCA embedding. Bear in mind that t-SNE is a local search algorithm with randomized initialization, and thus even for a fixed perplexity value, different calls to it can return different results.
+
+    \item How can we evaluate these embeddings? Some might seem more visually pleasing than others, or might seem to group animals in a way that agrees more with our own intuitions. Let's look at a somewhat more objective measure. Say we have a data set of $n$ points $x_{1}, \ldots, x_{n} \in \mathbb{R}^{d}$ and we somehow obtain a 2-d visualization $z_{1}, \ldots, z_{n} \in \mathbb{R}^{2}$ of them. How accurately does this 2-d embedding capture the original interpoint distances? To see this,
+        \begin{itemize}
+        \item Define $D_{i j} = \left\|x_{i} - x_{j}\right\|$ and $\widehat{D}_{i j} = \left\|z_{i} - z_{j}\right\|$.
+        \item In general, the $D$ values might be scaled differently from the $\widehat{D}$ values; so define the scaling factor to be $c = \operatorname{mean}(D) / \operatorname{mean}(\widehat{D})$, where $\operatorname{mean}(\cdot)$ denotes the average over all $n^{2}$ entries of the matrix.
+        \item The multiplicative factor by which the distance between $x_{i}$ and $x_{j}$ is distorted can be defined by
+            \[
+            \Delta_{i j} = \max \left(\frac{D_{i j}}{c \cdot \widehat{D}_{i j}}, \frac{c \cdot \widehat{D}_{i j}}{D_{i j}}\right)
+            \]
+            This ratio is always $\geq 1$.
+        \item The average distortion is then $\operatorname{mean}(\Delta)$.
+        \end{itemize}
+        Compute the average distortion for each of the five embeddings you found (PCA and four t-SNE embeddings). Which of them fares best under this measure?
+    \end{enumerate}
+\end{enumerate}
+
+\section*{Singular Value Decomposition}
+
+\begin{enumerate}[resume]
+\item A particular $4 \times 5$ matrix $M$ has the following singular value decomposition:
+    \[
+    M = \begin{bmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 1 \\
+    0 & 0 & 1 & 0 \\
+    0 & 1 & 0 & 0
+    \end{bmatrix}
+    \begin{bmatrix}
+    4 & 0 & 0 & 0 \\
+    0 & 3 & 0 & 0 \\
+    0 & 0 & 2 & 0 \\
+    0 & 0 & 0 & 1
+    \end{bmatrix}
+    \begin{bmatrix}
+    1 & 0 & 0 & 0 & 0 \\
+    0 & 1 & 0 & 0 & 0 \\
+    0 & 0 & 1 & 0 & 0 \\
+    0 & 0 & 0 & 1 & 0
+    \end{bmatrix}
+    \]
+    Find the best rank-2 approximation to $M$.
+
+\item \textbf{Rank-1 matrices.}
+    \begin{enumerate}
+    \item Find the best rank-1 approximation to the matrix:
+        \[
+        M = \begin{bmatrix}
+        1 & 2 & 3 \\
+        4 & 5 & 6
+        \end{bmatrix}
+        \]
+        If you use the SVD method in Python to solve this problem, you should use the setting \texttt{full\_matrices = 0} to get the kind of decomposition we've been discussing (sometimes called the "thin SVD").
+    \item In general, a rank-1 matrix of dimension $p \times q$ is a matrix that can be written in form $u v^{T}$, where $u \in \mathbb{R}^{p}$ and $v \in \mathbb{R}^{q}$. Do you think this decomposition is unique, or is it in general possible to find a different pair of vectors $a \in \mathbb{R}^{p}$ and $b \in \mathbb{R}^{q}$ such that $u v^{T} = a b^{T}$?
+    \end{enumerate}
+\end{enumerate}
+
+\end{document}

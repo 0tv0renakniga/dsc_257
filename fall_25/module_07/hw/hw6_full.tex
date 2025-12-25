@@ -1159,14 +1159,6 @@ In plain English: "Of all the ways a person could be paralyzed (which is 3.16% o
 %------------------
 \subsection*{Solution 8}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 8 (e)}
-\begin{flushleft}
-    \textbf{Genes, diseases, and outcomes.} ... [Intro text from 8(a) omitted for brevity] ...
-
-    We observe that a person has the disease $(D=1)$. 
-    What is the probability that they have the mutant form of gene $G_1$? 
-\end{flushleft}
-
 \subsubsection*{Solution 8 (e)}
 We need to calculate $P(G_1=1 \mid D=1)$. We use Bayes' rule:
 $$ P(G_1=1 \mid D=1) = \frac{P(D=1, G_1=1)}{P(D=1)} $$
@@ -1228,14 +1220,38 @@ The chance of having the mutant gene $G_1$ was only 10%. But *given* you have th
 \end{flushleft}
 
 \subsubsection*{Solution 9 (a)}
+These answers are found by running the notebook cells and inspecting the `char_to_index` dictionary created from the `chars.npy` file.
 
+\begin{enumerate}
+    \item \textbf{Number of characters:} This is the length of the `chars` array or the `char_to_index` dictionary. The question for part (c) and the code in cell [29] (setting `input_size = 66`) confirm that the total number of unique characters in the vocabulary is 66.
+    
+    \item \textbf{Integer code for 'A':} This depends on the exact contents and order of the `chars.npy` file, which is not provided in the script. To find this, one would run the cell that defines `char_to_index` and then execute:
+\end{enumerate}
 
-\subsubsection*{\normalfont}{$\therefore$ }
+\begin{lstlisting}[language=Python]
+# This cell must be run after the cell defining char_to_index
+print(f"Total characters in vocabulary: {len(char_to_index)}")
+print(f"Integer code for 'A': {char_to_index['A']}")
+\end{lstlisting}
+
+\subsubsection*{Verification}
+The number of characters (66) is confirmed by cross-referencing part (c) of the question. The method to find the code for 'A' (`char_to_index['A']`) is correct. The exact value for 'A' cannot be determined from the provided script alone, as it depends on an external data file (`chars.npy`).
+
+\subsubsection*{\normalfont}{$\therefore$ There are \textbf{66} unique characters in the vocabulary. The integer code for 'A' is found by running \texttt{print(char\_to\_index['A'])} after loading the \texttt{chars.npy} file, as its specific value depends on the order of characters in that file.}
+
+\subsubsection*{Graduate Level Explanation}
+The 66 characters form the vocabulary of this language model. This process, known as tokenization, maps discrete symbols (characters) to numerical representations (integers). These integers serve as indices for an embedding layer, which translates the sparse, 66-dimensional one-hot representation of a character into a dense, lower-dimensional vector. The size of this vocabulary dictates the dimensionality of the model's input embedding table and its final output (softmax) layer.
+
+\subsubsection*{Learn Fast Explanation}
+Think of the 66 characters as the total number of "keys" on the model's typewriter (e.g., 'a', 'b', 'c', 'A', 'B', '!', ' ', '\textbackslash n').
+\begin{itemize}
+    \item \textbf{Number of characters:} 66 is just the total count of these unique keys.
+    \item \textbf{Integer code for 'A':} This is like the ID number for the 'A' key. The computer can't read 'A', but it can read the ID number (like 11, or 34, or whatever it is in the file). We just need to run the code to see what ID number was assigned to 'A'.
+\end{itemize}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
 \newpage
-
 %------------------
 % Solution for 9(b)
 %------------------
@@ -1243,7 +1259,9 @@ The chance of having the mutant gene $G_1$ was only 10%. But *given* you have th
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Question 9 (b)}
 \begin{flushleft}
-    \textbf{A character-level RNN for text generation.} ... [Intro text from 9(a)  
+\textbf{A character-level RNN for text generation.} Download the file \texttt{rnn-gen.zip} from the course webpage; it contains a Jupyter notebook saved as .py, \texttt{text-gen-rnn.ipynb}, as well as data and helper files. The notebook is adapted from an excellent blog post by Andrej Karpathy, \textit{The unreasonable effectiveness of recurrent neural networks}. It fits an RNN (more precisely, an LSTM) to the text of Shakespeare's plays and then uses this to generate more text, one character at a time.
+
+Work through the notebook and try to understand what is going on. There are just three small questions to answer.
 
     What is the length of the corpus in characters? 
 \end{flushleft}
@@ -1264,7 +1282,9 @@ The chance of having the mutant gene $G_1$ was only 10%. But *given* you have th
 \noindent\rule{\textwidth}{0.4pt}\\
 \subsubsection*{Question 9 (c)}
 \begin{flushleft}
-    \textbf{A character-level RNN for text generation.} ... [Intro text from 9(a)  
+\textbf{A character-level RNN for text generation.} Download the file \texttt{rnn-gen.zip} from the course webpage; it contains a Jupyter notebook saved as .py, \texttt{text-gen-rnn.ipynb}, as well as data and helper files. The notebook is adapted from an excellent blog post by Andrej Karpathy, \textit{The unreasonable effectiveness of recurrent neural networks}. It fits an RNN (more precisely, an LSTM) to the text of Shakespeare's plays and then uses this to generate more text, one character at a time.
+
+Work through the notebook and try to understand what is going on. There are just three small questions to answer.
 
     The input and output size for the RNN are set to 66. Why is this? 
 \end{flushleft}

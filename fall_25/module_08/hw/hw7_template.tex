@@ -648,19 +648,7 @@ $$\Pr(Y_p = +1 \mid Y_{\backslash p}, X) = \frac{1}{1 + \exp(-2 E_p)} \quad \tex
 %------------------
 \subsection*{Solution 5}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 5 (b)}
-\begin{flushleft}
-    A Bayesian approach to image denoising. Download the file \texttt{gibbs.zip} from the course website. This contains a Jupyter notebook and two images (\texttt{noisy\_bear.png} and \texttt{original\_bear.png}). The former is a corrupted version of the latter (which is provided only for reference).
-\end{flushleft}
-
-\begin{flushleft}
-    Let $X$ be the corrupted image and $Y$ the uncorrupted version that we wish to recover. Both are of the form $\{-1, +1\}^{M \times N}$. In the notebook, a Markov random field joint distribution for $(X, Y)$ is given. You will use this to design a Gibbs sampler for $Y|X$.
-\end{flushleft}
-
-\begin{flushleft}
-    \textit{Implement a Gibbs sampler at the appropriate place in the notebook. Initialize $Y$ by setting each pixel to $\{-1, +1\}$ uniformly at random. Then apply the sampler and show the image $Y$ at various stages while the Markov chain is mixing: show any five of the images obtained along the way.}
-\end{flushleft}
-
+\subsubsection*{Solution 5 (b)}
 \subsubsection*{Python Code: Gibbs sampler}
 \begin{lstlisting}
 import numpy as np
@@ -668,36 +656,41 @@ import matplotlib.pyplot as plt
 import cv2
 import math
 
-# (load_image function and X = load_image(...) assumed from notebook)
+def load_image(filename):
+  img = cv2.imread(filename,cv2.IMREAD_GRAYSCALE)
+  img = img/255.0
+  img[img>=0.5]=1.0
+  img[img<0.5]=0.0
+  img = img*2-1
+  return img
+
+# Load in both the degraded image and the original
+img = load_image("noisy_bear.png")
+gt = load_image("original_bear.png")
+M,N = img.shape[0], img.shape[1]
+
+# Create a version of img that is padded with zeros all around
+padded_image = np.zeros((img.shape[0]+2, img.shape[1]+2)) #Padding image to make some computations easier 
+padded_image[1:-1,1:-1] = img
 
 def gibbs_step(Y, X):
-    """
-    Performs one full sweep of Gibbs sampling.
-    
-    Y: Current state of the uncorrupted image (M x N)
-    X: The noisy image (M x N)
-    (eta and beta are 1.0 based on the notebook's model)
-    """
     Y_new = np.copy(Y)
     M, N = Y.shape
     
-    # Iterate over every pixel
+    # loop over every pixel
     for i in range(M):
         for j in range(N):
-            # Sum over neighbors, handling boundaries
+            # sum over neighbors
             neighbors_sum = 0
-            if i > 0:   neighbors_sum += Y_new[i-1, j] # Up
-            if i < M-1: neighbors_sum += Y_new[i+1, j] # Down
-            if j > 0:   neighbors_sum += Y_new[i, j-1] # Left
-            if j < N-1: neighbors_sum += Y_new[i, j+1] # Right
+            if i > 0:   neighbors_sum += Y_new[i-1, j] 
+            if i < M-1: neighbors_sum += Y_new[i+1, j] 
+            if j > 0:   neighbors_sum += Y_new[i, j-1] 
+            if j < N-1: neighbors_sum += Y_new[i, j+1] 
             
-            # E_p = eta * X_p + beta * neighbors_sum
-            # From notebook model, eta=1 and beta=1
+            # E_p = eta * X_p + beta * neighbors_sum (eta=1 and beta=1)
             E_p = X[i, j] + neighbors_sum
             
-            # Prob of Y_p = +1
-            # prob_plus_one = 1.0 / (1.0 + np.exp(-2.0 * E_p))
-            # Use a numerically stable sigmoid:
+            # prob of Y_p = +1 -> prob_plus_one = 1.0 / (1.0 + np.exp(-2.0 * E_p))
             if E_p * 2 > 700: # Avoid overflow in exp
                 prob_plus_one = 1.0
             elif E_p * 2 < -700:
@@ -705,7 +698,7 @@ def gibbs_step(Y, X):
             else:
                 prob_plus_one = 1.0 / (1.0 + np.exp(-2.0 * E_p))
 
-            # Sample from Bernoulli(prob_plus_one)
+            # sample from Bernoulli(prob_plus_one)
             if np.random.rand() < prob_plus_one:
                 Y_new[i, j] = 1
             else:
@@ -713,67 +706,32 @@ def gibbs_step(Y, X):
                 
     return Y_new
 
-# --- Main loop (as would be in the notebook) ---
-# Y = np.random.choice([-1, 1], size=X.shape)
-# num_iterations = 50
-# images_to_show = []
-# iterations_to_save = [0, 1, 5, 10, 49]
+# initalize Y and set X to the img
+X = img
+Y = np.random.choice([-1, 1], size=X.shape)
+num_iterations = 50
+images_to_show = []
+iterations_to_save = [0, 1, 5, 10, 49]
 
-# for t in range(num_iterations):
-#     if t in iterations_to_save:
-#         images_to_show.append(np.copy(Y))
-#     Y = gibbs_step(Y, X)
+for t in range(num_iterations):
+    if t in iterations_to_save:
+        images_to_show.append(np.copy(Y))
+    Y = gibbs_step(Y, X)
 
-# --- Plotting (as would be in the notebook) ---
-# fig, axes = plt.subplots(1, len(images_to_show), figsize=(20, 4))
-# for ax, img, t in zip(axes, images_to_show, iterations_to_save):
-#     ax.imshow(img, cmap='gray')
-#     ax.set_title(f'Iteration {t}')
-#     ax.axis('off')
-# plt.show()
+# plot
+fig, axes = plt.subplots(1, len(images_to_show), figsize=(20, 4))
+for ax, img, t in zip(axes, images_to_show, iterations_to_save):
+    ax.imshow(img, cmap='gray')
+    ax.set_title(f'Iteration {t}')
+    ax.axis('off')
+plt.show()
 \end{lstlisting}
 
 \subsubsection*{Images}
-The code above would generate the plots. The images (as described in the commented-out (see comment) blocks) would show:
-\begin{itemize}
-    \item \textbf{Iteration 0:} A random salt-and-pepper noise image (the random initialization).
-    \item \textbf{Iteration 1:} Still very noisy, but some very small clusters of $\{-1\}$ or $\{+1\}$ might be visible.
-    \item \textbf{Iteration 5:} The "burn-in" is progressing. The noise is clumping, and a very faint, "ghostly" outline of the bear becomes visible.
-    \item \textbf{Iteration 10:} The shape of the bear is now clearly distinct from the background, though both are still "patchy" and noisy.
-    \item \textbf{Iteration 49:} The image has converged to a stable, smooth state. The bear is clearly defined, and the background is almost entirely uniform.
-\end{itemize}
-
-\subsubsection*{Images}
-\begin{comment}
 \begin{figure}[h]
-  \includegraphics[width=\textwidth]{q5b_image1.png}
-  \caption{Image Y at stage n while Markov chain is missing}
+  \includegraphics[width=\textwidth]{q5b.png}
+  \caption{Image 0,1,5,10,49 while Markov chain is missing}
 \end{figure}
-\begin{figure}[h]
-  \includegraphics[width=\textwidth]{q5b_image2.png}
-  \caption{Image Y+1 at stage n+1 while Markov chain is missing}
-\end{figure}
-\begin{figure}[h]
-  \includegraphics[width=\textwidth]{q5b_image3.png}
-  \caption{Image Y+2 at stage n+2 while Markov chain is missing}
-\end{figure}
-\begin{figure}[h]
-  \includegraphics[width=\textwidth]{q5b_image4.png}
-  \caption{Image Y+3 at stage n+3 while Markov chain is missing}
-\end{figure}
-\begin{figure}[h]
-  \includegraphics[width=\textwidth]{q5b_image5.png}
-  \caption{Image Y+4 at stage n+4 while Markov chain is missing}
-\end{figure}
-\end{comment}
-
-\subsubsection*{\normalfont}{$\therefore$ The provided code implements the Gibbs sampler. When run, it would show a sequence of images that clearly progress from pure random noise to a coherent, denoised image of a bear as the Markov chain mixes.}
-
-\subsubsection*{Graduate Level Explanation}
-The code implements a single-site Gibbs sampler. Each call to \texttt{gibbs\_step} constitutes one sweep of the Markov chain. As the sampler iterates, the configuration $Y$ moves from a random, high-energy (low-probability) state towards the stationary distribution $P(Y \mid X)$. The images at different iterations are samples from this burn-in phase, visually demonstrating the chain's convergence to the high-probability region of the posterior, which corresponds to the denoised image.
-
-\subsubsection*{Simple Expedited Learning Explanation}
-The code starts with a TV static image ($Y$). The \texttt{gibbs\_step} function is like asking every pixel to ``look at its neighbors and its noisy self'' and re-pick its color. We do this 50 times. The first few images look like static, but then the pixels start to ``agree'' with their neighbors. After 5 iterations, you can see a ghost of the bear. After 50, the pixels have all settled down, and the static has organized itself into the clean bear image.
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -784,81 +742,40 @@ The code starts with a TV static image ($Y$). The \texttt{gibbs\_step} function 
 %------------------
 \subsection*{Solution 5}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 5 (c)}
-\begin{flushleft}
-    A Bayesian approach to image denoising. Download the file \texttt{gibbs.zip} from the course website. This contains a Jupyter notebook and two images (\texttt{noisy\_bear.png} and \texttt{original\_bear.png}). The former is a corrupted version of the latter (which is provided only for reference).
-\end{flushleft}
-
-\begin{flushleft}
-    Let $X$ be the corrupted image and $Y$ the uncorrupted version that we wish to recover. Both are of the form $\{-1, +1\}^{M \times N}$. In the notebook, a Markov random field joint distribution for $(X, Y)$ is given. You will use this to design a Gibbs sampler for $Y|X$.
-\end{flushleft}
-
-\begin{flushleft}
-    \textit{To reconstruct the image, just set the value of each pixel $p$ to $\mathbb{E}[Y_p|X]$. Show this image.}
-\end{flushleft}
-
 \subsubsection*{Solution 5 (c)}
-To estimate the posterior mean $\mathbb{E}[Y_p \mid X]$, we must average the value of $Y_p$ over many samples collected after the initial ``burn-in'' period. The code below runs the sampler for \texttt{burn\_in} steps, then continues to run it for \texttt{num\_samples} more steps, summing the $Y_p$ values at each step. The final estimate is this sum divided by \texttt{num\_samples}. This result is a float-valued image, which is the requested reconstruction.
-
 \subsubsection*{Python Code: Reconstruct Image}
 \begin{lstlisting}
 import numpy as np
 import matplotlib.pyplot as plt
-
-# (Assumes X is loaded and gibbs_step is defined as in 5(b))
-# Y_init = np.random.choice([-1, 1], size=X.shape)
-
 def get_posterior_mean(Y, X, burn_in, num_samples):
-    """
-    Estimates the posterior mean E[Y|X] by averaging
-    MCMC samples after a burn-in period.
-    """
     M, N = X.shape
     Y_samples_sum = np.zeros((M, N), dtype=float)
     
-    # Run the chain
+    # run the chain
     for t in range(burn_in + num_samples):
         Y = gibbs_step(Y, X)
-        
         # After burn-in, start collecting samples
         if t >= burn_in:
-            Y_samples_sum += Y
-            
-    # Compute the average
+            Y_samples_sum += Y        
+    # calc average
     posterior_mean = Y_samples_sum / num_samples
     return posterior_mean
 
-# --- Main call (as would be in the notebook) ---
-# Y_init = np.random.choice([-1, 1], size=X.shape)
-# posterior_mean_image = get_posterior_mean(Y_init, X, 
-#                                             burn_in=50, 
-#                                             num_samples=200)
+X= img
+Y_init = np.random.choice([-1, 1], size=X.shape)
+posterior_mean_image = get_posterior_mean(Y_init, X, burn_in=50, num_samples=200)
 
-# --- Plotting (as would be in the notebook) ---
-# plt.imshow(posterior_mean_image, cmap='gray', vmin=-1, vmax=1)
-# plt.title('Reconstructed Image E[Y|X]')
-# plt.axis('off')
-# plt.show()
+# plot
+plt.imshow(posterior_mean_image, cmap='gray', vmin=-1, vmax=1)
+plt.title('Reconstructed Image E[Y|X]')
+plt.axis('off')
+plt.show()
 \end{lstlisting}
 
 \subsubsection*{Reconstructed Image}
-The code above would generate the plot. The resulting image (as described in the commented-out (see comment) block) is not binary but consists of floating-point values between -1.0 and +1.0. It will look like a very sharp, clear, grayscale version of the bear. Pixels where the sampler was very confident ($Y_p$ was almost always +1) will have values near +1.0 (white), and pixels where it was confident it was -1 will be near -1.0 (black). This averaging process removes the "flicker" noise of any single MCMC sample.
-\subsubsection*{Reconstructed Image}
-
-\begin{comment}
-\begin{figure}[h]
-  \includegraphics[width=\textwidth]{q5c_image1.png}
-  \caption{Reconstructed image, is seen above.}
-\end{figure}
-\end{comment}
-
-\subsubsection*{\normalfont}{$\therefore$ The provided code runs the Gibbs sampler for a burn-in period, then averages 200 subsequent samples to estimate the posterior mean $\mathbb{E}[Y_p \mid X]$ for each pixel, which forms the final reconstructed image.}
-
-\subsubsection*{Graduate Level Explanation}
-The posterior mean, $\mathbb{E}[Y \mid X]$, is the optimal Bayesian estimator under squared error ($L_2$) loss. By the ergodic theorem for Markov chains, the time average of a function of the state (here, the state $Y_p$ itself) converges to the expectation of that function under the stationary distribution $P(Y \mid X)$. This code computes this ergodic average. The resulting float-valued image represents the posterior marginal probabilities, as $\mathbb{E}[Y_p \mid X] = \Pr(Y_p=+1 \mid X) - \Pr(Y_p=-1 \mid X)$.
-
-\subsubsection*{Simple Expedited Learning Explanation}
-After the sampler "warms up" (the 50 burn-in steps), it's exploring plausible clean images. We then take 200 "snapshots" (samples) of what it thinks the bear looks like. Each snapshot is slightly different. To get the single *best* guess, we average all 200 snapshots together, pixel by pixel. If a pixel is white in 180/200 snapshots, its average value will be high (e.g., +0.8). This "average bear" image is much smoother and cleaner than any single snapshot and is our final answer.
+\begin{center}
+  \includegraphics[width=0.6\textwidth]{q5c.png} 
+\end{center}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -869,60 +786,21 @@ After the sampler "warms up" (the 50 burn-in steps), it's exploring plausible cl
 %------------------
 \subsection*{Solution 6}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 6 (a)}
-\begin{flushleft}
-Rejection sampling. Suppose we want to sample from a one-dimensional density $f(x)$ for which we do not have a readymade sampler. One way to do this is via rejection sampling. Here's the idea:
-    \begin{itemize}
-    \item We choose another distribution $g(x)$ from which we know how to sample (e.g. uniform or Gaussian distribution). We will call this the proposal distribution. It is important that $g(x)$ be nonzero whenever $f(x)$ is nonzero.
-    \item Let $M$ be an upper bound on $f(x)/g(x)$; that is, $f(x)/g(x) \leq M$ for all $x$.
-    \item To generate a sample from $f$, we repeat the following procedure until it accepts:
-        \begin{itemize}
-        \item Generate a sample $x$ from $g$
-        \item With probability $f(x)/(Mg(x))$, accept the sample. Otherwise, reject it.
-        \end{itemize}
-    \end{itemize}
-\end{flushleft}
-
-\begin{flushleft}
-    Let's see how this works in practice. Let's say we want to sample a number in the range $[0, \pi]$ from
-\end{flushleft}
-$$
-f(x) = \frac{1}{2} \sin x \qquad \text{(think of $x$ as being in radians)}
-$$
-
-\begin{flushleft}
-    \textit{Plot the density of $f$.}
-\end{flushleft}
-
 \subsubsection*{Solution 6 (a)}
-We use \texttt{numpy} to create a dense array of $x$ values on the domain $[0, \pi]$ and \texttt{matplotlib} to plot the corresponding $f(x)$ values.
-
-Before plotting, we verify $f(x)$ is a valid probability density function on $[0, \pi]$:
-\begin{enumerate}
-    \item \textbf{Non-negativity:} For all $x \in [0, \pi]$, $\sin(x) \ge 0$, so $f(x) = \frac{1}{2} \sin x \ge 0$.
-    \item \textbf{Integrates to 1:} 
-    $$
-    \int_0^\pi f(x) \,dx = \int_0^\pi \frac{1}{2} \sin x \,dx = \frac{1}{2} [-\cos x]_0^\pi = \frac{1}{2} \left( -(-1) - (-1) \right) = \frac{1}{2} (1 + 1) = 1
-    $$
-\end{enumerate}
-The function is a valid PDF. The Python code below generates the plot and saves it as \texttt{q6a\_plot.png}.
-
 \subsubsection*{Python Code: Plot $f(x)$}
-\begin{lstlisting}[language=Python, caption={Python code to plot the target density f(x).}]
+\begin{lstlisting}[language=Python]
 import numpy as np
 import matplotlib.pyplot as plt
 
-# 1. Define the function and domain
+# set the function and domain
 f = lambda x: 0.5 * np.sin(x)
 x_domain = np.linspace(0, np.pi, 400)
 y_values = f(x_domain)
 
-# 2. Create a professional plot
+# plot
 fig, ax = plt.subplots(figsize=(8, 5))
 ax.plot(x_domain, y_values, 'r-', linewidth=2, 
         label=r'$f(x) = \frac{1}{2}\sin(x)$')
-
-# 3. Add labels, title, and grid
 ax.set_xlabel('x (radians)', fontsize=12)
 ax.set_ylabel('Density f(x)', fontsize=12)
 ax.set_title('Target Probability Density Function', fontsize=14)
@@ -930,33 +808,13 @@ ax.legend(fontsize=10)
 ax.grid(True, alpha=0.3)
 ax.set_xlim(0, np.pi)
 ax.set_ylim(0, 0.6) # Max is 0.5, give a little space
-
-# 4. Save and show the plot
 plt.savefig('q6a_plot.png', dpi=150, bbox_inches='tight')
 plt.show()
 \end{lstlisting}
-
-
-% This image is generated by the Python code above.
-% Make sure to run the code to produce 'q6a_plot.png'
-\begin{comment}
-\subsubsection*{Resulting Plot}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.7\textwidth]{q6a_plot.png}
-\caption{Plot of the target density $f(x) = \frac{1}{2}\sin x$ on $[0, \pi]$.}
-\label{fig:q6a_plot}
-\end{figure}
-\end{comment}
-
-
-\subsubsection*{\normalfont}{$\therefore$ The plot of the density $f(x) = \frac{1}{2}\sin x$ on $[0, \pi]$ is a single, positive arch, which is 0 at $x=0$ and $x=\pi$, and reaches its maximum value of $0.5$ at $x=\pi/2$.}
-
-\subsubsection*{Graduate Level Explanation}
-This function $f(x)$ serves as the **target density** for the rejection sampler. Its properties—being bounded, defined on a finite interval, and having a simple analytic form—make it a good canonical example. The subsequent challenge is to find an appropriate proposal distribution $g(x)$ (e.g., a uniform distribution on $[0, \pi]$) and a tight constant $M$ such that $f(x) \le M g(x)$. The efficiency of the sampler, $1/M$, will be directly determined by the shape of this plotted density relative to the chosen $M g(x)$ "envelope".
-
-\subsubsection*{Simple Expedited Learning Explanation}
-This plot is the "shape" of the probability we want to sample from. Think of it as a small hill. It's impossible to get a sample at $x=0$ or $x=\pi$ (where the hill is flat on the ground, $f(x)=0$), and you are *most* likely to get a sample right in the middle at $x=\pi/2$, where the hill is highest (at $f(x)=0.5$). The rejection sampling algorithm in the next steps is a clever way to "throw darts" at a graph so that the ones that "stick" will form this exact hill shape.
+\subsubsection*{Plot}
+\begin{center}
+  \includegraphics[width=0.6\textwidth]{q6a_plot.png} 
+\end{center}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 \newpage
@@ -966,74 +824,36 @@ This plot is the "shape" of the probability we want to sample from. Think of it 
 %------------------
 \subsection*{Solution 6}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 6 (b)}
-\begin{flushleft}
-Rejection sampling. Suppose we want to sample from a one-dimensional density $f(x)$ for which we do not have a readymade sampler. One way to do this is via rejection sampling. Here's the idea:
-    \begin{itemize}
-    \item We choose another distribution $g(x)$ from which we know how to sample (e.g. uniform or Gaussian distribution). We will call this the proposal distribution. It is important that $g(x)$ be nonzero whenever $f(x)$ is nonzero.
-    \item Let $M$ be an upper bound on $f(x)/g(x)$; that is, $f(x)/g(x) \leq M$ for all $x$.
-    \item To generate a sample from $f$, we repeat the following procedure until it accepts:
-        \begin{itemize}
-        \item Generate a sample $x$ from $g$
-        \item With probability $f(x)/(Mg(x))$, accept the sample. Otherwise, reject it.
-        \end{itemize}
-    \end{itemize}
-\end{flushleft}
-
-\begin{flushleft}
-    Let's see how this works in practice. Let's say we want to sample a number in the range $[0, \pi]$ from
-\end{flushleft}
-$$
-f(x) = \frac{1}{2} \sin x \qquad \text{(think of $x$ as being in radians)}
-$$
-
-\begin{flushleft}
-    \textit{Give a suitable proposal distribution $g(x)$. What is a suitable upper bound $M$ on $f(x)/g(x)$?}
-\end{flushleft}
-
 \subsubsection*{Solution 6 (b)}
-\textbf{1. Suitable Proposal $g(x)$:}
-The target density $f(x)$ is defined on the compact interval $[0, \pi]$. The simplest and most convenient proposal distribution $g(x)$ that covers this support is the \textbf{Uniform distribution} on $[0, \pi]$.
-\begin{itemize}
-    \item We know how to sample from it (e.g., \texttt{np.random.uniform(0, np.pi)}).
-    \item Its support, $\text{supp}(g) = [0, \pi]$, contains the support of $f(x)$, $\text{supp}(f) = [0, \pi]$.
-    \item For all $x \in (0, \pi)$ where $f(x) > 0$, $g(x)$ is also $> 0$.
-\end{itemize}
+\begin{enumerate}
+    \item Suitable Proposal $g(x)$
+    The target density $f(x)$ is defined on the interval $[0, \pi]$. The simplest proposal distribution $g(x)$ that covers this support is the Uniform distribution on $[0, \pi]$.
+    \begin{itemize}
+        \item Its support, $[0, \pi]$, matches the support of $f(x)$.
+        \item $f(x) > 0$ only when $x \in (0, \pi)$, and $g(x) > 0$ on this entire interval.
+    \end{itemize}
 The probability density function (PDF) for $g(x) = \text{Uniform}(0, \pi)$ is:
 $$
 g(x) = \frac{1}{\pi - 0} = \frac{1}{\pi} \quad \text{for } x \in [0, \pi]
 $$
-
-\textbf{2. Suitable Upper Bound $M$:}
-We need to find the smallest constant $M$ such that $f(x) \le M g(x)$ for all $x \in [0, \pi]$. This is equivalent to finding the maximum of the ratio $f(x)/g(x)$:
+    \item Suitable Upper Bound $M$
+We need to find the smallest constant $M$ such that $f(x) \le M g(x)$, which is equivalent to finding the maximum of the ratio $f(x)/g(x)$:
 $$
 M = \sup_{x \in [0, \pi]} \frac{f(x)}{g(x)}
 $$
-Let's compute this ratio:
+We compute this ratio:
 $$
 \frac{f(x)}{g(x)} = \frac{\frac{1}{2} \sin x}{\frac{1}{\pi}} = \frac{\pi}{2} \sin x
 $$
-To find the maximum of this expression, we just need to find the maximum of $\sin x$ on the interval $[0, \pi]$, since $\pi/2$ is a positive constant.
-$$
-\max_{x \in [0, \pi]} (\sin x) = 1 \quad \text{(This occurs at $x = \pi/2$)}
-$$
-Therefore, the tightest possible upper bound $M$ is:
+To find the maximum, we find the maximum of $\sin x$ on the interval $[0, \pi]$, which is $1$ (at $x = \pi/2$).
+
+Hence, the tightest possible upper bound $M$ is:
 $$
 M = \frac{\pi}{2} \cdot \left( \max_{x \in [0, \pi]} \sin x \right) = \frac{\pi}{2} \cdot 1 = \frac{\pi}{2}
 $$
-A suitable upper bound is $M = \frac{\pi}{2} \approx 1.5708$.
+\end{enumerate}
 
 \subsubsection*{\normalfont}{$\therefore$ A suitable proposal is $g(x) = \text{Uniform}(0, \pi)$ with PDF $g(x) = 1/\pi$. The corresponding tightest upper bound is $M = \frac{\pi}{2}$.}
-
-\subsubsection*{Graduate Level Explanation}
-The optimal choice for a simple proposal $g(x)$ is the uniform distribution on the target's support, $g(x) \sim U(0, \pi)$, as it ensures $\text{supp}(g) \supseteq \text{supp}(f)$. To maximize sampling efficiency, we find the tightest bound $M = \sup_x \frac{f(x)}{g(x)}$. For $f(x)=0.5 \sin x$ and $g(x)=1/\pi$, the bound is $M = \sup_x \frac{\pi}{2} \sin x = \frac{\pi}{2}$. This $M$ value defines the "envelope" $M g(x) = (\pi/2)(1/\pi) = 0.5$. The condition $f(x) \le M g(x)$ is $0.5 \sin x \le 0.5$, which holds. The sampler's overall acceptance rate is $1/M = 2/\pi \approx 63.7\%$, which is highly efficient.
-
-\subsubsection*{Simple Expedited Learning Explanation}
-Think of rejection sampling as "throwing darts." The $f(x)$ hill (from 6a) is our target.
-\begin{enumerate}
-    \item \textbf{Choosing $g(x)$:} We need a "dartboard" to throw at. The easiest choice is $g(x) = \text{Uniform}(0, \pi)$, which just means we throw darts uniformly along the x-axis from $0$ to $\pi$.
-    \item \textbf{Finding $M$:} We need to build a rectangular "roof" $M \cdot g(x)$ that is *always* above our $f(x)$ hill. We want the *lowest* possible roof so we don't waste throws. We found the ratio "hill" $f(x)/g(x)$ has a maximum height of $\pi/2$. We set our roof $M$ to exactly this height, $M = \pi/2$. This roof just barely touches the peak of our $f(x)$ hill (at $x=\pi/2$), making it the most efficient choice.
-\end{enumerate}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -1044,79 +864,24 @@ Think of rejection sampling as "throwing darts." The $f(x)$ hill (from 6a) is ou
 %------------------
 \subsection*{Solution 6}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 6 (c)}
-\begin{flushleft}
-Rejection sampling. Suppose we want to sample from a one-dimensional density $f(x)$ for which we do not have a readymade sampler. One way to do this is via rejection sampling. Here's the idea:
-    \begin{itemize}
-    \item We choose another distribution $g(x)$ from which we know how to sample (e.g. uniform or Gaussian distribution). We will call this the proposal distribution. It is important that $g(x)$ be nonzero whenever $f(x)$ is nonzero.
-    \item Let $M$ be an upper bound on $f(x)/g(x)$; that is, $f(x)/g(x) \leq M$ for all $x$.
-    \item To generate a sample from $f$, we repeat the following procedure until it accepts:
-        \begin{itemize}
-        \item Generate a sample $x$ from $g$
-        \item With probability $f(x)/(Mg(x))$, accept the sample. Otherwise, reject it.
-        \end{itemize}
-    \end{itemize}
-\end{flushleft}
-
-\begin{flushleft}
-    Let's see how this works in practice. Let's say we want to sample a number in the range $[0, \pi]$ from
-\end{flushleft}
-$$
-f(x) = \frac{1}{2} \sin x \qquad \text{(think of $x$ as being in radians)}
-$$
-
-\begin{flushleft}
-    \textit{Use rejection sampling to generate 10000 samples from $f$. How many times did you need to sample from $g$?}
-\end{flushleft}
-
 \subsubsection*{Solution 6 (c)}
-We implement the rejection sampling algorithm using the parameters from 6(b):
-\begin{itemize}
-    \item Target density: $f(x) = \frac{1}{2} \sin x$
-    \item Proposal density: $g(x) = \frac{1}{\pi}$ (for $x \in [0, \pi]$)
-    \item Bound: $M = \frac{\pi}{2}$
-\end{itemize}
-The algorithm requires us to accept a sample $x \sim g(x)$ with probability $p_{\text{accept}} = \frac{f(x)}{M g(x)}$. Let's compute this probability:
-$$
-p_{\text{accept}}(x) = \frac{f(x)}{M g(x)} = \frac{\frac{1}{2} \sin x}{\left(\frac{\pi}{2}\right) \cdot \left(\frac{1}{\pi}\right)} = \frac{\frac{1}{2} \sin x}{\frac{1}{2}} = \sin x
-$$
-So, the algorithm is:
-\begin{enumerate}
-    \item Draw a proposal sample $x \sim \text{Uniform}(0, \pi)$.
-    \item Draw a uniform random number $u \sim \text{Uniform}(0, 1)$.
-    \item If $u \le \sin(x)$, accept $x$. Otherwise, reject it.
-    \item Repeat until we have 10,000 accepted samples.
-\end{enumerate}
-The Python code to perform this is given below.
-
-The total number of draws from $g(x)$ is a random variable. We are interested in its expected value. The overall probability of acceptance is:
-$$
-P(\text{accept}) = \int_0^\pi P(\text{accept} \mid x) g(x) \,dx = \int_0^\pi (\sin x) \cdot \left(\frac{1}{\pi}\right) \,dx = \frac{1}{\pi} [-\cos x]_0^\pi = \frac{1}{\pi} (1 - (-1)) = \frac{2}{\pi}
-$$
-This confirms the general theory that $P(\text{accept}) = 1/M = 1/(\pi/2) = 2/\pi$.
-To get $N_{\text{accept}} = 10,000$ samples, the expected number of total draws is:
-$$
-\mathbb{E}[N_{\text{total}}] = \frac{N_{\text{accept}}}{P(\text{accept})} = \frac{10000}{2/\pi} = 5000\pi \approx 15707.96
-$$
-We expect to need approximately 15,708 samples from $g(x)$.
-
 \subsubsection*{Python Code: Rejection Sampler}
-\begin{lstlisting}[language=Python, caption={Python code to generate 10,000 samples.}]
+\begin{lstlisting}[language=Python]
 import numpy as np
 
-# Set seed for reproducible results
+# set seed
 np.random.seed(42)
 
 N_ACCEPT = 10000
 accepted_samples = []
 total_draws = 0
 
-# Parameters from 6(b)
-# f = lambda x: 0.5 * np.sin(x)
-# g = lambda x: 1.0 / np.pi
-# M = np.pi / 2.0
+# Parameters from part (b)
+f = lambda x: 0.5 * np.sin(x)
+g = lambda x: 1.0 / np.pi
+M = np.pi / 2.0
 
-# Loop until we have 10,000 accepted samples
+# loop until we have 10,000 accepted samples
 while len(accepted_samples) < N_ACCEPT:
     total_draws += 1
     
@@ -1140,17 +905,15 @@ print(f"Total samples drawn from g: {total_draws}")
 print(f"Empirical acceptance rate: {N_ACCEPT / total_draws:.4f}")
 print(f"Theoretical acceptance rate (2/pi): {2.0 / np.pi:.4f}")
 
-# (accepted_samples list is saved for part (d))
 \end{lstlisting}
-\textit{Running the code above with seed 42 produces the output: \texttt{Total samples drawn from g: 15743}}
 
-\subsubsection*{\normalfont}{$\therefore$ To generate 10,000 samples from $f(x)$, we expect to draw $5000\pi \approx 15,708$ samples from $g(x)$. (A specific run of the code with \texttt{seed=42} required \textbf{15,743} draws.)}
-
-\subsubsection*{Graduate Level Explanation}
-The expected number of iterations, $\mathbb{E}[N]$, required to obtain $k$ accepted samples is $k/p$, where $p$ is the marginal probability of acceptance. This probability $p$ is $\int g(x) \frac{f(x)}{M g(x)} \,dx = \frac{1}{M} \int f(x) \,dx = \frac{1}{M}$. For our $M=\pi/2$, the efficiency is $1/M = 2/\pi \approx 63.7\%$, a relatively high efficiency. The actual number of draws $N$ follows a Negative Binomial distribution, but for large $k$, it is sharply concentrated around its mean, $\mathbb{E}[N] = kM$.
-
-\subsubsection*{Simple Expedited Learning Explanation}
-Our "dart throwing" strategy is pretty good. We found that our target "hill" ($f(x)$) takes up about 63.7\% of the area of our rectangular "roof" ($M \cdot g(x)$). This means for every 100 darts we throw, we expect about 64 to "hit" (be accepted). To get 10,000 "hits," we will need to throw roughly $10,000 / 0.637 \approx 15,708$ darts in total. Our simulation confirmed this, requiring 15,743 throws.
+\subsubsection*{\normalfont}{$\therefore$ see output below}
+\begin{verbatim}
+Target number of samples: 10000
+Total samples drawn from g: 15529
+Empirical acceptance rate: 0.6440
+Theoretical acceptance rate (2/pi): 0.6366
+\end{verbatim}
 
 \noindent\rule{\textwidth}{0.4pt}\\
 
@@ -1161,32 +924,6 @@ Our "dart throwing" strategy is pretty good. We found that our target "hill" ($f
 %------------------
 \subsection*{Solution 6}
 \noindent\rule{\textwidth}{0.4pt}\\
-\subsubsection*{Question 6 (d)}
-\begin{flushleft}
-    Rejection sampling. Suppose we want to sample from a one-dimensional density $f(x)$ for which we do not have a readymade sampler. One way to do this is via rejection sampling. Here's the idea:
-    \begin{itemize}
-    \item We choose another distribution $g(x)$ from which we know how to sample (e.g. uniform or Gaussian distribution). We will call this the proposal distribution. It is important that $g(x)$ be nonzero whenever $f(x)$ is nonzero.
-    \item Let $M$ be an upper bound on $f(x)/g(x)$; that is, $f(x)/g(x) \leq M$ for all $x$.
-    \item To generate a sample from $f$, we repeat the following procedure until it accepts:
-        \begin{itemize}
-        \item Generate a sample $x$ from $g$
-        \item With probability $f(x)/(Mg(x))$, accept the sample. Otherwise, reject it.
-        \end{itemize}
-    \end{itemize}
-\end{flushleft}
-
-\begin{flushleft}
-    Let's see how this works in practice. Let's say we want to sample a number in the range $[0, \pi]$ from
-\end{flushleft}
-$$
-f(x) = \frac{1}{2} \sin x \qquad \text{(think of $x$ as being in radians)}
-$$
-
-\begin{flushleft}
-    \textit{Plot the histogram of the samples you generated, using 50 bins. It should bear a resemblance to the density in (a).}
-\end{flushleft}
-
-\subsubsection*{Solution 6 (d)}
 \subsubsection*{Solution 6 (d)}
 We use the \texttt{accepted\_samples} list (containing 10,000 samples) that was generated in part 6(c). We use Matplotlib's \texttt{hist} function, specifying \texttt{bins=50} and, most importantly, \texttt{density=True}. This parameter normalizes the histogram so that the total area under the bars equals 1, making it directly comparable to the probability density function $f(x)$. We then overlay the plot of $f(x)$ from 6(a) to visually confirm the match.
 
@@ -1195,41 +932,30 @@ We use the \texttt{accepted\_samples} list (containing 10,000 samples) that was 
 import numpy as np
 import matplotlib.pyplot as plt
 
-# --- Assume 'accepted_samples' (list of 10,000 floats) 
-# --- from 6(c) is available in the environment.
+# used samplesfrom part (c) 
 
 # 1. Define the true function and domain (from 6a)
 f = lambda x: 0.5 * np.sin(x)
 x_domain = np.linspace(0, np.pi, 400)
 y_true = f(x_domain)
 
-# 2. Create the plot
+# plot
 fig, ax = plt.subplots(figsize=(8, 5))
-
-# 3. Plot the normalized histogram of samples
 ax.hist(accepted_samples, bins=50, density=True, 
         label='Sampled Histogram (10k samples)', 
         alpha=0.7, edgecolor='k', linewidth=0.5)
-
-# 4. Overlay the true density function
 ax.plot(x_domain, y_true, 'r-', linewidth=3, 
         label=r'True Density $f(x) = \frac{1}{2}\sin(x)$')
-
-# 5. Add labels, title, and grid
 ax.set_xlabel('x (radians)', fontsize=12)
 ax.set_ylabel('Density', fontsize=12)
 ax.set_title('Rejection Sampling: Histogram vs. True Density', fontsize=14)
 ax.legend(fontsize=10)
 ax.grid(True, alpha=0.3)
 ax.set_xlim(0, np.pi)
-
-# 6. Save and show the plot
 plt.savefig('q6d_histogram.png', dpi=150, bbox_inches='tight')
 plt.show()
 \end{lstlisting}
-
-\begin{comment}
-    \subsubsection*{Resulting Plot}
+\subsubsection*{Resulting Plot}
 \begin{figure}[h!]
 \centering
 % This image is generated by the Python code above.
@@ -1238,14 +964,5 @@ plt.show()
 \caption{Normalized histogram of 10,000 accepted samples overlaid with the true target density $f(x)$.}
 \label{fig:q6d_histogram}
 \end{figure}
-\end{comment}
-
-\subsubsection*{\normalfont}{$\therefore$ The normalized histogram of the 10,000 generated samples, using 50 bins, provides an excellent empirical approximation of the true target density $f(x) = \frac{1}{2}\sin(x)$, validating the correctness of the rejection sampling implementation.}
-
-\subsubsection*{Graduate Level Explanation}
-This plot serves as a visual verification that the rejection sampling algorithm correctly produces samples from the target density $f(x)$. The histogram is a non-parametric density estimator. By plotting it with \texttt{density=True}, we ensure it integrates to unity, making it directly comparable to the PDF. The close alignment between the empirical distribution (histogram) and the analytic PDF $f(x)$ is a practical demonstration of the algorithm's validity, which is formally grounded in the fact that $P(\text{Sample}=x \mid \text{Accepted}) \propto P(\text{Accepted} \mid \text{Sample}=x) P(\text{Sample}=x) \propto \frac{f(x)}{M g(x)} \cdot g(x) = f(x)$.
-
-\subsubsection*{Simple Expedited Learning Explanation}
-This graph proves our "dart throwing" trick worked. We took all 10,000 "darts" that we kept from part (c) and stacked them into 50 different bins. By setting \texttt{density=True}, we're not plotting the *count* of darts, but the *proportion* in each bin. You can see that the shape of our stacked-up samples (the blue bars) almost perfectly recreates the original red "hill" ($f(x)$) we were aiming for. This confirms we successfully generated samples that follow the $\sin x$ curve.
 
 \end{document}

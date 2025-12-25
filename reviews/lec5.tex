@@ -1,0 +1,155 @@
+\documentclass[letterpaper,10pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{enumitem}
+\usepackage{graphicx} % Required for including images
+
+% Custom theorem-like environments
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+
+\begin{document}
+
+\title{CSE 291: Unsupervised learning \\ Spring 2008}
+\author{}
+\date{Lecture 5 Finding meaningful clusters in data}
+\maketitle
+
+So far we've been in the vector quantization mindset, where we want to approximate a data set by a small number of representatives, and the quality of the approximation is measured by a precise distortion function. Now we move to a different use of clustering: to discover interesting structure in data.
+
+This immediately seems fuzzy and ill-defined, and it is unclear how to make a principled choice among the plethora of clustering heuristics that present themselves. But if we step back and take a slightly more abstract view, some interesting conclusions and directions emerge.
+
+We'll assume that we have a data set S, along with some notion of interpoint distances. For the latter, we use the following formalism.
+
+\begin{definition}
+$d:S\times S\rightarrow\mathbb{R}$ is a distance function if it satisfies the following two properties:
+\begin{enumerate}
+    \item $d(x,y)\ge0$, with equality if and only if $x=y$
+    \item $d(x,y)=d(y,x).$
+\end{enumerate}
+In particular, any metric is a distance function, although a distance function need not satisfy the triangle inequality.
+\end{definition}
+
+Given only S and d, what is a reasonable way to generate a clustering?
+
+\section{Kleinberg's axiomatic framework for clustering}
+Kleinberg formalizes a clustering function as a mapping that takes as input a distance function d on n points and returns a partition $\Gamma$ of $[n]=\{1,2,...,n\}$; if this mapping is f, we will write $f(d)=\Gamma$. For instance,
+\[
+f\left(\begin{pmatrix}0&10&10\\ 10&0&1\\ 10&1&0\end{pmatrix}\right)=(\{1\},\{2,3\})
+\]
+sends a distance function on three points to a clustering with two clusters. Notice that the clustering function has to choose the number of clusters.
+
+\subsection{Axioms for reasonable clustering functions}
+What properties might one expect a good clustering function to possess? Here are some possibilities.
+\begin{itemize}
+    \item \textbf{Scale invariance.} For any $\alpha>0$ and any d, $f(\alpha\cdot d)=f(d)$.
+    \item \textbf{Richness.} $Range(f)=$ \{all possible partitions of $[n]\}$.
+    \item \textbf{Consistency.} If $f(d)=\Gamma$ and $d^{\prime}$ is a $\Gamma$-enhancing transformation of d, then $f(d^{\prime})=\Gamma.$
+\end{itemize}
+For the last property, a $\Gamma$-enhancing transformation is one that makes a distance function even more suggestive of the clustering $\Gamma$. More precisely:
+
+\begin{definition}
+$d^{\prime}$ is a $\Gamma$-enhancing transformation of d if
+\begin{itemize}
+    \item $d^{\prime}(i,j)\le d(i,j)$ for i, j in the same cluster of $\Gamma$
+    \item $d^{\prime}(i,j)\ge d(i,j)$ for i, j in different clusters of $\Gamma$
+\end{itemize}
+\end{definition}
+
+For instance, in the figure below, the left side shows a set of six points (with Euclidean distances d) and a particular clustering $\Gamma$ consisting of three clusters. The right side shows a modified configuration whose distance function $d^{\prime}$ is a $\Gamma$-transformation of d.
+
+%\begin{figure}[h!]
+%    \centering
+%    \includegraphics[width=0.8\textwidth]{lec5_fig1.png} % Placeholder for the image
+%    \caption{Example of $\Gamma$-enhancing transformation. Left: Original configuration with distance d and clustering $\Gamma$. Right: Modified configuration with distance $d'$.}
+%\end{figure}
+
+What kinds of algorithms satisfy the axioms above? Here are three illustrative examples.
+\begin{enumerate}
+    \item Run single linkage till you get k clusters. This satisfies scale invariance and consistency, but not richness.
+    \item Run single linkage till distances exceed $c\cdot \max_{i,j}d(i,j)$, where c is some constant. This satisfies scale invariance and richness but not consistency.
+    \item Run single linkage until distances exceed some threshold r. This satisfies richness and consistency but not scale invariance.
+\end{enumerate}
+In fact, Kleinberg shows that there is no clustering function that satisfies all three axioms.
+
+\subsection{An impossibility result}
+The basic problem is that there is no consistent way to choose a level of granularity. Does the following picture contain 2 clusters, or 3, or 12? Let's see how this problem makes it impossible to satisfy all three axioms. Suppose we have eight points whose interpoint distances d look like this:
+
+%\begin{figure}[h!]
+%    \centering
+%    \includegraphics[width=0.8\textwidth]{lec5_fig2.png} % Placeholder for the image
+%    \caption{Example of eight points with interpoint distances d.}
+%\end{figure}
+
+This looks like one cluster, so suppose $f(d)=\Gamma$ consists of a single cluster. Then a $\Gamma$-enhancing transformation yields the following $d^{\prime}$ in which the four points initially on the left are now almost on top of each other, and likewise with the four points initially on the right.
+
+%\begin{figure}[h!]
+%    \centering
+%    \includegraphics[width=0.8\textwidth]{lec5_fig3.png} % Placeholder for the image
+%    \caption{Example of $\Gamma$-enhancing transformation yielding $d'$.}
+%\end{figure}
+
+Rescaling, we get $d^{\prime\prime}:$
+
+%\begin{figure}[h!]
+%    \centering
+%    \includegraphics[width=0.8\textwidth]{lec5_fig4.png} % Placeholder for the image
+%    \caption{Rescaled version $d''$ of $d'$.}
+%\end{figure}
+
+Now, consistency and scale invariance would enforce $f(d^{\prime\prime})=f(d^{\prime})=f(d)$. But d looks like one cluster while $d^{\prime\prime}$ looks like two! To make this intuition more precise, we introduce a key concept.
+
+\begin{definition}
+Partition $\Gamma^{\prime}$ is a refinement of $\Gamma$ (written $\Gamma^{\prime}\le\Gamma$) if for every $C^{\prime}\in\Gamma^{\prime}$ there is some $C\in\Gamma$ such that $C^{\prime}\subset C$.
+\end{definition}
+In other words, $\Gamma$ can be obtained by merging clusters of $\Gamma^{\prime}$. For instance:
+
+%\begin{figure}[h!]
+%    \centering
+%    \includegraphics[width=0.6\textwidth]{lec5_fig5.png} % Placeholder for the image
+%    \caption{Example of partition refinement.}
+%\end{figure}
+
+\begin{theorem}
+Pick any $\Gamma_{0}\le\Gamma_{1}$ with $\Gamma_{0}\ne\Gamma_{1}$. If f satisfies scale invariance and consistency then $\Gamma_{0}$ and $\Gamma_{1}$ cannot both be in $range(f)$.
+\end{theorem}
+\begin{proof}
+Suppose, on the contrary, that $f(d_{0})=\Gamma_{0}$ and $f(d_{1})=\Gamma_{1}$. We'll arrive at a contradiction.
+%\begin{figure}[h!]
+%    \centering
+%    \includegraphics[width=0.6\textwidth]{lec5_fig6.png} % Placeholder for the image
+%    \caption{Diagram illustrating assumptions for proof of Theorem 4.}
+%\end{figure}
+Let $a_{0}=\min\{d_{0}(i,j):i\ne j\}$ and $b_{0}=\max\{d_{0}(i,j)\}$; likewise, let $a_{1}$ and $b_{1}$ be the smallest and largest values of $d_{1}$. Now construct a new distance function d:
+\[
+d(i,j) =
+\begin{cases}
+    \alpha_{0} & \text{if } i, j \text{ in same cluster of } \Gamma_{0} \\
+    a_{1} & \text{if } i, j \text{ in same cluster of } \Gamma_{1} \text{ but not } \Gamma_{0} \\
+    b_{1} & \text{if } i, j \text{ in different clusters of } \Gamma_{1}
+\end{cases}
+\]
+where $\alpha_{0}$ is chosen such that $0 < \alpha_{0} < a_{1}$.
+
+Distance function d is a $\Gamma_{1}$-enhancing transformation of $d_{1}$. Therefore, $f(d)=f(d_{1})=\Gamma_{1}$. But now consider distance function $d^{\prime}=(b_{0}/a_{1})\cdot d$; notice that
+\[
+d^{\prime}(i,j)=\begin{cases}
+    a_{0} & \text{if } i,j \text{ in same cluster of } \Gamma_{0} \\
+    \ge b_{0} & \text{if } i,j \text{ in different clusters of } \Gamma_{0}
+\end{cases}
+\]
+Therefore $d^{\prime}$ is a $\Gamma_{0}$-enhancing transformation of $d_{0}$ and $f(d^{\prime})=f(d_{0})=\Gamma_{0}$. But d' is also a scaled version of d, so we need $f(d)=f(d^{\prime})$, a contradiction.
+\end{proof}
+
+\subsubsection*{Problem 1}
+Develop an axiomatic framework for hierarchical clustering. This will circumvent the difficulty of automatically choosing a level of granularity.
+
+\section{Finding prominent clusterings}
+In some situations, we primarily want a clustering algorithm to find prominent groups in the data, if such groups exist. If, on the other hand, the data has no well-defined clusters, then it doesn't matter what the algorithm does.
+
+\end{document}

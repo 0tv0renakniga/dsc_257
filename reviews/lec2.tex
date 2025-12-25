@@ -1,0 +1,268 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\title{Lecture 2 - The $k$-means clustering problem}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{2.1 The $k$-means cost function}
+
+Last time we saw the $k$-center problem, in which the input is a set $S$ of data points and the goal is to choose $k$ representatives for $S$. The distortion on a point $x \in S$ is then the distance to its closest representative. The overall goal is to make sure that every point in $S$ has low distortion; that is, to minimize the maximum distortion in $S$.
+
+In most applications, we are more interested in minimizing the typical (i.e., average) distortion. The most popular formulation of this is the $k$-means cost function, which assumes that points lie in Euclidean space.
+
+\textbf{$k$-MEANS CLUSTERING}
+
+\textbf{Input:} Finite set $S \subset \mathbb{R}^{d}$; integer $k$.
+
+\textbf{Output:} $T \subset \mathbb{R}^{d}$ with $|T|=k$.
+
+\textbf{Goal:} Minimize $\operatorname{cost}(T)=\sum_{x \in S} \min _{z \in T}\|x-z\|^{2}$.
+
+It is interesting that cost function uses the square of the $L_{2}$ norm rather than $L_{2}$ norm. This is a fortuitous choice that turns out to simplify the math in many ways.
+
+\subsection*{2.1.1 Voronoi regions}
+
+The representatives $T$ induce a Voronoi partition of $\mathbb{R}^{d}$: a decomposition of $\mathbb{R}^{d}$ into $k$ convex cells, each corresponding to some $z \in T$ and containing the region of space whose nearest representative is $z$.
+
+This partition induces an optimal clustering of the data set, $S=\cup_{z \in T} C_{z}$, where
+
+\begin{equation*}
+C_{z}=\left\{x \in S: \text{ the closest representative of } x \text{ is } z\right\}
+\end{equation*}
+
+Thus the $k$-means cost function can equally be written
+
+\begin{equation*}
+\operatorname{cost}(T)=\sum_{z \in T} \sum_{x \in C_{z}}\|x-z\|^{2}
+\end{equation*}
+
+In analyzing algorithms, we'll sometimes need to consider suboptimal partitions of $S$. To this end, define
+
+\begin{equation*}
+\operatorname{cost}\left(C_{1}, \ldots, C_{k} ; z_{1}, \ldots, z_{k}\right)=\sum_{j=1}^{k} \sum_{x \in C_{j}}\left\|x-z_{j}\right\|^{2}
+\end{equation*}
+
+\subsection*{2.1.2 A single cluster}
+
+Suppose a single cluster $C$ is assigned representative $z$. The cost is then
+
+\begin{equation*}
+\operatorname{cost}(C ; z)=\sum_{x \in C}\|x-z\|^{2}
+\end{equation*}
+
+This is minimized when $z=\operatorname{mean}(C)$. Moreover, the additional cost incurred by picking $z \neq \operatorname{mean}(C)$ can be characterized very simply:
+
+\textbf{Lemma 1.} For any set $C \subset \mathbb{R}^{d}$ and any $z \in \mathbb{R}^{d}$,
+
+\begin{equation*}
+\operatorname{cost}(C ; z)=\operatorname{cost}(C ; \operatorname{mean}(C))+|C| \cdot\|z-\operatorname{mean}(C)\|^{2}
+\end{equation*}
+
+Contrast this with the case of $k$-center, where there is no closed-form expression for the optimal center of a cluster. This is a perfect example of the benefit of using average distortion and the squared $L_{2}$ norm.
+
+\textbf{Lemma 1} follows from a generic bias-variance decomposition of random vectors.
+
+\textbf{Lemma 2.} Let $X \in R^{d}$ be any random variable. For any $z \in \mathbb{R}^{d}$,
+
+\begin{equation*}
+\mathbb{E}\|X-z\|^{2}=\mathbb{E}\|X-\mathbb{E} X\|^{2}+\|z-\mathbb{E} X\|^{2}
+\end{equation*}
+
+\textbf{Proof.} Expanding the right-hand side,
+
+
+$$\mathbb{E}\|X-\mathbb{E} X\|^{2}+\|z-\mathbb{E} X\|^{2} &=\mathbb{E}\left[\|X\|^{2}+\|\mathbb{E} X\|^{2}-2 X \cdot \mathbb{E} X\right]+\left[\|z\|^{2}+\|\mathbb{E} X\|^{2}-2 z \cdot \mathbb{E} X\right]$$ \\
+$$=\mathbb{E}\|X\|^{2}+\|\mathbb{E} X\|^{2}-2 \mathbb{E} X \cdot \mathbb{E} X+\|z\|^{2}+\|\mathbb{E} X\|^{2}-2 z \cdot \mathbb{E} X$$ \\
+$$=\mathbb{E}\|X\|^{2}+\|z\|^{2}-2 z \cdot \mathbb{E} X$$ \\
+$$=\mathbb{E}\|X-z\|^{2}$$
+
+
+To see how this implies Lemma 1, let $X$ denote a uniform random draw from cluster $C$. Then
+
+\begin{equation*}
+\mathbb{E}\|X-z\|^{2}=\sum_{x \in C} \frac{1}{|C|}\|x-z\|^{2}=\frac{1}{|C|} \operatorname{cost}(C ; z)
+\end{equation*}
+
+and
+
+\begin{equation*}
+\mathbb{E}\|X-\mathbb{E} X\|^{2}=\frac{1}{|C|} \operatorname{cost}(C ; \operatorname{mean}(C))
+\end{equation*}
+
+\section*{2.2 The $k$-means algorithm}
+
+The name $k$-means is applied both to the clustering task defined above and to a specific algorithm that attempts with mixed success to solve it. Here's how the algorithm works, given a data set $S \subset \mathbb{R}^{d}$ and an integer $k$:
+
+\begin{verbatim}
+initialize centers $z_{1}, \ldots, z_{k} \in \mathbb{R}^{d}$ and clusters $C_{1}, \ldots, C_{k}$ in any way
+repeat until there is no further change in cost:
+    for each $j: \quad C_{j} \leftarrow\left\{x \in S\right.$ whose closest center is $z_{j}\right\}$
+    for each $j: \quad z_{j} \leftarrow \operatorname{mean}\left(C_{j}\right)$
+\end{verbatim}
+
+This is simple enough, and takes $O(k|S|)$ time per iteration. What can one possibly prove about it?
+
+\subsection*{2.2.1 Convergence}
+
+\textbf{Lemma 3.} During the course of the $k$-means algorithm, the cost monotonically decreases.
+
+\textbf{Proof.} Let $z_{1}^{(t)}, \ldots, z_{k}^{(t)}, C_{1}^{(t)}, \ldots, C_{k}^{(t)}$ denote the centers and clusters at the start of the $t^{t h}$ iteration of $k$-means. The first step of the iteration assigns each data point to its closest center; therefore
+
+\begin{equation*}
+\operatorname{cost}\left(C_{1}^{(t+1)}, \ldots, C_{k}^{(t+1)} ; z_{1}^{(t)}, \ldots, z_{k}^{(t)}\right) \leq \operatorname{cost}\left(C_{1}^{(t)}, \ldots, C_{k}^{(t)} ; z_{1}^{(t)}, \ldots, z_{k}^{(t)}\right)
+\end{equation*}
+
+On the second step, each cluster is re-centered at its mean; by Lemma 1,
+
+\begin{equation*}
+\operatorname{cost}\left(C_{1}^{(t+1)}, \ldots, C_{k}^{(t+1)} ; z_{1}^{(t+1)}, \ldots, z_{k}^{(t+1)}\right) \leq \operatorname{cost}\left(C_{1}^{(t+1)}, \ldots, C_{k}^{(t+1)} ; z_{1}^{(t)}, \ldots, z_{k}^{(t)}\right)
+\end{equation*}
+
+\subsection*{2.2.2 Initialization}
+
+We've seen that the $k$-means algorithm converges to a local optimum of its cost function. The quality of its final clustering depends heavily on the manner of initialization. If this isn't done right, things could go horribly wrong.
+
+Here's an example. Suppose the data set consists of $n$ points in five tight clusters (of some tiny radius $\delta$) arranged in a line, with some large distance $B$ between them:
+
+The optimal 5-clustering has cost roughly $\delta^{2} n$. If we initialize $k$-means by choosing five centers at random from the data, there is some chance that we'd end up with no centers from cluster 1, two centers from cluster 3, and one center each from clusters 2,4, and 5:
+
+In the first round of $k$-means, all points in clusters 1 and 2 will be assigned to the leftmost center. The two centers in cluster 3 will end up sharing that cluster. And the centers in clusters 4 and 5 will move roughly to the centers of those clusters.
+
+Thereafter, no further changes will occur. This local optimum has cost $\Omega\left(B^{2} n\right)$. We can make this arbitrarily far away from the optimum cost by setting $B$ large enough. Thus, good initialization is crucial.
+
+\section*{2.3 The $k$-means++ initializer}
+
+One idea for initializing $k$-means is to use a farthest-first traversal on the data set, to pick $k$ points that are far away from each other. However, this is too sensitive to outliers. Instead, Arthur and Vassilvitskii suggest the following procedure, called $k$-means++: pick the $k$ centers one at a time, but instead of always choosing the point farthest from those picked so far, choose each point at random, with probability proportional to its squared distance from the centers chosen already. Here's the algorithm (given $S$ and $k$).
+
+\begin{verbatim}
+pick $x \in S$ uniformly at random and set $T \leftarrow\{x\}$
+while $|T|<k$:
+    pick $x \in S$ at random, with probability proportional to $\operatorname{cost}(\{x\} ; T)=\min _{z \in T}\|x-z\|^{2}$
+    $T \leftarrow T \cup\{x\}$
+\end{verbatim}
+
+This initialization takes time $O(k|S|)$, about the same as a single iteration of $k$-means. Arthur and Vassilvitskii show that this initialization is itself a pretty good clustering. And subsequent iterations of $k$-means can only improve things.
+
+\textbf{Theorem 4.} Let $T$ be the initial centers chosen by $k$-means++. Let $T^{*}$ be the optimal centers. Then $\mathbb{E}[\operatorname{cost}(T)] \leq \operatorname{cost}\left(T^{*}\right) \cdot O(\log k)$, where the expectation is over the randomness in the initialization procedure.
+
+We won't get into the proof here, except to point out one small aspect of it. The initial centers $T$ are not arbitrary points in $\mathbb{R}^{d}$ but are points from the data set itself. It turns out that in general, one loses at most a factor of two on account of this. The following lemma can be applied to each cluster within the optimal $k$-means clustering.
+
+\textbf{Lemma 5.} For any $C \subset \mathbb{R}^{d}$, pick $Z$ uniformly at random from $C$. Then $\mathbb{E}[\operatorname{cost}(C ; Z)]=2 \operatorname{cost}(C ; \operatorname{mean}(C))$.
+
+\textbf{Proof.} Let $\mu=\operatorname{mean}(C)$. By Lemma 1,
+
+
+$$\mathbb{E}[\operatorname{cost}(C ; Z)] &=\sum_{z \in C} \frac{1}{|C|} \operatorname{cost}(C ; z)$$ \\
+$$=\frac{1}{|C|} \sum_{z \in C}\left[\operatorname{cost}(C ; \mu)+|C| \cdot\|z-\mu\|^{2}\right]$$ \\
+$$=\operatorname{cost}(C ; \mu)+\sum_{z \in C}\|z-\mu\|^{2}=2 \operatorname{cost}(C ; \mu)$$
+
+
+\section*{2.4 A local search heuristic for the $k$-means problem}
+
+Now let's look at a different heuristic that is guaranteed to return a set of $k$ centers whose cost is within a (large) constant factor of optimal. Given a data set $S \subset \mathbb{R}^{d}$ and an integer $k$, the algorithm maintains a set $T \subset S$ of centers, $|T|=k$, and incrementally adjusts this set, changing one center at a time.
+
+\begin{verbatim}
+initialize centers $T \subset S$ arbitrarily
+while $\exists t \in T, t' \in S$ such that $\operatorname{cost}\left(T+\left\{t'\right\}-\{t\}\right) < \operatorname{cost}(T)$
+    $T \leftarrow T+\left\{t'\right\}-\{t\}$
+\end{verbatim}
+
+This is a local search heuristic. Such algorithms are notoriously difficult to analyze, but with quite a bit of ingenuity, Arya et al were able to show the following.
+
+\textbf{Theorem 6.} Let $O \subset S$ be the subset of $k$ data points which minimize $\operatorname{cost}(O)$. Let $T$ be the solution returned by the local search procedure. Then $\operatorname{cost}(T) \leq 25 \operatorname{cost}(O)$.
+
+By Lemma 5, this means $T$ is at worst a factor-50 approximation to the original $k$-means problem.
+
+\subsection*{2.4.1 A single swap}
+
+Let's start by pinning down some notation. The algorithm returns some set of centers $T \subset S$, which partition the data into clusters $\left\{C_{t}: t \in T\right\}$. The optimal solution (with centers restricted to $S$) is $O \subset S$, with clusters $\left\{C_{o}^{*}: o \in O\right\}$. For any point $x$, let $t(x)$ be its closest representative to in $T$, and $o(x)$ its closest representative in $O$.
+
+It is very difficult to keep track of what goes on during the successive iterations of local search. Instead, we will work only with the termination condition. We know that for any pair $\langle o, t\rangle$ (with $o \in O$ and $t \in T$), swapping $o$ for $t$ cannot decrease the cost. In other words,
+
+\begin{equation*}
+\operatorname{cost}(T+\{o\}-\{t\})-\operatorname{cost}(T) \geq 0
+\end{equation*}
+
+Our overall strategy will be to carefully select $k$ pairs $\langle o, t\rangle$, such that these $k$ inequalities add up to something that looks roughly like $25 \operatorname{cost}(O)-\operatorname{cost}(T) \geq 0$.
+
+To start with, we consider a single swap, and rewrite the corresponding inequality in terms of its constituent distances.
+
+\textbf{Lemma 7.} Pick any pair $\langle o, t\rangle$ with $o \in O, t \in T$, that satisfies the following property:
+(*) For each $x \in C_{t}$, either $o(x)=o$ or $t(o(x)) \neq t$.
+Then
+
+\begin{equation*}
+\sum_{x \in C_{o}^{*}}\left[\|x-o(x)\|^{2}-\|x-t(x)\|^{2}\right]+\sum_{x \in C_{t}}\left[\|x-t(o(x))\|^{2}-\|x-t(x)\|^{2}\right] \geq 0
+\end{equation*}
+
+\textbf{Proof.} We know $\operatorname{cost}(T+\{o\}-\{t\})-\operatorname{cost}(T) \geq 0$. We will get an upper bound on $\operatorname{cost}(T+\{o\}-\{t\})$ by considering a particular (possibly suboptimal) partitioning of $S$ for centers $T+\{o\}-\{t\}$. This partitioning assigns each $x \in S$ to center $t(x)$, with two exceptions:
+
+\begin{itemize}
+    \item any point in $C_{o}^{*}$ gets assigned to $o$
+    \item any point in $C_{t} \backslash C_{o}^{*}$ gets assigned to $t(o(x))$
+\end{itemize}
+
+Notice that we are removing center $t$, and that any point $x \in C_{t}$ now gets assigned either to the new center $o$, or to $t(o(x))$, which by hypothesis is not $t$. Thus this is a valid assignment of points to centers.
+
+Using this assignment, we get the upper bound
+
+\begin{equation*}
+\operatorname{cost}(T+\{o\}-\{t\})-\operatorname{cost}(T) \leq \sum_{x \in C_{o}^{*}}\left[\|x-o\|^{2}-\|x-t(x)\|^{2}\right]+\sum_{x \in C_{t} \backslash C_{o}^{*}}\left[\|x-t(o(x))\|^{2}-\|x-t\|^{2}\right]
+\end{equation*}
+
+Notice that the term in the second parenthesis is always positive (since $t=t(x)$ for all such points); thus we are allowed to add in more such terms while maintaining a valid inequality. Specifically, we extend the summation to be over all of $C_{t}$, and the lemma follows.
+
+\subsection*{2.4.2 Summing over a set of swaps}
+
+The expression in Lemma 7 is suggestive. If we were to pair up the centers $\langle o, t\rangle$, and sum the resulting expressions, we would get
+
+\begin{equation*}
+\operatorname{cost}(O)-\operatorname{cost}(T)+R-\operatorname{cost}(T) \geq 0
+\end{equation*}
+
+where $R=\sum_{x \in S}\|x-t(o(x))\|^{2}$. This is very close to the kind of bound we seek. There are only two difficulties: first, we need to upper-bound $R$; second, we have to limit ourselves to pairs $\langle o, t\rangle$ that satisfy the special additional condition $\left(^{*}\right)$ stated in Lemma 7.
+
+Let's deal with these problems one by one. First we upper bound $R$. Looking at its definition, we see that each point $x$ is being assigned to a center in $T$, but not necessarily the best choice $t(x)$. Thus we can expect $R$ to be more than $\operatorname{cost}(O)$ and more than $\operatorname{cost}(T)$. Using the triangle inequality, we get the following upper bound.
+
+\textbf{Lemma 8.} $R \leq 2 \operatorname{cost}(O)+\operatorname{cost}(T)+2 \sqrt{\operatorname{cost}(O) \operatorname{cost}(T)}$.
+
+\textbf{Proof.} To be filled in.
+
+Next, we need to carefully select pairs $\langle o, t\rangle$. Ideally, we like to find some pairing of the centers in $O$ and $T$ that satisfy condition $\left(^{*}\right)$, but this may not be possible. Instead, we will find $k$ pairs $\langle o, t\rangle$ such that:
+
+\begin{itemize}
+    \item Each $o \in O$ occurs in exactly one pair.
+    \item Each $t \in T$ occurs in at most two pairs.
+    \item Each $\langle o, t\rangle$ satisfies condition $\left(^{*}\right)$.
+\end{itemize}
+
+(Details of how to do this pairing need to be filled in.) Summing the expressions in Lemma 7, we then get
+
+
+$$0  \leq \sum_{x \in S}\left[\|x-o(x)\|^{2}-\|x-t(x)\|^{2}\right]+2 \sum_{x \in S}\left[\|x-t(o(x))\|^{2}-\|x-t(x)\|^{2}\right]$$ \\
+$$=\operatorname{cost}(O)-3 \operatorname{cost}(T)+2 R$$ \\
+$$ \leq 5 \operatorname{cost}(O)-\operatorname{cost}(T)+4 \sqrt{\operatorname{cost}(O) \operatorname{cost}(T)}$$ \\
+$$=\left(5 \sqrt{\operatorname{cost}(O)}-\sqrt{\operatorname{cost}(T)}\right)\left(\sqrt{\operatorname{cost}(O)}+\sqrt{\operatorname{cost}(T)}\right)$$
+
+
+It follows that $\sqrt{\operatorname{cost}(T)} \leq 5 \sqrt{\operatorname{cost}(O)}$ and thus $\operatorname{cost}(T) \leq 25 \operatorname{cost}(O)$.
+
+\section*{2.5 Open problems}
+
+\textbf{Problem 1.} It is known that the $k$-means problem is NP-hard even when $k=2$. This particular reduction creates instances whose dimension is $d=\Theta(n)$. Is $k$-means clustering hard even when $d=2$? Is it hard to approximate within a constant factor?
+
+\textbf{Problem 2.} Are there better, practical approximation algorithms for $k$-means clustering?
+
+\textbf{Problem 3.} Characterize the various kinds of local optima into which the $k$-means algorithm can fall. A possible starting point is to consider the case of well-separated clusters.
+
+\textbf{Problem 4.} We've seen two reasonable ways to initialize the $k$-means algorithm: by $k$-means++ and by the local search heuristic. Which works better in practice?
+
+\textbf{Problem 5.} The EM clustering algorithm (for mixtures of Gaussians) is more general than $k$-means in that it allows soft clustering (in which each data point can be divided fractionally between clusters rather than being definitively assigned to just one of them) and permits clusters of arbitrary ellipsoidal shapes (while $k$-means is geared towards spherical clusters of the same radius). Is there a way to use ideas from our two $k$-means approximation algorithms to give an approximation algorithm for the EM objective function? This would be interesting even for the simpler case of soft $k$-means.
+
+\end{document}

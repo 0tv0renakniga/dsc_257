@@ -1,0 +1,376 @@
+\documentclass[letterpaper,10pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{enumitem}
+\usepackage{verbatim} % For algorithms
+\usepackage{graphicx} % Required for including images
+
+% Custom theorem-like environments
+\theoremstyle{plain}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+
+\begin{document}
+
+\title{CSE 291: Unsupervised learning \\ Spring 2008}
+\author{}
+\date{Lecture 6 Online and streaming algorithms for clustering}
+\maketitle
+
+\section{On-line k-clustering}
+To the extent that clustering takes place in the brain, it happens in an on-line manner: each data point comes in, is processed, and then goes away never to return.  To formalize this, imagine an endless stream of data points $x_{1},x_{2},...$ and a k-clustering algorithm that works according to the following paradigm: 
+\begin{verbatim}
+repeat forever:
+    get a new data point
+    update the current set of k centers
+\end{verbatim}
+This algorithm cannot store all the data it sees, because the process goes on ad infinitum.  More precisely, we will allow it space proportional to k.  And at any given moment in time, we want the algorithm's k-clustering to be close to the optimal clustering of all the data seen so far.  This is a tall order, but nonetheless we can manage it for the simplest of our cost functions, k-center. 
+
+\section{The on-line k-center problem}
+The setting is, as usual, a metric space $(\mathcal{X}, \rho)$.  Recall that for data set $S\subset\mathcal{X}$ and centers $T\subset\mathcal{X}$ we define $cost(T)=\max_{x\in S}\rho(x,T).$  In the on-line setting, our algorithm must conform to the following template. 
+\begin{verbatim}
+repeat forever:
+    get x in X
+    update centers T subset X, |T|=k
+\end{verbatim}
+And for all times t, we would like it to be the case that the cost of T for the points seen so far is close to the optimal cost achievable for those particular points.  We will look at two schemes that fit this bill. 
+
+\subsection{A doubling algorithm}
+This algorithm is due to Charikar, Chekuri, Feder, and Motwani (1997). 
+\begin{verbatim}
+T <- {first k distinct data points}
+R <- smallest interpoint distance in T
+repeat forever:
+    while |T| <= k:
+        (A) get new point x
+        if rho(x,T) > 2R: T <- T union {x}
+    (B) T' <- {}
+    while there exists z in T such that rho(z,T') > 2R:
+        T' <- T' union {z}
+    (C) T <- T'
+    R <- 2R
+\end{verbatim}
+Here 2R is roughly the cost of the current clustering, as we will shortly make precise.  The lemmas below describe invariants that hold at lines (A), (B), and (C) in the code;  each refers to the start of the line (that is, before the line is executed). 
+
+\begin{lemma}[1]
+All data points seen so far are (i) within distance 2R of T at (B) and (ii) within distance 4R of T at (C). 
+\end{lemma}
+\begin{proof}
+Use induction on the number of iterations through the main loop.  Notice that (i) holds on the first iteration, and that if (i) holds on the pth iteration then (ii) holds on the pth iteration and (i) holds on the $(p+1)$st iteration. 
+\end{proof}
+To prove an approximation guarantee, we also need to lower bound the cost of the optimal clustering in terms of R. 
+
+\begin{lemma}[2]
+At (B), there are $k+1$ centers at distance $\ge R$ from each other. 
+\end{lemma}
+\begin{proof}
+A similar induction.  It is easiest to simultaneously establish that at (C), all centers are distance $\ge2R$ apart. 
+\end{proof}
+We now put these together to give a performance guarantee. 
+
+\begin{theorem}[3]
+Whenever the algorithm is at (A),
+$cost(T) \le 8 \cdot cost(\text{optimal k centers for data seen so far})$. 
+\end{theorem}
+\begin{proof}
+At location (A), we have $|T|\le k$ and $cost(T)\le2R.$  The last time the algorithm was at (B), there were $k+1$ centers at distance $\ge R/2$ from each other, implying an optimal cost of $\ge R/4.$ 
+\end{proof}
+
+\subsubsection*{Problem 1}
+A commonly-used scheme for on-line k-means works as follows. 
+\begin{verbatim}
+initialize the k centers t_1,...,t_k in any way
+create counters n_1,...,n_k, all initialized to zero
+repeat forever:
+    get data point x
+    let t_i be its closest center
+    set t_i <- (n_i*t_i + x)/(n_i + 1) and n_i <- n_i + 1
+\end{verbatim}
+What can be said about this scheme? 
+
+\subsection{An algorithm based on the cover tree}
+The algorithm of the previous section works for a pre-specified value of k.  Is there some way to handle all k simultaneously?  Indeed, there is a clean solution to this;  it is made possible by a data structure called the cover tree, which was nicely formalized by Beygelzimer, Kakade, and Langford (2003), although it had been in the air for a while before then. 
+
+Assume for the moment that all interpoint distances are $\le1$.  Of course this is ridiculous, but we will get rid of this assumption shortly.  A cover tree on data points $x_{1},...,x_{n}$ is a rooted infinite tree with the following properties. 
+\begin{enumerate}
+    \item Each node of the tree is associated with one of the data points $x_{i}$. 
+    \item If a node is associated with $x_{i},$ then one of its children must also be associated with $x_{i}$. 
+    \item All nodes at depth j are at distance at least $1/2^{j}$ from each other. 
+    \item Each node at depth $j+1$ is within distance $1/2^{j}$ of its parent (at depth j). 
+\end{enumerate}
+This is described as an infinite tree for simplicity of analysis, but it would not be stored as such.  In practice, there is no need to duplicate a node as its own child, and so the tree would take up $O(n)$ space.  The figure below gives an example of a cover tree for a data set of five points.  This is just the top few levels of the tree, but the rest of it is simply a duplication of the bottom row.  From the structure of the tree we can conclude, for instance, that $x_{2}, x_5$ are all at distance $\ge1/2$ from each other (since they are all at depth 1), and that the distance between $x_{2}$ and $x_{3}$ is $\le1/4$ (since $x_{3}$ is at depth 3, and is a child of $x_{2}$). 
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{lec6_fig1.png} % Placeholder for the image
+    \caption{Example of a cover tree for a data set of five points.}
+\end{figure}
+
+What makes cover trees especially convenient is that they can be built on-line, one point at a time.  To insert a new point $z$: find the largest j such that z is within $1/2^{j}$ of some node p at depth j in the tree;  and make z a child of p.  Do you see why this maintains the four defining properties?  Once the tree is built, it is easy to obtain k-clusterings from it. 
+
+\begin{lemma}[4]
+For any k, consider the deepest level of the tree with $\le k$ nodes, and let Tk be those nodes.  Then: 
+cost(Tk) 8 cost (optimal k centers).
+
+\end{lemma}
+\begin{proof}
+Fix any k, and suppose j is the deepest level with $<k$ nodes.  By Property 4, all of $T_{k}$ children are within distance $1/2^{j}$ of $it,$ and its grandchildren are within distance $1/2^{j}+1/2^{j+1}$ of it, and so on.  Therefore, 
+\[
+cost(T_{k})\le\frac{1}{2^{j}}+\frac{1}{2^{j+1}}+\cdot\cdot\cdot=\frac{1}{2^{j-1}}
+\]
+Meanwhile, level $j+1~has\ge k+1$ nodes, and by Property 3, these are at distance $\ge1/2^{j+1}$ from each other.  Therefore the optimal k-clustering has cost at least $1/2^{j+2}$. 
+\end{proof}
+
+To get rid of the assumption that all interpoint distances are $\le1$, simply allow the tree to have depths -1,-2,-3 and so on.  Initially, the root is at depth 0, but if a node arrives that is at distance $\ge8$ (say) from all existing nodes, then it is made the new root and is put at depth -3.  Also, the creation of the data structure appears to take $O(n^{2})$ time and $O(n)$ space.  But if we are only interested in values of k from 1 to K, then we need only keep the top few levels of the tree, those with $\le K$ nodes.  This reduces the time and space requirements to $O(nK)$ and $O(K)$, respectively. 
+
+\subsection{On-line clustering algorithms: epilogue}
+It is an open problem to develop a good on-line algorithm for k-means clustering.  There are at least two different ways in which a proposed scheme might be analyzed.  The first supposes at each time t, the algorithm sees a new data point $x_{t}$, and then outputs a set of k centers $T_{t}$  The hope is that for some constant $\alpha\ge1$, for all t, 
+\[
+cost(T_{t})\le\alpha \text{ cost (best k centers for } x_{1},...,x_{t}).
+\]
+This is the pattern we have followed in our k-center examples.  The second kind of analysis is the more usual setting of the on-line learning literature.  It supposes that at each time t, the algorithm announces a set of k centers $T_{t}$, then sees a new point $x_{t}$ and incurs a loss equal to the cost of $x_{t}$ under $T_{t}$ (that is, the squared distance from $x_{t}$ to the closest center in $T_{t}$.  The hope is that at any time t, the total loss incurred upto time $t,$ 
+\[
+\sum_{t^{\prime}\le t}\min_{z\in T_{t}}||x_{t}-z||^{2}
+\]
+is not too much more than the optimal cost achievable by the best k centers for $x_{1},...,x_{t}.$ 
+
+\subsubsection*{Problem 2}
+Develop an on-line algorithm for k-means clustering that has a performance guarantee under either of the two criteria above. 
+
+\section{Streaming algorithms for clustering}
+The streaming model of computation is inspired by massive data sets that are too large to fit in memory.  Unlike on-line learning, which continues forever, there is a finite job to be done.  But it is a very big job, and so only a small portion of the input can be held in memory at any one time.  For an input of size n, one typically seeks algorithm that use memory $o(n)$ (say, $\sqrt{n}$ and that need to make just one or two passes through the data. 
+
+The following table: 
+\begin{tabular}{|l|l|}
+\hline
+\textbf{On-line} & \textbf{Streaming} \\
+\hline
+Endless stream of data & Stream of (known) length n \\
+Fixed amount of memory & Memory available is $o(n)$ \\
+Tested at every time step & Tested only at the very end \\
+Each point is seen only once & More than one pass may be possible \\
+\hline
+\end{tabular}
+
+There are some standard ways to convert regular algorithms (that assume the data fits in memory) into streaming algorithms.  These include divide-and-conquer and random sampling.  We'll now see k-medoid algorithms based on each of these. 
+
+\subsection{A streaming k-medoid algorithm based on divide-and-conquer}
+Recall the k-medoid problem: the setting is a metric space $(\mathcal{X},\rho)$ 
+Input: Finite set $S\subset\mathcal{X};$ integer k. 
+Output: $T\subset S$ with $|T|=k.$ 
+Goal: Minimize $cost(T)=\sum_{x\in S}\rho(x,T).$ 
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{lec6_fig2.png} % Placeholder for the image
+    \caption{A streaming algorithm for the k-medoid problem, based on divide and conquer. }
+\end{figure}
+
+Earlier, we saw an LP-based algorithm that finds 2k centers whose cost is at most 4 times that of the best k-medoid solution.  This extends to the case when the problem is weighted, that is, when each data point z has an associated weight $w(x)$ and the cost function is 
+\[
+cost(T)=\sum_{x\in S}w(x)\rho(x,T).
+\]
+We will call it a (2,4)-approximation algorithm.  It turns out that (a, b)-approximation algorithms are available for many combinations (a, b).  A natural way to deal with a huge data stream S is to read as much of it as will fit into memory (call this portion $S_{1}$, solve this sub-instance, then read the next batch $S_{2}$, solve this sub-instance, and so on.  At the end, the partial solutions need to be combined somehow. 
+\begin{verbatim}
+Divide S into groups S_1,S_2,...,S_l
+for each i=1,2,...,l
+    run an ( (a,b)- -approximation alg on S_i to get <= ak medoids T_i={t_i1,t_i2,...}
+    suppose S_i1 union S_i2 union ... are the induced clusters of S_i
+S_w <- T_1 union T_2 union ... union T_l with weights w(t_ij) <- |S_ij|
+run an (a',b')-approximation algorithm on weighted S_w to get
+<= a'k centers T
+return T
+\end{verbatim}
+Figure 6.1 shows this pictorially.  An interesting case to consider is when stream S has length n, and each batch $S_{i}$ consists of $\sqrt{nk}$ points.  In this case, the second clustering problem $S_{w}$ is also of size $\sqrt{nk}$, and so the whole algorithm operates with just a single pass and $O(\sqrt{n}k)$ memory.  Before analyzing the algorithm we introduce some notation.  Let $T^{*}=\{t_{1}^{*},...,t_{k}^{*}\}$ be the optimal k medoids for data set S.  Let $t^{*}(x)\in T^{*}$ be the medoid closest to point x.  Likewise, let $t(x)\in T$ be the point in T closest to x, and $t_{i}(x)$ the point in $T_{i}$ closest to x.  Since we are dividing the data into subsets $S_{i}$, we will need to talk about the costs of clustering these subsets as well as the overall cost of clustering S.  To this end, define 
+\[
+cost(S^{\prime},T^{\prime})= \text{cost of medoids } T^{\prime} \text{ for data } S^{\prime} =
+\begin{cases}
+    \sum_{x\in S^{\prime}}\rho(x,T^{\prime}) & \text{unweighted instance} \\
+    \sum_{x\in S^{\prime}}w(x)\rho(x,T^{\prime}) & \text{weighted instance}
+\end{cases}
+\]
+\begin{theorem}[5]
+This streaming algorithm is an $(a^{\prime},2b+2b^{\prime}(2b+1))$-approximation. 
+\end{theorem}
+The $a^{\prime}$ part is obvious; the rest will be shown over the course of the next few lemmas.  The first step is to bound the overall cost in terms of the costs of two clustering steps;  this is a simple application of the triangle inequality. 
+
+\begin{lemma}[6]
+$cost(S,T)\le\sum_{i=1}^{l}cost(S_{i},T_{i})+cost(S_{w},T)$. 
+\end{lemma}
+\begin{proof}
+Recall that the second clustering problem $S_{w}$ consists of all medoids $t_{ij}$ from the first step, with weights $w(t_{ij})=|S_{ij}|$. 
+\[
+cost(S,T)=\sum_{i=1}^{l}\sum_{x\in S_{i}}\rho(x,T)\le\sum_{i=1}^{l}\sum_{x\in S_{i}}(\rho(x,t_{i}(x))+\rho(t_{i}(x),T))
+\]
+\[
+=\sum_{i=1}^{l}cost(S_{i},T_{i})+\sum_{i=1}^{l}\sum_{j}|S_{ij}|\rho(t_{ij},T)
+\]
+\[
+=\sum_{i=1}^{l}cost(S_{i},T_{i})+cost(S_{w},T).
+\]
+\end{proof}
+
+The next lemma says that when clustering a data set $S^{\prime},$ picking centers from $S^{\prime}$ is at most twice as bad as picking centers from the entire underlying metric space X. 
+
+\begin{lemma}[7]
+For any $S^{\prime}\subset\mathcal{X},$ we have 
+\[
+\min_{T^{\prime}\subset S^{\prime}}cost(S^{\prime},T^{\prime})\le2\min_{T^{\prime}\subset\mathcal{X}}cost(S^{\prime},T^{\prime}).
+\]
+\end{lemma}
+\begin{proof}
+Let $T^{\prime}\subset\mathcal{X}$ be the optimal solution chosen from $\mathcal{X}$ For each induced cluster of $S^{\prime}$, replace its center $t^{\prime}\in T^{\prime}$ by the closest neighbor of $t^{\prime}$ in $S^{\prime}$.  This at most doubles the cost, by the triangle inequality. 
+\end{proof}
+
+Our final goal is to upper-bound $cost(S,T)$, and we will do so by bounding the two terms on the right-hand side of Lemma 6.  Let's start with the first of them.  We'd certainly hope that $\sum_{i}cost(S_{i},T_{i})$ is smaller than cost(S,T); after all, the former uses way more representatives (about akl of them) to approximate the same set S.  We now give a coarse upper bound to this effect. 
+
+\begin{lemma}[8]
+$\sum_{i=1}^{l}cost(S_{i},T_{i})\le2b\cdot cost(S,T^{*}).$ 
+\end{lemma}
+\begin{proof}
+Each $T_{i}$ is a b-approximation solution to the k-medoid problem for $S_{i}$.  Thus 
+\[
+\sum_{i=1}^{l}cost(S_{i},T_{i})\le\sum_{i=1}^{l}b\cdot \min_{T^{\prime}\subset S_{i}}cost(S_{i},T^{\prime})
+\]
+\[
+\le\sum_{i=1}^{l}2b\cdot \min_{T^{\prime}\subseteq \mathcal{X}}cost(S_{i},T^{\prime})
+\]
+\[
+\le\sum_{i=1}^{l}2b\cdot cost(S_{i},T^{*})=cost(S,T^{*}).
+\]
+The second inequality is from Lemma 7. 
+\end{proof}
+
+Finally, we bound the second term on the right-hand side of Lemma 6. 
+
+\begin{lemma}[9]
+$cost(S_{w},T)\le2b^{\prime}(\sum_{i=1}^{l}cost(S_{i},T_{i})+cost(S,T^{*}))$. 
+\end{lemma}
+\begin{proof}
+It is enough to upper-bound $cost(S_{w},T^{*})$ and then invoke 
+\[
+cost(S_{w},T)\le b^{\prime}\cdot \min_{T^{\prime}\subset S_{w}}cost(\overline{S}_{w},T^{\prime})\le2b^{\prime}\cdot \min_{T^{\prime}\subset\mathcal{X}}cost(\overline{S}_{w},T^{\prime})\le2b^{\prime}\cdot cost(S_{w},T^{*}).
+\]
+To do so, we need only the triangle inequality. 
+\[
+cost(S_{w},T^{*})=\sum_{i,j}|S_{ij}|\rho(t_{ij},T^{*})\le\sum_{i,j}\sum_{x\in S_{ij}}(\rho(x,t_{ij})+\rho(x,t^{*}(x)))
+\]
+\[
+=\sum_{i}\sum_{x\in S_{i}}(\rho(x,t_{i}(x))+\rho(x,t^{*}(x)))
+\]
+\[
+=\sum_{i}cost(S_{i},T_{i})+cost(S,T^{*}).
+\]
+The theorem follows immediately by putting together the last two lemmas with Lemma 6.
+\end{proof}
+
+\subsubsection*{Problem 3}
+Notice that this streaming algorithm uses two k-medoid subroutines.  Even if both are perfect, that is, if both are (1, 1)-approximations, the overall bound on the approximation factor is 8. Can a better factor be achieved? 
+
+\subsection{A streaming k-medoid algorithm based on random sampling}
+In this approach, we randomly sample from stream S, taking as many points as will fit in memory.  We then solve the clustering problem on this subset $S^{\prime}\subset S.$  The resulting cluster centers should work well for all of S, unless S contains a cluster that has few points (and is thus not represented in $S^{\prime})$ and is far away from the rest of the data.  A second round of clustering is used to deal with this contigency. 
+
+The algorithm below is due to Indyk (1999).  Its input is a stream S of length n, and also a confidence parameter $\delta$. 
+\begin{verbatim}
+let S' subset S be a random subset of size s
+run an (a,b) -approximation alg on S' to get <= ak medoids T'
+let S'' subset S be the (8kn/s)log(k/delta) points furthest from T'
+run an (a,b) -approximation alg on S'' to get <= ak medoids T''
+return T' union T''
+\end{verbatim}
+This algorithm returns 2ak medoids.  It requires two passes through the data, and if s is set to $\sqrt{8kn~log(k/\delta)}$, it uses memory $O(\sqrt{8kn~log(k/\delta)})$. 
+
+\begin{theorem}[10]
+With probability $\ge1-2\delta,$ this is a $(2a,(1+2b)(1+2/\delta))$ approximation. 
+\end{theorem}
+
+As before, let $T^{*}=\{t_{1}^{*},...,t_{k}^{*}\}$ denote the optimal medoids.  Suppose these induce a clustering $S_{1},...,S_{k}$ of S.  In the initial random sample $S^{\prime}$, the large clusters those with a lot of points will be well-represented.  We now formalize this.  Let L be the large clusters: 
+\[
+L=\{i:|S_{i}|\ge(8n/s)log(k/\delta)\}
+\]
+The sample $S^{\prime}$ contains points $S_{i}^{\prime}=S_{i}\cap S^{\prime}$ from cluster $S_{i}$ 
+
+\begin{lemma}[11]
+With probability $\ge1-\delta,$ for all $i\in L$ $|S_{i}^{\prime}|\ge\frac{1}{2}\cdot\frac{s}{n}\cdot|S_{i}|.$ 
+\end{lemma}
+\begin{proof}
+Use a multiplicative form of the Chernoff bound. 
+\end{proof}
+
+We'll next show that the optimal centers $T^{*}$ do a pretty good job on the random sample $S^{\prime}$. 
+
+\begin{lemma}[12]
+With probability $\ge1-\delta$, $cost(S^{\prime},T^{*})\le\frac{1}{\delta}\cdot\frac{s}{n}\cdot cost(S,T^{*})$ 
+\end{lemma}
+\begin{proof}
+The expected value of $cost(S^{\prime},T^{*})$ is exactly $(s/n)cost(S,T^{*})$, whereupon the lemma follows by Markov's inequality. 
+\end{proof}
+Henceforth assume that the high-probability events of Lemmas 11 and 12 hold.  Lemma 12 implies that $T^{\prime}$ is also pretty good for $S^{\prime}.$ 
+
+\begin{lemma}[13]
+$cost(S^{\prime},T^{\prime})\le2b\cdot\frac{1}{\delta}\cdot\frac{s}{n}\cdot cost(S,T^{*})$. 
+\end{lemma}
+\begin{proof}
+This is by now a familiar argument. 
+\[
+cost(S^{\prime},T^{\prime})\le b\cdot \min_{T\subset S^{\prime}}cost(S^{\prime},T)\le2b\cdot \min_{T\subset\mathcal{X}}cost(S^{\prime},T)\le2b\cdot cost(S^{\prime},T^{*})
+\]
+and the rest follows from Lemma 12. 
+\end{proof}
+
+Since the large clusters are well-represented in $S^{\prime},$ we would expect centers $T^{\prime}$ to do a good job with them. 
+
+\begin{lemma}[14]
+cost (UiELSi, T') $\le$ cost(S,T) (1+2(1+2b)). 
+\end{lemma}
+\begin{proof}
+We'll show that for each optimal $t_{i}^{*}$ of a large cluster, there must be a point in $T^{\prime}$ relatively close by.  To show this, we use the triangle inequality $\rho(t_{i}^{*},T^{\prime})\le\rho(t_{i}^{*},y)+\rho(y,t^{\prime}(y)).$  where $t^{\prime}(y)\in T^{\prime}$ is the medoid in $T^{\prime}$ closest to point y.  This inequality holds for all y, so we can average it over all $y\in S_{i}^{\prime}$: 
+\[
+\rho(t_{i}^{*},T^{\prime})\le\frac{1}{|S_{i}^{\prime}|}\sum_{y\in S_{i}^{\prime}}(\rho(y,t_{i}^{*})+\rho(y,t^{\prime}(y))).
+\]
+Now we can bound the cost of the large clusters with respect to medoids $T^{\prime}$ 
+\[
+cost(\cup_{i\in L}S_{i},T^{\prime})\le\sum_{i\in L}\sum_{x\in S_{i}}(\rho(x,t_{i}^{*})+\rho(t_{i}^{*},T^{\prime}))
+\]
+\[
+\le cost(S,T^{*})+\sum_{i\in L}|S_{i}|\rho(t_{i}^{*},T^{\prime})
+\]
+\[
+\le cost(S,T^{*})+\sum_{i\in L}\frac{|S_{i}|}{|S_{i}^{\prime}|}\sum_{y\in S_{i}^{\prime}}(\rho(y,t_{i}^{*})+\rho(y,t^{\prime}(y)))
+\]
+\[
+\le cost(S,T^{*})+\frac{2n}{s}\sum_{y\in S^{\prime}}(\rho(y,t^{*}(y))+\rho(y,t^{\prime}(y)))
+\]
+\[
+=cost(S,T^{*})+\frac{2n}{s}(cost(S^{\prime},T^{*})+cost(S^{\prime},T^{\prime}))
+\]
+where the last inequality is from Lemma 11.  The rest follows from Lemmas 12 and 13. 
+\end{proof}
+
+Thus the large clusters are well-represented by $T^{\prime}$.  But this isn't exactly what we need.  Looking back at the algorithm, we see that medoids $T^{\prime\prime}$ will take care of $S^{\prime\prime}$, which means that we need medoids $T^{\prime}$ to take care of $S\backslash S^{\prime\prime}$ 
+
+\begin{lemma}[15]
+cost(S\S", T') $\le$ cost (S,T) (1+2(1+26)). 
+\end{lemma}
+\begin{proof}
+A large cluster is one with at least $(8n/s)log(k/\delta)$ points.  Therefore, since there are at most k small clusters, the total number of points in small clusters is at most $(8kn/s)log(k/\delta).$  This means that the large clusters account for the vast majority of the data, at least $n-(8kn/s)log(k/\delta)$ points. 
+
+$S\backslash S^{\prime\prime}$ is exactly then- $n-(8kn/s)log(k/\delta)$ points closest to TV.  Therefore $cost(S\backslash S^{\prime\prime},T^{\prime})\le cost(\cup_{i\in L}S_{i},T^{\prime})$. 
+
+To prove the main theorem, it just remains to bound the cost of $S^{\prime\prime}$. 
+\begin{lemma}[16]
+$cost(S^{\prime\prime},T^{\prime\prime})\le2b\cdot cost(S,T^{*}).$ 
+\end{lemma}
+\begin{proof}
+This is routine. 
+\[
+cost(S^{\prime\prime},T^{\prime\prime})\le b\cdot \min_{T\subset S^{\prime\prime}}cost(S^{\prime\prime},T)\le2b\cdot \min_{T\subset \mathcal{X}}cost(S^{\prime\prime},T)\le2b\cdot cost(S^{\prime\prime},T^{*})\le2b\cdot cost(S,T^{*}).
+\]
+\end{proof}
+
+\subsubsection*{Problem 4}
+The approximation factor contains a highly unpleasant $1/\delta$ term.  Is there a way to reduce this to, say, $log(1/\delta)?$ 
+
+\end{document}
